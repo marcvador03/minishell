@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/29 21:50:41 by mfleury           #+#    #+#             */
-/*   Updated: 2024/07/05 09:38:23 by mfleury          ###   ########.fr       */
+/*   Updated: 2024/10/09 10:51:44 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ static size_t	ft_strtrim_loop(char *s1, char *set, size_t len, int j)
 	{
 		j = 0;
 		while (set[j] != s1[len - 1] && x == 0)
-			if (set [j] == '\0' || set[++j] == '\0')
+			if (set[j] == '\0' || set[++j] == '\0')
 				x = 1;
 		if (x == 0)
 			len--;
@@ -44,7 +44,7 @@ char	*ft_strtrim(char const *s1, char const *set)
 	{
 		j = 0;
 		while (set[j] != *s1 && x == 0)
-			if (set [j] == '\0' || set[++j] == '\0')
+			if (set[j] == '\0' || set[++j] == '\0')
 				x = 1;
 		if (x == 0)
 			s1++;
