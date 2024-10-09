@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/27 23:01:41 by mfleury           #+#    #+#             */
-/*   Updated: 2024/07/05 00:05:21 by mfleury          ###   ########.fr       */
+/*   Updated: 2024/10/09 19:53:02 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,29 +66,28 @@ static void	ft_split_free(char **ptr, int n)
 
 char	**ft_split(char const *s, char c)
 {
-	int		i;
-	int		cnt;
+	int		cnt[2];
 	int		len;
 	char	**ptr;
 	char	*str;
+	char	set[2];
 
-	str = ft_strtrim((char *)s, &c);
-	cnt = ft_split_size(str, c);
-	ptr = (char **)malloc((cnt + 1) * sizeof(char *));
+	set[0] = c;
+	set[1] = '\0';
+	str = ft_strtrim(s, set);
+	cnt[1] = ft_split_size(str, c);
+	ptr = (char **)malloc((cnt[1] + 1) * sizeof(char *));
 	if (ptr == NULL || str == NULL)
 		return (NULL);
-	i = -1;
+	cnt[0] = -1;
 	len = 0;
-	while (++i < cnt && *str != '\0')
+	while (++cnt[0] < cnt[1] && *str != '\0')
 	{
-		len = len + ft_split_loop(str, c, &ptr[i], len) + 1;
-		if (ptr[i] == NULL)
-		{
-			ft_split_free(ptr, i);
-			return (NULL);
-		}
+		len = len + ft_split_loop(str, c, &ptr[cnt[0]], len) + 1;
+		if (ptr[cnt[0]] == NULL)
+			return (ft_split_free(ptr, cnt[0]), NULL);
 	}
 	free(str);
-	ptr[cnt] = 0;
+	ptr[cnt[1]] = 0;
 	return (ptr);
 }
