@@ -1,0 +1,2 @@
+create exit_error function
+manage error codes (errno etc.)
