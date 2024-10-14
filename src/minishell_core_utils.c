@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 12:26:04 by mfleury           #+#    #+#             */
-/*   Updated: 2024/10/14 13:01:42 by mfleury          ###   ########.fr       */
+/*   Updated: 2024/10/14 13:17:35 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ char	*create_prompt()
 	//home = getenv("HOME");
 	if (user == NULL/* || home == NULL*/)
 		return (NULL); // exit_error
-	res = ft_strjoin(user, " :<#");
+	res = ft_strjoin(user, "$ ");
 	if (res == NULL)
 		return (NULL); //exit_error	
 	return (res);

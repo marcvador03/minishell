@@ -6,7 +6,7 @@
 /*   By: pmorello <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 10:36:03 by pmorello          #+#    #+#             */
-/*   Updated: 2024/10/14 13:14:30 by mfleury          ###   ########.fr       */
+/*   Updated: 2024/10/14 13:32:38 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,11 +14,15 @@
 
 void	ft_cd(char **args)
 {
-	if (args[2] != NULL)
-		printf("pwd : too many arguments");
+	char	*path;
+
 	if (args[1] == NULL)
-		args[1] = getenv("HOME");
-	chdir(args[1]);
+		path = getenv("HOME");
+	else
+		path = args[1];
+	if (args[2] != NULL)
+		printf("cd : too many arguments");
+	chdir(path);
 }
 
 void	ft_echo(int argc, char **argv)

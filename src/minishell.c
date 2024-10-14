@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 10:01:23 by mfleury           #+#    #+#             */
-/*   Updated: 2024/10/14 13:10:17 by mfleury          ###   ########.fr       */
+/*   Updated: 2024/10/14 13:26:04 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,11 +40,11 @@ void	get_cmd(char *input)
 	args = ft_split(input, ' ');
 	if (args == NULL)
 		exit(EXIT_FAILURE);
-	if (ft_strncmp(args[0], "exit", 4) == 0)
+	else if (ft_strncmp(args[0], "exit", 4) == 0)
 		exit_clean(args);
-	if (ft_strncmp(args[0], "cd", 2) == 0)
+	else if (ft_strncmp(args[0], "cd", 2) == 0)
 		ft_cd(args);
-	if (ft_strncmp(args[0], "pwd", 3) == 0)
+	else if (ft_strncmp(args[0], "pwd", 3) == 0)
 		ft_pwd(args);
 	else
 		ft_printf("%s is an unknown command\n", args[0]);
