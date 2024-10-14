@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 10:01:23 by mfleury           #+#    #+#             */
-/*   Updated: 2024/10/14 12:15:26 by mfleury          ###   ########.fr       */
+/*   Updated: 2024/10/14 13:10:17 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,14 +42,23 @@ void	get_cmd(char *input)
 		exit(EXIT_FAILURE);
 	if (ft_strncmp(args[0], "exit", 4) == 0)
 		exit_clean(args);
+	if (ft_strncmp(args[0], "cd", 2) == 0)
+		ft_cd(args);
+	if (ft_strncmp(args[0], "pwd", 3) == 0)
+		ft_pwd(args);
+	else
+		ft_printf("%s is an unknown command\n", args[0]);
 	return (free_split(args));
 }
 
 char	*get_input()
 {
 	char	*line;
+	char	*prompt;
 
-	line = readline("#");
+	prompt = create_prompt();
+	line = readline(prompt);
+	free(prompt);
 	if (line != NULL && *line != '\0')
 		add_history(line);
 	return (line);	

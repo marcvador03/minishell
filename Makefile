@@ -8,7 +8,9 @@ LIB_DIR := lib
 #Filenames definition
 NAME := minishell
 
-SRC_NAMES := minishell.c
+SRC_NAMES := minishell.c \
+			 built_ins.c \
+			 minishell_core_utils.c
 
 INC_NAMES := minishell.h
 
