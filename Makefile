@@ -23,7 +23,8 @@ DEPS := $(OBJECTS:.o=.d)
 CFLAGS += -Wall -Werror -Wextra -MMD -MP
 
 LIB_NAMES := libft.a 
-LIBS_TAG := $(patsubst lib%.a, -l%, $(LIB_NAMES)) 
+LIBS_TAG := $(patsubst lib%.a, -l%, $(LIB_NAMES))
+LIBS_TAG += -lreadline
 
 DEBUG ?=
 
@@ -38,17 +39,17 @@ $(NAME): libft/libft.a Makefile $(INCLUDES) $(OBJECTS)
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c | $(OBJ_DIR)
 	cc $(CFLAGS) $(DEBUG) -c $< -o $@ 
 
-libft: | $(LIB_DIR) $(INC_DIR) 
+libft: 
 	@$(MAKE) -C $(LIBFT_DIR)
 
 $(OBJ_DIR):
 	@mkdir $(OBJ_DIR)
 
-$(LIB_DIR):
-	@mkdir $(LIB_DIR)
+#$(LIB_DIR):
+#	@mkdir $(LIB_DIR)
 
-$(INC_DIR):
-	@mkdir $(INC_DIR)
+#$(INC_DIR):
+#	@mkdir $(INC_DIR)
 
 flags:
 	@echo $(CFLAGS)
