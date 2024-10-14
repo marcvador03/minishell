@@ -6,7 +6,7 @@
 /*   By: pmorello <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 10:36:03 by pmorello          #+#    #+#             */
-/*   Updated: 2024/10/14 12:36:28 by pmorello         ###   ########.fr       */
+/*   Updated: 2024/10/14 13:01:38 by pmorello         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ void	ft_cd(int argc, char **argv)
 {
 	char *path;
 
-	path = argv[1];
+	path = argv[2];
 	if (path == NULL)
 		path = getenv("HOME");
 	chdir(path);
@@ -83,5 +83,5 @@ void	ft_env(int argc, char **argv)
 
 void	ft_exit(void)
 {
-
+	exit(0);
 }
