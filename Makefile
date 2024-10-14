@@ -6,12 +6,11 @@ INC_DIR := include
 LIB_DIR := lib
 
 #Filenames definition
-NAME := pipex
+NAME := minishell
 
-SRC_NAMES := pipex.c \
-			 pipex_utils.c
+SRC_NAMES := minishell.c
 
-INC_NAMES := pipex.h
+INC_NAMES := minishell.h
 
 SOURCES := $(patsubst %.c, $(SRC_DIR)/%.c, $(SRC_NAMES))
 
