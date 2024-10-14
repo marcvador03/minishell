@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mfleury <mfleury@student.42barcelona.      +#+  +:+       +#+        */
+/*   By: pmorello <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/10/14 10:00:44 by mfleury           #+#    #+#             */
-/*   Updated: 2024/10/14 13:09:46 by mfleury          ###   ########.fr       */
+/*   Created: 2024/10/14 12:17:09 by pmorello          #+#    #+#             */
+/*   Updated: 2024/10/14 13:12:54 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,5 +28,7 @@
 char	*create_prompt();
 void	ft_cd(char **args);
 void	ft_pwd(char **args);
+
+extern char **environ; //variable global para la funcion de ft_env
 
 #endif
