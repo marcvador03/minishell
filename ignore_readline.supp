@@ -12,7 +12,6 @@
    match-leak-kinds: reachable
    fun:calloc
    ...
-   fun:rl_initialize
    fun:readline
 }
 {
@@ -21,6 +20,13 @@
    match-leak-kinds: reachable
    fun:realloc
    ...
-   fun:rl_initialize
    fun:readline
+}
+{
+   ignore_addhistory_malloc
+   Memcheck:Leak
+   match-leak-kinds: reachable
+   fun:malloc
+   ...
+   fun:add_history
 }
