@@ -6,16 +6,42 @@
 /*   By: pmorello <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 10:36:03 by pmorello          #+#    #+#             */
-/*   Updated: 2024/10/14 12:11:17 by pmorello         ###   ########.fr       */
+/*   Updated: 2024/10/14 12:36:28 by pmorello         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 
-//void echo -n
-
-void	ft_cd(char *path)
+void	ft_echo(int argc, char **argv)
 {
+	size_t	len;
+	int	i;
+	int new_line;
+
+	new_line = 1;
+	i = 1;
+	len = ft_strlen(argv[i]);
+	while (i < argc)
+	{
+		if (ft_strncmp(argv[i], "-n", len) == 0)
+			new_line = 0;
+		else
+		{
+			printf("%s", argv[i]);
+			if (i < argc - 1)
+				printf (" ");
+		}
+		i++;
+	}
+	if (new_line)
+		printf("\n");
+}
+
+void	ft_cd(int argc, char **argv)
+{
+	char *path;
+
+	path = argv[1];
 	if (path == NULL)
 		path = getenv("HOME");
 	chdir(path);
@@ -57,5 +83,5 @@ void	ft_env(int argc, char **argv)
 
 void	ft_exit(void)
 {
-	exit(0);
+
 }
