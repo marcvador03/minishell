@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 10:01:23 by mfleury           #+#    #+#             */
-/*   Updated: 2024/10/14 13:26:04 by mfleury          ###   ########.fr       */
+/*   Updated: 2024/10/15 22:23:20 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,68 +24,93 @@ void	free_split(char **ptr)
 	free(ptr);
 }
 
-void	exit_clean(char **ptr)
+void	exit_minishell(int status, int err)
 {
-	if (ptr != NULL)
-		free_split(ptr);
-	exit(EXIT_SUCCESS);
+	if (err != 0)
+		errno = err;
+	if (errno == 0)
+		ft_printf("Minishell exited with success\n");
+	else
+		ft_printf("Minishell exit with error:\n %s", strerror(errno));
+	exit(status);
 }
 
-void	get_cmd(char *input)
+cmd_enum str_to_enum(const char *str)
+{
+	const char	*enum_str[] = {"cd", "pwd"}; 
+	int	i;
+	
+	i = 0;
+	while (i < END)
+	{
+		if (ft_strncmp(enum_str[i++], str, ft_strlen(str)) == 0)
+			return (i);
+		i++;
+	}
+	return (-1);
+}
+
+int	get_cmd(char *input)
 {
 	char	**args;
+	int		x;
+	t_func_arr	call_cmd[2] = {&ft_cd, &ft_pwd};
 
 	if (input == NULL)
-		return ;
+		return (1); ;
 	args = ft_split(input, ' ');
 	if (args == NULL)
-		exit(EXIT_FAILURE);
+		return (1); 
 	else if (ft_strncmp(args[0], "exit", 4) == 0)
-		exit_clean(args);
-	else if (ft_strncmp(args[0], "cd", 2) == 0)
-		ft_cd(args);
-	else if (ft_strncmp(args[0], "pwd", 3) == 0)
-		ft_pwd(args);
-	else
-		ft_printf("%s is an unknown command\n", args[0]);
-	return (free_split(args));
+		return (free_split(args), 99);
+	x = str_to_enum(args[0]);
+	call_cmd[x](args);
+	//ft_printf("%s is an unknown command\n", args[0]);
+	return (free_split(args), 1);
 }
 
-char	*get_input()
+char	*get_input(char *prompt)
 {
 	char	*line;
-	char	*prompt;
 
-	prompt = create_prompt();
 	line = readline(prompt);
-	free(prompt);
 	if (line != NULL && *line != '\0')
 		add_history(line);
 	return (line);	
 }
+void	handle_cmd_return(int wstatus)
+{
+	if (/*WIFEXITED(wstatus) && */WEXITSTATUS(wstatus) == 0)
+		exit_minishell(EXIT_SUCCESS, wstatus);
+}	
 
 int	main(/*int argc, char *argv[], char *envp[]*/)
 {
 	char	*input;
 	pid_t	pid;
 	int		wstatus;
+	char	*prompt;
 	
 	input = NULL;
 	while (1)
 	{
-		input = get_input();
+		prompt = create_prompt();
+		input = get_input(prompt);
 		if (input != NULL)
 		{
 			pid = fork();
 			if (pid == -1)
-				exit(EXIT_FAILURE);
-			if (pid == 0 && input != NULL)
-				get_cmd(input);
-			if (waitpid(0, &wstatus, 0) == -1)
-				exit(EXIT_FAILURE);
-			if (WIFEXITED(wstatus) && WEXITSTATUS(wstatus) == 0)
-				exit(EXIT_SUCCESS);
+				exit_minishell(EXIT_FAILURE, errno);
+			if (pid == 0)
+			get_cmd(input);
+			else
+			{
+				wait(&wstatus);
+				free(input);
+				free(prompt);
+				handle_cmd_return(wstatus);
+			}	
 		}
-		free(input);
 	}
+	return (0);
 }
