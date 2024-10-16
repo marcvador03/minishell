@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 10:01:23 by mfleury           #+#    #+#             */
-/*   Updated: 2024/10/16 11:38:41 by mfleury          ###   ########.fr       */
+/*   Updated: 2024/10/16 12:37:04 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,16 +57,16 @@ int	get_cmd(char *input)
 	t_func_arr	call_cmd[2] = {&ft_cd, &ft_pwd};
 
 	if (input == NULL)
-		return (1); ;
+		return (99); ;
 	args = ft_split(input, ' ');
 	if (args == NULL)
 		return (1); 
 	else if (ft_strncmp(args[0], "exit", 4) == 0)
-		return (free_split(args), 99);
+		return (free_split(args), 0);
 	x = str_to_enum(args[0]);
 	call_cmd[x](args);
 	//ft_printf("%s is an unknown command\n", args[0]);
-	return (free_split(args), 1);
+	return (free_split(args), 99);
 }
 
 char	*get_input()
@@ -77,6 +77,8 @@ char	*get_input()
 	prompt = create_prompt();
 	line = readline(prompt);
 	free(prompt);
+	if (ft_strncmp(line, "", ft_strlen(line) + 1))
+		line = NULL;
 	if (line != NULL && *line != '\0')
 		add_history(line);
 	return (line);	
@@ -94,24 +96,26 @@ int	main(/*int argc, char *argv[], char *envp[]*/)
 	int		wstatus;
 	
 	input = NULL;
+	wstatus = 0;
 	while (1)
 	{
-		pid[0] = fork();
-		if (pid[0] == -1)
-			exit_minishell(EXIT_FAILURE, 1);
-		if (pid[0] == 0)
+		input = get_input();
+		if (input != NULL)
 		{
-			input = get_input();
-			if (input != NULL)
+			pid[0] = fork();
+			if (pid[0] == -1)
+				exit_minishell(EXIT_FAILURE, 1);
+			if (pid[0] == 0 && input != NULL)
 			{
-				get_cmd(input);
+				wstatus = get_cmd(input);
 				free(input);
+				exit(wstatus);
 			}
-		}
-		else
-		{
-			wait(&wstatus);
-			handle_cmd_return(wstatus);
+			else
+			{
+				wait(&wstatus);
+				handle_cmd_return(wstatus);
+			}
 		}
 	}
 	return (0);
