@@ -6,7 +6,7 @@
 /*   By: pmorello <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 12:17:09 by pmorello          #+#    #+#             */
-/*   Updated: 2024/10/15 22:12:20 by mfleury          ###   ########.fr       */
+/*   Updated: 2024/10/16 16:34:35 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,14 +28,23 @@
 /*Enum to match command names input with a number*/
 typedef enum {cd, pwd, END} cmd_enum;
 //http://stackoverflow.com/questions/16844728/converting-from-string-to-enum-in-c
-
-typedef	void (*t_func_arr)(char **args);
-
-/* minishell core utils */
-char	*create_prompt();
-void	ft_cd(char **args);
-void	ft_pwd(char **args);
-
 extern char **environ; //variable global para la funcion de ft_env
+
+typedef	int (*t_func_arr)(char **args);
+
+/* minishell base prompt functions*/
+char	*create_prompt();
+char	**get_cmd_args();
+int		exec_cmd(char **args);
+
+/* minishell built-ins functions*/
+int		ft_cd(char **args);
+int		ft_pwd(char **args);
+void	ft_env(int argc, char **argv);
+void	ft_echo(int argc, char **argv);
+
+/*diverse utils functions*/		
+void	free_s(char *ptr);
+void	free_d(char **ptr);
 
 #endif

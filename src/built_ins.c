@@ -6,13 +6,13 @@
 /*   By: pmorello <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 10:36:03 by pmorello          #+#    #+#             */
-/*   Updated: 2024/10/14 13:32:38 by mfleury          ###   ########.fr       */
+/*   Updated: 2024/10/16 16:25:05 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 
-void	ft_cd(char **args)
+int	ft_cd(char **args)
 {
 	char	*path;
 
@@ -20,9 +20,11 @@ void	ft_cd(char **args)
 		path = getenv("HOME");
 	else
 		path = args[1];
-	if (args[2] != NULL)
-		printf("cd : too many arguments");
+	if (args[1] != NULL && args[2] != NULL)
+		return(E2BIG);
+		//printf("cd : too many arguments");
 	chdir(path);
+	return (0);
 }
 
 void	ft_echo(int argc, char **argv)
@@ -50,20 +52,23 @@ void	ft_echo(int argc, char **argv)
 		printf("\n");
 }
 
-void	ft_pwd(char **args)
+int	ft_pwd(char **args)
 {
 	char *buffer;
 	size_t	size;
 	
 	if (args[1] != NULL)
-		printf("pwd : too many arguments");
+		return (E2BIG);
+//		printf("pwd : too many arguments");
 	size = 1024;
-	buffer = (char *)malloc(sizeof(char) * size);
+	buffer = (char *)ft_calloc(sizeof(char), size);
 	if (buffer == NULL)
-		return ; //use EXIT_ERROR
+		return (ENOMEM);
 	getcwd(buffer, size);
+	if (buffer == NULL)
+		return (free(buffer), errno);
 	printf("%s\n", buffer);
-	free (buffer);
+	return (free(buffer), 0);
 }
 
 //void	ft_export

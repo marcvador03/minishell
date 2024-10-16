@@ -10,7 +10,8 @@ NAME := minishell
 
 SRC_NAMES := minishell.c \
 			 built_ins.c \
-			 minishell_core_utils.c
+			 core_utils.c \
+			 minishell_prompt.c
 
 INC_NAMES := minishell.h
 
