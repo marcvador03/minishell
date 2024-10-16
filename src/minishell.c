@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 10:01:23 by mfleury           #+#    #+#             */
-/*   Updated: 2024/10/15 22:23:20 by mfleury          ###   ########.fr       */
+/*   Updated: 2024/10/16 11:38:41 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,47 +69,49 @@ int	get_cmd(char *input)
 	return (free_split(args), 1);
 }
 
-char	*get_input(char *prompt)
+char	*get_input()
 {
 	char	*line;
+	char	*prompt;
 
+	prompt = create_prompt();
 	line = readline(prompt);
+	free(prompt);
 	if (line != NULL && *line != '\0')
 		add_history(line);
 	return (line);	
 }
 void	handle_cmd_return(int wstatus)
 {
-	if (/*WIFEXITED(wstatus) && */WEXITSTATUS(wstatus) == 0)
+	if (WIFEXITED(wstatus) && WEXITSTATUS(wstatus) == 0)
 		exit_minishell(EXIT_SUCCESS, wstatus);
 }	
 
 int	main(/*int argc, char *argv[], char *envp[]*/)
 {
 	char	*input;
-	pid_t	pid;
+	pid_t	pid[2];
 	int		wstatus;
-	char	*prompt;
 	
 	input = NULL;
 	while (1)
 	{
-		prompt = create_prompt();
-		input = get_input(prompt);
-		if (input != NULL)
+		pid[0] = fork();
+		if (pid[0] == -1)
+			exit_minishell(EXIT_FAILURE, 1);
+		if (pid[0] == 0)
 		{
-			pid = fork();
-			if (pid == -1)
-				exit_minishell(EXIT_FAILURE, errno);
-			if (pid == 0)
-			get_cmd(input);
-			else
+			input = get_input();
+			if (input != NULL)
 			{
-				wait(&wstatus);
+				get_cmd(input);
 				free(input);
-				free(prompt);
-				handle_cmd_return(wstatus);
-			}	
+			}
+		}
+		else
+		{
+			wait(&wstatus);
+			handle_cmd_return(wstatus);
 		}
 	}
 	return (0);
