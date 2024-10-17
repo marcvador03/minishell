@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 10:01:23 by mfleury           #+#    #+#             */
-/*   Updated: 2024/10/16 16:48:41 by mfleury          ###   ########.fr       */
+/*   Updated: 2024/10/17 15:16:56 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,23 +35,25 @@ void	handle_cmd_return(int wstatus, char **args)
 		perror(args[0]);
 }	
 
-int	main(/*int argc, char *argv[], char *envp[]*/)
+int	main(int argc, char *argv[], char *envp[])
 {
 	char	**args;
 	pid_t	pid[2];
 	int		wstatus;
 	
+	if (argc > 1 || argv == NULL)
+		return (1);	
 	wstatus = 0;
 	while (1)
 	{
 		args = get_cmd_args();
-		if (args[0] != NULL)
+		if (args != NULL && args[0] != NULL)
 		{
 			pid[0] = fork();
 			if (pid[0] == -1)
 				return(errno);
 			if (pid[0] == 0)
-				exit(exec_cmd(args));
+				exit(exec_cmd(args, envp));
 			else
 			{
 				wait(&wstatus);
