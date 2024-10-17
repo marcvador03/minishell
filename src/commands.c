@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   command.c                                          :+:      :+:    :+:   */
+/*   commands.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mfleury <mfleury@student.42barcelona.      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/17 15:39:35 by mfleury           #+#    #+#             */
-/*   Updated: 2024/10/17 15:41:26 by mfleury          ###   ########.fr       */
+/*   Updated: 2024/10/17 16:13:52 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,14 @@ static cmd_enum str_to_enum(const char *str)
 		i++;
 	}
 	return (-1);
+}
+
+void	identify_tokens(char *input)
+{
+	int	i;
+
+	i = 0;
+	
 }
 
 int	exec_cmd(char **args, char *envp[])
