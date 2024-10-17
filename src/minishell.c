@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 10:01:23 by mfleury           #+#    #+#             */
-/*   Updated: 2024/10/16 16:37:18 by mfleury          ###   ########.fr       */
+/*   Updated: 2024/10/16 16:48:41 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,6 +58,7 @@ int	main(/*int argc, char *argv[], char *envp[]*/)
 				handle_cmd_return(wstatus, args);
 			}
 		}
+		free_d(args);
 	}
 	return (0);
 }
