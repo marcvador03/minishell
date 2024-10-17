@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 10:01:23 by mfleury           #+#    #+#             */
-/*   Updated: 2024/10/17 15:16:56 by mfleury          ###   ########.fr       */
+/*   Updated: 2024/10/17 15:36:29 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ int	main(int argc, char *argv[], char *envp[])
 	while (1)
 	{
 		args = get_cmd_args();
-		if (args != NULL && args[0] != NULL)
+		if (args != NULL)
 		{
 			pid[0] = fork();
 			if (pid[0] == -1)
@@ -59,8 +59,8 @@ int	main(int argc, char *argv[], char *envp[])
 				wait(&wstatus);
 				handle_cmd_return(wstatus, args);
 			}
-		}
 		free_d(args);
+		}
 	}
 	return (0);
 }
