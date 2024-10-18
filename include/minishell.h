@@ -6,7 +6,7 @@
 /*   By: pmorello <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 12:17:09 by pmorello          #+#    #+#             */
-/*   Updated: 2024/10/17 15:43:25 by mfleury          ###   ########.fr       */
+/*   Updated: 2024/10/18 13:19:29 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,7 @@ typedef	int (*t_func_arr)(char **args);
 char	*create_prompt();
 char	**get_cmd_args();
 int		exec_cmd(char **args, char *envp[]);
+char	**get_input();
 
 /* minishell built-ins functions*/
 int		ft_cd(char **args);
@@ -47,5 +48,6 @@ void	ft_echo(int argc, char **argv);
 void	free_s(char *ptr);
 void	free_d(char **ptr);
 char	*get_full_path(char *arg0, char *envp[]);
+void	set_errno(int err);
 
 #endif

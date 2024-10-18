@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/17 15:39:35 by mfleury           #+#    #+#             */
-/*   Updated: 2024/10/17 16:13:52 by mfleury          ###   ########.fr       */
+/*   Updated: 2024/10/18 14:42:32 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,14 +25,6 @@ static cmd_enum str_to_enum(const char *str)
 		i++;
 	}
 	return (-1);
-}
-
-void	identify_tokens(char *input)
-{
-	int	i;
-
-	i = 0;
-	
 }
 
 int	exec_cmd(char **args, char *envp[])
@@ -57,21 +49,12 @@ int	exec_cmd(char **args, char *envp[])
 	return (ENOENT);
 }
 
-char	**get_cmd_args()
+char	**get_cmd_args(char *cmd_in)
 {
-	char	*line;
-	char	*prompt;
 	char	**args;
 
-	prompt = create_prompt();
-	line = readline(prompt);
-	free(prompt);
-	if (ft_strncmp(line, "", ft_strlen(line) + 1) == 0)
-		return (free(line), NULL);
-	if (line != NULL && *line != '\0')
-		add_history(line);
-	args = ft_split(line, ' ');
+	args = ft_split(cmd_in, ' ');
 	if (args == NULL)
-		return (free(line), NULL); 
-	return (free(line), args);	
+		return (free(cmd_in), set_errno(ENOMEM), NULL); 
+	return (free(cmd_in), args);	
 }

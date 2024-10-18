@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/16 16:32:42 by mfleury           #+#    #+#             */
-/*   Updated: 2024/10/17 15:41:26 by mfleury          ###   ########.fr       */
+/*   Updated: 2024/10/18 13:17:39 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,4 +76,9 @@ char	*get_full_path(char *arg0, char *envp[])
 		free(cmd_out);
 	}
 	return (free_d(paths), free_s(cmd_in), NULL);
+}
+
+void	set_errno(int err)
+{
+	errno = err;
 }
