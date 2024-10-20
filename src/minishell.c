@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 10:01:23 by mfleury           #+#    #+#             */
-/*   Updated: 2024/10/18 14:43:54 by mfleury          ###   ########.fr       */
+/*   Updated: 2024/10/19 19:29:41 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,39 +35,35 @@ void	handle_cmd_return(int wstatus, char **args)
 		perror(args[0]);
 }
 
-int	create_subshell(char **pipes, char *envp[])
+int	subshell(char **pipes, char *envp[])
 {
 	pid_t	*pid;
-	char	**args;
+	char	***args;
 	int		i;
 	int		n;
+	int		p_fd[2];
 
 	n = 0;
-	while (pipes[n++] != NULL)
-	pid = (pid_t *)ft_calloc(n, sizeof(pid_t));
-	if (pid == NULL)
-		return(ENOMEM);
-	i = 0;
+	while (pipes[n++] != NULL);
+	args = (char ***)ft_calloc(sizeof(char **), n);
+	pid = (pid_t *)ft_calloc(sizeof(pid_t), n);
 	pid[0] = fork();
-	if (pid[0] == -1)
-		exit(errno);
-	if (pid[0] == 0)	
+	i = 1;
+	while (i < n)
 	{
-		while (i < n)
+		if (pid[i - 1] != 0)
 		{
-			if (pid[i++] == 0)
-			{
-				pid[i] = fork();
-				if (pid[i] == -1)
-					exit(errno);
-			}
-			if (pid[i - 1] == 0)
-				break;
+			pid[i] = fork();
 		}
-		args = get_cmd_args(pipes[0]);
-		if (args == NULL)
-			exit(errno);
-		exit(exec_cmd(args, envp));
+		else if (pid[i - 1] == 0)
+		{
+			args[i] = get_cmd_args(pipes[i]);
+			close(p_fd[1]);
+			dup2(p_fd[0], 0);
+			exec_cmd(args[i], envp);
+			break;			
+		}
+		i++;
 	}
 	return (0);
 }
@@ -77,8 +73,6 @@ int	main(int argc, char *argv[], char *envp[])
 {
 	
 	char	**pipes;
-	char	**sub_args;
-	pid_t	pid[2];
 	int		wstatus;
 	
 	if (argc > 1 || argv == NULL)
@@ -89,6 +83,7 @@ int	main(int argc, char *argv[], char *envp[])
 		pipes = get_input();
 		if (pipes == NULL)
 			perror("minishell");
+		subshell(pipes, envp);
 		wait(&wstatus);
 		handle_cmd_return(wstatus, args);
 		free_d(args);
