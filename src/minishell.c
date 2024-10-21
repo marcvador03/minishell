@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 10:01:23 by mfleury           #+#    #+#             */
-/*   Updated: 2024/10/21 15:56:35 by mfleury          ###   ########.fr       */
+/*   Updated: 2024/10/22 01:09:28 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,40 +40,63 @@ int	subshell(char **pipes, char *envp[])
 	pid_t	*pid;
 	char	***args;
 	int		i;
+	int		j;
 	int		n;
-	int		p_fd[2];
+	int		**p_fd;
 	int		wstatus;
 
 	n = 0;
 	while (pipes[n++] != NULL);
 	args = (char ***)ft_calloc(sizeof(char **), n);
-	pid = (pid_t *)ft_calloc(sizeof(pid_t), n);
-//	pid[0] = fork();
+	pid = (pid_t *)ft_calloc(sizeof(pid_t), n - 1);
+	p_fd = (int **)ft_calloc(sizeof(int *), n - 1);
 	i = 0;
+	wstatus = 0;
 	while (i < n - 1)
 	{
-		if (i == 0 || (pid[i - 1] != 0 && i > 0))
-		{
-			pipe(p_fd);
-			pid[i] = fork();
+		/*if (i == 0 || (pid[i - 1] != 0 && i > 0))
+		{*/
+			p_fd[i] = (int *)ft_calloc(sizeof(int), 2);
+			pipe(p_fd[i]);
 			args[i] = get_cmd_args(pipes[i]);
-		}
-		if (pid[i] == 0)
+			pid[i] = fork();
+		//}
+		if (pid[i++] == 0)
 			break;
-		i++;
 	}
-	if (pid[i] != 0)
+	if (pid[--i] == 0)
 	{
-		waitpid(pid[i], &wstatus, 0);
-		handle_cmd_return(wstatus, args[i]);
-	}
-	if (pid[i] == 0)
-	{
-		dup2(p_fd[0], 0);
-//		dup2(p_fd[1], 1);
+		printf("Pid %d\n", i);
+		j = 0;
+		while (j < i - 1)
+		{
+			close(p_fd[j][0]);	
+			close(p_fd[j++][1]);	
+		}
+		close(p_fd[i - 1][1]);	
+		if (i != 0)
+			dup2(p_fd[i - 1][0], 0);
+		else
+			close(p_fd[i - 1][0]);	
+		dup2(p_fd[i][1], 1);
 		wstatus = exec_cmd(args[i], envp);
 		exit (wstatus);
 	}
+	i = 0;
+	while (i < n - 1)
+	{
+		waitpid(pid[i], &wstatus, 0);
+		handle_cmd_return(wstatus, args[i]);
+		i++;
+	}
+	j = 0;
+	while (j < n - 2)
+	{
+		close(p_fd[j][0]);	
+		close(p_fd[j++][1]);	
+	}
+	dup2(p_fd[n - 1][0], 0);
+	close(p_fd[n - 1][1]);
 	return (0);
 }
 
@@ -82,11 +105,11 @@ int	main(int argc, char *argv[], char *envp[])
 {
 	
 	char	**pipes;
-	int		wstatus;
+	//int		wstatus;
 	
 	if (argc > 1 || argv == NULL)
 		return (1);	
-	wstatus = 0;
+	//wstatus = 0;
 	while (1)
 	{
 		pipes = get_input();

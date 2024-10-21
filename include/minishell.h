@@ -6,7 +6,7 @@
 /*   By: pmorello <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 12:17:09 by pmorello          #+#    #+#             */
-/*   Updated: 2024/10/18 13:19:29 by mfleury          ###   ########.fr       */
+/*   Updated: 2024/10/22 00:03:17 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ typedef	int (*t_func_arr)(char **args);
 
 /* minishell base prompt functions*/
 char	*create_prompt();
-char	**get_cmd_args();
+char	**get_cmd_args(char *cmd_in);
 int		exec_cmd(char **args, char *envp[]);
 char	**get_input();
 
