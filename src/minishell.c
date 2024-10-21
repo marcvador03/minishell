@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 10:01:23 by mfleury           #+#    #+#             */
-/*   Updated: 2024/10/19 19:29:41 by mfleury          ###   ########.fr       */
+/*   Updated: 2024/10/21 13:16:13 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,26 +42,32 @@ int	subshell(char **pipes, char *envp[])
 	int		i;
 	int		n;
 	int		p_fd[2];
+	int		wstatus;
 
 	n = 0;
 	while (pipes[n++] != NULL);
 	args = (char ***)ft_calloc(sizeof(char **), n);
 	pid = (pid_t *)ft_calloc(sizeof(pid_t), n);
-	pid[0] = fork();
-	i = 1;
+//	pid[0] = fork();
+	i = 0;
 	while (i < n)
 	{
-		if (pid[i - 1] != 0)
+		if (i == 0 || (pid[i - 1] != 0 && i > 0))
 		{
 			pid[i] = fork();
-		}
-		else if (pid[i - 1] == 0)
-		{
 			args[i] = get_cmd_args(pipes[i]);
-			close(p_fd[1]);
+		}
+		if (pid[i] != 0)
+		{
+			waitpid(pid[i], &wstatus, 0);
+			handle_cmd_return(wstatus, args[i]);
+		}
+		else if (pid[i] == 0)
+		{
 			dup2(p_fd[0], 0);
-			exec_cmd(args[i], envp);
-			break;			
+//			dup2(p_fd[1], 1);
+			wstatus = exec_cmd(args[i], envp);
+			exit (wstatus);
 		}
 		i++;
 	}
@@ -84,10 +90,6 @@ int	main(int argc, char *argv[], char *envp[])
 		if (pipes == NULL)
 			perror("minishell");
 		subshell(pipes, envp);
-		wait(&wstatus);
-		handle_cmd_return(wstatus, args);
-		free_d(args);
-		}
 	}
 	return (0);
 }
