@@ -6,20 +6,20 @@
 /*   By: mfleury <mfleury@student.42barcelona.      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/16 16:32:42 by mfleury           #+#    #+#             */
-/*   Updated: 2024/10/18 13:17:39 by mfleury          ###   ########.fr       */
+/*   Updated: 2024/10/22 13:55:46 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 
-void	free_s(char *ptr)
+void	free_s(void *ptr)
 {
 
 	free(ptr);
 	ptr = NULL;
 }
 
-void	free_d(char **ptr)
+void	free_d(void **ptr)
 {
 	int	i;
 
@@ -63,19 +63,19 @@ char	*get_full_path(char *arg0, char *envp[])
 		return (NULL);
 	cmd_in = ft_strjoin("/", arg0);
 	if (cmd_in == NULL)
-		return (free_d(paths), NULL);
+		return (free_d((void **)paths), NULL);
 	i = 0;
 	while (paths[i] != NULL)
 	{
 		cmd_out = ft_strjoin(paths[i], cmd_in);
 		if (cmd_out == NULL)
-			return (free_d(paths), free(cmd_in), NULL);
+			return (free_d((void **)paths), free(cmd_in), NULL);
 		if (access(cmd_out, F_OK) == 0)
-			return (free_d(paths), free(cmd_in), cmd_out);
+			return (free_d((void **)paths), free(cmd_in), cmd_out);
 		i++;
 		free(cmd_out);
 	}
-	return (free_d(paths), free_s(cmd_in), NULL);
+	return (free_d((void **)paths), free_s(cmd_in), NULL);
 }
 
 void	set_errno(int err)

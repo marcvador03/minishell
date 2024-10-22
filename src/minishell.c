@@ -6,16 +6,16 @@
 /*   By: mfleury <mfleury@student.42barcelona.      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 10:01:23 by mfleury           #+#    #+#             */
-/*   Updated: 2024/10/22 01:09:28 by mfleury          ###   ########.fr       */
+/*   Updated: 2024/10/22 14:29:11 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 
 
-void	exit_minishell(int status, int err, char **args)
+void	exit_minishell(int status, int err/*, char **args*/)
 {
-	free_d(args);
+	//free_d((void **)args);
 	if (err != 0)
 		errno = err;
 	if (errno == 99)
@@ -26,13 +26,13 @@ void	exit_minishell(int status, int err, char **args)
 }
 
 
-void	handle_cmd_return(int wstatus, char **args)
+void	handle_cmd_return(int wstatus/*, char **args*/)
 {
 	errno = WEXITSTATUS(wstatus);
 	if (WIFEXITED(wstatus) && WEXITSTATUS(wstatus) == 99)
-		exit_minishell(EXIT_SUCCESS, 0, args);
+		exit_minishell(EXIT_SUCCESS, 0/*, args*/);
 	else if (WIFEXITED(wstatus) && WEXITSTATUS(wstatus) != 0)
-		perror(args[0]);
+		perror("cmd: ");
 }
 
 int	subshell(char **pipes, char *envp[])
@@ -44,20 +44,34 @@ int	subshell(char **pipes, char *envp[])
 	int		n;
 	int		**p_fd;
 	int		wstatus;
+	char	c;
 
 	n = 0;
-	while (pipes[n++] != NULL);
-	args = (char ***)ft_calloc(sizeof(char **), n);
-	pid = (pid_t *)ft_calloc(sizeof(pid_t), n - 1);
-	p_fd = (int **)ft_calloc(sizeof(int *), n - 1);
-	i = 0;
 	wstatus = 0;
-	while (i < n - 1)
+	while (pipes[n++] != NULL);
+	n--;
+	args = (char ***)ft_calloc(sizeof(char **), n + 1);
+	if (args == NULL)
+		return (ENOMEM);
+	pid = (pid_t *)ft_calloc(sizeof(pid_t), n);
+	if (pid == NULL)
+		return (free(args), ENOMEM);
+	p_fd = (int **)ft_calloc(sizeof(int *), n);
+	if (p_fd == NULL)
+		return (free(pid), free(args), ENOMEM);
+	i = 0;
+	while (i < n)
+	{
+		p_fd[i] = (int *)ft_calloc(sizeof(int), 2);
+		if (p_fd[i] == NULL)
+			return (free_d((void **)p_fd), free(args), ENOMEM);
+		pipe(p_fd[i++]);
+	}
+	i = 0;
+	while (i < n)
 	{
 		/*if (i == 0 || (pid[i - 1] != 0 && i > 0))
 		{*/
-			p_fd[i] = (int *)ft_calloc(sizeof(int), 2);
-			pipe(p_fd[i]);
 			args[i] = get_cmd_args(pipes[i]);
 			pid[i] = fork();
 		//}
@@ -66,38 +80,42 @@ int	subshell(char **pipes, char *envp[])
 	}
 	if (pid[--i] == 0)
 	{
-		printf("Pid %d\n", i);
+		//printf("Pipe %d\n", i);
 		j = 0;
-		while (j < i - 1)
+		while (j < n)
 		{
-			close(p_fd[j][0]);	
-			close(p_fd[j++][1]);	
+			if (j == i - 1)
+				dup2(p_fd[j][0], 0);
+			else
+				close(p_fd[j][0]);	
+			if (j == i)
+				dup2(p_fd[j][1], 1);
+			else
+				close(p_fd[j][1]);	
+			j++;
 		}
-		close(p_fd[i - 1][1]);	
-		if (i != 0)
-			dup2(p_fd[i - 1][0], 0);
-		else
-			close(p_fd[i - 1][0]);	
-		dup2(p_fd[i][1], 1);
 		wstatus = exec_cmd(args[i], envp);
 		exit (wstatus);
 	}
-	i = 0;
-	while (i < n - 1)
-	{
-		waitpid(pid[i], &wstatus, 0);
-		handle_cmd_return(wstatus, args[i]);
-		i++;
-	}
 	j = 0;
-	while (j < n - 2)
+	while (j < n - 1)
 	{
 		close(p_fd[j][0]);	
 		close(p_fd[j++][1]);	
 	}
 	dup2(p_fd[n - 1][0], 0);
 	close(p_fd[n - 1][1]);
-	return (0);
+	close(p_fd[n - 1][0]);
+	while (read(0, &c, 1) > 0)
+		write(1, &c, 1);
+	i = 0;
+	while (i < n)
+	{
+		waitpid(pid[i], &wstatus, 0);
+		//handle_cmd_return(wstatus);
+		i++;
+	}
+	return (wstatus);
 }
 
 
@@ -105,11 +123,11 @@ int	main(int argc, char *argv[], char *envp[])
 {
 	
 	char	**pipes;
-	//int		wstatus;
+	int		wstatus;
 	
 	if (argc > 1 || argv == NULL)
 		return (1);	
-	//wstatus = 0;
+	wstatus = 0;
 	while (1)
 	{
 		pipes = get_input();
@@ -118,10 +136,11 @@ int	main(int argc, char *argv[], char *envp[])
 		if (pipes[1] == NULL)
 		{
 			if (ft_strncmp(pipes[0], "", ft_strlen(pipes[0] + 1) + 1) != 0)
-				subshell(pipes, envp);
+				wstatus = subshell(pipes, envp);
 		}
 		else
-			subshell(pipes, envp);
+			wstatus = subshell(pipes, envp);
+		handle_cmd_return(wstatus);
 	}
 	return (0);
 }

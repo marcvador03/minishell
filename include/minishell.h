@@ -6,7 +6,7 @@
 /*   By: pmorello <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 12:17:09 by pmorello          #+#    #+#             */
-/*   Updated: 2024/10/22 00:03:17 by mfleury          ###   ########.fr       */
+/*   Updated: 2024/10/22 13:53:32 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,8 +45,8 @@ void	ft_env(int argc, char **argv);
 void	ft_echo(int argc, char **argv);
 
 /*diverse utils functions*/		
-void	free_s(char *ptr);
-void	free_d(char **ptr);
+void	free_s(void *ptr);
+void	free_d(void **ptr);
 char	*get_full_path(char *arg0, char *envp[]);
 void	set_errno(int err);
 
