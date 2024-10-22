@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 10:01:23 by mfleury           #+#    #+#             */
-/*   Updated: 2024/10/22 16:06:55 by mfleury          ###   ########.fr       */
+/*   Updated: 2024/10/22 16:36:47 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,110 +35,32 @@ void	handle_cmd_return(int wstatus/*, char **args*/)
 		perror("cmd: ");
 }
 
-int	subshell(char **pipes, char *envp[])
-{
-	pid_t	*pid;
-	char	***args;
-	int		i;
-	int		j;
-	int		n;
-	int		**p_fd;
-	int		wstatus;
-	char	c;
-
-	n = 0;
-	wstatus = 0;
-	while (pipes[n++] != NULL);
-	n--;
-	args = (char ***)ft_calloc(sizeof(char **), n + 1);
-	if (args == NULL)
-		return (ENOMEM);
-	pid = (pid_t *)ft_calloc(sizeof(pid_t), n);
-	if (pid == NULL)
-		return (free(args), ENOMEM);
-	p_fd = (int **)ft_calloc(sizeof(int *), n);
-	if (p_fd == NULL)
-		return (free(pid), free(args), ENOMEM);
-	i = 0;
-	while (i < n)
-	{
-		p_fd[i] = (int *)ft_calloc(sizeof(int), 2);
-		if (p_fd[i] == NULL)
-			return (free_d((void **)p_fd), free(args), ENOMEM);
-		pipe(p_fd[i++]);
-	}
-	i = 0;
-	while (i < n)
-	{
-			args[i] = get_cmd_args(pipes[i]);
-			pid[i] = fork();
-		if (pid[i++] == 0)
-			break;
-	}
-	if (pid[--i] == 0)
-	{
-		j = 0;
-		while (j < n)
-		{
-			if (j == i - 1)
-				dup2(p_fd[j][0], 0);
-			else
-				close(p_fd[j][0]);	
-			if (j == i)
-				dup2(p_fd[j][1], 1);
-			else
-				close(p_fd[j][1]);	
-			j++;
-		}
-		wstatus = exec_cmd(args[i], envp);
-		exit (wstatus);
-	}
-	j = 0;
-	while (j < n - 1)
-	{
-		close(p_fd[j][0]);	
-		close(p_fd[j++][1]);	
-	}
-	//dup2(p_fd[n - 1][0], 0);
-	close(p_fd[n - 1][1]);
-	while (read(p_fd[n - 1][0], &c, 1) > 0)
-		write(1, &c, 1);
-	close(p_fd[n - 1][0]);
-	rl_replace_line("", 0);
-	rl_on_new_line();
-	//rl_redisplay();
-	i = 0;
-	while (i < n)
-	{
-		waitpid(pid[i], &wstatus, 0);
-		//handle_cmd_return(wstatus);
-		i++;
-	}
-	return (wstatus);
-}
 
 
 int	main(int argc, char *argv[], char *envp[])
 {
 	
-	char	**pipes;
+	char	**in_pipes;
 	int		wstatus;
+	int		n;
 	
 	if (argc > 1 || argv == NULL)
 		return (1);	
 	wstatus = 0;
+	n = 0;
 	while (1)
 	{
-		pipes = get_input();
-		if (pipes == NULL)
+		in_pipes = get_input();
+		while (in_pipes[n++] != NULL);
+		if (in_pipes == NULL)
 			perror("minishell");
-		if (pipes[1] == NULL)
+		if (in_pipes != NULL && in_pipes[1] == NULL)
 		{
-			if (ft_strncmp(pipes[0], "", ft_strlen(pipes[0] + 1) + 1) != 0)
-				wstatus = subshell(pipes, envp);
+			if (ft_strncmp(in_pipes[0], "", ft_strlen(in_pipes[0] + 1) + 1) != 0)
+				wstatus = subshell(--n, in_pipes, envp);
 		}
 		else
-			wstatus = subshell(pipes, envp);
+			wstatus = subshell(--n, in_pipes, envp);
 		handle_cmd_return(wstatus);
 	}
 	return (0);
