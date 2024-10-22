@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 12:26:04 by mfleury           #+#    #+#             */
-/*   Updated: 2024/10/22 14:37:15 by mfleury          ###   ########.fr       */
+/*   Updated: 2024/10/22 15:32:51 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,10 @@ char	**get_input()
 
 	prompt = create_prompt();
 	line = readline(prompt);
+	rl_on_new_line();
 	free(prompt);
+	if (line  == NULL)
+		return (NULL, NULL);	
 	if (ft_strncmp(line, "", ft_strlen(line) + 1) == 0)
 	{
 		pipes = (char **)ft_calloc(sizeof(char *), 2);

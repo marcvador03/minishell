@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 10:01:23 by mfleury           #+#    #+#             */
-/*   Updated: 2024/10/22 14:29:11 by mfleury          ###   ########.fr       */
+/*   Updated: 2024/10/22 16:06:55 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,17 +70,13 @@ int	subshell(char **pipes, char *envp[])
 	i = 0;
 	while (i < n)
 	{
-		/*if (i == 0 || (pid[i - 1] != 0 && i > 0))
-		{*/
 			args[i] = get_cmd_args(pipes[i]);
 			pid[i] = fork();
-		//}
 		if (pid[i++] == 0)
 			break;
 	}
 	if (pid[--i] == 0)
 	{
-		//printf("Pipe %d\n", i);
 		j = 0;
 		while (j < n)
 		{
@@ -103,11 +99,14 @@ int	subshell(char **pipes, char *envp[])
 		close(p_fd[j][0]);	
 		close(p_fd[j++][1]);	
 	}
-	dup2(p_fd[n - 1][0], 0);
+	//dup2(p_fd[n - 1][0], 0);
 	close(p_fd[n - 1][1]);
-	close(p_fd[n - 1][0]);
-	while (read(0, &c, 1) > 0)
+	while (read(p_fd[n - 1][0], &c, 1) > 0)
 		write(1, &c, 1);
+	close(p_fd[n - 1][0]);
+	rl_replace_line("", 0);
+	rl_on_new_line();
+	//rl_redisplay();
 	i = 0;
 	while (i < n)
 	{
