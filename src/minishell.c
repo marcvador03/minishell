@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 10:01:23 by mfleury           #+#    #+#             */
-/*   Updated: 2024/10/22 16:36:47 by mfleury          ###   ########.fr       */
+/*   Updated: 2024/10/23 22:14:07 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,12 +26,12 @@ void	exit_minishell(int status, int err/*, char **args*/)
 }
 
 
-void	handle_cmd_return(int wstatus/*, char **args*/)
+void	handle_cmd_return(t_shell *sh)
 {
-	errno = WEXITSTATUS(wstatus);
-	if (WIFEXITED(wstatus) && WEXITSTATUS(wstatus) == 99)
+	errno = WEXITSTATUS(sh->wstatus);
+	if (WIFEXITED(sh->wstatus) && WEXITSTATUS(sh->wstatus) == 99)
 		exit_minishell(EXIT_SUCCESS, 0/*, args*/);
-	else if (WIFEXITED(wstatus) && WEXITSTATUS(wstatus) != 0)
+	else if (WIFEXITED(sh->wstatus) && WEXITSTATUS(sh->wstatus) != 0)
 		perror("cmd: ");
 }
 
@@ -39,29 +39,27 @@ void	handle_cmd_return(int wstatus/*, char **args*/)
 
 int	main(int argc, char *argv[], char *envp[])
 {
-	
-	char	**in_pipes;
-	int		wstatus;
-	int		n;
+	t_shell	sh;	
 	
 	if (argc > 1 || argv == NULL)
 		return (1);	
-	wstatus = 0;
-	n = 0;
+	sh.wstatus = 0;
+	sh.count = 0;
 	while (1)
 	{
-		in_pipes = get_input();
-		while (in_pipes[n++] != NULL);
-		if (in_pipes == NULL)
+		sh.in_pipes = get_input();
+		while (sh.in_pipes[sh.count++] != NULL);
+		sh.count--;
+		if (sh.in_pipes == NULL)
 			perror("minishell");
-		if (in_pipes != NULL && in_pipes[1] == NULL)
+		if (sh.in_pipes != NULL && sh.in_pipes[1] == NULL)
 		{
-			if (ft_strncmp(in_pipes[0], "", ft_strlen(in_pipes[0] + 1) + 1) != 0)
-				wstatus = subshell(--n, in_pipes, envp);
+			if (ft_strncmp(sh.in_pipes[0], "", ft_strlen(sh.in_pipes[0] + 1) + 1) != 0)
+				sh.wstatus = subshell(&sh, envp);
 		}
 		else
-			wstatus = subshell(--n, in_pipes, envp);
-		handle_cmd_return(wstatus);
+			sh.wstatus = subshell(&sh, envp);
+		handle_cmd_return(&sh);
 	}
 	return (0);
 }

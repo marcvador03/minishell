@@ -6,7 +6,7 @@
 /*   By: pmorello <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 12:17:09 by pmorello          #+#    #+#             */
-/*   Updated: 2024/10/22 13:53:32 by mfleury          ###   ########.fr       */
+/*   Updated: 2024/10/23 22:09:17 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,14 @@ typedef enum {cd, pwd, END} cmd_enum;
 extern char **environ; //variable global para la funcion de ft_env
 
 typedef	int (*t_func_arr)(char **args);
+typedef	struct s_shell {
+	pid_t	*pid;
+	char	**in_pipes;	
+	char	***args;
+	int		**fd;
+	int		wstatus;
+	int		count;
+} t_shell;
 
 /* minishell base prompt functions*/
 char	*create_prompt();
@@ -50,4 +58,6 @@ void	free_d(void **ptr);
 char	*get_full_path(char *arg0, char *envp[]);
 void	set_errno(int err);
 
+/*subshell*/
+int	subshell(t_shell *sh, char *envp[]);
 #endif

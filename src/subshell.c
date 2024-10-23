@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/22 16:08:01 by mfleury           #+#    #+#             */
-/*   Updated: 2024/10/22 16:52:08 by mfleury          ###   ########.fr       */
+/*   Updated: 2024/10/23 22:16:03 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,100 +31,92 @@ static int **create_fpipes(int n)
 	return (p_fd);
 }
 
-static void	child_man_pipes(int n, int i, char **in_pipes, int **p_fd)
-{
-	int	j;
-
-	j = 0;
-	while (j < n)
-	{
-		if (j == i - 1)
-			dup2(p_fd[j][0], 0);
-		else
-			close(p_fd[j][0]);	
-		if (j == i)
-			dup2(p_fd[j][1], 1);
-		else
-			close(p_fd[j][1]);	
-		j++;
-	}
-}
-
-
-static char	***create_forks(int n, char **in_pipes, pid_t *pid)
+static char	***create_args(t_shell *sh)
 {
 	char	***args;
 	int		i;
 
-	args = (char ***)ft_calloc(sizeof(char **), n + 1);
+	args = (char ***)ft_calloc(sizeof(char **), sh->count + 1);
 	if (args == NULL)
 		return (NULL);
 	i = 0;
-	while (i < n)
+	while (i < sh->count)
 	{
-			args[i] = get_cmd_args(in_pipes[i]);
-			pid[i] = fork();
-		if (pid[i] == 0)
-			break;
+		args[i] = get_cmd_args(sh->in_pipes[i]);
 		i++;
 	}
 	return (args);
-}	
+}
 
-int	subshell(int n, char **in_pipes, char *envp[])
+static int run_child(t_shell *sh, int i, char *envp[]) 
 {
-	pid_t	*pid;
-	char	***args;
-	int		i;
-	int		j;
-	int		**p_fd;
-	int		wstatus;
-	char	c;
-
-	wstatus = 0;
-	p_fd = create_fpipes(n);
-	pid = (pid_t *)ft_calloc(sizeof(pid_t), n);
-	args = create_forks(n, in_pipes, pid);
-	if (p_fd  == NULL || args == NULL || pid == NULL)
-		return (free_d((void **)p_fd), free(args), free(pid), ENOMEM);
-	if (pid[--i] == 0)
-	{
-		j = 0;
-		while (j < n)
-		{
-			if (j == i - 1)
-				dup2(p_fd[j][0], 0);
-			else
-				close(p_fd[j][0]);	
-			if (j == i)
-				dup2(p_fd[j][1], 1);
-			else
-				close(p_fd[j][1]);	
-			j++;
-		}
-		wstatus = exec_cmd(args[i], envp);
-		exit (wstatus);
-	}
+	int 	j;
+	
 	j = 0;
-	while (j < n - 1)
+	while (j < sh->count)
 	{
-		close(p_fd[j][0]);	
-		close(p_fd[j++][1]);	
+		if (j == i - 1)
+			dup2(sh->fd[j][0], 0);
+		else
+			close(sh->fd[j][0]);	
+		if (j == i)
+			dup2(sh->fd[j][1], 1);
+		else
+			close(sh->fd[j][1]);	
+		j++;
 	}
-	//dup2(p_fd[n - 1][0], 0);
-	close(p_fd[n - 1][1]);
-	while (read(p_fd[n - 1][0], &c, 1) > 0)
-		write(1, &c, 1);
-	close(p_fd[n - 1][0]);
-	rl_replace_line("", 0);
-	rl_on_new_line();
-	//rl_redisplay();
+	exit(exec_cmd(sh->args[i], envp));
+}
+
+static void	create_fork(t_shell *sh, char *envp[])
+{
+	int	i;
+
 	i = 0;
-	while (i < n)
+	while (i < sh->count)
 	{
-		waitpid(pid[i], &wstatus, 0);
-		//handle_cmd_return(wstatus);
+			sh->pid[i] = fork();
+		if (sh->pid[i] == 0)
+			sh->wstatus = run_child(sh, i, envp);
 		i++;
 	}
-	return (wstatus);
+}
+
+static void	run_parent(t_shell *sh)
+{
+	int		j;
+	char	c;
+		
+	j = 0;
+	while (j < sh->count - 1)
+	{
+		close(sh->fd[j][0]);	
+		close(sh->fd[j++][1]);	
+	}
+	close(sh->fd[sh->count - 1][1]);
+	while (read(sh->fd[sh->count - 1][0], &c, 1) > 0)
+		write(1, &c, 1);
+	close(sh->fd[sh->count - 1][0]);
+	rl_replace_line("", 0);
+	rl_on_new_line();
+}	  
+
+int	subshell(t_shell *sh, char *envp[])
+{
+	int		i;
+
+	sh->fd = create_fpipes(sh->count);
+	sh->pid = (pid_t *)ft_calloc(sizeof(pid_t), sh->count);
+	sh->args = create_args(sh);
+	if (sh->fd  == NULL || sh->args == NULL || sh->pid == NULL)
+		return (free_d((void **)sh->fd), free(sh->args), free(sh->pid), ENOMEM);
+	create_fork(sh, envp);
+	run_parent(sh);
+	i = 0;
+	while (i < sh->count)
+	{
+		waitpid(sh->pid[i], &(sh->wstatus), 0);
+		i++;
+	}
+	return (sh->wstatus);
 }
