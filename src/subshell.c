@@ -6,29 +6,30 @@
 /*   By: mfleury <mfleury@student.42barcelona.      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/22 16:08:01 by mfleury           #+#    #+#             */
-/*   Updated: 2024/10/23 22:16:03 by mfleury          ###   ########.fr       */
+/*   Updated: 2024/10/24 16:25:08 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 
-static int **create_fpipes(int n)
+static int **create_fpipes(t_shell *sh)
 {
 	int	i;
-	int	**p_fd;
+	int	**fd;
 	
-	p_fd = (int **)ft_calloc(sizeof(int *), n);
-	if (p_fd == NULL)
+	fd = (int **)ft_calloc(sizeof(int *), sh->count + 1);
+	if (fd == NULL)
 		return (NULL);
 	i = 0;
-	while (i < n)
+	while (i < sh->count)
 	{
-		p_fd[i] = (int *)ft_calloc(sizeof(int), 2);
-		if (p_fd[i] == NULL)
-			return (NULL);
-		pipe(p_fd[i++]);
+		fd[i] = (int *)ft_calloc(sizeof(int), 2);
+		if (fd[i] == NULL)
+			return (free_d((void **)fd), NULL);
+		pipe(fd[i++]);
 	}
-	return (p_fd);
+	fd[i] = NULL;
+	return (set_flag(sh, 3), fd);
 }
 
 static char	***create_args(t_shell *sh)
@@ -45,7 +46,7 @@ static char	***create_args(t_shell *sh)
 		args[i] = get_cmd_args(sh->in_pipes[i]);
 		i++;
 	}
-	return (args);
+	return (set_flag(sh, 2), args);
 }
 
 static int run_child(t_shell *sh, int i, char *envp[]) 
@@ -82,6 +83,13 @@ static void	create_fork(t_shell *sh, char *envp[])
 	}
 }
 
+static void	create_pids(t_shell *sh)
+{
+	sh->pid = (pid_t *)ft_calloc(sizeof(pid_t), sh->count);
+	if (sh->pid != NULL)
+		set_flag(sh, 4);
+}
+
 static void	run_parent(t_shell *sh)
 {
 	int		j;
@@ -105,11 +113,11 @@ int	subshell(t_shell *sh, char *envp[])
 {
 	int		i;
 
-	sh->fd = create_fpipes(sh->count);
-	sh->pid = (pid_t *)ft_calloc(sizeof(pid_t), sh->count);
+	sh->fd = create_fpipes(sh);
 	sh->args = create_args(sh);
+	create_pids(sh);
 	if (sh->fd  == NULL || sh->args == NULL || sh->pid == NULL)
-		return (free_d((void **)sh->fd), free(sh->args), free(sh->pid), ENOMEM);
+		return (free_sh(sh), ENOMEM);
 	create_fork(sh, envp);
 	run_parent(sh);
 	i = 0;
@@ -118,5 +126,5 @@ int	subshell(t_shell *sh, char *envp[])
 		waitpid(sh->pid[i], &(sh->wstatus), 0);
 		i++;
 	}
-	return (sh->wstatus);
+	return (free_sh(sh), sh->wstatus);
 }

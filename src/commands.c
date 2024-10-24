@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/17 15:39:35 by mfleury           #+#    #+#             */
-/*   Updated: 2024/10/22 13:56:04 by mfleury          ###   ########.fr       */
+/*   Updated: 2024/10/24 00:48:35 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,6 +55,6 @@ char	**get_cmd_args(char *cmd_in)
 
 	args = ft_split(cmd_in, ' ');
 	if (args == NULL)
-		return (free(cmd_in), set_errno(ENOMEM), NULL); 
-	return (free(cmd_in), args);	
+		return (set_errno(ENOMEM), NULL); 
+	return (args);	
 }

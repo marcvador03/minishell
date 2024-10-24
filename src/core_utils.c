@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/16 16:32:42 by mfleury           #+#    #+#             */
-/*   Updated: 2024/10/22 13:55:46 by mfleury          ###   ########.fr       */
+/*   Updated: 2024/10/24 00:47:47 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,30 @@ void	free_d(void **ptr)
 	}
 	free(ptr);
 	ptr = NULL;
+}
+
+void	free_sh(t_shell *sh)
+{
+	int	i;
+	
+	if (sh->free_flag & (1 << 4))
+	{
+		free(sh->pid);
+		sh->pid = NULL;
+	}
+	if (sh->free_flag & (1 << 1))
+		free_d((void **)sh->in_pipes);
+	if (sh->free_flag & (1 << 3))
+		free_d((void **)sh->fd);
+	if (sh->free_flag & (1 << 2))
+	{
+		i = 0;
+		while (sh->args[i] != NULL)
+			free_d((void **)sh->args[i++]);
+		free(sh->args);
+		sh->args = NULL;
+	}
+	sh->free_flag = 0;
 }
 
 static char	**search_path(char *envp[])
@@ -81,4 +105,14 @@ char	*get_full_path(char *arg0, char *envp[])
 void	set_errno(int err)
 {
 	errno = err;
+}
+
+void	set_flag(t_shell *sh, int n)
+{
+	sh->free_flag = sh->free_flag | (1 << n); 	
+}
+
+void	unset_flag(t_shell *sh, int n)
+{
+	sh->free_flag = sh->free_flag & ~ (1 << n); 	
 }

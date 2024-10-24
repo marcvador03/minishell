@@ -6,7 +6,7 @@
 /*   By: pmorello <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 12:17:09 by pmorello          #+#    #+#             */
-/*   Updated: 2024/10/23 22:09:17 by mfleury          ###   ########.fr       */
+/*   Updated: 2024/10/24 00:37:31 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,13 +38,14 @@ typedef	struct s_shell {
 	int		**fd;
 	int		wstatus;
 	int		count;
+	char	free_flag;
 } t_shell;
 
 /* minishell base prompt functions*/
 char	*create_prompt();
 char	**get_cmd_args(char *cmd_in);
 int		exec_cmd(char **args, char *envp[]);
-char	**get_input();
+char	**get_input(t_shell *sh);
 
 /* minishell built-ins functions*/
 int		ft_cd(char **args);
@@ -55,8 +56,11 @@ void	ft_echo(int argc, char **argv);
 /*diverse utils functions*/		
 void	free_s(void *ptr);
 void	free_d(void **ptr);
+void	free_sh(t_shell *sh);
 char	*get_full_path(char *arg0, char *envp[]);
 void	set_errno(int err);
+void	set_flag(t_shell *sh, int n);
+void	unset_flag(t_shell *sh, int n);
 
 /*subshell*/
 int	subshell(t_shell *sh, char *envp[]);
