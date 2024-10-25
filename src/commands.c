@@ -6,17 +6,17 @@
 /*   By: mfleury <mfleury@student.42barcelona.      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/17 15:39:35 by mfleury           #+#    #+#             */
-/*   Updated: 2024/10/24 00:48:35 by mfleury          ###   ########.fr       */
+/*   Updated: 2024/10/25 14:17:19 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 
-static cmd_enum str_to_enum(const char *str)
+static t_cmd_enum	str_to_enum(const char *str)
 {
-	const char	*enum_str[] = {"cd", "pwd"}; 
-	int	i;
-	
+	const char	*enum_str[] = {"cd", "pwd"};
+	int			i;
+
 	i = 0;
 	while (i < END)
 	{
@@ -30,11 +30,13 @@ static cmd_enum str_to_enum(const char *str)
 int	exec_cmd(char **args, char *envp[])
 {
 	int			x;
-	t_func_arr	call_cmd[2] = {&ft_cd, &ft_pwd};
+	t_func_arr	call_cmd[2];
 	char		*cmd;
 
+	call_cmd[0] = &ft_cd;
+	call_cmd[1] = &ft_pwd;
 	if (ft_strncmp(args[0], "exit", 4) == 0)
-		return (99);
+		return (255);
 	x = str_to_enum(args[0]);
 	if (x != -1)
 		return (call_cmd[x](args));
@@ -42,11 +44,11 @@ int	exec_cmd(char **args, char *envp[])
 	{
 		cmd = get_full_path(args[0], envp);
 		if (cmd == NULL)
-			return (free_d((void **)args), ENOENT);
+			return (free_d((void **)args), set_errno(ENOENT), ENOENT);
 		else if (execve(cmd, args, envp) == -1)
 			return (free_d((void **)args), errno);
 	}
-	return (ENOENT);
+	return (set_errno(ENOENT), ENOENT);
 }
 
 char	**get_cmd_args(char *cmd_in)
@@ -55,6 +57,6 @@ char	**get_cmd_args(char *cmd_in)
 
 	args = ft_split(cmd_in, ' ');
 	if (args == NULL)
-		return (set_errno(ENOMEM), NULL); 
-	return (args);	
+		return (NULL);
+	return (args);
 }

@@ -6,44 +6,40 @@
 /*   By: mfleury <mfleury@student.42barcelona.      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 10:01:23 by mfleury           #+#    #+#             */
-/*   Updated: 2024/10/24 16:34:13 by mfleury          ###   ########.fr       */
+/*   Updated: 2024/10/25 14:07:20 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 
-
-void	exit_minishell(int status, int err/*, char **args*/)
+void	exit_minishell(t_shell *sh, int status, int err)
 {
-	//free_d((void **)args);
 	if (err != 0)
 		errno = err;
-	if (errno == 99)
+	if (errno == 0)
 		printf("Minishell exited with success\n");
 	else
-		perror("Minishell exit with error:\n");
+		perror("Minishell exited with error:\n");
+	free_sh(sh);
 	exit(status);
 }
 
-
-void	handle_cmd_return(t_shell *sh)
+void	main_cmd_return(t_shell *sh)
 {
-	errno = WEXITSTATUS(sh->wstatus);
-	if (WIFEXITED(sh->wstatus) && WEXITSTATUS(sh->wstatus) == 99)
-		exit_minishell(EXIT_SUCCESS, 0/*, args*/);
-	else if (WIFEXITED(sh->wstatus) && WEXITSTATUS(sh->wstatus) != 0)
-		perror("cmd: ");
+	if (errno != 0)
+		exit_minishell(sh, EXIT_FAILURE, 0);
+	if (sh->flag & (1 << 1))
+		exit_minishell(sh, EXIT_SUCCESS, 0);
 }
 
 int	main(int argc, char *argv[], char *envp[])
 {
-	t_shell	sh;	
-	
+	t_shell	sh;
+
 	if (argc > 1 || argv == NULL)
-		return (1);	
-	sh.wstatus = 0;
+		return (1);
 	sh.count = 0;
-	sh.free_flag = 0;
+	sh.flag = 0;
 	while (1)
 	{
 		sh.in_pipes = get_input(&sh);
@@ -54,13 +50,15 @@ int	main(int argc, char *argv[], char *envp[])
 		if (sh.in_pipes != NULL && sh.in_pipes[1] == NULL)
 		{
 			if (ft_strncmp(sh.in_pipes[0], "", ft_strlen(sh.in_pipes[0] + 1) + 1) != 0)
-				sh.wstatus = subshell(&sh, envp);
+				subshell(&sh, envp);
 			else
 				free_sh(&sh);
 		}
 		else
-			sh.wstatus = subshell(&sh, envp);
-		handle_cmd_return(&sh);
+			subshell(&sh, envp);
+		main_cmd_return(&sh);
+		sh.count = 0;
+		sh.flag = 0;
 	}
 	return (0);
 }
