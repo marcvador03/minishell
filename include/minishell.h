@@ -6,7 +6,7 @@
 /*   By: pmorello <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 12:17:09 by pmorello          #+#    #+#             */
-/*   Updated: 2024/10/25 14:16:17 by mfleury          ###   ########.fr       */
+/*   Updated: 2024/10/28 16:25:33 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,9 @@
 # include "../libft/ft_printf/ft_printf.h"
 # include "../libft/getnextline/get_next_line.h"
 
+# define TRUE 1
+# define FALSE 0
+
 /*Enum to match command names input with a number*/
 typedef enum cmd_enum
 {
@@ -38,6 +41,8 @@ extern char	**environ;//variable global para la funcion de ft_env
 typedef int	(*t_func_arr)(char **args);
 typedef struct s_shell
 {
+	char	*s_line;
+	int		priority;
 	pid_t	*pid;
 	char	**in_pipes;
 	char	***args;
@@ -50,7 +55,7 @@ typedef struct s_shell
 char	*create_prompt(void);
 char	**get_cmd_args(char *cmd_in);
 int		exec_cmd(char **args, char *envp[]);
-char	**get_input(t_shell *sh);
+t_shell	*get_input();
 
 /* minishell built-ins functions*/
 int		ft_cd(char **args);

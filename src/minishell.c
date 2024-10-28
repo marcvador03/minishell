@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 10:01:23 by mfleury           #+#    #+#             */
-/*   Updated: 2024/10/25 14:07:20 by mfleury          ###   ########.fr       */
+/*   Updated: 2024/10/28 16:25:35 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,15 +34,17 @@ void	main_cmd_return(t_shell *sh)
 
 int	main(int argc, char *argv[], char *envp[])
 {
-	t_shell	sh;
+	t_shell	*sh;
 
 	if (argc > 1 || argv == NULL)
 		return (1);
-	sh.count = 0;
-	sh.flag = 0;
 	while (1)
 	{
-		sh.in_pipes = get_input(&sh);
+		sh = get_input();
+		if (sh == NULL)
+			perror("minishell: ");
+
+		/*sh.in_pipes = get_input(&sh);
 		if (sh.in_pipes == NULL)
 			perror("minishell");
 		while (sh.in_pipes[sh.count++] != NULL);
@@ -55,10 +57,8 @@ int	main(int argc, char *argv[], char *envp[])
 				free_sh(&sh);
 		}
 		else
-			subshell(&sh, envp);
+			subshell(&sh, envp);*/
 		main_cmd_return(&sh);
-		sh.count = 0;
-		sh.flag = 0;
 	}
 	return (0);
 }
