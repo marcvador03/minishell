@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 12:26:04 by mfleury           #+#    #+#             */
-/*   Updated: 2024/10/28 16:29:12 by mfleury          ###   ########.fr       */
+/*   Updated: 2024/10/29 19:57:39 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,16 +68,35 @@ int	count_p(char *line, int cnt)
 	return (free_s(line), cnt);
 }
 
+char	*get_next_bracket(char *line)
+{
+	char *s_line;
+
+	if (ft_strchr(line, '(') == 0 && ft_strchr(line, ')') == 0)
+		return (line);
+	ft_substr(line, 
+	return (s_line);
+	
+}
+
 static void	fill_sh(t_shell **sh, char *line, int n)
 {
-	int	i;
+	int		i;
+	int		j;
+	char	*sub_line;
 
 	i = 0;
+	j = 0;
 	while (i < n)
 	{
 		if (ft_strchr(line, '(') == 0 && ft_strchr(line, ')') == 0)
 			sh[i]->s_line = line;
-		
+		if (ft_strrchr(line, ')') != 0 || *line != '\0')
+		{
+				
+			line++;
+		}
+		line++;
 		i++;
 	}
 }
