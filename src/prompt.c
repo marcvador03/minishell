@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 12:26:04 by mfleury           #+#    #+#             */
-/*   Updated: 2024/10/29 19:57:39 by mfleury          ###   ########.fr       */
+/*   Updated: 2024/10/30 19:29:54 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,22 +26,18 @@ char	*create_prompt(void)
 	return (res);
 }
 
-char	**identify_pipes(char *input)
+char	**identify_pipes(t_shell *sh)
 {
-	int		i;
-	char	x;
 	char	**pipes;
+	int		i;
 
-	i = 0;
-	while (input[i] != '\0')
-	{
-		x = input[i++];
-		if (x == '|' && input[i] == '|')
-			return (set_errno(EPERM), NULL);
-	}
-	pipes = ft_split(input, '|');
+	pipes = ft_split(sh->s_line, '|');
 	if (pipes == NULL)
 		return (set_errno(ENOMEM), NULL);
+	sh->count = 0;
+	i = 0;
+	while (pipes[i++] != NULL)
+		sh->count++;
 	return (pipes);
 }
 
@@ -68,45 +64,83 @@ int	count_p(char *line, int cnt)
 	return (free_s(line), cnt);
 }
 
-char	*get_next_bracket(char *line)
+int	sh_strpos(const char *big, const char *little)
 {
-	char *s_line;
-
-	if (ft_strchr(line, '(') == 0 && ft_strchr(line, ')') == 0)
-		return (line);
-	ft_substr(line, 
-	return (s_line);
-	
-}
-
-static void	fill_sh(t_shell **sh, char *line, int n)
-{
-	int		i;
+	size_t	i;
 	int		j;
-	char	*sub_line;
+	char 	*str;
 
+	str = (char *)big;
+	if (ft_strlen(little) == 0)
+		return (ft_strlen(big));
 	i = 0;
-	j = 0;
-	while (i < n)
+	while (*str != '\0')
 	{
-		if (ft_strchr(line, '(') == 0 && ft_strchr(line, ')') == 0)
-			sh[i]->s_line = line;
-		if (ft_strrchr(line, ')') != 0 || *line != '\0')
+		if (*little == *str)
 		{
-				
-			line++;
+			j = 0;
+			while (little[j] == str[j])
+			{
+				j++;
+				if (little[j] == '\0')
+					return (i);
+			}
 		}
-		line++;
+		str++;
 		i++;
 	}
+	return (ft_strlen(big));
 }
 
-t_shell *get_input()
+char	*sh_strcut(char *str, int start, int end)
+{
+	char	*res;
+	int		i;
+	int		j;
+	int		len;
+
+	if (str == NULL || end <= start)
+		return (NULL);
+	len = ft_strlen(str);
+	if (start > len)
+		return (NULL);
+	if (end - start > len)
+		end = start + len;
+	res = (char *)ft_calloc(sizeof(char), end - start + 1);
+	if (res == NULL)
+		return (NULL);
+	i = start;
+	j = 0;
+	while (i < end || str[i] != '\0')
+		res[j++] = str[i++];
+	res[j] = '\0';
+	return (res);
+}
+
+int	get_next_token(t_shell *sh, char *line)
+{
+	int		len;
+	char 	*tk;
+
+	len = ft_strlen(line);
+	if (sh_strpos(line, "&&") == len && sh_strpos(line, "||") == len)
+		tk = NULL;
+	else if (sh_strpos(line, "&&") < sh_strpos(line, "||"))
+		tk = "&&";
+	else if (sh_strpos(line, "||") < sh_strpos(line, "&&"))
+	{	
+		sh->token = 1;
+		tk = "||";
+	}
+	sh->s_line = sh_strcut(line, 0, sh_strpos(line, tk));
+	sh->pipes->in_pipes = identify_pipes(sh);//
+	return (0);	
+}
+
+char	*get_input(t_shell *sh)
 {
 	char	*line;
 	char	*prompt;
-	int		n;
-	t_shell	*sh;
 
 	prompt = create_prompt();
 	if (prompt == NULL)
@@ -114,19 +148,58 @@ t_shell *get_input()
 	line = readline(prompt);
 	if (line == NULL)
 		return (free_s(prompt), set_errno(ENOMEM), NULL);
-	else if (ft_strlen(line) == 1 && line[0] == '\0')
-		return (free_s(prompt), free_s(line), get_input());
+	else if (ft_strlen(line) == 0 && line[0] == '\0')
+		return (free_s(prompt), free_s(line), get_input(sh));
 	add_history(line);
-	n = count_p(ft_strdup(line), 0);
-	if (n == 0)
-		return (free_s(prompt), free_s(line), set_errno(EINVAL), NULL);
-	sh = (t_shell *)ft_calloc(sizeof(t_shell), n);	
-	if (sh == NULL)
-		return (free_s(prompt), free_s(line), set_errno(ENOMEM), NULL);
-	fill_sh(&sh, line, n);
-	return (free_s(prompt), free_s(line), sh);
-	/*pipes = identify_pipes(line);
-	if (pipes == NULL)
-		return (free(prompt), free(line), set_errno(ENOMEM), NULL);
-	return (free_s(prompt), free_s(line), set_flag(sh, 2), pipes);*/
+	return (free_s(prompt), set_flag(sh, 2), line);
+}
+
+int	count_tokens(char *line)
+{
+	int	n;
+	int	i;
+	int	len;
+
+	if (line == NULL)
+		return (0);
+	n = 1;
+	len = ft_strlen(line);
+	if (sh_strpos(line, "&&") == len && sh_strpos(line, "||") == len)
+		return (n);
+	i = 0;
+	while (i <= len)
+	{
+		if (sh_strpos(line + i, "&&") < sh_strpos(line + i, "||"))
+			i += sh_strpos(line + i, "&&");
+		else	
+			i += sh_strpos(line + i, "||");
+		n++;
+	}
+	return (n);
+}
+
+void	start_shell(char *envp[])
+{
+	char	*line;
+	t_shell	*sh;
+	char	*t_line;
+	int		n;
+	int		i;
+
+	n = 0;
+	i = 0;
+	line = get_input(sh);
+	if (line == NULL)
+		perror("minishell: ");	
+	n = count_tokens(line);
+	t_line = line;
+	while (i++ < n)
+	{
+		if (sh == NULL)
+			sh = sh_lstnew(t_line);
+		else
+			sh_lstadd_back(&sh, t_line);
+		t_line = line +  
+	}
+	free(line);
 }
