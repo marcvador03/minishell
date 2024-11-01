@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/22 16:08:01 by mfleury           #+#    #+#             */
-/*   Updated: 2024/11/01 23:26:42 by mfleury          ###   ########.fr       */
+/*   Updated: 2024/11/02 00:01:41 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,15 +83,15 @@ static int	create_fork(t_pipe *p, char *envp[])
 	return (0);
 }
 
-void	sub_cmd_return(t_pipe *p, char *cmd, int wstatus)
+void	sub_cmd_return(char *cmd, int wstatus)
 {
 	if (WIFEXITED(wstatus))
 	{
 		if (errno == 0)
 			errno = WEXITSTATUS(wstatus);
-		if (WEXITSTATUS(wstatus) == 255)
-			exit_minishell(p, EXIT_SUCCESS, 0);
-		else if (WEXITSTATUS(wstatus) > 0 && WEXITSTATUS(wstatus) < 255)
+		/*if (WEXITSTATUS(wstatus) == 255)
+			exit_minishell(p, EXIT_SUCCESS, 0);*/
+		if (WEXITSTATUS(wstatus) > 0 && WEXITSTATUS(wstatus) < 255)
 			perror(cmd);
 		errno = 0;
 	}
@@ -106,16 +106,16 @@ int	subshell(t_pipe *p, char *envp[])
 	p->args = create_args(p);
 	p->pid = create_pids(p);
 	if (p->fd == NULL || p->args == NULL || p->pid == NULL)
-		return (free_sh(p), errno);
+		return (free_pipe(p), errno);
 	if (create_fork(p, envp) == -1)
-		return (free_sh(p), errno);
+		return (free_pipe(p), errno);
 	if (run_parent(p) == -1)
-		return (free_sh(p), errno);
+		return (free_pipe(p), errno);
 	i = 0;
 	while (i < p->count)
 	{
 		waitpid(p->pid[i], &wstatus, 0);
-		sub_cmd_return(p, p->args[i++][0], wstatus);
+		sub_cmd_return(p->args[i++][0], wstatus);
 	}
-	return (free_sh(p), WEXITSTATUS(wstatus));
+	return (free_pipe(p), WEXITSTATUS(wstatus));
 }

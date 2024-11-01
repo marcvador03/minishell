@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/25 13:59:57 by mfleury           #+#    #+#             */
-/*   Updated: 2024/11/01 21:29:49 by mfleury          ###   ########.fr       */
+/*   Updated: 2024/11/02 00:27:05 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ int	**create_fpipes(t_pipe *p)
 		}
 	}
 	fd[i] = NULL;
-	return (set_flag(p, 4), fd);
+	return (set_flag(p, 2), fd);
 }
 
 char	***create_args(t_pipe *p)
@@ -52,7 +52,7 @@ char	***create_args(t_pipe *p)
 			return (free_d((void **)args[i]), set_errno(ENOMEM), NULL);
 		i++;
 	}
-	return (set_flag(p, 3), args);
+	return (set_flag(p, 1), args);
 }
 
 pid_t	*create_pids(t_pipe *p)
@@ -62,5 +62,5 @@ pid_t	*create_pids(t_pipe *p)
 	pid = (pid_t *)ft_calloc(sizeof(pid_t), p->count);
 	if (pid == NULL)
 		return (set_errno(ENOMEM), NULL);
-	return (set_flag(p, 5), pid);
+	return (set_flag(p, 3), pid);
 }

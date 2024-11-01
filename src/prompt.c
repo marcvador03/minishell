@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 12:26:04 by mfleury           #+#    #+#             */
-/*   Updated: 2024/11/01 23:22:59 by mfleury          ###   ########.fr       */
+/*   Updated: 2024/11/02 00:23:27 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ char	**identify_pipes(char *s_line, t_pipe **p)
 	i = 0;
 	while (pipes[i++] != NULL)
 		(*p)->count++;
-	return (pipes);
+	return (set_flag(*p, 0), pipes);
 }
 
 int	count_p(char *line, int cnt)
@@ -135,7 +135,7 @@ int	get_next_token(t_shell *sh, char *line)
 		sh->token = 1;
 	else if (ft_strncmp(line, "&&", 2) == 0) 
 		sh->token = 0;
-	sh->pipes->in_pipes = identify_pipes(sh->s_line, &sh->pipes);//
+	sh->pipes->in_pipes = identify_pipes(sh->s_line, &sh->pipes);
 	return (0);	
 }
 
@@ -199,26 +199,27 @@ t_shell	*fill_sh(t_shell *sh, char *line, int n)
 		if (tmp == NULL)
 			return (NULL);
 		line = line + ft_strlen(tmp->s_line) + 2;
-		tmp->s_line = ft_strtrim(tmp->s_line, " ");
+		free_s((void *)tmp->s_line);
+	//	tmp->s_line = ft_strtrim(tmp->s_line, " ");
 		sh = tmp->head;
 	}
 	return (tmp->head);
 }
 
-/*void	main_cmd_return(t_shell *sh)
+void	main_cmd_return(t_shell *sh)
 {
-	if (errno != 0)
-		exit_minishell(sh, EXIT_FAILURE, 0);
-	if (sh->pipes->mem_flag & (1 << 1))
-		exit_minishell(sh, EXIT_SUCCESS, 0);
-}*/
+	if (errno > 0 && errno < 255)
+		exit_minishell(sh, EXIT_FAILURE);
+	else if (errno == 255 && sh->pipes->count == 1)
+		exit_minishell(sh, EXIT_SUCCESS);
+}
 
 int	start_shell(char *envp[])
 {
 	char	*line;
 	t_shell	*sh;
+	t_shell	*head;
 	int		n;
-	int		x;
 
 	n = 0;
 	sh = NULL;
@@ -228,15 +229,19 @@ int	start_shell(char *envp[])
 	n = count_tokens(line);
 	sh = fill_sh(sh, line, n);
 	if (sh == NULL)
-		return (set_errno(ENOMEM), free_s(line), ENOMEM);
-	x = 0;
+		return (set_errno(ENOMEM), free_s((void *)line), ENOMEM);
+	free_s((void *)line);
+	errno = 0;
+	head = sh->head;
 	while (sh != NULL)
 	{
-		if (sh->token == 0 || (sh->token == 1 && x != 0))
-			x = subshell(sh->pipes, envp); 
+		if (sh->token == 0 || (sh->token == 1 && errno != 0))
+		{
+			errno = subshell(sh->pipes, envp);
+			main_cmd_return(head);
+		}
 		sh = sh->next;
 	}
-	free_s(line);
 //	main_cmd_return(sh);
-	return (0);
+	return (free_sh(head), 0);
 }

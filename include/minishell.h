@@ -6,7 +6,7 @@
 /*   By: pmorello <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 12:17:09 by pmorello          #+#    #+#             */
-/*   Updated: 2024/11/01 22:00:22 by mfleury          ###   ########.fr       */
+/*   Updated: 2024/11/02 00:22:25 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,12 +41,12 @@ typedef enum cmd_enum
 
 typedef int	(*t_func_arr)(char **args);
 /*flag bit position: bitvalue = 0 | bitvalue = 1
-0:
-1: no exit | exit minishell
-2: pipes mem freed | pipes allocated on heap
-3: args mem freed | args allocated on heap
-4: fd mem freed | fd allocated on heap
-5: pid mem freed | pid allocated on heap
+0: pipes mem freed | pipes allocated on heap
+1: args mem freed | args allocated on heap
+2: fd mem freed | fd allocated on heap
+3: pid mem freed | pid allocated on heap
+4:
+5:
 6:
 7:
 */
@@ -77,7 +77,7 @@ char	**get_cmd_args(char *cmd_in);
 int		exec_cmd(char **args, char *envp[]);
 char	*get_input();
 int		start_shell(char *envp[]);
-void	exit_minishell(t_pipe *p, int status, int err);
+void	exit_minishell(t_shell *sh, int status);
 
 /* minishell built-ins functions*/
 int		ft_cd(char **args);
@@ -88,7 +88,8 @@ void	ft_echo(int argc, char **argv);
 /*diverse utils functions*/
 void	free_s(void *ptr);
 void	free_d(void **ptr);
-void	free_sh(t_pipe *p);
+void	free_pipe(t_pipe *p);
+void	free_sh(t_shell *sh);
 char	*get_full_path(char *arg0, char *envp[]);
 void	set_errno(int err);
 void	set_flag(t_pipe *p, int n);
