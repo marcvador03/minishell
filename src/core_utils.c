@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/16 16:32:42 by mfleury           #+#    #+#             */
-/*   Updated: 2024/10/25 14:11:04 by mfleury          ###   ########.fr       */
+/*   Updated: 2024/11/01 21:13:02 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,12 +62,12 @@ void	set_errno(int err)
 	errno = err;
 }
 
-void	set_flag(t_shell *sh, int n)
+void	set_flag(t_pipe *p, int n)
 {
-	sh->flag = sh->flag | (1 << n);
+	p->mem_flag = p->mem_flag | (1 << n);
 }
 
-void	unset_flag(t_shell *sh, int n)
+void	unset_flag(t_pipe *p, int n)
 {
-	sh->flag = sh->flag & ~ (1 << n);
+	p->mem_flag = p->mem_flag & ~ (1 << n);
 }

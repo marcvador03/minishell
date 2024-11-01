@@ -15,7 +15,8 @@ SRC_NAMES := minishell.c \
 			 prompt.c \
 			 subshell.c \
 			 subshell_utils.c \
-			 free_utils.c
+			 free_utils.c \
+			 list_utils.c
 
 INC_NAMES := minishell.h
 

@@ -6,7 +6,7 @@
 /*   By: pmorello <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 12:17:09 by pmorello          #+#    #+#             */
-/*   Updated: 2024/10/30 19:09:27 by mfleury          ###   ########.fr       */
+/*   Updated: 2024/11/01 22:00:22 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ typedef enum cmd_enum
 
 typedef int	(*t_func_arr)(char **args);
 /*flag bit position: bitvalue = 0 | bitvalue = 1
-0: "&&" | "||" 
+0:
 1: no exit | exit minishell
 2: pipes mem freed | pipes allocated on heap
 3: args mem freed | args allocated on heap
@@ -76,7 +76,8 @@ char	*create_prompt(void);
 char	**get_cmd_args(char *cmd_in);
 int		exec_cmd(char **args, char *envp[]);
 char	*get_input();
-void	start_shell(char *envp[]);
+int		start_shell(char *envp[]);
+void	exit_minishell(t_pipe *p, int status, int err);
 
 /* minishell built-ins functions*/
 int		ft_cd(char **args);
@@ -87,16 +88,16 @@ void	ft_echo(int argc, char **argv);
 /*diverse utils functions*/
 void	free_s(void *ptr);
 void	free_d(void **ptr);
-void	free_sh(t_shell *sh);
+void	free_sh(t_pipe *p);
 char	*get_full_path(char *arg0, char *envp[]);
 void	set_errno(int err);
-void	set_flag(t_shell *sh, int n);
-void	unset_flag(t_shell *sh, int n);
+void	set_flag(t_pipe *p, int n);
+void	unset_flag(t_pipe *p, int n);
 /*list utils */
 t_shell	*sh_lstnew(char *line);
 t_shell	*sh_lstlast(t_shell *sh);
-void	sh_lstadd_back(t_shell **sh, char *line);
+t_shell	*sh_lstadd_back(t_shell **sh, char *line);
 
 /*subshell*/
-int		subshell(t_shell *sh, char *envp[]);
+int		subshell(t_pipe *p, char *envp[]);
 #endif

@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 12:26:04 by mfleury           #+#    #+#             */
-/*   Updated: 2024/10/30 19:29:54 by mfleury          ###   ########.fr       */
+/*   Updated: 2024/11/01 23:22:59 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,18 +26,18 @@ char	*create_prompt(void)
 	return (res);
 }
 
-char	**identify_pipes(t_shell *sh)
+char	**identify_pipes(char *s_line, t_pipe **p)
 {
 	char	**pipes;
 	int		i;
 
-	pipes = ft_split(sh->s_line, '|');
+	pipes = ft_split(s_line, '|');
 	if (pipes == NULL)
 		return (set_errno(ENOMEM), NULL);
-	sh->count = 0;
+	(*p)->count = 0;
 	i = 0;
 	while (pipes[i++] != NULL)
-		sh->count++;
+		(*p)->count++;
 	return (pipes);
 }
 
@@ -80,11 +80,8 @@ int	sh_strpos(const char *big, const char *little)
 		{
 			j = 0;
 			while (little[j] == str[j])
-			{
-				j++;
-				if (little[j] == '\0')
+				if (little[++j] == '\0')
 					return (i);
-			}
 		}
 		str++;
 		i++;
@@ -111,7 +108,7 @@ char	*sh_strcut(char *str, int start, int end)
 		return (NULL);
 	i = start;
 	j = 0;
-	while (i < end || str[i] != '\0')
+	while (i < end && str[i] != '\0')
 		res[j++] = str[i++];
 	res[j] = '\0';
 	return (res);
@@ -121,25 +118,31 @@ int	get_next_token(t_shell *sh, char *line)
 {
 	int		len;
 	char 	*tk;
+	char	*t_line;
 
-	len = ft_strlen(line);
-	if (sh_strpos(line, "&&") == len && sh_strpos(line, "||") == len)
+	t_line = line + 2;
+	len = ft_strlen(t_line);
+	if (sh_strpos(t_line, "&&") == len && sh_strpos(t_line, "||") == len)
 		tk = NULL;
-	else if (sh_strpos(line, "&&") < sh_strpos(line, "||"))
+	else if (sh_strpos(t_line, "&&") < sh_strpos(t_line, "||"))
 		tk = "&&";
-	else if (sh_strpos(line, "||") < sh_strpos(line, "&&"))
-	{	
-		sh->token = 1;
+	else if (sh_strpos(t_line, "||") < sh_strpos(t_line, "&&"))
 		tk = "||";
-	}
-	sh->s_line = sh_strcut(line, 0, sh_strpos(line, tk));
-	sh->pipes->in_pipes = identify_pipes(sh);//
+	sh->s_line = sh_strcut(line, 2, sh_strpos(t_line, tk) + 2);
+	if (sh->s_line == NULL)
+		return (set_errno(ENOMEM), ENOMEM);
+	if (ft_strncmp(line, "||", 2) == 0) 
+		sh->token = 1;
+	else if (ft_strncmp(line, "&&", 2) == 0) 
+		sh->token = 0;
+	sh->pipes->in_pipes = identify_pipes(sh->s_line, &sh->pipes);//
 	return (0);	
 }
 
-char	*get_input(t_shell *sh)
+char	*get_input()
 {
 	char	*line;
+	char	*line2;
 	char	*prompt;
 
 	prompt = create_prompt();
@@ -149,57 +152,91 @@ char	*get_input(t_shell *sh)
 	if (line == NULL)
 		return (free_s(prompt), set_errno(ENOMEM), NULL);
 	else if (ft_strlen(line) == 0 && line[0] == '\0')
-		return (free_s(prompt), free_s(line), get_input(sh));
+		return (free_s(prompt), free_s(line), get_input());
 	add_history(line);
-	return (free_s(prompt), set_flag(sh, 2), line);
+	line2 = ft_strjoin("&&", line);
+	return (free_s(prompt), free_s(line), line2);
 }
 
 int	count_tokens(char *line)
 {
-	int	n;
-	int	i;
-	int	len;
+	int		n;
+	int		i;
+	int		len;
+	char	*t_line;
 
 	if (line == NULL)
 		return (0);
-	n = 1;
-	len = ft_strlen(line);
-	if (sh_strpos(line, "&&") == len && sh_strpos(line, "||") == len)
-		return (n);
+	n = 0;
+	t_line = line + 2;
+	len = ft_strlen(t_line);
+	if (sh_strpos(t_line, "&&") == len && sh_strpos(t_line, "||") == len)
+		return (1);
 	i = 0;
-	while (i <= len)
+	while (i < len)
 	{
-		if (sh_strpos(line + i, "&&") < sh_strpos(line + i, "||"))
-			i += sh_strpos(line + i, "&&");
+		if (sh_strpos(t_line + i, "&&") < sh_strpos(t_line + i, "||"))
+			i += sh_strpos(t_line + i, "&&") + 2;
 		else	
-			i += sh_strpos(line + i, "||");
+			i += sh_strpos(t_line + i, "||") + 2;
 		n++;
 	}
 	return (n);
 }
 
-void	start_shell(char *envp[])
+t_shell	*fill_sh(t_shell *sh, char *line, int n)
+{
+	int		i;
+	t_shell	*tmp;
+	
+	i = 0;
+	while (i++ < n && *line != '\0')
+	{
+		if (sh == NULL)
+			tmp = sh_lstnew(line);
+		else
+			tmp = sh_lstadd_back(&sh, line);
+		if (tmp == NULL)
+			return (NULL);
+		line = line + ft_strlen(tmp->s_line) + 2;
+		tmp->s_line = ft_strtrim(tmp->s_line, " ");
+		sh = tmp->head;
+	}
+	return (tmp->head);
+}
+
+/*void	main_cmd_return(t_shell *sh)
+{
+	if (errno != 0)
+		exit_minishell(sh, EXIT_FAILURE, 0);
+	if (sh->pipes->mem_flag & (1 << 1))
+		exit_minishell(sh, EXIT_SUCCESS, 0);
+}*/
+
+int	start_shell(char *envp[])
 {
 	char	*line;
 	t_shell	*sh;
-	char	*t_line;
 	int		n;
-	int		i;
+	int		x;
 
 	n = 0;
-	i = 0;
-	line = get_input(sh);
+	sh = NULL;
+	line = get_input();
 	if (line == NULL)
 		perror("minishell: ");	
 	n = count_tokens(line);
-	t_line = line;
-	while (i++ < n)
+	sh = fill_sh(sh, line, n);
+	if (sh == NULL)
+		return (set_errno(ENOMEM), free_s(line), ENOMEM);
+	x = 0;
+	while (sh != NULL)
 	{
-		if (sh == NULL)
-			sh = sh_lstnew(t_line);
-		else
-			sh_lstadd_back(&sh, t_line);
-		t_line = line +  
+		if (sh->token == 0 || (sh->token == 1 && x != 0))
+			x = subshell(sh->pipes, envp); 
+		sh = sh->next;
 	}
-	free(line);
+	free_s(line);
+//	main_cmd_return(sh);
+	return (0);
 }

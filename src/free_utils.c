@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/25 14:10:00 by mfleury           #+#    #+#             */
-/*   Updated: 2024/10/25 14:10:29 by mfleury          ###   ########.fr       */
+/*   Updated: 2024/11/01 21:15:00 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,31 +32,31 @@ void	free_d(void **ptr)
 	ptr = NULL;
 }
 
-void	free_sh(t_shell *sh)
+void	free_sh(t_pipe *p)
 {
 	int	i;
 
-	if (sh->flag & (1 << 5))
+	if (p->mem_flag & (1 << 5))
 	{
-		free_s((void *)sh->pid);
-		unset_flag(sh, 5);
+		free_s((void *)p->pid);
+		unset_flag(p, 5);
 	}
-	if (sh->flag & (1 << 2))
+	if (p->mem_flag & (1 << 2))
 	{
-		free_d((void **)sh->in_pipes);
-		unset_flag(sh, 2);
+		free_d((void **)p->in_pipes);
+		unset_flag(p, 2);
 	}
-	if (sh->flag & (1 << 4))
+	if (p->mem_flag & (1 << 4))
 	{
-		free_d((void **)sh->fd);
-		unset_flag(sh, 4);
+		free_d((void **)p->fd);
+		unset_flag(p, 4);
 	}
-	if (sh->flag & (1 << 3))
+	if (p->mem_flag & (1 << 3))
 	{
 		i = 0;
-		while (sh->args[i] != NULL)
-			free_d((void **)sh->args[i++]);
-		free_s((void **)sh->args);
-		unset_flag(sh, 3);
+		while (p->args[i] != NULL)
+			free_d((void **)p->args[i++]);
+		free_s((void **)p->args);
+		unset_flag(p, 3);
 	}
 }
