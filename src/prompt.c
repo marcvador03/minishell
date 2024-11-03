@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 12:26:04 by mfleury           #+#    #+#             */
-/*   Updated: 2024/11/03 20:03:50 by mfleury          ###   ########.fr       */
+/*   Updated: 2024/11/03 20:56:19 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -228,12 +228,13 @@ t_shell	*fill_sh(t_shell *sh, char *line, int n)
 	return (tmp->head);
 }
 
-void	main_cmd_return(t_shell *sh)
+int	main_cmd_return(t_shell *sh)
 {
 	if (errno > 0 && errno < 255)
-		exit_minishell(sh, EXIT_FAILURE);
+		perror("minishell: ");
 	else if (errno == 255 && sh->pipes->count == 1)
 		exit_minishell(sh, EXIT_SUCCESS);
+	return (errno);
 }
 
 void	get_bracket(char *line)
@@ -268,15 +269,14 @@ int	execute_tokens(t_shell *sh, t_shell *head, int x, char *envp[])
 			waitpid(pid, &wstatus, 0);
 		}
 		else if (sh->depth < prev)
-			return (errno);
+			return (main_cmd_return(head));
 		else if (sh->depth == x)
 			if (sh->token == 0 || (sh->token == 1 && errno != 0))
 				errno = subshell(sh->pipes, envp);
 		main_cmd_return(head);
 		sh = sh->next;
 	}
-	main_cmd_return(head);
-	return (errno);
+	return(main_cmd_return(head));
 }	
 
 int	start_shell(char *envp[])
