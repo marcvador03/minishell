@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 12:26:04 by mfleury           #+#    #+#             */
-/*   Updated: 2024/11/02 00:23:27 by mfleury          ###   ########.fr       */
+/*   Updated: 2024/11/03 20:03:50 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -114,12 +114,31 @@ char	*sh_strcut(char *str, int start, int end)
 	return (res);
 }
 
+void	count_brackets(t_shell *sh, char *line)
+{
+	char	*t_line;
+	
+	t_line = line;
+	while (*ft_strchr(t_line, '(') != '\0' && *t_line != '\0')
+	{
+		sh->depth++;
+		t_line = ft_strchr(t_line, '(') + 1;
+	}
+	t_line = line;
+	while (*ft_strchr(t_line, ')') != '\0' && *t_line != '\0')
+	{
+		sh->depth--;
+		t_line = ft_strchr(t_line, ')') + 1;
+	}
+
+}
+
 int	get_next_token(t_shell *sh, char *line)
 {
 	int		len;
 	char 	*tk;
 	char	*t_line;
-
+	
 	t_line = line + 2;
 	len = ft_strlen(t_line);
 	if (sh_strpos(t_line, "&&") == len && sh_strpos(t_line, "||") == len)
@@ -129,6 +148,9 @@ int	get_next_token(t_shell *sh, char *line)
 	else if (sh_strpos(t_line, "||") < sh_strpos(t_line, "&&"))
 		tk = "||";
 	sh->s_line = sh_strcut(line, 2, sh_strpos(t_line, tk) + 2);
+	count_brackets(sh, sh->s_line);
+	sh->s_line = ft_strtrim(sh->s_line, "(");
+	sh->s_line = ft_strtrim(sh->s_line, ")");
 	if (sh->s_line == NULL)
 		return (set_errno(ENOMEM), ENOMEM);
 	if (ft_strncmp(line, "||", 2) == 0) 
@@ -214,6 +236,49 @@ void	main_cmd_return(t_shell *sh)
 		exit_minishell(sh, EXIT_SUCCESS);
 }
 
+void	get_bracket(char *line)
+{
+	char	*t_line;
+
+	t_line = line;
+	
+	t_line = ft_strrchr(line, '(');
+	t_line = ft_substr(t_line, 1, sh_strpos(t_line, ")"));
+	if (t_line == NULL)
+		return ;
+}
+
+int	execute_tokens(t_shell *sh, t_shell *head, int x, char *envp[])
+{
+	pid_t	pid;
+	int		wstatus;
+	int		prev;
+
+	prev = sh->depth;
+	while (sh != NULL)
+	{
+		pid = 0;
+		if (sh->depth > x)
+		{
+			pid = fork();
+			if (pid == -1)
+				return (errno);
+			if (pid == 0)
+				exit(execute_tokens(sh, head, x++, envp));
+			waitpid(pid, &wstatus, 0);
+		}
+		else if (sh->depth < prev)
+			return (errno);
+		else if (sh->depth == x)
+			if (sh->token == 0 || (sh->token == 1 && errno != 0))
+				errno = subshell(sh->pipes, envp);
+		main_cmd_return(head);
+		sh = sh->next;
+	}
+	main_cmd_return(head);
+	return (errno);
+}	
+
 int	start_shell(char *envp[])
 {
 	char	*line;
@@ -225,23 +290,13 @@ int	start_shell(char *envp[])
 	sh = NULL;
 	line = get_input();
 	if (line == NULL)
-		perror("minishell: ");	
+		perror("minishell: ");
 	n = count_tokens(line);
 	sh = fill_sh(sh, line, n);
 	if (sh == NULL)
 		return (set_errno(ENOMEM), free_s((void *)line), ENOMEM);
 	free_s((void *)line);
-	errno = 0;
 	head = sh->head;
-	while (sh != NULL)
-	{
-		if (sh->token == 0 || (sh->token == 1 && errno != 0))
-		{
-			errno = subshell(sh->pipes, envp);
-			main_cmd_return(head);
-		}
-		sh = sh->next;
-	}
-//	main_cmd_return(sh);
+	execute_tokens(sh, head, 0, envp);
 	return (free_sh(head), 0);
 }

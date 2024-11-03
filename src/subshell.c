@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/22 16:08:01 by mfleury           #+#    #+#             */
-/*   Updated: 2024/11/02 00:01:41 by mfleury          ###   ########.fr       */
+/*   Updated: 2024/11/02 23:19:00 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,7 @@ static int	run_parent(t_pipe *p)
 	return (0);
 }
 
-static int	create_fork(t_pipe *p, char *envp[])
+static int	create_fork_pipe(t_pipe *p, char *envp[])
 {
 	int	i;
 
@@ -107,7 +107,7 @@ int	subshell(t_pipe *p, char *envp[])
 	p->pid = create_pids(p);
 	if (p->fd == NULL || p->args == NULL || p->pid == NULL)
 		return (free_pipe(p), errno);
-	if (create_fork(p, envp) == -1)
+	if (create_fork_pipe(p, envp) == -1)
 		return (free_pipe(p), errno);
 	if (run_parent(p) == -1)
 		return (free_pipe(p), errno);
