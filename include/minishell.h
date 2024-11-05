@@ -6,7 +6,7 @@
 /*   By: pmorello <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 12:17:09 by pmorello          #+#    #+#             */
-/*   Updated: 2024/11/02 00:22:25 by mfleury          ###   ########.fr       */
+/*   Updated: 2024/11/05 16:46:49 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,6 +66,7 @@ typedef struct s_shell
 	char			*s_line;
 	int				token; // 0 = && | 1 = ||
 	int				depth;
+	int				bracket[2];
 	struct s_pipe	*pipes;
 	struct s_shell	*head;
 	struct s_shell	*next;
@@ -100,5 +101,5 @@ t_shell	*sh_lstlast(t_shell *sh);
 t_shell	*sh_lstadd_back(t_shell **sh, char *line);
 
 /*subshell*/
-int		subshell(t_pipe *p, char *envp[]);
+int		subshell(t_shell *sh, t_pipe *p, char *envp[]);
 #endif

@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 12:26:04 by mfleury           #+#    #+#             */
-/*   Updated: 2024/11/05 10:48:46 by mfleury          ###   ########.fr       */
+/*   Updated: 2024/11/05 17:36:37 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,7 +72,7 @@ int	sh_strpos(const char *big, const char *little)
 
 	str = (char *)big;
 	if (ft_strlen(little) == 0)
-		return (ft_strlen(big));
+		return (ft_strlen(big) + 1);
 	i = 0;
 	while (*str != '\0')
 	{
@@ -86,7 +86,7 @@ int	sh_strpos(const char *big, const char *little)
 		str++;
 		i++;
 	}
-	return (ft_strlen(big));
+	return (ft_strlen(big) + 1);
 }
 
 char	*sh_strcut(char *str, int start, int end)
@@ -121,13 +121,14 @@ void	count_brackets(t_shell *sh, char *line)
 	t_line = line;
 	while (*ft_strchr(t_line, '(') != '\0' && *t_line != '\0')
 	{
-		sh->depth++;
+		sh->bracket[0]++;
 		t_line = ft_strchr(t_line, '(') + 1;
 	}
+	sh->bracket[1] = sh->bracket[0];
 	t_line = line;
 	while (*ft_strchr(t_line, ')') != '\0' && *t_line != '\0')
 	{
-		sh->depth--;
+		sh->bracket[1]--;
 		t_line = ft_strchr(t_line, ')') + 1;
 	}
 
@@ -139,7 +140,7 @@ int	get_next_token(t_shell *sh, char *line)
 	char 	*tk;
 	char	*t_line;
 	
-	t_line = ft_strtrim(line," ") + 2;
+	t_line = ft_strtrim(ft_strtrim(line," ") + 2, " ");
 	len = ft_strlen(t_line);
 	if (sh_strpos(t_line, "&&") == len && sh_strpos(t_line, "||") == len)
 		tk = NULL;
@@ -148,6 +149,7 @@ int	get_next_token(t_shell *sh, char *line)
 	else if (sh_strpos(t_line, "||") < sh_strpos(t_line, "&&"))
 		tk = "||";
 	sh->s_line = sh_strcut(line, 2, sh_strpos(t_line, tk) + 2);
+	sh->s_line = ft_strtrim(sh->s_line, " ");
 	count_brackets(sh, sh->s_line);
 	sh->s_line = ft_strtrim(sh->s_line, "(");
 	sh->s_line = ft_strtrim(sh->s_line, ")");
@@ -210,10 +212,13 @@ t_shell	*fill_sh(t_shell *sh, char *line, int n)
 {
 	int		i;
 	t_shell	*tmp;
+	int		x[2];
 	
 	i = 0;
+	ft_memset(x, 0, 2 * sizeof(int));
 	while (i++ < n && *line != '\0')
 	{
+		line = ft_strtrim(line, " ");
 		if (sh == NULL)
 			tmp = sh_lstnew(line);
 		else
@@ -221,21 +226,29 @@ t_shell	*fill_sh(t_shell *sh, char *line, int n)
 		if (tmp == NULL)
 			return (NULL);
 		tmp->s_line = ft_strtrim(tmp->s_line, " ");
-		line = ft_strchr(ft_strchr(line, '&') + 2, '&') + 2;
+		tmp->bracket[0] += x[0];
+		tmp->bracket[1] += x[1];
+		line = ft_strchr(ft_strchr(line, '&') + 2, '&');
+		x[0] = tmp->bracket[0];
+		x[1] = tmp->bracket[1];
 		//line = line + ft_strlen(tmp->s_line) + 2;
 	//	free_s((void *)tmp->s_line);
 		sh = tmp->head;
+		
 	}
 	return (tmp->head);
 }
 
-int	main_cmd_return(t_shell *sh)
+int	main_cmd_return(t_shell *sh, int wstatus)
 {
-	if (errno > 0 && errno < 255)
-		perror("minishell: ");
-	else if (errno == 255 && sh->pipes->count == 1)
-		exit_minishell(sh, EXIT_SUCCESS);
-	return (errno);
+	if (WIFEXITED(wstatus))
+	{
+		if (sh->pipes->mem_flag & (1 << 7))
+			exit_minishell(sh, EXIT_SUCCESS);
+		if (WEXITSTATUS(wstatus) > 0 && WEXITSTATUS(wstatus) < 255)
+			perror("minishell: ");
+	}
+	return (0);
 }
 
 void	get_bracket(char *line)
@@ -250,35 +263,40 @@ void	get_bracket(char *line)
 		return ;
 }
 
-int	execute_tokens(t_shell *sh, t_shell *head, int x, char *envp[])
+int	execute_tokens(t_shell *sh, t_shell *head, int level, char *envp[])
 {
 	pid_t	pid;
 	int		wstatus;
-	int		prev;
+	int		errnum;
 
-	prev = 0;
+	errnum = 0;
 	while (sh != NULL)
 	{
 		pid = 0;
-		if (sh->depth > x)
+		if (sh->bracket[0] > level)
 		{
 			pid = fork();
 			if (pid == -1)
-				return (errno);
+				perror("minishell: ");
 			if (pid == 0)
-				exit(execute_tokens(sh, head, ++x, envp));
+				exit(execute_tokens(sh, head, ++level, envp));
 			waitpid(pid, &wstatus, 0);
+			return(main_cmd_return(sh, wstatus));
 		}
-		else if (sh->depth < prev)
-			return (main_cmd_return(head));
-		else if (sh->depth == x)
-			if (sh->token == 0 || (sh->token == 1 && errno != 0))
-				wstatus = subshell(sh->pipes, envp);
-	//	main_cmd_return(head);
-		prev = sh->depth;
+		else if (sh->bracket[0] == level)
+		{
+			if (sh->token == 0 || (sh->token == 1 && errnum != 0))
+			{
+				errnum = subshell(sh, sh->pipes, envp);
+				if (errnum == -1)
+					perror("minishell: ");
+			}
+		}
+		else if (sh->bracket[1] < level)
+			exit(0);
 		sh = sh->next;
 	}
-	return(main_cmd_return(head));
+	return(0);
 }	
 
 int	start_shell(char *envp[])
@@ -292,13 +310,14 @@ int	start_shell(char *envp[])
 	sh = NULL;
 	line = get_input();
 	if (line == NULL)
-		perror("minishell: ");
+		return (1);
 	n = count_tokens(line);
 	sh = fill_sh(sh, line, n);
 	if (sh == NULL)
-		return (set_errno(ENOMEM), free_s((void *)line), ENOMEM);
+		return (free_s((void *)line), 1);
 	free_s((void *)line);
 	head = sh->head;
-	execute_tokens(sh, head, 0, envp);
+	if (execute_tokens(sh, head, 0, envp) != 0)
+		return (free_sh(head), 1);
 	return (free_sh(head), 0);
 }

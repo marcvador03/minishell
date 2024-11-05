@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 10:01:23 by mfleury           #+#    #+#             */
-/*   Updated: 2024/11/02 00:04:15 by mfleury          ###   ########.fr       */
+/*   Updated: 2024/11/05 16:02:37 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,14 +22,12 @@ void	exit_minishell(t_shell *sh, int status)
 	exit(status);
 }
 
-
 int	main(int argc, char *argv[], char *envp[])
 {
 	if (argc > 1 || argv == NULL)
 		return (1);
 	while (1)
-	{
-		start_shell(envp);
-	}
+		if (start_shell(envp) != 0)
+			perror("minishell: ");
 	return (0);
 }

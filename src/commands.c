@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/17 15:39:35 by mfleury           #+#    #+#             */
-/*   Updated: 2024/10/25 14:17:19 by mfleury          ###   ########.fr       */
+/*   Updated: 2024/11/05 16:50:19 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ int	exec_cmd(char **args, char *envp[])
 		if (cmd == NULL)
 			return (free_d((void **)args), set_errno(ENOENT), ENOENT);
 		else if (execve(cmd, args, envp) == -1)
-			return (free_d((void **)args), errno);
+			return (free_d((void **)args), -1);
 	}
 	return (set_errno(ENOENT), ENOENT);
 }
