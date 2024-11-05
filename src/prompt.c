@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 12:26:04 by mfleury           #+#    #+#             */
-/*   Updated: 2024/11/03 20:56:19 by mfleury          ###   ########.fr       */
+/*   Updated: 2024/11/05 10:48:46 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -139,7 +139,7 @@ int	get_next_token(t_shell *sh, char *line)
 	char 	*tk;
 	char	*t_line;
 	
-	t_line = line + 2;
+	t_line = ft_strtrim(line," ") + 2;
 	len = ft_strlen(t_line);
 	if (sh_strpos(t_line, "&&") == len && sh_strpos(t_line, "||") == len)
 		tk = NULL;
@@ -220,9 +220,10 @@ t_shell	*fill_sh(t_shell *sh, char *line, int n)
 			tmp = sh_lstadd_back(&sh, line);
 		if (tmp == NULL)
 			return (NULL);
-		line = line + ft_strlen(tmp->s_line) + 2;
-		free_s((void *)tmp->s_line);
-	//	tmp->s_line = ft_strtrim(tmp->s_line, " ");
+		tmp->s_line = ft_strtrim(tmp->s_line, " ");
+		line = ft_strchr(ft_strchr(line, '&') + 2, '&') + 2;
+		//line = line + ft_strlen(tmp->s_line) + 2;
+	//	free_s((void *)tmp->s_line);
 		sh = tmp->head;
 	}
 	return (tmp->head);
@@ -255,7 +256,7 @@ int	execute_tokens(t_shell *sh, t_shell *head, int x, char *envp[])
 	int		wstatus;
 	int		prev;
 
-	prev = sh->depth;
+	prev = 0;
 	while (sh != NULL)
 	{
 		pid = 0;
@@ -265,15 +266,16 @@ int	execute_tokens(t_shell *sh, t_shell *head, int x, char *envp[])
 			if (pid == -1)
 				return (errno);
 			if (pid == 0)
-				exit(execute_tokens(sh, head, x++, envp));
+				exit(execute_tokens(sh, head, ++x, envp));
 			waitpid(pid, &wstatus, 0);
 		}
 		else if (sh->depth < prev)
 			return (main_cmd_return(head));
 		else if (sh->depth == x)
 			if (sh->token == 0 || (sh->token == 1 && errno != 0))
-				errno = subshell(sh->pipes, envp);
-		main_cmd_return(head);
+				wstatus = subshell(sh->pipes, envp);
+	//	main_cmd_return(head);
+		prev = sh->depth;
 		sh = sh->next;
 	}
 	return(main_cmd_return(head));

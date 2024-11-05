@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/22 16:08:01 by mfleury           #+#    #+#             */
-/*   Updated: 2024/11/02 23:19:00 by mfleury          ###   ########.fr       */
+/*   Updated: 2024/11/04 14:29:18 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ int		**create_fpipes(t_pipe *p);
 char	***create_args(t_pipe *p);
 pid_t	*create_pids(t_pipe *p);
 
-static void	run_child(t_pipe *p, int i, char *envp[])
+static int	run_child(t_pipe *p, int i, char *envp[])
 {
 	int	j;
 	int	wstatus;
