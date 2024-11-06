@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 12:26:04 by mfleury           #+#    #+#             */
-/*   Updated: 2024/11/05 17:36:37 by mfleury          ###   ########.fr       */
+/*   Updated: 2024/11/06 15:30:27 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -134,20 +134,27 @@ void	count_brackets(t_shell *sh, char *line)
 
 }
 
-int	get_next_token(t_shell *sh, char *line)
+char	*get_tk(char *line)
 {
 	int		len;
+	
+	len = ft_strlen(line);
+	if (sh_strpos(line, "&&") == len && sh_strpos(line, "||") == len)
+		return (NULL);
+	else if (sh_strpos(line, "&&") < sh_strpos(line, "||"))
+		return ("&&");
+	else if (sh_strpos(line, "||") < sh_strpos(line, "&&"))
+		return ("||");
+	return (NULL);
+}
+
+int	get_next_token(t_shell *sh, char *line)
+{
 	char 	*tk;
 	char	*t_line;
 	
 	t_line = ft_strtrim(ft_strtrim(line," ") + 2, " ");
-	len = ft_strlen(t_line);
-	if (sh_strpos(t_line, "&&") == len && sh_strpos(t_line, "||") == len)
-		tk = NULL;
-	else if (sh_strpos(t_line, "&&") < sh_strpos(t_line, "||"))
-		tk = "&&";
-	else if (sh_strpos(t_line, "||") < sh_strpos(t_line, "&&"))
-		tk = "||";
+	tk = get_tk(t_line);
 	sh->s_line = sh_strcut(line, 2, sh_strpos(t_line, tk) + 2);
 	sh->s_line = ft_strtrim(sh->s_line, " ");
 	count_brackets(sh, sh->s_line);
@@ -199,10 +206,7 @@ int	count_tokens(char *line)
 	i = 0;
 	while (i < len)
 	{
-		if (sh_strpos(t_line + i, "&&") < sh_strpos(t_line + i, "||"))
-			i += sh_strpos(t_line + i, "&&") + 2;
-		else	
-			i += sh_strpos(t_line + i, "||") + 2;
+		i += sh_strpos(t_line + i, get_tk(t_line + i)) + 2;
 		n++;
 	}
 	return (n);
@@ -213,6 +217,7 @@ t_shell	*fill_sh(t_shell *sh, char *line, int n)
 	int		i;
 	t_shell	*tmp;
 	int		x[2];
+	char	*tk;
 	
 	i = 0;
 	ft_memset(x, 0, 2 * sizeof(int));
@@ -228,10 +233,10 @@ t_shell	*fill_sh(t_shell *sh, char *line, int n)
 		tmp->s_line = ft_strtrim(tmp->s_line, " ");
 		tmp->bracket[0] += x[0];
 		tmp->bracket[1] += x[1];
-		line = ft_strchr(ft_strchr(line, '&') + 2, '&');
+		tk = get_tk(line + 2);
+		line = ft_strnstr(line + 2, tk, ft_strlen(line));
 		x[0] = tmp->bracket[0];
 		x[1] = tmp->bracket[1];
-		//line = line + ft_strlen(tmp->s_line) + 2;
 	//	free_s((void *)tmp->s_line);
 		sh = tmp->head;
 		
