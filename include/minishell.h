@@ -6,7 +6,7 @@
 /*   By: pmorello <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 12:17:09 by pmorello          #+#    #+#             */
-/*   Updated: 2024/11/05 16:46:49 by mfleury          ###   ########.fr       */
+/*   Updated: 2024/11/07 14:45:50 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,12 +73,12 @@ typedef struct s_shell
 }	t_shell;
 
 /*minishell base prompt functions*/
-char	*create_prompt(void);
 char	**get_cmd_args(char *cmd_in);
 int		exec_cmd(char **args, char *envp[]);
 char	*get_input();
 int		start_shell(char *envp[]);
 void	exit_minishell(t_shell *sh, int status);
+int	main_cmd_return(t_shell *sh, int wstatus);
 
 /* minishell built-ins functions*/
 int		ft_cd(char **args);
@@ -91,6 +91,7 @@ void	free_s(void *ptr);
 void	free_d(void **ptr);
 void	free_pipe(t_pipe *p);
 void	free_sh(t_shell *sh);
+char	*sh_strtrim(char **str, char *set, char offset);
 char	*get_full_path(char *arg0, char *envp[]);
 void	set_errno(int err);
 void	set_flag(t_pipe *p, int n);
@@ -100,6 +101,12 @@ t_shell	*sh_lstnew(char *line);
 t_shell	*sh_lstlast(t_shell *sh);
 t_shell	*sh_lstadd_back(t_shell **sh, char *line);
 
+/*str utils*/
+int		sh_strpos(const char *big, const char *little);
+char	*sh_strcut(char *str, int start, int end);
+
 /*subshell*/
 int		subshell(t_shell *sh, t_pipe *p, char *envp[]);
+
+
 #endif

@@ -12,11 +12,17 @@ SRC_NAMES := minishell.c \
 			 built_ins.c \
 			 core_utils.c \
 			 commands.c \
-			 prompt.c \
+			 shell.c \
 			 subshell.c \
 			 subshell_utils.c \
 			 free_utils.c \
-			 list_utils.c
+			 list_utils.c \
+			 prompt_creation.c \
+			 prompt_reading.c \
+			 prompt_utils.c \
+			 str_utils.c \
+			 tokens.c \
+			 tokens_utils.c
 
 INC_NAMES := minishell.h
 
