@@ -6,7 +6,7 @@
 /*   By: pmorello <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 10:36:03 by pmorello          #+#    #+#             */
-/*   Updated: 2024/10/16 16:25:05 by mfleury          ###   ########.fr       */
+/*   Updated: 2024/11/07 12:17:00 by pmorello         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,13 +16,12 @@ int	ft_cd(char **args)
 {
 	char	*path;
 
+	if (args[1] != NULL && args[2] != NULL)
+		return(E2BIG);
 	if (args[1] == NULL)
 		path = getenv("HOME");
 	else
 		path = args[1];
-	if (args[1] != NULL && args[2] != NULL)
-		return(E2BIG);
-		//printf("cd : too many arguments");
 	chdir(path);
 	return (0);
 }
@@ -88,9 +87,4 @@ void	ft_env(int argc, char **argv)
 	}
 	if (argc > 1)
 		printf("env: '%s' : No such file or directori\n", argv[1]);
-}
-
-void	ft_exit(void)
-{
-	exit(0);
 }
