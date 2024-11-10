@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/10 08:52:08 by mfleury           #+#    #+#             */
-/*   Updated: 2024/11/10 12:09:00 by mfleury          ###   ########.fr       */
+/*   Updated: 2024/11/11 00:40:35 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,18 +55,28 @@ int	count_redir(char *line)
 	return (0);
 }
 
-void	redirections(char *line)
+void	redirections(char *line, int *out_fd)
 {
-	int		i;
+int		i;
 	int		n;
 	char	**sub_redir;
 	char	*rd;
-	
+	int		*fd;
+	int		err;
+	char	c;
+
 	n = count_redir(line);
+	err = 0;
 	sub_redir = (char **)ft_calloc(sizeof(char *), n);
 	if (sub_redir == NULL)
 		return;
 	i = 0;
+	//just get first test following > or <
+	//how to repass remainings args (before next < or > to arg list)?
+	//if > --> replace write of parent_fork to std_out sino replace ??
+	//open redirections with R/W, manage permissions and APPEND for >> 
+
+
 	while (i < n)
 	{
 		rd = get_redir(line);
@@ -77,7 +87,16 @@ void	redirections(char *line)
 		i++;
 	}
 	sub_redir[n] = NULL;
+	fd = (int *)ft_calloc(sizeof(int), n);
+	if (fd == NULL)
+		return;
+	i = 0;
+	while (i < n)
+	{
+		
+	}
 
 		
 }
 
+//https://unix.stackexchange.com/questions/235092/command-redirection-to-multiple-files-command-file1-file2
