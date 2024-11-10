@@ -38,7 +38,7 @@ CFLAGS += -Wall -Werror -Wextra -MMD -MP
 
 LIB_NAMES := libft.a 
 LIBS_TAG := $(patsubst lib%.a, -l%, $(LIB_NAMES))
-LIBS_TAG += -lreadline
+LIBS_TAG += -lreadline -ltermcap
 
 DEBUG ?=
 

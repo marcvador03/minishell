@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/22 16:08:01 by mfleury           #+#    #+#             */
-/*   Updated: 2024/11/05 17:36:41 by mfleury          ###   ########.fr       */
+/*   Updated: 2024/11/10 10:52:41 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,7 @@ static int	run_parent(t_pipe *p)
 		return (-1);
 	while (read(p->fd[p->count - 1][0], &c, 1) > 0)
 		if (write(1, &c, 1) == -1)
-			return (+1);
+			return (1);
 	if (close(p->fd[p->count - 1][0]) == -1)
 		return (-1);
 	rl_replace_line("", 0);
