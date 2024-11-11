@@ -6,7 +6,7 @@
 /*   By: pmorello <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 12:17:09 by pmorello          #+#    #+#             */
-/*   Updated: 2024/11/08 22:22:08 by mfleury          ###   ########.fr       */
+/*   Updated: 2024/11/11 12:31:24 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,6 +56,8 @@ typedef struct s_pipe
 {
 	pid_t	*pid;
 	char	**in_pipes;
+	char	**cmd;
+	char	***redir;
 	char	***args;
 	int		**fd;
 	int		count;
@@ -105,6 +107,8 @@ t_shell	*sh_lstadd_back(t_shell **sh, char *line);
 /*str utils*/
 int		sh_strpos(const char *big, const char *little);
 char	*sh_strcut(char *str, int start, int end);
+char	*sh_strcut2(char **str, int start, int end);
+char	*sh_strstrip(char **str, int start, int end);
 
 /*subshell*/
 int		subshell(t_shell *sh, t_pipe *p, char *envp[]);

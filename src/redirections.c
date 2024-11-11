@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/10 08:52:08 by mfleury           #+#    #+#             */
-/*   Updated: 2024/11/11 00:40:35 by mfleury          ###   ########.fr       */
+/*   Updated: 2024/11/11 12:31:24 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,7 +67,7 @@ int		i;
 
 	n = count_redir(line);
 	err = 0;
-	sub_redir = (char **)ft_calloc(sizeof(char *), n);
+	sub_redir = (char **)ft_calloc(sizeof(char *), n + 1);
 	if (sub_redir == NULL)
 		return;
 	i = 0;
@@ -75,7 +75,7 @@ int		i;
 	//how to repass remainings args (before next < or > to arg list)?
 	//if > --> replace write of parent_fork to std_out sino replace ??
 	//open redirections with R/W, manage permissions and APPEND for >> 
-
+	
 
 	while (i < n)
 	{
