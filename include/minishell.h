@@ -6,7 +6,7 @@
 /*   By: pmorello <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 12:17:09 by pmorello          #+#    #+#             */
-/*   Updated: 2024/11/11 12:31:24 by mfleury          ###   ########.fr       */
+/*   Updated: 2024/11/11 16:20:03 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,8 +46,8 @@ typedef int	(*t_func_arr)(char **args);
 1: args mem freed | args allocated on heap
 2: fd mem freed | fd allocated on heap
 3: pid mem freed | pid allocated on heap
-4:
-5:
+4: redirs mem freed | redirs allocated on heap
+5: cmd mem freed | cmd allocated on heap
 6:
 7:
 */
@@ -57,7 +57,7 @@ typedef struct s_pipe
 	pid_t	*pid;
 	char	**in_pipes;
 	char	**cmd;
-	char	***redir;
+	char	***redirs;
 	char	***args;
 	int		**fd;
 	int		count;
@@ -77,7 +77,7 @@ typedef struct s_shell
 
 /*minishell base prompt functions*/
 char	**get_cmd_args(char *cmd_in);
-int		exec_cmd(char **args, char *envp[]);
+int		exec_cmd(char *cmd, char **args, char *envp[]);
 char	*get_input();
 int		start_shell(char *envp[]);
 void	exit_minishell(t_shell *sh, int status);

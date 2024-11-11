@@ -22,7 +22,8 @@ SRC_NAMES := minishell.c \
 			 prompt_utils.c \
 			 str_utils.c \
 			 tokens.c \
-			 tokens_utils.c
+			 tokens_utils.c \
+			 redirections.c
 
 INC_NAMES := minishell.h
 

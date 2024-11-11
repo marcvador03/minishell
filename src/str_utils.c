@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/07 14:41:31 by mfleury           #+#    #+#             */
-/*   Updated: 2024/11/11 12:30:49 by mfleury          ###   ########.fr       */
+/*   Updated: 2024/11/11 15:28:30 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,10 +71,8 @@ char	*sh_strstrip(char **str, int start, int end)
 	
 	len = ft_strlen(*str);
 	res1 = sh_strcut(*str, 0, start);	
-	if (res1 == NULL)
-		return (NULL);
 	res2 = sh_strcut(*str, end, len);	
-	if (res2 == NULL)
+	if (res1 == NULL && res2 == NULL)
 		return (NULL);
 	res3 = ft_strjoin(res1, res2);	
 	if (res3 == NULL)
@@ -102,8 +100,8 @@ char	*sh_strcut2(char **str, int start, int end)
 		return (NULL);
 	i = start;
 	j = 0;
-	while (i < end && *str[i] != '\0')
-		res[j++] = *str[i++];
+	while (i < end && str[0][i] != '\0')
+		res[j++] = str[0][i++];
 	res[j] = '\0';
 	*str = sh_strstrip(str, start, end); 
 	return (res);

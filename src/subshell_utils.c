@@ -6,11 +6,12 @@
 /*   By: mfleury <mfleury@student.42barcelona.      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/25 13:59:57 by mfleury           #+#    #+#             */
-/*   Updated: 2024/11/02 00:27:05 by mfleury          ###   ########.fr       */
+/*   Updated: 2024/11/11 17:11:47 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
+char	**get_redirs(char *line);
 
 int	**create_fpipes(t_pipe *p)
 {
@@ -53,6 +54,25 @@ char	***create_args(t_pipe *p)
 		i++;
 	}
 	return (set_flag(p, 1), args);
+}
+
+char	***create_redirs(t_pipe *p)
+{
+	char	***redirs;
+	int		i;
+
+	redirs = (char ***)ft_calloc(sizeof(char **), p->count + 1);
+	if (redirs == NULL)
+		return (set_errno(ENOMEM), NULL);
+	i = 0;
+	while (i < p->count)
+	{
+		redirs[i] = get_redirs(p->in_pipes[i]);
+		if (redirs[i] == NULL)
+			return (free_d((void **)redirs[i]), set_errno(ENOMEM), NULL);
+		i++;
+	}
+	return (set_flag(p, 4), redirs);
 }
 
 pid_t	*create_pids(t_pipe *p)

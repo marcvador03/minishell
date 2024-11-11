@@ -6,13 +6,13 @@
 /*   By: mfleury <mfleury@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/10 08:52:08 by mfleury           #+#    #+#             */
-/*   Updated: 2024/11/11 12:31:24 by mfleury          ###   ########.fr       */
+/*   Updated: 2024/11/11 17:26:47 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 
-char	*get_redir(char *line)
+char	*get_rd(char *line)
 {
 	
 	int	i;
@@ -36,7 +36,7 @@ char	*get_redir(char *line)
 		}
 		i++;
 	}
-	return (NULL);
+	return (" ");
 }
 
 int	count_redir(char *line)
@@ -47,56 +47,41 @@ int	count_redir(char *line)
 	n = 0;
 	if (line == NULL)
 		return (n);
-	rd = get_redir(line);
-	if (rd != NULL)
+	rd = get_rd(line);
+	if (ft_strncmp(rd, " ", 1) != 0)
 		n += count_redir(line + sh_strpos(line, rd) + ft_strlen(rd));
 	else
 		return (++n);
 	return (0);
 }
 
-void	redirections(char *line, int *out_fd)
+char	**get_redirs(char *line)
 {
-int		i;
+	int		i;
 	int		n;
-	char	**sub_redir;
+	char	**redirs;
 	char	*rd;
-	int		*fd;
-	int		err;
-	char	c;
+	int		pos[2];
 
 	n = count_redir(line);
-	err = 0;
-	sub_redir = (char **)ft_calloc(sizeof(char *), n + 1);
-	if (sub_redir == NULL)
-		return;
+	redirs = (char **)ft_calloc(sizeof(char *), n + 1);
+	if (redirs == NULL)
+		return (NULL);
 	i = 0;
+	while (i <= n)
+	{
+		rd = get_rd(line);
+		pos[0] = sh_strpos(line, rd) + 1;
+		pos[1] = sh_strpos(line + pos[0], " ");
+		redirs[i] = sh_strcut(line, pos[0], pos[1]);
+		i++;
+	}
+	redirs[n] = NULL;
+	return (redirs);		
+	
 	//just get first test following > or <
 	//how to repass remainings args (before next < or > to arg list)?
 	//if > --> replace write of parent_fork to std_out sino replace ??
 	//open redirections with R/W, manage permissions and APPEND for >> 
-	
-
-	while (i < n)
-	{
-		rd = get_redir(line);
-		sub_redir[i] = sh_strcut(line, 0, sh_strpos(line, rd));
-		if (sub_redir[i] == NULL)
-			return ;
-		line = line + sh_strpos(line, rd) + ft_strlen(rd);	
-		i++;
-	}
-	sub_redir[n] = NULL;
-	fd = (int *)ft_calloc(sizeof(int), n);
-	if (fd == NULL)
-		return;
-	i = 0;
-	while (i < n)
-	{
-		
-	}
-
-		
 }
-
-//https://unix.stackexchange.com/questions/235092/command-redirection-to-multiple-files-command-file1-file2
+	//https://unix.stackexchange.com/questions/235092/command-redirection-to-multiple-files-command-file1-file2

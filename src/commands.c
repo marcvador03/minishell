@@ -6,12 +6,12 @@
 /*   By: mfleury <mfleury@student.42barcelona.      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/17 15:39:35 by mfleury           #+#    #+#             */
-/*   Updated: 2024/11/11 12:49:51 by mfleury          ###   ########.fr       */
+/*   Updated: 2024/11/11 16:30:47 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
-char	*get_redir(char *line);
+char	*get_rd(char *line);
 
 static t_cmd_enum	str_to_enum(const char *str)
 {
@@ -28,31 +28,31 @@ static t_cmd_enum	str_to_enum(const char *str)
 	return (-1);
 }
 
-int	exec_cmd(char **args, char *envp[])
+int	exec_cmd(char *cmd, char **args, char *envp[])
 {
 	int			x;
 	t_func_arr	call_cmd[2];
-	char		*cmd;
+	char		*t_cmd;
 
 	call_cmd[0] = &ft_cd;
 	call_cmd[1] = &ft_pwd;
-	if (ft_strncmp(args[0], "exit", 4) == 0)
+	if (ft_strncmp(cmd, "exit", 4) == 0)
 		return (255);
-	x = str_to_enum(args[0]);
+	x = str_to_enum(cmd);
 	if (x != -1)
 		return (call_cmd[x](args));
 	else
 	{
-		cmd = get_full_path(args[0], envp);
-		if (cmd == NULL)
-			return (free_d((void **)args), set_errno(ENOENT), ENOENT);
-		else if (execve(cmd, args, envp) == -1)
-			return (free_d((void **)args), -1);
+		t_cmd = get_full_path(cmd, envp);
+		if (t_cmd == NULL)
+			return (set_errno(ENOENT), ENOENT);
+		else if (execve(t_cmd, args, envp) == -1)
+			return (-1);
 	}
 	return (set_errno(ENOENT), ENOENT);
 }
 
-char	**get_cmd_names(t_pipe *p)
+char	**create_cmd_names(t_pipe *p)
 {
 	char 	**res;
 	char	*rd;
@@ -64,18 +64,19 @@ char	**get_cmd_names(t_pipe *p)
 	i = 0;
 	while (i < p->count)
 	{
-		rd = get_redir(p->in_pipes[i]);
+		rd = get_rd(p->in_pipes[i]);
 		res[i] = sh_strcut2(&p->in_pipes[i], 0, sh_strpos(p->in_pipes[i], rd));
+		i++;
 	}
 	res[p->count] = NULL;
-	return (res);
+	return (set_flag(p, 5), res);
 }
 
-char	**get_cmd_args(char *cmd_in)
+char	**get_cmd_args(char *line)
 {
 	char	**args;
 
-	args = ft_split(cmd_in, ' ');
+	args = ft_split(line, ' ');
 	if (args == NULL)
 		return (NULL);
 	return (args);

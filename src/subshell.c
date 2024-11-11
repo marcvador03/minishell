@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/22 16:08:01 by mfleury           #+#    #+#             */
-/*   Updated: 2024/11/11 12:49:51 by mfleury          ###   ########.fr       */
+/*   Updated: 2024/11/11 16:37:49 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,9 @@
 
 int		**create_fpipes(t_pipe *p);
 char	***create_args(t_pipe *p);
-char	**get_cmd_names(t_pipe *p);
+char	**create_cmd_names(t_pipe *p);
 pid_t	*create_pids(t_pipe *p);
+char	***create_redirs(t_pipe *p);
 
 static int	run_child(t_pipe *p, int i, char *envp[])
 {
@@ -40,7 +41,7 @@ static int	run_child(t_pipe *p, int i, char *envp[])
 			exit(err);
 		j++;
 	}
-	exit(exec_cmd(p->args[i], envp));
+	exit(exec_cmd(p->args[i][0], p->args[i], envp));
 }
 
 static int	run_parent(t_pipe *p)
@@ -111,7 +112,8 @@ int	subshell(t_shell *sh, t_pipe *p, char *envp[])
 	errnum = 0;
 	p->fd = create_fpipes(p);
 	p->pid = create_pids(p);
-	p->cmd = get_cmd_names(p);
+	//p->cmd = create_cmd_names(p);
+	p->redirs = create_redirs(p);
 	p->args = create_args(p);
 	if (p->fd == NULL || p->args == NULL || p->pid == NULL)
 		return (free_pipe(p), -1);
