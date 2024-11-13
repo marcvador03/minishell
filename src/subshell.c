@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/22 16:08:01 by mfleury           #+#    #+#             */
-/*   Updated: 2024/11/13 12:19:59 by mfleury          ###   ########.fr       */
+/*   Updated: 2024/11/13 16:47:00 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,48 @@ char	**create_cmd_names(t_pipe *p);
 pid_t	*create_pids(t_pipe *p);
 char	***create_redirs(t_pipe *p);
 
+int	get_fdin_redir(t_pipe *p, int n)
+{
+	int	i;
+	int	*fd;
+	int	x;
+
+	fd = (int *)ft_calloc(sizeof(int), n);
+	if (fd == NULL)
+		return (-1);
+	i = 0;
+	x = STDIN_FILENO;
+
+	return (x);
+
+}
+
+int	get_fdout_redir(t_pipe *p, int n)
+{
+	int	i;
+	int	*fd;
+	int	x;
+
+	fd = (int *)ft_calloc(sizeof(int), n);
+	if (fd == NULL)
+		return (-1);
+	i = 0;
+	x = STDOUT_FILENO;
+	while (p->redirs[n][i] != NULL)
+	{
+		if (p->rd[n][i] & (0 << 0) && p->rd[n][i] & (1 << 1))
+			fd[i] = open(p->redirs[n][i], O_CREAT | O_RDWR | O_APPEND, 0700);
+		else if (p->rd[n][i] & (0 << 0) && p->rd[n][i] & (0 << 1))
+			fd[i] = open(p->redirs[n][i], O_CREAT | O_RDWR, 0700);
+		if (fd[i] == -1)
+			return (free_s(fd), -1);
+		x = dup2(x, fd[i]);
+		if (x == -1)
+			return (free_s(fd), -1);
+		i++;
+	}
+	return (free_s(fd), x);
+}
 static int	run_child(t_pipe *p, int i, char *envp[])
 {
 	int	j;
@@ -48,8 +90,10 @@ static int	run_parent(t_pipe *p)
 {
 	int		j;
 	char	c;
+	int		fd_out;
 
 	j = 0;
+	fd_out = get_fdout_redir(p, p->count - 1);
 	while (j < p->count - 1)
 	{
 		if (close(p->fd[j][0]) == -1)
@@ -60,7 +104,7 @@ static int	run_parent(t_pipe *p)
 	if (close(p->fd[p->count - 1][1]) == -1)
 		return (-1);
 	while (read(p->fd[p->count - 1][0], &c, 1) > 0)
-		if (write(1, &c, 1) == -1)
+		if (write(fd_out, &c, 1) == -1)
 			return (-1);
 	if (close(p->fd[p->count - 1][0]) == -1)
 		return (-1);

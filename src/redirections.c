@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/10 08:52:08 by mfleury           #+#    #+#             */
-/*   Updated: 2024/11/13 13:39:46 by mfleury          ###   ########.fr       */
+/*   Updated: 2024/11/13 15:07:59 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,7 @@ int	set_rd_flag(char *rd)
 	else if (ft_strncmp(rd, "<", ft_strlen(rd)) == 0)
 		return (1);
 	else if (ft_strncmp(rd, "<<", ft_strlen(rd)) == 0)
-		return (4);
+		return (3);
 	return (255);
 }
 
