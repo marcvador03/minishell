@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/22 16:08:01 by mfleury           #+#    #+#             */
-/*   Updated: 2024/11/11 16:37:49 by mfleury          ###   ########.fr       */
+/*   Updated: 2024/11/13 12:19:59 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -114,6 +114,7 @@ int	subshell(t_shell *sh, t_pipe *p, char *envp[])
 	p->pid = create_pids(p);
 	//p->cmd = create_cmd_names(p);
 	p->redirs = create_redirs(p);
+	clean_spaces(p->in_pipes);
 	p->args = create_args(p);
 	if (p->fd == NULL || p->args == NULL || p->pid == NULL)
 		return (free_pipe(p), -1);

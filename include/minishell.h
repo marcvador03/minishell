@@ -6,7 +6,7 @@
 /*   By: pmorello <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 12:17:09 by pmorello          #+#    #+#             */
-/*   Updated: 2024/11/11 16:20:03 by mfleury          ###   ########.fr       */
+/*   Updated: 2024/11/13 13:31:26 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,8 @@ typedef enum cmd_enum
 //http://stackoverflow.com/questions/16844728/converting-from-string-to-enum-in-c
 
 typedef int	(*t_func_arr)(char **args);
+
+
 /*flag bit position: bitvalue = 0 | bitvalue = 1
 0: pipes mem freed | pipes allocated on heap
 1: args mem freed | args allocated on heap
@@ -58,6 +60,7 @@ typedef struct s_pipe
 	char	**in_pipes;
 	char	**cmd;
 	char	***redirs;
+	int		**rd;
 	char	***args;
 	int		**fd;
 	int		count;
@@ -109,6 +112,7 @@ int		sh_strpos(const char *big, const char *little);
 char	*sh_strcut(char *str, int start, int end);
 char	*sh_strcut2(char **str, int start, int end);
 char	*sh_strstrip(char **str, int start, int end);
+void	clean_spaces(char **s); 
 
 /*subshell*/
 int		subshell(t_shell *sh, t_pipe *p, char *envp[]);
