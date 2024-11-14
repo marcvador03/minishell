@@ -4,12 +4,18 @@ SRC_DIR := src
 OBJ_DIR := obj
 INC_DIR := include
 LIB_DIR := lib
+BUILT_INS := $(SRC_DIR)/built_ins
 
 #Filenames definition
 NAME := minishell
 
 SRC_NAMES := minishell.c \
-			 built_ins.c \
+			 built_ins/ft_cd.c \
+			 built_ins/ft_echo.c \
+			 built_ins/ft_env.c \
+			 built_ins/ft_export.c \
+			 built_ins/ft_pwd.c \
+			 built_ins/ft_unset.c \
 			 core_utils.c \
 			 commands.c \
 			 prompt.c \

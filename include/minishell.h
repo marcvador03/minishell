@@ -79,12 +79,12 @@ int		exec_cmd(char **args, char *envp[]);
 char	**get_input(t_shell *sh);
 
 /* ft_cd*/
-int	ft_cd(char **args, t_env *env)
+int	ft_cd(char **args, t_env *env);
 int	ft_echo(char **args);
 int	ft_pwd(char **args);
 int	ft_env(t_env *env);
 int	ft_export(char **args, t_env *env, t_env *secret);
-int	ft_unset(char **a t_mini *mini);
+int	ft_unset(char **a, t_mini *mini);
 
 /*diverse utils functions*/
 void	free_s(void *ptr);
