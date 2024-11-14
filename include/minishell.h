@@ -6,7 +6,7 @@
 /*   By: pmorello <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 12:17:09 by pmorello          #+#    #+#             */
-/*   Updated: 2024/11/14 09:15:30 by pmorello         ###   ########.fr       */
+/*   Updated: 2024/11/14 11:23:08 by pmorello         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,22 +56,7 @@ typedef struct	s_env
 typedef struct	s_mini
 {
 	t_env	*env;
-	t_env	*secret_env;
-	int	in;
-	int	out;
-	int	fdin;
-	int	fdout;
-	int	pipin;
-	int	pipout;
-	int	pid;
-	int	charge;
-	int	parent;
-	int	last;
-	int	ret;
-	int	exit;
-	int	no_exec;
 }	t_mini;
-
 /*minishell base prompt functions*/
 char	*create_prompt(void);
 char	**get_cmd_args(char *cmd_in);
