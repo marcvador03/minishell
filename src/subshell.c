@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/22 16:08:01 by mfleury           #+#    #+#             */
-/*   Updated: 2024/11/13 16:47:00 by mfleury          ###   ########.fr       */
+/*   Updated: 2024/11/18 16:54:39 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,9 +29,21 @@ int	get_fdin_redir(t_pipe *p, int n)
 		return (-1);
 	i = 0;
 	x = STDIN_FILENO;
-
-	return (x);
-
+	while (p->redirs[n][i] != NULL)
+	{
+		if (p->rd[n][i] == 1)
+			fd[i] = open(p->redirs[n][i], O_RDONLY, 0700);
+		if (fd[i] == -1)
+			return (free_s(fd), -1);
+		if (p->rd[n][i] & (1 << 0))
+		{
+			x = fd[i];
+			if (x == -1)
+				return (free_s(fd), -1);
+		}
+		i++;
+	}
+	return (free_s(fd), x);
 }
 
 int	get_fdout_redir(t_pipe *p, int n)
@@ -47,23 +59,26 @@ int	get_fdout_redir(t_pipe *p, int n)
 	x = STDOUT_FILENO;
 	while (p->redirs[n][i] != NULL)
 	{
-		if (p->rd[n][i] & (0 << 0) && p->rd[n][i] & (1 << 1))
-			fd[i] = open(p->redirs[n][i], O_CREAT | O_RDWR | O_APPEND, 0700);
-		else if (p->rd[n][i] & (0 << 0) && p->rd[n][i] & (0 << 1))
-			fd[i] = open(p->redirs[n][i], O_CREAT | O_RDWR, 0700);
+		if (p->rd[n][i] == 2)
+			fd[i] = open(p->redirs[n][i], O_CREAT | O_RDWR | O_APPEND, 0644);
+		else if (p->rd[n][i] == 0)
+			fd[i] = open(p->redirs[n][i], O_CREAT | O_RDWR | O_TRUNC, 0644);
 		if (fd[i] == -1)
 			return (free_s(fd), -1);
-		x = dup2(x, fd[i]);
-		if (x == -1)
-			return (free_s(fd), -1);
+		if (!(p->rd[n][i] & (1 << 0)))
+		{
+			x = fd[i];
+			if (x == -1)
+				return (free_s(fd), -1);
+		}
 		i++;
 	}
 	return (free_s(fd), x);
 }
 static int	run_child(t_pipe *p, int i, char *envp[])
 {
-	int	j;
-	int	err;
+	int		j;
+	int		err;
 
 	j = 0;
 	err = 0;
@@ -116,10 +131,13 @@ static int	run_parent(t_pipe *p)
 static int	create_fork_pipe(t_pipe *p, char *envp[])
 {
 	int	i;
+	int		fd_in;
 
 	i = 0;
 	while (i < p->count)
 	{
+		fd_in = get_fdin_redir(p, i);
+		dup2(0, fd_in);
 		p->pid[i] = fork();
 		if (p->pid[i] == -1)
 			return (-1);
