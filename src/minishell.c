@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 10:01:23 by mfleury           #+#    #+#             */
-/*   Updated: 2024/11/08 22:26:57 by mfleury          ###   ########.fr       */
+/*   Updated: 2024/11/18 17:24:21 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,16 +39,15 @@ int	main(int argc, char *argv[], char *envp[])
 	char	term_buffer[2048];
 	char	*term_type;
 	int		success;
-		
+
 	if (argc > 1 || argv == NULL)
-			return (1);
+		return (1);
 	term_type = getenv("TERM");
 	if (term_type == 0)
-			exit_minishell(NULL, 1);
+		exit_minishell(NULL, 1);
 	success = tgetent(term_buffer, term_type);
 	if (success <= 0)
 		exit_minishell(NULL, success);
-
 	while (1)
 		if (start_shell(envp) != 0)
 			perror("minishell: ");

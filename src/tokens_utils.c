@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/07 14:53:29 by mfleury           #+#    #+#             */
-/*   Updated: 2024/11/07 14:55:35 by mfleury          ###   ########.fr       */
+/*   Updated: 2024/11/18 17:11:05 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 char	*get_tk(char *line)
 {
 	int		len;
-	
+
 	len = ft_strlen(line);
 	if (sh_strpos(line, "&&") == len && sh_strpos(line, "||") == len)
 		return (NULL);
@@ -26,46 +26,10 @@ char	*get_tk(char *line)
 	return (NULL);
 }
 
-/*void	get_bracket(char *line)
-{
-	char	*t_line;
-
-	t_line = line;
-	
-	t_line = ft_strrchr(line, '(');
-	t_line = ft_substr(t_line, 1, sh_strpos(t_line, ")"));
-	if (t_line == NULL)
-		return ;
-}*/
-
-/*int	count_p(char *line, int cnt)
-{
-	char	*str;
-
-	if (ft_strchr(line, '(') == 0 && ft_strchr(line, ')') == 0)
-		return (free_s(line), 1);
-	else if (ft_strchr(line, '(') > ft_strrchr(line, ')'))
-		return (free_s(line), 0);
-	while (*line != '\0')
-	{
-		if (*line == '(')
-		{
-			str = ft_substr(line + 1, 0, ft_strrchr(line, ')') - line);
-			if (count_p(str, cnt) == 0)
-				return (free_s(line), 0);
-			cnt += count_p(str, cnt);
-			break;
-		}
-		line++;
-	}
-	return (free_s(line), cnt);
-}*/
-
-
 void	count_brackets(t_shell *sh, char *line)
 {
 	char	*t_line;
-	
+
 	t_line = line;
 	while (*ft_strchr(t_line, '(') != '\0' && *t_line != '\0')
 	{
@@ -103,4 +67,3 @@ int	count_tokens(char *line)
 	}
 	return (n);
 }
-

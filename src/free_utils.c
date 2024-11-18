@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/25 14:10:00 by mfleury           #+#    #+#             */
-/*   Updated: 2024/11/07 14:56:09 by mfleury          ###   ########.fr       */
+/*   Updated: 2024/11/18 17:23:53 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,8 +63,8 @@ void	free_pipe(t_pipe *p)
 
 void	free_sh(t_shell *sh)
 {
-	t_shell *tmp;
-	
+	t_shell	*tmp;
+
 	if (sh == NULL)
 		return ;
 	sh = sh->head;
@@ -77,12 +77,4 @@ void	free_sh(t_shell *sh)
 		sh = sh->next;
 		free_s(tmp);
 	}
-
 }
-
-/*void	free_callback(char **str, char (*f)(char *, char *))
-{
-	char	*tmp;
-
-
-}*/	

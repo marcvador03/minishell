@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/07 14:32:18 by mfleury           #+#    #+#             */
-/*   Updated: 2024/11/07 14:52:11 by mfleury          ###   ########.fr       */
+/*   Updated: 2024/11/18 17:11:40 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ static char	*create_prompt(void)
 	return (res);
 }
 
-char	*get_input()
+char	*get_input(void)
 {
 	char	*line;
 	char	*line2;
@@ -59,5 +59,3 @@ char	*get_input()
 	line2 = ft_strjoin("&&", line);
 	return (free_s(prompt), free_s(line), line2);
 }
-
-

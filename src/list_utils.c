@@ -6,11 +6,12 @@
 /*   By: mfleury <mfleury@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/30 17:25:00 by mfleury           #+#    #+#             */
-/*   Updated: 2024/11/01 21:47:24 by mfleury          ###   ########.fr       */
+/*   Updated: 2024/11/18 17:24:52 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
+
 int	get_next_token(t_shell *sh, char *line);
 
 t_shell	*sh_lstnew(char *line)
@@ -24,7 +25,7 @@ t_shell	*sh_lstnew(char *line)
 	if (ptr->pipes == NULL)
 		return (NULL);
 	if (get_next_token(ptr, line) != 0)
-		return (NULL);	
+		return (NULL);
 	ptr->next = NULL;
 	ptr->head = ptr;
 	return (ptr);
@@ -59,4 +60,3 @@ t_shell	*sh_lstadd_back(t_shell **sh, char *line)
 	}
 	return (tmp->next);
 }
-

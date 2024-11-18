@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/10 08:52:08 by mfleury           #+#    #+#             */
-/*   Updated: 2024/11/13 15:07:59 by mfleury          ###   ########.fr       */
+/*   Updated: 2024/11/18 17:05:28 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,6 @@
 
 char	*get_rd(char *line)
 {
-	
 	int	i;
 
 	i = 0;
@@ -25,14 +24,14 @@ char	*get_rd(char *line)
 			if (line[i + 1] == '>')
 				return (">>");
 			else
-				return (">");	
+				return (">");
 		}
 		else if (line[i] == '<')
 		{
 			if (line[i + 1] == '<')
 				return ("<<");
 			else
-				return ("<");	
+				return ("<");
 		}
 		i++;
 	}
@@ -88,18 +87,12 @@ char	**get_redirs(char **line, int **rd)
 		pos[0] = sh_strpos(*line, t_rd) + ft_strlen(t_rd);
 		pos[1] = sh_strpos(ft_strtrim(*line + pos[0], " "), " ") + 1;
 		redirs[i] = sh_strcut(*line, pos[0], pos[0] + pos[1]);
-		rd[0][i] = set_rd_flag(t_rd); 
+		rd[0][i++] = set_rd_flag(t_rd);
 		*line = sh_strstrip(line, pos[0] - ft_strlen(t_rd), pos[0] + pos[1]);
 		*line = sh_strtrim(line, t_rd, 0);
-		i++;
 	}
 	redirs[n] = NULL;
 	clean_spaces(redirs);
-	return (redirs);		
-	
-	//just get first test following > or <
-	//how to repass remainings args (before next < or > to arg list)?
-	//if > --> replace write of parent_fork to std_out sino replace ??
-	//open redirections with R/W, manage permissions and APPEND for >> 
+	return (redirs);
 }
 	//https://unix.stackexchange.com/questions/235092/command-redirection-to-multiple-files-command-file1-file2

@@ -6,11 +6,12 @@
 /*   By: mfleury <mfleury@student.42barcelona.      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/25 13:59:57 by mfleury           #+#    #+#             */
-/*   Updated: 2024/11/13 13:31:26 by mfleury          ###   ########.fr       */
+/*   Updated: 2024/11/18 17:12:13 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
+
 char	**get_redirs(char **line, int **rd);
 
 int	**create_fpipes(t_pipe *p)

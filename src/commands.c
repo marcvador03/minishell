@@ -6,11 +6,12 @@
 /*   By: mfleury <mfleury@student.42barcelona.      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/17 15:39:35 by mfleury           #+#    #+#             */
-/*   Updated: 2024/11/11 16:30:47 by mfleury          ###   ########.fr       */
+/*   Updated: 2024/11/18 17:06:58 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
+
 char	*get_rd(char *line);
 
 static t_cmd_enum	str_to_enum(const char *str)
@@ -54,7 +55,7 @@ int	exec_cmd(char *cmd, char **args, char *envp[])
 
 char	**create_cmd_names(t_pipe *p)
 {
-	char 	**res;
+	char	**res;
 	char	*rd;
 	int		i;
 

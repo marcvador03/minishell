@@ -18,12 +18,15 @@ SRC_NAMES := minishell.c \
 			 free_utils.c \
 			 list_utils.c \
 			 prompt_creation.c \
-			 prompt_reading.c \
-			 prompt_utils.c \
 			 str_utils.c \
 			 tokens.c \
 			 tokens_utils.c \
-			 redirections.c
+			 redirections.c \
+			 redirections_utils.c 
+			 #ft_exit.c \
+			 #ft_export.c \
+			 #ft_unset.c \
+			 #ft_env.c
 
 INC_NAMES := minishell.h
 

@@ -6,20 +6,21 @@
 /*   By: mfleury <mfleury@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/07 14:31:45 by mfleury           #+#    #+#             */
-/*   Updated: 2024/11/13 11:51:05 by mfleury          ###   ########.fr       */
+/*   Updated: 2024/11/18 17:09:11 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
+
 char	**identify_pipes(char *s_line, t_pipe **p);
 char	*get_tk(char *line);
 void	count_brackets(t_shell *sh, char *line);
 
 int	get_next_token(t_shell *sh, char *line)
 {
-	char 	*tk1;
-	char 	*tk2;
-	
+	char	*tk1;
+	char	*tk2;
+
 	line = sh_strtrim(&line, " ", 0);
 	tk1 = get_tk(line);
 	line = sh_strtrim(&line, " ", 2);
@@ -31,13 +32,12 @@ int	get_next_token(t_shell *sh, char *line)
 	sh->s_line = sh_strtrim(&sh->s_line, ")", 0);
 	if (sh->s_line == NULL)
 		return (free_s(line), set_errno(ENOMEM), ENOMEM);
-	if (tk1 != NULL && ft_strncmp(tk1, "||", 2) == 0) 
+	if (tk1 != NULL && ft_strncmp(tk1, "||", 2) == 0)
 		sh->token = 1;
 	sh->pipes->in_pipes = identify_pipes(sh->s_line, &sh->pipes);
 	clean_spaces(sh->pipes->in_pipes);
-	return (free_s(line), 0);	
+	return (free_s(line), 0);
 }
-
 
 int	execute_tokens(t_shell *sh, t_shell *head, int level, char *envp[])
 {
@@ -57,7 +57,7 @@ int	execute_tokens(t_shell *sh, t_shell *head, int level, char *envp[])
 			if (pid == 0)
 				exit(execute_tokens(sh, head, ++level, envp));
 			waitpid(pid, &wstatus, 0);
-			return(main_cmd_return(sh, wstatus));
+			return (main_cmd_return(sh, wstatus));
 		}
 		else if (sh->bracket[0] == level)
 		{
@@ -72,6 +72,5 @@ int	execute_tokens(t_shell *sh, t_shell *head, int level, char *envp[])
 			exit(0);
 		sh = sh->next;
 	}
-	return(0);
-}	
-
+	return (0);
+}
