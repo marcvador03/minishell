@@ -6,7 +6,7 @@
 /*   By: pmorello <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 12:17:09 by pmorello          #+#    #+#             */
-/*   Updated: 2024/11/13 15:38:29 by mfleury          ###   ########.fr       */
+/*   Updated: 2024/11/19 13:45:21 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,6 +79,17 @@ typedef struct s_shell
 	struct s_shell	*next;
 }	t_shell;
 
+
+typedef struct	s_env
+{
+	char 	*value;
+	struct s_env	*next;
+}	t_env;
+
+typedef struct	s_mini
+{
+	t_env	*env;
+}	t_mini;
 /*minishell base prompt functions*/
 char	**get_cmd_args(char *cmd_in);
 int		exec_cmd(char *cmd, char **args, char *envp[]);
@@ -87,11 +98,13 @@ int		start_shell(char *envp[]);
 void	exit_minishell(t_shell *sh, int status);
 int	main_cmd_return(t_shell *sh, int wstatus);
 
-/* minishell built-ins functions*/
-int		ft_cd(char **args);
-int		ft_pwd(char **args);
-void	ft_env(int argc, char **argv);
-void	ft_echo(int argc, char **argv);
+/* ft_cd*/
+int	ft_cd(char **args, t_env *env);
+int	ft_echo(char **args);
+int	ft_pwd(char **args);
+int	ft_env(t_env *env);
+int	ft_export(char **args, t_env *env, t_env *secret);
+int	ft_unset(char **a, t_mini *mini);
 
 /*diverse utils functions*/
 void	free_s(void *ptr);

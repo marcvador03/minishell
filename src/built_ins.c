@@ -6,7 +6,7 @@
 /*   By: pmorello <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 10:36:03 by pmorello          #+#    #+#             */
-/*   Updated: 2024/10/16 16:25:05 by mfleury          ###   ########.fr       */
+/*   Updated: 2024/11/14 09:21:18 by pmorello         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,13 +16,12 @@ int	ft_cd(char **args)
 {
 	char	*path;
 
+	if (args[1] != NULL && args[2] != NULL)
+		return(E2BIG);
 	if (args[1] == NULL)
 		path = getenv("HOME");
 	else
 		path = args[1];
-	if (args[1] != NULL && args[2] != NULL)
-		return(E2BIG);
-		//printf("cd : too many arguments");
 	chdir(path);
 	return (0);
 }
@@ -71,26 +70,16 @@ int	ft_pwd(char **args)
 	return (free(buffer), 0);
 }
 
-//void	ft_export
 
-//void	ft_unset
 
-void	ft_env(int argc, char **argv)
+int	ft_env(t_env *env)
 {
-	//usar la variable global environ
-	char **env;
-	
-	env = environ;
-	while (*env)
+	while (env && env->next != NULL)
 	{
-		printf("%s\n", *env);
-		env++;
+		ft_putendl(env->value);
+		env = env->next;
 	}
-	if (argc > 1)
-		printf("env: '%s' : No such file or directori\n", argv[1]);
-}
-
-void	ft_exit(void)
-{
-	exit(0);
+	if (env)
+		ft_putendl(env->value);
+	return (SUCCES);
 }
