@@ -6,7 +6,7 @@
 /*   By: pmorello <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 12:17:09 by pmorello          #+#    #+#             */
-/*   Updated: 2024/11/19 13:45:21 by mfleury          ###   ########.fr       */
+/*   Updated: 2024/11/19 15:49:12 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,10 @@ typedef enum cmd_enum
 {
 	cd,
 	pwd,
+	unset,
+	exprt,
+	env,
+	echo,
 	END
 }	t_cmd_enum;
 //http://stackoverflow.com/questions/16844728/converting-from-string-to-enum-in-c
@@ -130,6 +134,5 @@ void	clean_spaces(char **s);
 
 /*subshell*/
 int		subshell(t_shell *sh, t_pipe *p, char *envp[]);
-
 
 #endif

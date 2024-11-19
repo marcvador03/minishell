@@ -6,11 +6,11 @@
 /*   By: mfleury <mfleury@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/07 14:32:18 by mfleury           #+#    #+#             */
-/*   Updated: 2024/11/18 17:11:40 by mfleury          ###   ########.fr       */
+/*   Updated: 2024/11/19 14:40:08 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../include/minishell.h"
+#include "minishell.h"
 
 char	**identify_pipes(char *s_line, t_pipe **p)
 {

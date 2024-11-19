@@ -6,11 +6,11 @@
 /*   By: pmorello <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/14 09:54:49 by pmorello          #+#    #+#             */
-/*   Updated: 2024/11/14 09:55:52 by pmorello         ###   ########.fr       */
+/*   Updated: 2024/11/19 15:07:22 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../inlcude/minishell.h"
+#include "minishell.h"
 
 static int	print_error(int error, const char *arg)
 {
@@ -76,7 +76,7 @@ static int			is_in_env(t_env *env, char *args)
 		get_env_name(env_name, env->value);
 		if (ft_strcmp(var_name, env_name) == 0)
 		{
-			ft_memdel(env->value);
+			free_s(env->value);
 			env->value = ft_strdup(args);
 			return (1);
 		}

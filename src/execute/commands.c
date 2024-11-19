@@ -6,17 +6,17 @@
 /*   By: mfleury <mfleury@student.42barcelona.      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/17 15:39:35 by mfleury           #+#    #+#             */
-/*   Updated: 2024/11/18 17:06:58 by mfleury          ###   ########.fr       */
+/*   Updated: 2024/11/19 15:47:49 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../include/minishell.h"
+#include "minishell.h"
 
 char	*get_rd(char *line);
 
 static t_cmd_enum	str_to_enum(const char *str)
 {
-	const char	*enum_str[] = {"cd", "pwd"};
+	const char	*enum_str[] = {"cd", "pwd", "unset", "export", "env", "echo"};
 	int			i;
 
 	i = 0;
@@ -35,8 +35,12 @@ int	exec_cmd(char *cmd, char **args, char *envp[])
 	t_func_arr	call_cmd[2];
 	char		*t_cmd;
 
-	call_cmd[0] = &ft_cd;
+	/*call_cmd[0] = &ft_cd;
 	call_cmd[1] = &ft_pwd;
+	call_cmd[2] = &ft_unset;
+	call_cmd[3] = &ft_export;
+	call_cmd[4] = &ft_env;
+	call_cmd[5] = &ft_echo;*/
 	if (ft_strncmp(cmd, "exit", 4) == 0)
 		return (255);
 	x = str_to_enum(cmd);

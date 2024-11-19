@@ -6,11 +6,11 @@
 /*   By: pmorello <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/14 09:16:56 by pmorello          #+#    #+#             */
-/*   Updated: 2024/11/14 09:20:39 by pmorello         ###   ########.fr       */
+/*   Updated: 2024/11/19 15:02:51 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../include/minishell.h"
+#include "minishell.h"
 
 static	int	nb_args(char **args)
 {
@@ -31,7 +31,7 @@ int	ft_echo(char **args)
 	n_option = 0;
 	if (nb_args(args)> 1)
 	{
-		while (args[i] && ft_strcmp(args[i], "-n") == 0)
+		while (args[i] && ft_strncmp(args[i], "-n") == 0)
 		{
 			n_option = 1;
 			i++;

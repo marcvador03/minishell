@@ -9,42 +9,50 @@ BUILT_INS := $(SRC_DIR)/built_ins
 #Filenames definition
 NAME := minishell
 
-SRC_NAMES := minishell.c \
-			 built_ins/ft_cd.c \
-			 built_ins/ft_echo.c \
-			 built_ins/ft_env.c \
-			 built_ins/ft_export.c \
-			 built_ins/ft_pwd.c \
-			 built_ins/ft_unset.c \
-			 core_utils.c \
-			 commands.c \
-			 shell.c \
-			 subshell.c \
-			 subshell_utils.c \
-			 free_utils.c \
-			 list_utils.c \
-			 prompt_creation.c \
-			 str_utils.c \
-			 tokens.c \
-			 tokens_utils.c \
-			 redirections.c \
-			 redirections_utils.c 
-			 #ft_exit.c \
-			 #ft_export.c \
-			 #ft_unset.c \
-			 #ft_env.c
+BUILTINS = ft_cd.c \
+		   ft_echo.c \
+		   ft_env.c \
+		   ft_export.c \
+		   ft_pwd.c \
+		   ft_unset.c \
+		   built_utils.c
 
+PARSE = prompt_creation.c \
+		tokens.c \
+		tokens_utils.c \
+		redirections.c \
+		redirections_utils.c	
+
+EXECUTE = commands.c
+
+UTILS = core_utils.c \
+		free_utils.c \
+		list_utils.c \
+		str_utils.c
+
+MAIN = minishell.c \
+	   shell.c \
+	   subshell.c \
+	   subshell_utils.c
+
+
+SRC_NAMES =  $(addprefix $(SRC_DIR)/parse/, $(PARSE)) \
+			 $(addprefix $(SRC_DIR)/execute/, $(EXECUTE)) \
+			 $(addprefix $(SRC_DIR)/utils/, $(UTILS)) \
+			 $(addprefix $(SRC_DIR)/main/, $(MAIN))  
+			# $(addprefix $(SRC_DIR)/built_ins/, $(BUILTINS))
 INC_NAMES := minishell.h
 
-SOURCES := $(patsubst %.c, $(SRC_DIR)/%.c, $(SRC_NAMES))
+#SOURCES := $((SRC_NAMES): %.c=$(SRC_DIR)/%.c)
 
-OBJECTS := $(patsubst $(SRC_DIR)/%.c, $(OBJ_DIR)/%.o, $(SOURCES))
+#OBJECTS := $(SRC_NAMES:.c=.o)
+OBJECTS := $(patsubst %.c, $(OBJ_DIR)/%.o, $(notdir $(SRC_NAMES)))
 
 INCLUDES := $(patsubst %.h, $(INC_DIR)/%.h, $(INC_NAMES))
 
 DEPS := $(OBJECTS:.o=.d)
 
-CFLAGS += -Wall -Werror -Wextra -MMD -MP
+CFLAGS += -Wall -Werror -Wextra -MMD -MP -I $(INC_DIR)
 
 LIB_NAMES := libft.a 
 LIBS_TAG := $(patsubst lib%.a, -l%, $(LIB_NAMES))
@@ -60,7 +68,7 @@ all: libft $(OBJECTS) $(NAME)
 $(NAME): libft/libft.a Makefile $(INCLUDES) $(OBJECTS)
 	cc $(CFLAGS) -L libft $(DEBUG) $(OBJECTS) -o $@ $(LIBS_TAG) $(LIBS_TAG)
 
-$(OBJ_DIR)/%.o: $(SRC_DIR)/%.c | $(OBJ_DIR)
+$(OBJ_DIR)/%.o: $(SRC_DIR)/*/%.c | $(OBJ_DIR)
 	cc $(CFLAGS) $(DEBUG) -c $< -o $@ 
 
 libft: 
@@ -79,7 +87,8 @@ flags:
 	@echo $(CFLAGS)
 
 show:
-	@echo $(SOURCES)
+	@echo $(OBJECTS)
+
 
 clean: 
 	@$(MAKE) clean -C $(LIBFT_DIR)

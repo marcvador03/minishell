@@ -6,11 +6,11 @@
 /*   By: mfleury <mfleury@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/07 15:12:52 by mfleury           #+#    #+#             */
-/*   Updated: 2024/11/18 17:00:40 by mfleury          ###   ########.fr       */
+/*   Updated: 2024/11/19 14:39:49 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../include/minishell.h"
+#include "minishell.h"
 
 int		count_tokens(char *line);
 int		execute_tokens(t_shell *sh, t_shell *head, int level, char *envp[]);

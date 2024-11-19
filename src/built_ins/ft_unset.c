@@ -6,11 +6,11 @@
 /*   By: pmorello <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/14 11:23:34 by pmorello          #+#    #+#             */
-/*   Updated: 2024/11/14 11:23:50 by pmorello         ###   ########.fr       */
+/*   Updated: 2024/11/19 15:06:52 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../include/minishell.h"
+#include "minishell.h"
 
 static size_t	env_size(char *env)
 {
@@ -26,13 +26,13 @@ static void		free_node(t_mini *mini, t_env *env)
 {
 	if (mini->env == env && env->next == NULL)
 	{
-		ft_memdel(mini->env->value);
+		free_s(mini->env->value);
 		mini->env->value = NULL;
 		mini->env->next = NULL;
 		return ;
 	}
-	ft_memdel(env->value);
-	ft_memdel(env);
+	free_s(env->value);
+	free_s(env);
 }
 
 int				ft_unset(char **a, t_mini *mini)

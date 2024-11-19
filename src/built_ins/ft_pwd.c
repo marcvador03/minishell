@@ -6,11 +6,11 @@
 /*   By: pmorello <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/14 09:44:34 by pmorello          #+#    #+#             */
-/*   Updated: 2024/11/14 09:47:07 by pmorello         ###   ########.fr       */
+/*   Updated: 2024/11/19 15:04:08 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../include/minishell.h"
+#include "minishell.h"
 
 int	ft_pwd(char **args)
 {
@@ -26,6 +26,6 @@ int	ft_pwd(char **args)
 	getcwd(buffer, size);
 	if (buffer == NULL)
 		return (free(buffer), errno);
-	prinf("%s\n", buffer);
+	printf("%s\n", buffer);
 	return (free(buffer), 0);
 }

@@ -6,11 +6,11 @@
 /*   By: pmorello <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/14 09:20:49 by pmorello          #+#    #+#             */
-/*   Updated: 2024/11/14 09:44:23 by pmorello         ###   ########.fr       */
+/*   Updated: 2024/11/19 15:08:06 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../include/minishell.h"
+#include "minishell.h"
 
 static void	print_error(char **args)
 {
@@ -22,7 +22,7 @@ static void	print_error(char **args)
 		ft_putstr_fd(strerror(errno), 2);
 		ft_putstr_fd(": ", 2);
 	}
-	ft_putnedl_fd(args[1], 2);
+	ft_putendl_fd(args[1], 2);
 }
 
 static char	*get_env_path(t_env *env, const char *var, size_t len)
@@ -34,7 +34,7 @@ static char	*get_env_path(t_env *env, const char *var, size_t len)
 
 	while (env && env->next != NULL)
 	{
-		if (ft_strcmp(env->value, var, len) == 0)
+		if (ft_strncmp(env->value, var, len) == 0)
 		{
 			s_alloc = ft_strlen(env->value) - len;
 			if (!(oldpwd = malloc(sizeof(char) * s-alloc + 1)))
@@ -65,7 +65,7 @@ static	int	update_oldpwd(t_env *env)
 		return (1);
 	if (is_in_nev(env, oldpwd) == 0)
 		env_add(oldpwd, env);
-	ft_memdel(oldpwd);
+	free_s(oldpwd);
 	return (1);
 }
 
@@ -94,7 +94,7 @@ static	int	go_to_path(int option, t_env *env)
 		update_oldpwd(end);
 	}
 	ret = chdir(env_path);
-	ft_memdel(env_path);
+	free_s(env_path);
 	return (ret);
 }
 
@@ -104,7 +104,7 @@ int	ft_cd(char **args, t_env *env)
 
 	if (args[1])
 		return (go_to_path(0, env));
-	if (ft_strcmp(args[1], "-") == 0)
+	if (ft_strncmp(args[1], "-") == 0)
 		cd_ret = go_to_path(1, env);
 	else
 	{
