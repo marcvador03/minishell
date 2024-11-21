@@ -6,7 +6,7 @@
 /*   By: pmorello <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 12:17:09 by pmorello          #+#    #+#             */
-/*   Updated: 2024/11/21 10:19:41 by mfleury          ###   ########.fr       */
+/*   Updated: 2024/11/21 19:36:41 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,12 @@
 
 # define TRUE 1
 # define FALSE 0
+# define READ_END 0
+# define WRITE_END 1
+# define INPUT 0
+# define OUTPUT 1
+# define T_INPUT 2
+# define T_OUTPUT 3
 
 extern char	**environ;//variable global para la funcion de ft_env
 
@@ -66,6 +72,7 @@ typedef struct s_pipe
 	char	**cmd;
 	char	***redirs;
 	int		**rd;
+	int		r_fd[4];
 	char	***args;
 	int		**fd;
 	int		count;
@@ -96,7 +103,7 @@ typedef struct	s_mini
 }	t_mini;
 /*minishell base prompt functions*/
 char	**get_cmd_args(char *cmd_in);
-int		exec_cmd(char *cmd, char **args, char *envp[]);
+int		exec_cmd(t_shell *sh, char *cmd, char **args, char *envp[]);
 char	*get_input();
 int		start_shell(char *envp[]);
 void	exit_minishell(t_shell *sh, int status);
