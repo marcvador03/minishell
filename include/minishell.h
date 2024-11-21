@@ -6,7 +6,7 @@
 /*   By: pmorello <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 12:17:09 by pmorello          #+#    #+#             */
-/*   Updated: 2024/11/19 15:49:12 by mfleury          ###   ########.fr       */
+/*   Updated: 2024/11/21 10:19:41 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,13 +102,13 @@ int		start_shell(char *envp[]);
 void	exit_minishell(t_shell *sh, int status);
 int	main_cmd_return(t_shell *sh, int wstatus);
 
-/* ft_cd*/
-int	ft_cd(char **args, t_env *env);
-int	ft_echo(char **args);
-int	ft_pwd(char **args);
-int	ft_env(t_env *env);
-int	ft_export(char **args, t_env *env, t_env *secret);
-int	ft_unset(char **a, t_mini *mini);
+/* built-ins*/
+int 	ft_unset(char **args); 
+int		ft_pwd(char **args);
+int 	ft_export(char **args);
+int		ft_env(char **args);
+int		ft_echo(char **args);
+int 	ft_cd(char **args); 
 
 /*diverse utils functions*/
 void	free_s(void *ptr);

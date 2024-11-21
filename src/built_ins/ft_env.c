@@ -3,23 +3,26 @@
 /*                                                        :::      ::::::::   */
 /*   ft_env.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pmorello <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/14 09:52:16 by pmorello          #+#    #+#             */
-/*   Updated: 2024/11/19 15:03:37 by mfleury          ###   ########.fr       */
+/*   Updated: 2024/11/21 10:22:07 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	ft_env(t_env *env)
+extern char **environ;
+
+int	ft_env(char **envp)
 {
-	while (env && env->next != NULL)
+	char	**env;
+
+	env = envp;
+	while (*env)
 	{
-		ft_putendl(env->value);
-		env = env->next;
+		printf("%s\n", *env);
+		env++;
 	}
-	if (env)
-		ft_putendl(env->value);
 	return (0);
 }

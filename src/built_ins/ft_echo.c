@@ -3,48 +3,38 @@
 /*                                                        :::      ::::::::   */
 /*   ft_echo.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pmorello <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/14 09:16:56 by pmorello          #+#    #+#             */
-/*   Updated: 2024/11/19 15:02:51 by mfleury          ###   ########.fr       */
+/*   Updated: 2024/11/21 10:03:34 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-static	int	nb_args(char **args)
-{
-	int	size;
-	
-	size = 0;
-	while (args[size])
-		size++;
-	return (size);
-}
-
 int	ft_echo(char **args)
 {
+	size_t	len;
 	int	i;
-	int	n_option;
+	int new_line;
 
+	new_line = 1;
 	i = 1;
-	n_option = 0;
-	if (nb_args(args)> 1)
+	len = ft_strlen(args[i]);
+	while (args[i] != NULL)
 	{
-		while (args[i] && ft_strncmp(args[i], "-n") == 0)
+		if (ft_strncmp(args[i], "-n", len) == 0)
+			new_line = 0;
+		else
 		{
-			n_option = 1;
-			i++;
+			printf("%s", args[i]);
+			//if (i < argc - 1)
+			if (args[i + 1] != NULL)
+				printf (" ");
 		}
-		while (args[i])
-		{
-			ft_putstr_fd(args[i], 1);
-			if (args[i + 1] && args[i][0] != '\0')
-				write(1, " ", 1);
-			i++;
-		}
+		i++;
 	}
-	if (n_option == 0)
-		write(1, "\n", 1);
-	return (SUCCESS):
+	if (new_line)
+		printf("\n");
+	return (0);
 }

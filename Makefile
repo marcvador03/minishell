@@ -14,8 +14,8 @@ BUILTINS = ft_cd.c \
 		   ft_env.c \
 		   ft_export.c \
 		   ft_pwd.c \
-		   ft_unset.c \
 		   built_utils.c
+		   #ft_unset.c \
 
 PARSE = prompt_creation.c \
 		tokens.c \
@@ -39,8 +39,8 @@ MAIN = minishell.c \
 SRC_NAMES =  $(addprefix $(SRC_DIR)/parse/, $(PARSE)) \
 			 $(addprefix $(SRC_DIR)/execute/, $(EXECUTE)) \
 			 $(addprefix $(SRC_DIR)/utils/, $(UTILS)) \
-			 $(addprefix $(SRC_DIR)/main/, $(MAIN))  
-			# $(addprefix $(SRC_DIR)/built_ins/, $(BUILTINS))
+			 $(addprefix $(SRC_DIR)/main/, $(MAIN)) \
+			$(addprefix $(SRC_DIR)/built_ins/, $(BUILTINS))
 INC_NAMES := minishell.h
 
 #SOURCES := $((SRC_NAMES): %.c=$(SRC_DIR)/%.c)
