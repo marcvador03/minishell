@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/22 16:08:01 by mfleury           #+#    #+#             */
-/*   Updated: 2024/11/21 19:40:32 by mfleury          ###   ########.fr       */
+/*   Updated: 2024/11/22 21:00:00 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,29 +87,50 @@ int	single_cmd(t_shell *sh, t_pipe *p, char *envp[])
 
 int	run_child(t_shell *sh, t_pipe *p, int i, char *envp[])
 {
-	int		j;
-	int		err;
+	int	j;
 
+	if (i == 0)
+		dup2(p->fd[i][WRITE_END], STDOUT_FILENO);	// r_fd?
+	else if (i != 0 && i != p->count - 1)
+	{
+		dup2(p->fd[i - 1][READ_END], p->fd[i][WRITE_END]); // r_fd?
+		dup2(p->fd[i][WRITE_END], STDOUT_FILENO); // r_fd?
+	}
+	else if (i == p->count - 1)
+		dup2(p->fd[i][WRITE_END], STDOUT_FILENO); //r_fd?
 	j = 0;
-	err = 0;
 	while (j < p->count)
 	{
-		/*if (j == i - 1)
-			err = dup2(p->fd[j][0], STDOUT_FILENO);
-		else*/
-			err = close(p->fd[j][READ_END]);
-		if (err == -1)
-			exit(err);
-		if (j == i)
-			err = dup2(p->fd[j][WRITE_END], STDIN_FILENO);
-		else
-			err = close(p->fd[j][WRITE_END]);
-		if (err == -1)
-			exit(err);
+		close(p->fd[j][READ_END]);
+		close(p->fd[j][WRITE_END]);
 		j++;
 	}
 	exit(exec_cmd(sh, p->args[i][0], p->args[i], envp));
 }
+
+static int	run_parent(t_shell *sh, t_pipe *p)
+{
+	int		i;
+	int	wstatus;
+	
+	i = 0;
+	while (i < p->count)
+	{
+		waitpid(p->pid[i], &wstatus, 0);
+		sub_cmd_return(sh, p->args[i++][0], wstatus, NULL);
+	}
+	i = 0;
+	while (i < p->count)
+	{
+		close(p->fd[i][READ_END]);
+		close(p->fd[i][WRITE_END]);
+		i++;
+	}
+	rl_replace_line("", 0);
+	rl_on_new_line();
+	return (0);
+}
+
 
 int	create_fork_pipe(t_shell *sh, t_pipe *p, char *envp[])
 {
@@ -127,38 +148,14 @@ int	create_fork_pipe(t_shell *sh, t_pipe *p, char *envp[])
 		//close_redir_fd(p);
 		i++;
 	}
-	return (0);
-}
-
-static int	run_parent(t_pipe *p)
-{
-	int		j;
-	char	c;
-
-	j = 0;
-	while (j < p->count - 1)
-	{
-		if (close(p->fd[j][READ_END]) == -1)
-			return (-1);
-		if (close(p->fd[j++][WRITE_END]) == -1)
-			return (-1);
-	}
-	if (close(p->fd[p->count - 1][WRITE_END]) == -1)
-		return (-1);
-	while (read(p->fd[p->count - 1][READ_END], &c, 1) > 0)
-		if (write(STDOUT_FILENO, &c, 1) == -1)
-			return (-1);
-	if (close(p->fd[p->count - 1][READ_END]) == -1)
-		return (-1);
-	rl_replace_line("", 0);
-	rl_on_new_line();
+	i = 0;
+	if (run_parent(sh, p) == -1)
+		return (free_pipe(p), -1);
 	return (0);
 }
 
 int	subshell(t_shell *sh, t_pipe *p, char *envp[])
 {
-	int	i;
-	int	wstatus;
 	int	errnum;
 
 	errnum = 0;
@@ -174,13 +171,5 @@ int	subshell(t_shell *sh, t_pipe *p, char *envp[])
 		errnum = single_cmd(sh, p, envp);
 	 else if (create_fork_pipe(sh, p, envp) == -1)
 		return (free_pipe(p), -1);
-	if (run_parent(p) == -1)
-		return (free_pipe(p), -1);
-	i = 0;
-	while (i < p->count)
-	{
-		waitpid(p->pid[i], &wstatus, 0);
-		sub_cmd_return(sh, p->args[i++][0], wstatus, &errnum);
-	}
 	return (errnum);
 }
