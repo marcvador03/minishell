@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/22 16:08:01 by mfleury           #+#    #+#             */
-/*   Updated: 2024/11/24 19:08:32 by mfleury          ###   ########.fr       */
+/*   Updated: 2024/11/24 20:13:10 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -111,9 +111,11 @@ int	close_pipes(t_pipe *p, int n)
 
 int	run_child(t_pipe *p, int i, char *envp[])
 {
+	int wstatus;
+	
 	if (i == 0)
 		dup2(p->fd[i][WRITE_END], STDOUT_FILENO);	// r_fd?
-	else if (i != 0 && i != p->count - 1)
+	if (i != 0 && i != p->count - 1)
 	{
 		dup2(p->fd[i - 1][READ_END], STDIN_FILENO); // r_fd?
 		dup2(p->fd[i][WRITE_END], STDOUT_FILENO); // r_fd?
@@ -121,7 +123,10 @@ int	run_child(t_pipe *p, int i, char *envp[])
 	else if (i != 0 && i == p->count - 1)
 		dup2(p->fd[i - 1][READ_END], STDIN_FILENO); //r_fd?
 	close_pipes(p, i);
-	return(exec_cmd(p->args[i][0], p->args[i], p->count, envp));
+	open_redir_fd(p, i);
+	wstatus = exec_cmd(p->args[i][0], p->args[i], p->count, envp);
+	close_redir_fd(p);
+	return (wstatus);
 }
 
 static int	run_parent(t_shell *sh, t_pipe *p)
@@ -155,13 +160,11 @@ int	create_fork_pipe(t_shell *sh, t_pipe *p, char *envp[])
 	i = 0;
 	while (i < p->count)
 	{
-		//open_redir_fd(p, i);
 		p->pid[i] = fork();
 		if (p->pid[i] == -1)
 			return (-1);
 		if (p->pid[i] == 0)
 			run_child(p, i, envp);
-		//close_redir_fd(p);
 		i++;
 	}
 	i = 0;
