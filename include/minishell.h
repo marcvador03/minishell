@@ -6,7 +6,7 @@
 /*   By: pmorello <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 12:17:09 by pmorello          #+#    #+#             */
-/*   Updated: 2024/11/24 12:10:08 by mfleury          ###   ########.fr       */
+/*   Updated: 2024/11/24 16:03:31 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,7 +103,7 @@ typedef struct	s_mini
 }	t_mini;
 /*minishell base prompt functions*/
 char	**get_cmd_args(char *cmd_in);
-int		exec_cmd(t_shell *sh, char *cmd, char **args, char *envp[]);
+int		exec_cmd(char *cmd, char **args, int pcount, char *envp[]);
 char	*get_input();
 int		start_shell(char *envp[]);
 void	exit_minishell(t_shell *sh, int status);

@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/22 16:08:01 by mfleury           #+#    #+#             */
-/*   Updated: 2024/11/24 13:50:13 by mfleury          ###   ########.fr       */
+/*   Updated: 2024/11/24 19:08:32 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,13 +47,11 @@ int	open_redir_fd(t_pipe *p, int n)
 	{
 		p->r_fd[T_INPUT] = dup(STDIN_FILENO);
 		dup2(p->r_fd[INPUT], STDIN_FILENO);
-		//close(p->r_fd[INPUT]);
 	}
 	if (p->r_fd[OUTPUT] > 2)
 	{
 		p->r_fd[T_OUTPUT] = dup(STDOUT_FILENO);
 		dup2(p->r_fd[OUTPUT], STDOUT_FILENO);
-		//close(p->r_fd[INPUT]);
 	}
 	return (0);
 }
@@ -62,50 +60,68 @@ int	close_redir_fd(t_pipe *p)
 {
 	if (p->r_fd[INPUT] > 2)
 	{
+		close(p->r_fd[INPUT]);
 		dup2(p->r_fd[T_INPUT], STDIN_FILENO);
 		close(p->r_fd[T_INPUT]);
 	}
 	if (p->r_fd[OUTPUT] > 2)
 	{
+		close(p->r_fd[OUTPUT]);
 		dup2(p->r_fd[T_OUTPUT], STDOUT_FILENO);
 		close(p->r_fd[T_OUTPUT]);
 	}
 	return (0);
 }
 
-int	single_cmd(t_shell *sh, t_pipe *p, char *envp[])
+int	single_cmd(t_pipe *p, char *envp[])
 {
 	int	wstatus;
 		
 	open_redir_fd(p, 0);
-	wstatus = exec_cmd(sh, p->args[0][0], p->args[0], envp);
+	wstatus = exec_cmd(p->args[0][0], p->args[0], p->count, envp);
 	close_redir_fd(p);
 	rl_replace_line("", 0);
 	rl_on_new_line();
 	return (wstatus);
 }
 
-int	run_child(t_shell *sh, t_pipe *p, int i, char *envp[])
+int	close_pipes(t_pipe *p, int n)
 {
-	int	j;
+	int	i;
 
+	i = 0;
+	while (i < p->count - 1)
+	{
+		if (i == n)
+		{
+			if (n == 0)
+				close(p->fd[i][READ_END]);
+			else if (n == p->count - 1)
+				close(p->fd[i][WRITE_END]);
+		}
+		else
+		{
+			close(p->fd[i][READ_END]);
+			close(p->fd[i][WRITE_END]);
+		}
+		i++;
+	}
+	return (0);
+}
+
+int	run_child(t_pipe *p, int i, char *envp[])
+{
 	if (i == 0)
 		dup2(p->fd[i][WRITE_END], STDOUT_FILENO);	// r_fd?
 	else if (i != 0 && i != p->count - 1)
 	{
-		dup2(p->fd[i - 1][READ_END], p->fd[i][WRITE_END]); // r_fd?
+		dup2(p->fd[i - 1][READ_END], STDIN_FILENO); // r_fd?
 		dup2(p->fd[i][WRITE_END], STDOUT_FILENO); // r_fd?
 	}
-	else if (i == p->count - 1)
-		dup2(p->fd[i][WRITE_END], STDOUT_FILENO); //r_fd?
-	j = 0;
-	while (j < p->count)
-	{
-		close(p->fd[j][READ_END]);
-		close(p->fd[j][WRITE_END]);
-		j++;
-	}
-	exit(exec_cmd(sh, p->args[i][0], p->args[i], envp));
+	else if (i != 0 && i == p->count - 1)
+		dup2(p->fd[i - 1][READ_END], STDIN_FILENO); //r_fd?
+	close_pipes(p, i);
+	return(exec_cmd(p->args[i][0], p->args[i], p->count, envp));
 }
 
 static int	run_parent(t_shell *sh, t_pipe *p)
@@ -114,17 +130,17 @@ static int	run_parent(t_shell *sh, t_pipe *p)
 	int	wstatus;
 	
 	i = 0;
-	while (i < p->count)
-	{
-		waitpid(p->pid[i], &wstatus, 0);
-		sub_cmd_return(sh, p->args[i++][0], wstatus, NULL);
-	}
-	i = 0;
-	while (i < p->count)
+	while (i < p->count - 1)
 	{
 		close(p->fd[i][READ_END]);
 		close(p->fd[i][WRITE_END]);
 		i++;
+	}
+	i = 0;
+	while (i < p->count)
+	{
+		waitpid(p->pid[i], &wstatus, 0);
+		sub_cmd_return(sh, p->args[i++][0], wstatus, NULL);
 	}
 	rl_replace_line("", 0);
 	rl_on_new_line();
@@ -144,7 +160,7 @@ int	create_fork_pipe(t_shell *sh, t_pipe *p, char *envp[])
 		if (p->pid[i] == -1)
 			return (-1);
 		if (p->pid[i] == 0)
-			run_child(sh, p, i, envp);
+			run_child(p, i, envp);
 		//close_redir_fd(p);
 		i++;
 	}
@@ -168,8 +184,8 @@ int	subshell(t_shell *sh, t_pipe *p, char *envp[])
 	if (p->fd == NULL || p->args == NULL || p->pid == NULL)
 		return (free_pipe(p), -1);
 	if (p->count == 1)
-		errnum = single_cmd(sh, p, envp);
-	 else if (create_fork_pipe(sh, p, envp) == -1)
+		errnum = single_cmd(p, envp);
+	else if (create_fork_pipe(sh, p, envp) == -1)
 		return (free_pipe(p), -1);
 	return (errnum);
 }

@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/25 13:59:57 by mfleury           #+#    #+#             */
-/*   Updated: 2024/11/22 20:06:42 by mfleury          ###   ########.fr       */
+/*   Updated: 2024/11/24 18:20:58 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,11 +19,11 @@ int	**create_fpipes(t_pipe *p)
 	int	i;
 	int	**fd;
 
-	fd = (int **)ft_calloc(sizeof(int *), p->count + 1);
+	fd = (int **)ft_calloc(sizeof(int *), p->count);
 	if (fd == NULL)
 		return (set_errno(ENOMEM), NULL);
 	i = 0;
-	while (i < p->count)
+	while (i < p->count - 1)
 	{
 		fd[i] = (int *)ft_calloc(sizeof(int), 2);
 		if (fd[i] == NULL)

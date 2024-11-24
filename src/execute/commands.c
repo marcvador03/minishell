@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/17 15:39:35 by mfleury           #+#    #+#             */
-/*   Updated: 2024/11/24 12:35:05 by mfleury          ###   ########.fr       */
+/*   Updated: 2024/11/24 16:08:02 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,17 @@ static t_cmd_enum	str_to_enum(const char *str)
 	return (-1);
 }
 
-int	exec_sys_cmd(t_shell *sh, char *cmd, char **args, char *envp[])
+int	exec_syscmd(char *cmd, char **args, char *envp[])
+{
+	char	*t_cmd;
+	
+	t_cmd = get_full_path(cmd, envp);
+	if (t_cmd == NULL)
+		return (set_errno(ENOENT), ENOENT);
+	return (execve(t_cmd, args, envp));
+}
+
+int	exec_syscmd_fk(char *cmd, char **args, char *envp[])
 {
 	char	*t_cmd;
 	int		wstatus;
@@ -43,15 +53,15 @@ int	exec_sys_cmd(t_shell *sh, char *cmd, char **args, char *envp[])
 	if (pid == -1)
 		return (-1);
 	if (pid == 0)
-		exit(execve(t_cmd, args, envp));
+		return (execve(t_cmd, args, envp));
 	waitpid(pid, &wstatus, 0);
-	sub_cmd_return(sh, cmd, wstatus, NULL);
-	return (0);
+	return (wstatus);
 }
 
-int	exec_cmd(t_shell *sh, char *cmd, char **args, char *envp[])
+int	exec_cmd(char *cmd, char **args, int pcount, char *envp[])
 {
-	int			x;
+	int	x;
+	
 	t_func_arr	call_cmd[6];
 	call_cmd[0] = &ft_cd;
 	call_cmd[1] = &ft_pwd;
@@ -64,8 +74,10 @@ int	exec_cmd(t_shell *sh, char *cmd, char **args, char *envp[])
 	x = str_to_enum(cmd);
 	if (x != -1)
 		return (call_cmd[x](args));
+	else if (pcount == 1)
+		return (exec_syscmd_fk(cmd, args, envp));
 	else
-		return (exec_sys_cmd(sh, cmd, args, envp));
+		return (exec_syscmd(cmd, args, envp));
 	return (set_errno(ENOENT), ENOENT);
 }
 
