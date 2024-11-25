@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   s_quotes.c                                         :+:      :+:    :+:   */
+/*   quotes.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mfleury <mfleury@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 12:44:06 by mfleury           #+#    #+#             */
-/*   Updated: 2024/11/25 14:35:39 by mfleury          ###   ########.fr       */
+/*   Updated: 2024/11/25 16:20:19 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,4 +33,20 @@ int	check_open_q(char *str)
 		return (-1);
 	return (0);
 
+}
+
+int	skip_quotes(char *str)
+{
+	int	i;
+
+	if (str == NULL)
+		return (0);
+	i = 1;
+	while (str[i] != '\0')
+	{
+		if (str[i] == 34 || str[i] == 39)
+			return (++i);
+		i++;
+	}	
+	return (0);
 }

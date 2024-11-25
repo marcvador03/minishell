@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/07 15:12:52 by mfleury           #+#    #+#             */
-/*   Updated: 2024/11/25 14:35:39 by mfleury          ###   ########.fr       */
+/*   Updated: 2024/11/25 16:49:10 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ t_shell	*fill_sh(t_shell *sh, char *line, int n)
 		tmp->bracket[0] += x[0];
 		tmp->bracket[1] += x[1];
 		tk = get_tk(line + 2);
-		line = ft_strnstr(line + 2, tk, ft_strlen(line));
+		line = sh_strnstr(line + 2, tk, ft_strlen(line));
 		x[0] = tmp->bracket[0];
 		x[1] = tmp->bracket[1];
 		sh = tmp->head;

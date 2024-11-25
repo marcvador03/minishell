@@ -6,11 +6,13 @@
 /*   By: mfleury <mfleury@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/07 14:41:31 by mfleury           #+#    #+#             */
-/*   Updated: 2024/11/19 14:40:56 by mfleury          ###   ########.fr       */
+/*   Updated: 2024/11/25 16:53:39 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+int	skip_quotes(char *str);
 
 int	sh_strpos(const char *big, const char *little)
 {
@@ -24,6 +26,11 @@ int	sh_strpos(const char *big, const char *little)
 	i = 0;
 	while (*str != '\0')
 	{
+		if (*str == 34 || *str == 39)
+		{
+			i += skip_quotes(str);
+			str = str + skip_quotes(str);
+		}
 		if (*little == *str)
 		{
 			j = 0;
@@ -127,4 +134,29 @@ void	clean_spaces(char **s)
 		s[i] = sh_strtrim(&s[i], " ", 0);
 		i++;
 	}
+}
+
+char	*sh_strnstr(const char *big, const char *little, size_t len)
+{
+	size_t	i;
+	int		j;
+
+	if (ft_strlen(little) == 0)
+		return ((char *)big);
+	i = 0;
+	while (i < len && *big != '\0')
+	{
+		if (*big == 34 || *big == 39)
+			big = big + skip_quotes((char *)big);	
+		if (*little == *big)
+		{
+			j = 0;
+			while (little[j] == big[j] && (i + j++) < len)
+				if (little[j] == '\0')
+					return ((char *)big);
+		}
+		big++;
+		i++;
+	}
+	return (0);
 }

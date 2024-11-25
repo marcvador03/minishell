@@ -6,7 +6,7 @@
 /*   By: pmorello <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 12:17:09 by pmorello          #+#    #+#             */
-/*   Updated: 2024/11/24 16:03:31 by mfleury          ###   ########.fr       */
+/*   Updated: 2024/11/25 16:47:51 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -137,6 +137,7 @@ int		sh_strpos(const char *big, const char *little);
 char	*sh_strcut(char *str, int start, int end);
 char	*sh_strcut2(char **str, int start, int end);
 char	*sh_strstrip(char **str, int start, int end);
+char	*sh_strnstr(const char *big, const char *little, size_t len);
 void	clean_spaces(char **s); 
 
 /*subshell*/
