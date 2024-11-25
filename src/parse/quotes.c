@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 12:44:06 by mfleury           #+#    #+#             */
-/*   Updated: 2024/11/25 16:20:19 by mfleury          ###   ########.fr       */
+/*   Updated: 2024/11/25 20:47:18 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,4 +49,16 @@ int	skip_quotes(char *str)
 		i++;
 	}	
 	return (0);
+}
+
+int	skip_spaces(char *str)
+{
+	int	i;
+
+	if (str == NULL)
+		return (0);
+	i = 0;
+	while (str[i] == ' ')
+		i++;
+	return (i);
 }

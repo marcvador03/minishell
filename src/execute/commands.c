@@ -6,13 +6,15 @@
 /*   By: mfleury <mfleury@student.42barcelona.      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/17 15:39:35 by mfleury           #+#    #+#             */
-/*   Updated: 2024/11/25 11:42:28 by mfleury          ###   ########.fr       */
+/*   Updated: 2024/11/26 00:09:00 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
 char	*get_rd(char *line);
+int		skip_quotes(char *str);
+int		skip_spaces(char *str);
 
 static t_cmd_enum	str_to_enum(const char *str)
 {
@@ -81,7 +83,7 @@ int	exec_cmd(char *cmd, char **args, int pcount, char *envp[])
 	return (errnum);
 }
 
-char	**create_cmd_names(t_pipe *p)
+/*char	**create_cmd_names(t_pipe *p)
 {
 	char	**res;
 	char	*rd;
@@ -99,14 +101,77 @@ char	**create_cmd_names(t_pipe *p)
 	}
 	res[p->count] = NULL;
 	return (set_flag(p, 5), res);
+}*/
+
+int	count_args(char *line)
+{
+	int	n;
+	int	i;
+
+	if (line == NULL)
+		return (0);
+	n = 1;
+	i = 0;
+	while (line[i] != '\0')
+	{
+		if (line[i] == 34 || line[i] == 39)
+			i += skip_quotes(line + i);
+		if (line[i] == '\0')
+			break;
+		if (line[i] == ' ')
+		{
+			i += skip_spaces(line);
+			n++;
+		}
+		i++;
+	}
+	return (n);
+}
+
+char	*get_args(char **line)
+{
+	int		i;
+	int		pos;
+	char	*res;
+
+	if (line == NULL)
+		return (NULL);
+	i = 0;
+	pos = 0;
+	res = NULL;
+	while ((*line)[i] != '\0')
+	{
+		if ((*line)[i] == 34 || (*line)[i] == 39)
+			pos = skip_quotes(*line + i);
+		else if ((*line)[i] == ' ')
+			pos = i + skip_spaces(*line + i);
+		if (pos > 0)
+		{
+			res = sh_strcut2(line, 0, pos);
+			return (res);
+		}
+		i++;
+	}
+	return (*line);
 }
 
 char	**get_cmd_args(char *line)
 {
 	char	**args;
-
-	args = ft_split(line, ' ');
+	int		cnt_args;
+	int		i;
+	
+	i = 0;
+	cnt_args = count_args(line);
+	args = (char **)ft_calloc(sizeof(char *), cnt_args + 1);
 	if (args == NULL)
 		return (NULL);
+	while (i < cnt_args)
+	{
+		line = sh_strtrim(&line, " ", 0);
+		args[i] = get_args(&line);
+		i++;
+	}
+	args[i] = NULL;
 	return (args);
 }
