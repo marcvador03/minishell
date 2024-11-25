@@ -6,14 +6,13 @@
 /*   By: mfleury <mfleury@student.42barcelona.      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/17 15:39:35 by mfleury           #+#    #+#             */
-/*   Updated: 2024/11/24 16:08:02 by mfleury          ###   ########.fr       */
+/*   Updated: 2024/11/25 11:42:28 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
 char	*get_rd(char *line);
-void	sub_cmd_return(t_shell *sh, char *cmd, int wstatus, int *errnum);
 
 static t_cmd_enum	str_to_enum(const char *str)
 {
@@ -36,32 +35,33 @@ int	exec_syscmd(char *cmd, char **args, char *envp[])
 	
 	t_cmd = get_full_path(cmd, envp);
 	if (t_cmd == NULL)
-		return (set_errno(ENOENT), ENOENT);
+		return (ENOENT);
 	return (execve(t_cmd, args, envp));
 }
 
 int	exec_syscmd_fk(char *cmd, char **args, char *envp[])
 {
 	char	*t_cmd;
-	int		wstatus;
 	pid_t	pid;
 	
 	t_cmd = get_full_path(cmd, envp);
 	if (t_cmd == NULL)
-		return (set_errno(ENOENT), ENOENT);
+		return (ENOENT);
 	pid = fork();
 	if (pid == -1)
 		return (-1);
 	if (pid == 0)
 		return (execve(t_cmd, args, envp));
-	waitpid(pid, &wstatus, 0);
-	return (wstatus);
+	waitpid(pid, NULL, 0);
+	return (0);
 }
 
 int	exec_cmd(char *cmd, char **args, int pcount, char *envp[])
 {
 	int	x;
+	int	errnum;
 	
+	errnum = 0;
 	t_func_arr	call_cmd[6];
 	call_cmd[0] = &ft_cd;
 	call_cmd[1] = &ft_pwd;
@@ -70,15 +70,15 @@ int	exec_cmd(char *cmd, char **args, int pcount, char *envp[])
 	call_cmd[4] = &ft_env;
 	call_cmd[5] = &ft_echo;
 	if (ft_strncmp(cmd, "exit", 4) == 0)
-		return (255);
+		return (0);
 	x = str_to_enum(cmd);
 	if (x != -1)
 		return (call_cmd[x](args));
 	else if (pcount == 1)
-		return (exec_syscmd_fk(cmd, args, envp));
+		errnum = exec_syscmd_fk(cmd, args, envp);
 	else
-		return (exec_syscmd(cmd, args, envp));
-	return (set_errno(ENOENT), ENOENT);
+		errnum = exec_syscmd(cmd, args, envp);
+	return (errnum);
 }
 
 char	**create_cmd_names(t_pipe *p)

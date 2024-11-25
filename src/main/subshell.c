@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/22 16:08:01 by mfleury           #+#    #+#             */
-/*   Updated: 2024/11/24 20:13:10 by mfleury          ###   ########.fr       */
+/*   Updated: 2024/11/25 11:44:22 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ int		get_fdout_redir(t_pipe *p, int n);
 
 
 
-void	sub_cmd_return(t_shell *sh, char *cmd, int wstatus, int *errnum)
+void	sub_cmd_return(t_shell *sh, char *cmd, int wstatus/*, int *errnum*/)
 {
 	if (WIFEXITED(wstatus))
 	{
@@ -34,7 +34,6 @@ void	sub_cmd_return(t_shell *sh, char *cmd, int wstatus, int *errnum)
 				perror(cmd);
 			else
 				printf("%s: %s\n", cmd, strerror(WEXITSTATUS(wstatus)));
-			*errnum = 1;
 		}
 	}
 }
@@ -73,13 +72,14 @@ int	close_redir_fd(t_pipe *p)
 	return (0);
 }
 
-int	single_cmd(t_pipe *p, char *envp[])
+int	single_cmd(t_shell *sh, t_pipe *p, char *envp[])
 {
 	int	wstatus;
 		
 	open_redir_fd(p, 0);
 	wstatus = exec_cmd(p->args[0][0], p->args[0], p->count, envp);
 	close_redir_fd(p);
+	sub_cmd_return(sh, p->args[0][0], wstatus);
 	rl_replace_line("", 0);
 	rl_on_new_line();
 	return (wstatus);
@@ -126,7 +126,7 @@ int	run_child(t_pipe *p, int i, char *envp[])
 	open_redir_fd(p, i);
 	wstatus = exec_cmd(p->args[i][0], p->args[i], p->count, envp);
 	close_redir_fd(p);
-	return (wstatus);
+	exit (wstatus);
 }
 
 static int	run_parent(t_shell *sh, t_pipe *p)
@@ -145,7 +145,7 @@ static int	run_parent(t_shell *sh, t_pipe *p)
 	while (i < p->count)
 	{
 		waitpid(p->pid[i], &wstatus, 0);
-		sub_cmd_return(sh, p->args[i++][0], wstatus, NULL);
+		sub_cmd_return(sh, p->args[i++][0], wstatus);
 	}
 	rl_replace_line("", 0);
 	rl_on_new_line();
@@ -187,7 +187,11 @@ int	subshell(t_shell *sh, t_pipe *p, char *envp[])
 	if (p->fd == NULL || p->args == NULL || p->pid == NULL)
 		return (free_pipe(p), -1);
 	if (p->count == 1)
-		errnum = single_cmd(p, envp);
+	{
+		if (ft_strncmp(p->args[0][0], "exit", 4) == 0)
+			exit_minishell(sh, EXIT_SUCCESS);
+		errnum = single_cmd(sh, p, envp);
+	}
 	else if (create_fork_pipe(sh, p, envp) == -1)
 		return (free_pipe(p), -1);
 	return (errnum);
