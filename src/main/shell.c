@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/07 15:12:52 by mfleury           #+#    #+#             */
-/*   Updated: 2024/11/19 14:39:49 by mfleury          ###   ########.fr       */
+/*   Updated: 2024/11/25 14:35:39 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 int		count_tokens(char *line);
 int		execute_tokens(t_shell *sh, t_shell *head, int level, char *envp[]);
 char	*get_tk(char *line);
+int		check_open_q(char *str);
 
 t_shell	*fill_sh(t_shell *sh, char *line, int n)
 {
@@ -59,6 +60,8 @@ int	start_shell(char *envp[])
 	line = get_input();
 	if (line == NULL)
 		return (1);
+	if (check_open_q(line) == -1)
+		return (free_s((void *)line), 1);
 	n = count_tokens(line);
 	sh = fill_sh(sh, line, n);
 	if (sh == NULL)
