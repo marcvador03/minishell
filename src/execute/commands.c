@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/17 15:39:35 by mfleury           #+#    #+#             */
-/*   Updated: 2024/11/26 00:16:11 by mfleury          ###   ########.fr       */
+/*   Updated: 2024/11/27 22:59:24 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,11 +34,14 @@ static t_cmd_enum	str_to_enum(const char *str)
 int	exec_syscmd(char *cmd, char **args, char *envp[])
 {
 	char	*t_cmd;
+	int		errnum;
 	
 	t_cmd = get_full_path(cmd, envp);
 	if (t_cmd == NULL)
 		return (ENOENT);
-	return (execve(t_cmd, args, envp));
+	errnum = execve(t_cmd, args, envp);
+	free_s(t_cmd);
+	return (errnum);
 }
 
 int	exec_syscmd_fk(char *cmd, char **args, char *envp[])
@@ -55,6 +58,7 @@ int	exec_syscmd_fk(char *cmd, char **args, char *envp[])
 	if (pid == 0)
 		return (execve(t_cmd, args, envp));
 	waitpid(pid, NULL, 0);
+	free_s(t_cmd);
 	return (0);
 }
 
@@ -170,6 +174,7 @@ char	**get_cmd_args(char *line)
 	{
 		line = sh_strtrim(&line, " ", 0);
 		args[i] = get_args(&line);
+		args[i] = sh_strtrim(&args[i], " ", 0);
 		i++;
 	}
 	args[i] = NULL;

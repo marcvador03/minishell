@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/07 14:31:45 by mfleury           #+#    #+#             */
-/*   Updated: 2024/11/24 12:39:15 by mfleury          ###   ########.fr       */
+/*   Updated: 2024/11/27 17:01:11 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ int	get_next_token(t_shell *sh, char *line)
 	if (tk1 != NULL && ft_strncmp(tk1, "||", 2) == 0)
 		sh->token = 1;
 	sh->pipes->in_pipes = identify_pipes(sh->s_line, &sh->pipes);
-	clean_spaces(sh->pipes->in_pipes);
+	//clean_spaces(sh->pipes->in_pipes);
 	return (free_s(line), 0);
 }
 

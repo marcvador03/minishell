@@ -1,2 +1,15 @@
-create exit_error function
-manage error codes (errno etc.)
+1. manage '' and "" - Marc
+2. build '$' function for environment variables
+3. build '$?' function
+4. integrate signals function into main - Marc
+5. optional : move from readline to getnextline
+6. optional: add wildcards *
+
+
+7. Full test
+
+
+BUGS TO FIX
+1. << EOF does not work in a pipeline - Marc
+2. 
+

@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/25 14:10:00 by mfleury           #+#    #+#             */
-/*   Updated: 2024/11/19 14:40:44 by mfleury          ###   ########.fr       */
+/*   Updated: 2024/11/27 22:56:41 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,9 +41,15 @@ void	free_pipe(t_pipe *p)
 		free_s((void *)p->pid);
 		unset_flag(p, 3);
 	}
+	if (p->mem_flag & (1 << 4))
+	{
+		free_d((void **)p->redirs);
+		free_s((void *)p->rd);
+		unset_flag(p, 4);
+	}
 	if (p->mem_flag & (1 << 0))
 	{
-		free_d((void **)p->in_pipes);
+		//free_d((void **)p->in_pipes);
 		unset_flag(p, 0);
 	}
 	if (p->mem_flag & (1 << 2))

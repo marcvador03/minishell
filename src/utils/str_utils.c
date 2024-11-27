@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/07 14:41:31 by mfleury           #+#    #+#             */
-/*   Updated: 2024/11/25 16:53:39 by mfleury          ###   ########.fr       */
+/*   Updated: 2024/11/27 22:25:35 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,16 +113,16 @@ char	*sh_strcut2(char **str, int start, int end)
 	return (res);
 }
 
-char	*sh_strtrim(char **str, char *set, char offset)
+char	*sh_strtrim(char *str[], char *set, char offset)
 {
-	char	*res;
-
+	char *res;
+	
 	res = ft_strtrim(*str + offset, set);
 	free(*str);
 	return (res);
 }
 
-void	clean_spaces(char **s)
+void	clean_spaces(char ***s)
 {
 	int	i;
 
@@ -131,7 +131,7 @@ void	clean_spaces(char **s)
 	i = 0;
 	while (s[i] != NULL)
 	{
-		s[i] = sh_strtrim(&s[i], " ", 0);
+		*s[i] = sh_strtrim(s[i], " ", 0);
 		i++;
 	}
 }

@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/10 08:52:08 by mfleury           #+#    #+#             */
-/*   Updated: 2024/11/25 19:31:32 by mfleury          ###   ########.fr       */
+/*   Updated: 2024/11/27 22:48:49 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,7 +96,8 @@ char	**get_redirs(char **line, int **rd)
 		i++;
 	}
 	redirs[n] = NULL;
-	clean_spaces(redirs);
+	if (n > 0)
+		clean_spaces(&redirs);
 	return (redirs);
 }
 //https://unix.stackexchange.com/questions/235092/command-redirection-to-multiple-files-command-file1-file2
