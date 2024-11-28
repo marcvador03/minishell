@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/10 08:52:08 by mfleury           #+#    #+#             */
-/*   Updated: 2024/11/27 22:48:49 by mfleury          ###   ########.fr       */
+/*   Updated: 2024/11/28 16:07:56 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ char	*get_rd(char *line)
 	while (line[i] != '\0')
 	{
 		if (line[i] == 34 || line[i] == 39)
-			i += skip_quotes(line + i);
+			i += sh_jump_to(line + i, line[i]);
 		if (line[i] == '>')
 		{
 			if (line[i + 1] == '>')

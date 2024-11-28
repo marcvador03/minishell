@@ -23,7 +23,8 @@ PARSE = prompt_creation.c \
 		redirections.c \
 		redirections_utils.c \
 		heredoc.c \
-		quotes.c	
+		quotes.c \
+		pipes.c	
 
 EXECUTE = commands.c
 

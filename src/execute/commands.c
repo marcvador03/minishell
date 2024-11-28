@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/17 15:39:35 by mfleury           #+#    #+#             */
-/*   Updated: 2024/11/27 22:59:24 by mfleury          ###   ########.fr       */
+/*   Updated: 2024/11/28 16:12:50 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -119,12 +119,12 @@ int	count_args(char *line)
 	while (line[i] != '\0')
 	{
 		if (line[i] == 34 || line[i] == 39)
-			i += skip_quotes(line + i);
+			i += sh_jump_to(line + i, line[i]);
 		if (line[i] == '\0')
 			break;
 		if (line[i] == ' ')
 		{
-			i += skip_spaces(line);
+			i += sh_skip(line, ' ');
 			n++;
 		}
 		i++;
@@ -146,9 +146,9 @@ char	*get_args(char **line)
 	while ((*line)[i] != '\0')
 	{
 		if ((*line)[i] == 34 || (*line)[i] == 39)
-			pos = skip_quotes(*line + i);
+			pos = sh_jump_to(*line + i, (*line)[i]);
 		else if ((*line)[i] == ' ')
-			pos = i + skip_spaces(*line + i);
+			pos = i + sh_skip(*line + i, ' ');
 		if (pos > 0)
 		{
 			res = sh_strcut2(line, 0, pos);

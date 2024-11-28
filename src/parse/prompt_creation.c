@@ -6,26 +6,11 @@
 /*   By: mfleury <mfleury@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/07 14:32:18 by mfleury           #+#    #+#             */
-/*   Updated: 2024/11/27 22:44:31 by mfleury          ###   ########.fr       */
+/*   Updated: 2024/11/28 14:40:28 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-char	**identify_pipes(char *s_line, t_pipe **p)
-{
-	char	**pipes;
-	int		i;
-
-	pipes = ft_split(s_line, '|');
-	if (pipes == NULL)
-		return (set_errno(ENOMEM), NULL);
-	(*p)->count = 0;
-	i = 0;
-	while (pipes[i++] != NULL)
-		(*p)->count++;
-	return (set_flag(*p, 0), pipes);
-}
 
 static char	*create_prompt(void)
 {

@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/07 14:41:31 by mfleury           #+#    #+#             */
-/*   Updated: 2024/11/27 22:25:35 by mfleury          ###   ########.fr       */
+/*   Updated: 2024/11/28 16:14:24 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,8 +28,8 @@ int	sh_strpos(const char *big, const char *little)
 	{
 		if (*str == 34 || *str == 39)
 		{
-			i += skip_quotes(str);
-			str = str + skip_quotes(str);
+			i += sh_jump_to(str, *str);
+			str = str + sh_jump_to(str, *str);
 		}
 		if (*little == *str)
 		{
@@ -147,7 +147,7 @@ char	*sh_strnstr(const char *big, const char *little, size_t len)
 	while (i < len && *big != '\0')
 	{
 		if (*big == 34 || *big == 39)
-			big = big + skip_quotes((char *)big);	
+			big = big + sh_jump_to((char *)big, *big);	
 		if (*little == *big)
 		{
 			j = 0;

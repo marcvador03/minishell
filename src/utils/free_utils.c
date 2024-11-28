@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/25 14:10:00 by mfleury           #+#    #+#             */
-/*   Updated: 2024/11/27 22:56:41 by mfleury          ###   ########.fr       */
+/*   Updated: 2024/11/28 15:42:19 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,8 +61,8 @@ void	free_pipe(t_pipe *p)
 	{
 		i = 0;
 		while (p->args[i] != NULL)
-			free_d((void **)p->args[i++]);
-		free_s((void *)p->args);
+			free_s((void *)p->args[i++]);
+		free_s((void **)p->args);
 		unset_flag(p, 1);
 	}
 }
@@ -77,9 +77,9 @@ void	free_sh(t_shell *sh)
 	while (sh != NULL)
 	{
 		tmp = sh;
-		free_s((void *)sh->s_line);
+		free_s(sh->s_line);
 		free_pipe(sh->pipes);
-		free_s((void *)sh->pipes);
+		free_s(sh->pipes);
 		sh = sh->next;
 		free_s(tmp);
 	}

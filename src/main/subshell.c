@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/22 16:08:01 by mfleury           #+#    #+#             */
-/*   Updated: 2024/11/27 22:43:41 by mfleury          ###   ########.fr       */
+/*   Updated: 2024/11/28 15:25:25 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@ pid_t	*create_pids(t_pipe *p);
 char	***create_redirs(t_pipe *p);
 int		get_fdin_redir(t_pipe *p, int n);
 int		get_fdout_redir(t_pipe *p, int n);
+char	**identify_pipes(char *s_line, t_pipe **p);
 
 int	open_redir_fd(t_pipe *p, int n)
 {
@@ -156,6 +157,7 @@ int	subshell(t_shell *sh, t_pipe *p, char *envp[])
 	int	errnum;
 
 	errnum = 0;
+	p->in_pipes = identify_pipes(sh->s_line, &p);
 	p->fd = create_fpipes(p);
 	p->pid = create_pids(p);
 	//p->cmd = create_cmd_names(p);

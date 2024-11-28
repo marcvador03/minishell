@@ -6,13 +6,12 @@
 /*   By: mfleury <mfleury@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/07 14:31:45 by mfleury           #+#    #+#             */
-/*   Updated: 2024/11/27 17:01:11 by mfleury          ###   ########.fr       */
+/*   Updated: 2024/11/28 15:24:05 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-char	**identify_pipes(char *s_line, t_pipe **p);
 char	*get_tk(char *line);
 void	count_brackets(t_shell *sh, char *line);
 
@@ -31,11 +30,9 @@ int	get_next_token(t_shell *sh, char *line)
 	sh->s_line = sh_strtrim(&sh->s_line, "(", 0);
 	sh->s_line = sh_strtrim(&sh->s_line, ")", 0);
 	if (sh->s_line == NULL)
-		return (free_s(line), set_errno(ENOMEM), ENOMEM);
+		return (free_s(line), ENOMEM);
 	if (tk1 != NULL && ft_strncmp(tk1, "||", 2) == 0)
 		sh->token = 1;
-	sh->pipes->in_pipes = identify_pipes(sh->s_line, &sh->pipes);
-	//clean_spaces(sh->pipes->in_pipes);
 	return (free_s(line), 0);
 }
 
