@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/17 15:39:35 by mfleury           #+#    #+#             */
-/*   Updated: 2024/11/28 16:12:50 by mfleury          ###   ########.fr       */
+/*   Updated: 2024/11/29 11:16:09 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -177,6 +177,6 @@ char	**get_cmd_args(char *line)
 		args[i] = sh_strtrim(&args[i], " ", 0);
 		i++;
 	}
-	args[i] = NULL;
+	args[cnt_args] = NULL;
 	return (args);
 }

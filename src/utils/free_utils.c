@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/25 14:10:00 by mfleury           #+#    #+#             */
-/*   Updated: 2024/11/28 15:42:19 by mfleury          ###   ########.fr       */
+/*   Updated: 2024/11/29 10:17:34 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,17 +34,17 @@ void	free_d(void **ptr)
 
 void	free_pipe(t_pipe *p)
 {
-	int	i;
+	//int	i;
 
 	if (p->mem_flag & (1 << 3))
 	{
-		free_s((void *)p->pid);
+		//free_s((void *)p->pid);
 		unset_flag(p, 3);
 	}
 	if (p->mem_flag & (1 << 4))
 	{
-		free_d((void **)p->redirs);
-		free_s((void *)p->rd);
+		//free_d((void **)p->redirs);
+		//free_s((void *)p->rd);
 		unset_flag(p, 4);
 	}
 	if (p->mem_flag & (1 << 0))
@@ -54,15 +54,15 @@ void	free_pipe(t_pipe *p)
 	}
 	if (p->mem_flag & (1 << 2))
 	{
-		free_d((void **)p->fd);
+		//free_d((void **)p->fd);
 		unset_flag(p, 2);
 	}
 	if (p->mem_flag & (1 << 1))
 	{
-		i = 0;
-		while (p->args[i] != NULL)
-			free_s((void *)p->args[i++]);
-		free_s((void **)p->args);
+		//i = 0;
+		//while (p->args[i] != NULL)
+		//	free_s((void *)p->args[i++]);
+		//free_s((void **)p->args);
 		unset_flag(p, 1);
 	}
 }

@@ -6,13 +6,13 @@
 /*   By: mfleury <mfleury@student.42barcelona.      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/25 13:59:57 by mfleury           #+#    #+#             */
-/*   Updated: 2024/11/25 19:44:16 by mfleury          ###   ########.fr       */
+/*   Updated: 2024/11/29 12:39:11 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-char	**get_redirs(char **line, int **rd);
+/*char	**get_redirs(char **line, int **rd);
 
 int	**create_fpipes(t_pipe *p)
 {
@@ -85,4 +85,4 @@ pid_t	*create_pids(t_pipe *p)
 	if (pid == NULL)
 		return (set_errno(ENOMEM), NULL);
 	return (set_flag(p, 3), pid);
-}
+}*/

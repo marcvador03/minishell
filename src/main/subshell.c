@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/22 16:08:01 by mfleury           #+#    #+#             */
-/*   Updated: 2024/11/28 15:25:25 by mfleury          ###   ########.fr       */
+/*   Updated: 2024/11/29 12:37:02 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,8 +20,9 @@ char	***create_redirs(t_pipe *p);
 int		get_fdin_redir(t_pipe *p, int n);
 int		get_fdout_redir(t_pipe *p, int n);
 char	**identify_pipes(char *s_line, t_pipe **p);
+int		count_pipes(char *line);
 
-int	open_redir_fd(t_pipe *p, int n)
+/*int	open_redir_fd(t_pipe *p, int n)
 {
 	p->r_fd[INPUT] = get_fdin_redir(p, n);
 	p->r_fd[OUTPUT] = get_fdout_redir(p, n);
@@ -152,27 +153,66 @@ int	create_fork_pipe(t_pipe *p, char *envp[])
 	return (0);
 }
 
-int	subshell(t_shell *sh, t_pipe *p, char *envp[])
+int	clean_inputs(t_pipe *p)
+{
+	sh_trim_list_strings(p->in_pipes, "\"");
+	sh_trim_list_strings(p->args[0], "\"");
+	sh_trim_list_strings(p->redirs[0], "\"");
+	
+	
+	return (0);
+}
+*/
+t_pipe	*fill_pipes(t_pipe *p, char *line, int n)
+{
+	t_pipe	*tmp;
+	int		i;
+
+	i = 0;
+	while (i < n)
+	{
+		line = sh_strtrim(&line, " ", 0);
+		if (p == NULL)
+			tmp = p_lstnew(&line);
+		else
+			tmp = p_lstadd_back(&p, &line);
+		if (tmp == NULL)
+			return (NULL);
+		p = tmp->head;
+		i++;
+	}
+	return (tmp->head);
+}
+
+int	subshell(t_shell *sh, char *envp[])
 {
 	int	errnum;
+	t_pipe *p;
+	int	n;
 
 	errnum = 0;
+	p = NULL;
+	n = count_pipes(sh->s_line);
+	p = fill_pipes(p, sh->s_line, n);
+
+	/*
 	p->in_pipes = identify_pipes(sh->s_line, &p);
 	p->fd = create_fpipes(p);
 	p->pid = create_pids(p);
 	//p->cmd = create_cmd_names(p);
 	p->redirs = create_redirs(p);
-	clean_spaces(&p->in_pipes);
+	sh_trim_list_strings(p->in_pipes, " ");
 	p->args = create_args(p);
 	if (p->fd == NULL || p->args == NULL || p->pid == NULL)
 		return (free_pipe(p), -1);
-	if (p->count == 1)
+	clean_inputs(p);*/
+	/*if (p->count == 1)
 	{
 		if (ft_strncmp(p->args[0][0], "exit", 4) == 0)
 			exit_minishell(sh, EXIT_SUCCESS);
 		errnum = single_cmd(p, envp);
 	}
 	else if (create_fork_pipe(p, envp) == -1)
-		return (free_pipe(p), -1);
+		return (free_pipe(p), -1);*/
 	return (errnum);
 }

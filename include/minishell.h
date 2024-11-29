@@ -6,7 +6,7 @@
 /*   By: pmorello <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 12:17:09 by pmorello          #+#    #+#             */
-/*   Updated: 2024/11/28 16:08:00 by mfleury          ###   ########.fr       */
+/*   Updated: 2024/11/29 12:36:27 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,16 +67,18 @@ typedef int	(*t_func_arr)(char **args);
 
 typedef struct s_pipe
 {
+	char	*p_line; //
 	pid_t	*pid;
-	char	**in_pipes;
-	char	**cmd;
-	char	***redirs;
-	int		**rd;
+	//char	**cmd;
+	char	**redirs;//
+	int		*rd;//
 	int		r_fd[4];
-	char	***args;
+	char	**args;//
 	int		**fd;
 	int		count;
 	char	mem_flag;
+	struct	s_pipe	*head;
+	struct	s_pipe	*next;
 }	t_pipe;
 
 typedef struct s_shell
@@ -131,6 +133,10 @@ void	unset_flag(t_pipe *p, int n);
 t_shell	*sh_lstnew(char *line);
 t_shell	*sh_lstlast(t_shell *sh);
 t_shell	*sh_lstadd_back(t_shell **sh, char *line);
+t_pipe	*p_lstnew(char **line);
+t_pipe	*p_lstlast(t_pipe *pipe);
+t_pipe	*p_lstadd_back(t_pipe **pipe, char **line);
+
 
 /*str utils*/
 int		sh_strpos(const char *big, const char *little);
@@ -138,11 +144,12 @@ char	*sh_strcut(char *str, int start, int end);
 char	*sh_strcut2(char **str, int start, int end);
 char	*sh_strstrip(char **str, int start, int end);
 char	*sh_strnstr(const char *big, const char *little, size_t len);
-void	clean_spaces(char ***s); 
+void	sh_trim_list_strings(char **str, char *set);
+void	clean_spaces(char ***str, char *set); 
 int		sh_jump_to(char *str, char c);
 int		sh_skip(char *str, char c);
 
 /*subshell*/
-int		subshell(t_shell *sh, t_pipe *p, char *envp[]);
+int		subshell(t_shell *sh, char *envp[]);
 
 #endif

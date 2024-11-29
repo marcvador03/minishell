@@ -20,11 +20,11 @@ BUILTINS = ft_cd.c \
 PARSE = prompt_creation.c \
 		tokens.c \
 		tokens_utils.c \
-		redirections.c \
-		redirections_utils.c \
-		heredoc.c \
-		quotes.c \
-		pipes.c	
+		pipes.c \
+		quotes.c
+		#redirections.c \
+		#redirections_utils.c \
+		#heredoc.c \
 
 EXECUTE = commands.c
 
@@ -55,7 +55,7 @@ INCLUDES := $(patsubst %.h, $(INC_DIR)/%.h, $(INC_NAMES))
 
 DEPS := $(OBJECTS:.o=.d)
 
-CFLAGS += -Wall -Werror -Wextra -MMD -MP -I $(INC_DIR)
+CFLAGS += -MMD -MP -I $(INC_DIR)
 
 LIB_NAMES := libft.a 
 LIBS_TAG := $(patsubst lib%.a, -l%, $(LIB_NAMES))
@@ -69,10 +69,10 @@ CUR_DIR := $(shell pwd)
 all: libft $(OBJECTS) $(NAME) 
 
 $(NAME): libft/libft.a Makefile $(INCLUDES) $(OBJECTS)
-	cc $(CFLAGS) -L libft $(DEBUG) $(OBJECTS) -o $@ $(LIBS_TAG) $(LIBS_TAG)
+	cc $(CFLAGS) -L libft $(DEBUG) -g $(OBJECTS) -o $@ $(LIBS_TAG) $(LIBS_TAG)
 
 $(OBJ_DIR)/%.o: $(SRC_DIR)/*/%.c | $(OBJ_DIR)
-	cc $(CFLAGS) $(DEBUG) -c $< -o $@ 
+	cc $(CFLAGS) $(DEBUG) -g -c $< -o $@ 
 
 libft: 
 	@$(MAKE) -C $(LIBFT_DIR)

@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/07 15:12:52 by mfleury           #+#    #+#             */
-/*   Updated: 2024/11/25 16:49:10 by mfleury          ###   ########.fr       */
+/*   Updated: 2024/11/29 10:20:11 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,5 +70,5 @@ int	start_shell(char *envp[])
 	head = sh->head;
 	if (execute_tokens(sh, head, 0, envp) != 0)
 		return (free_sh(head), 1);
-	return (free_sh(head), 0);
+	return (/*free_sh(head),*/ 0);
 }
