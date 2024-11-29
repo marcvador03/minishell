@@ -6,7 +6,7 @@
 /*   By: pmorello <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 12:17:09 by pmorello          #+#    #+#             */
-/*   Updated: 2024/11/29 12:36:27 by mfleury          ###   ########.fr       */
+/*   Updated: 2024/11/29 14:23:34 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,14 +68,13 @@ typedef int	(*t_func_arr)(char **args);
 typedef struct s_pipe
 {
 	char	*p_line; //
-	pid_t	*pid;
+	pid_t	pid;
 	//char	**cmd;
 	char	**redirs;//
 	int		*rd;//
 	int		r_fd[4];
 	char	**args;//
-	int		**fd;
-	int		count;
+	int		fd[2];//
 	char	mem_flag;
 	struct	s_pipe	*head;
 	struct	s_pipe	*next;
@@ -87,6 +86,7 @@ typedef struct s_shell
 	int				token; // 0 = && | 1 = ||
 	int				depth;
 	int				bracket[2];
+	int				p_count;
 	struct s_pipe	*pipes;
 	struct s_shell	*head;
 	struct s_shell	*next;

@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/10 08:52:08 by mfleury           #+#    #+#             */
-/*   Updated: 2024/11/29 11:20:36 by mfleury          ###   ########.fr       */
+/*   Updated: 2024/11/29 15:30:46 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,24 +70,20 @@ int	set_rd_flag(char *rd)
 	return (255);
 }
 
-char	**get_redirs(char **line, int **rd)
+/*char	*get_redirs(t_pipe *p, char **line, int *rd)
 {
 	int		i;
 	int		n;
-	char	**redirs;
+	char	*redirs;
 	char	*t_rd;
 	int		pos[2];
 
 	n = count_redir(*line);
-	redirs = (char **)ft_calloc(sizeof(char *), n + 1);
-	*rd = (int *)ft_calloc(sizeof(int), n);
-	if (redirs == NULL || rd == NULL)
-		return (NULL);
 	i = 0;
 	while (i < n)
 	{
 		t_rd = get_rd(*line);
-		rd[0][i] = set_rd_flag(t_rd);
+		p->rd = set_rd_flag(t_rd);
 		pos[0] = sh_strpos(*line, t_rd) + ft_strlen(t_rd);
 		pos[1] = sh_strpos(ft_strtrim(*line + pos[0], " "), " ") + 1;
 		redirs[i] = sh_strcut(*line, pos[0], pos[0] + pos[1]);
@@ -99,5 +95,36 @@ char	**get_redirs(char **line, int **rd)
 	if (n > 0)
 		sh_trim_list_strings(redirs, " ");
 	return (redirs);
+}*/
+
+char	**create_redirs(t_pipe *p)
+{
+	int		i;
+	char	**redirs;
+	int		n;
+	char	*t_rd;
+	int		pos[2];
+	
+	p->p_line = sh_strtrim(&p->p_line, " ", 0);
+	n = count_redir(p->p_line);
+	redirs = (char **)ft_calloc(sizeof(char *), n + 1);
+	p->rd = (int *)ft_calloc(sizeof(int), n);
+	if (redirs == NULL || p->rd == NULL)
+		return (NULL);
+	i = 0;
+	while (i < n)
+	{
+		t_rd = get_rd(p->p_line);
+		p->rd[0] = set_rd_flag(t_rd);
+		pos[0] = sh_strpos(p->p_line, t_rd) + ft_strlen(t_rd);
+		pos[1] = sh_strpos(ft_strtrim(p->p_line + pos[0], " "), " ") + 1;
+		redirs[i] = sh_strcut(p->p_line, pos[0], pos[0] + pos[1]);
+		redirs[i] = sh_strtrim(&redirs[i], " ", 0);
+		p->p_line = sh_strstrip(&p->p_line, pos[0] - ft_strlen(t_rd), pos[0] + pos[1]);
+		p->p_line = sh_strtrim(&p->p_line, t_rd, 0);
+i++;
+	}
+	redirs[n] = NULL;
+	return (set_flag(p, 4), redirs);
 }
 //https://unix.stackexchange.com/questions/235092/command-redirection-to-multiple-files-command-file1-file2

@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/22 16:08:01 by mfleury           #+#    #+#             */
-/*   Updated: 2024/11/29 12:37:02 by mfleury          ###   ########.fr       */
+/*   Updated: 2024/11/29 14:23:58 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -188,12 +188,11 @@ int	subshell(t_shell *sh, char *envp[])
 {
 	int	errnum;
 	t_pipe *p;
-	int	n;
 
 	errnum = 0;
 	p = NULL;
-	n = count_pipes(sh->s_line);
-	p = fill_pipes(p, sh->s_line, n);
+	sh->p_count = count_pipes(sh->s_line);
+	p = fill_pipes(p, sh->s_line, sh->p_count);
 
 	/*
 	p->in_pipes = identify_pipes(sh->s_line, &p);

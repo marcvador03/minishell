@@ -21,10 +21,10 @@ PARSE = prompt_creation.c \
 		tokens.c \
 		tokens_utils.c \
 		pipes.c \
-		quotes.c
-		#redirections.c \
+		quotes.c \
+		redirections.c 
 		#redirections_utils.c \
-		#heredoc.c \
+		#heredoc.c
 
 EXECUTE = commands.c
 

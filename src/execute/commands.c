@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/17 15:39:35 by mfleury           #+#    #+#             */
-/*   Updated: 2024/11/29 11:16:09 by mfleury          ###   ########.fr       */
+/*   Updated: 2024/11/29 14:32:42 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,32 +107,8 @@ int	exec_cmd(char *cmd, char **args, int pcount, char *envp[])
 	return (set_flag(p, 5), res);
 }*/
 
-int	count_args(char *line)
-{
-	int	n;
-	int	i;
 
-	if (line == NULL)
-		return (0);
-	n = 1;
-	i = 0;
-	while (line[i] != '\0')
-	{
-		if (line[i] == 34 || line[i] == 39)
-			i += sh_jump_to(line + i, line[i]);
-		if (line[i] == '\0')
-			break;
-		if (line[i] == ' ')
-		{
-			i += sh_skip(line, ' ');
-			n++;
-		}
-		i++;
-	}
-	return (n);
-}
-
-char	*get_args(char **line)
+/*char	*get_args(char **line)
 {
 	int		i;
 	int		pos;
@@ -179,4 +155,4 @@ char	**get_cmd_args(char *line)
 	}
 	args[cnt_args] = NULL;
 	return (args);
-}
+}*/
