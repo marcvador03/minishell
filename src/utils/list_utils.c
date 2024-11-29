@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/30 17:25:00 by mfleury           #+#    #+#             */
-/*   Updated: 2024/11/29 12:33:13 by mfleury          ###   ########.fr       */
+/*   Updated: 2024/11/29 15:50:44 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,6 +71,7 @@ t_pipe	*p_lstnew(char **line)
 		return (NULL);
 	if (get_next_pipe(ptr, line) != 0)
 		return (NULL);
+	ptr->prev = NULL;
 	ptr->next = NULL;
 	ptr->head = ptr;
 	return (ptr);
@@ -102,6 +103,7 @@ t_pipe	*p_lstadd_back(t_pipe **pipe, char **line)
 		tmp->next = new_node;
 		*pipe = tmp->next;
 		(*pipe)->head = tmp->head;
+		(*pipe)->prev = tmp;
 	}
 	return (tmp->next);
 }

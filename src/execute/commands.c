@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/17 15:39:35 by mfleury           #+#    #+#             */
-/*   Updated: 2024/11/29 14:32:42 by mfleury          ###   ########.fr       */
+/*   Updated: 2024/11/29 15:37:39 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,8 +75,6 @@ int	exec_cmd(char *cmd, char **args, int pcount, char *envp[])
 	call_cmd[3] = &ft_export;
 	call_cmd[4] = &ft_env;
 	call_cmd[5] = &ft_echo;
-	if (ft_strncmp(cmd, "exit", 4) == 0)
-		return (0);
 	x = str_to_enum(cmd);
 	if (x != -1)
 		return (call_cmd[x](args));
