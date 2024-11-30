@@ -6,7 +6,7 @@
 /*   By: pmorello <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 12:17:09 by pmorello          #+#    #+#             */
-/*   Updated: 2024/11/30 12:13:28 by mfleury          ###   ########.fr       */
+/*   Updated: 2024/11/30 21:08:36 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -144,6 +144,8 @@ char	*sh_strcut(char *str, int start, int end);
 char	*sh_strcut2(char **str, int start, int end);
 char	*sh_strstrip(char **str, int start, int end);
 char	*sh_strnstr(const char *big, const char *little, size_t len);
+char	*sh_strtrim(char *str, char *set, char offset);
+void	sh_strtrim2(char **str, char *set, char offset);
 void	sh_trim_list_strings(char **str, char *set);
 void	clean_spaces(char ***str, char *set); 
 int		sh_jump_to(char *str, char c);

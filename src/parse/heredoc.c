@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/23 14:57:19 by mfleury           #+#    #+#             */
-/*   Updated: 2024/11/29 19:09:58 by mfleury          ###   ########.fr       */
+/*   Updated: 2024/11/30 21:17:13 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,7 @@ int	init_heredoc(char *line)
 		if (pid == -1)
 			return (-1);
 		if (pid == 0)
-			get_hd_input(line, fd);
+			exit(get_hd_input(line, fd));
 		waitpid(pid, &wstatus, 0);
 		close(fd);
 		fd = open(".heredoc_tmp", O_RDONLY);

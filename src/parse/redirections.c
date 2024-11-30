@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/10 08:52:08 by mfleury           #+#    #+#             */
-/*   Updated: 2024/11/30 12:13:48 by mfleury          ###   ########.fr       */
+/*   Updated: 2024/11/30 21:15:03 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -119,7 +119,7 @@ char	**create_redirs(t_pipe *p)
 		p->rd[i] = get_rd(p->p_line);
 		//p->rd[i] = set_rd_flag(t_rd);
 		pos[0] = sh_strpos(p->p_line, p->rd[i]) + ft_strlen(p->rd[i]);
-		pos[1] = sh_strpos(ft_strtrim(p->p_line + pos[0], " "), " ") + 1;
+		pos[1] = sh_strpos(ft_strtrim(p->p_line + pos[0], " "), " ") + 1; // leak
 		redirs[i] = sh_strcut(p->p_line, pos[0], pos[0] + pos[1]);
 		redirs[i] = sh_strtrim(redirs[i], " ", 0);
 		p->p_line = sh_strstrip(&p->p_line, pos[0] - ft_strlen(p->rd[i]), pos[0] + pos[1]);
