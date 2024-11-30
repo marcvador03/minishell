@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/22 16:08:01 by mfleury           #+#    #+#             */
-/*   Updated: 2024/11/29 16:08:32 by mfleury          ###   ########.fr       */
+/*   Updated: 2024/11/30 20:47:11 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,15 +17,11 @@ char	***create_args(t_pipe *p);
 char	**create_cmd_names(t_pipe *p);
 pid_t	*create_pids(t_pipe *p);
 char	***create_redirs(t_pipe *p);
-int		get_fdin_redir(t_pipe *p);
-int		get_fdout_redir(t_pipe *p);
 char	**identify_pipes(char *s_line, t_pipe **p);
 int		count_pipes(char *line);
 
 int	open_redir_fd(t_pipe *p)
 {
-	p->r_fd[INPUT] = get_fdin_redir(p);
-	p->r_fd[OUTPUT] = get_fdout_redir(p);
 	if (p->r_fd[INPUT] > 2)
 	{
 		p->r_fd[T_INPUT] = dup(STDIN_FILENO);
@@ -70,23 +66,24 @@ int	single_cmd(t_pipe *p, char *envp[])
 
 int	close_pipes(t_pipe *p)
 {
-	t_pipe *tmp;
+	//t_pipe *tmp;
 
-	tmp = p;
+	//tmp = p;
+	p = p->head;
 	while (p != NULL)
 	{
-		if (p == tmp)
+		/*if (p == tmp)
 		{
 			if (tmp == tmp->head)
 				close(p->fd[READ_END]);
-			else if (tmp->next == NULL)
+			else if (tmp != tmp->head && tmp->next == NULL)
 				close(p->fd[WRITE_END]);
 		}
 		else
-		{
+		{*/
 			close(p->fd[READ_END]);
 			close(p->fd[WRITE_END]);
-		}
+		//}
 		p = p->next;
 	}
 	return (0);
@@ -99,14 +96,14 @@ int	run_child(t_pipe *p, char *envp[])
 	
 	o = p->prev;
 	if (p == p->head)
-		dup2(p->fd[WRITE_END], STDOUT_FILENO);	// r_fd?
+		dup2(p->fd[WRITE_END], STDOUT_FILENO);
 	if (p != p->head && p->next != NULL)
 	{
-		dup2(o->fd[READ_END], STDIN_FILENO); // r_fd?
-		dup2(p->fd[WRITE_END], STDOUT_FILENO); // r_fd?
+		dup2(o->fd[READ_END], STDIN_FILENO);
+		dup2(p->fd[WRITE_END], STDOUT_FILENO);
 	}
 	else if (p != p->head && p->next == NULL)
-		dup2(o->fd[READ_END], STDIN_FILENO); //r_fd?
+		dup2(o->fd[READ_END], STDIN_FILENO);
 	close_pipes(p);
 	open_redir_fd(p);
 	wstatus = exec_cmd(p->args[0], p->args, 0, envp);
@@ -138,12 +135,29 @@ static int	run_parent(t_pipe *p)
 	return (0);
 }
 
-
-int	create_fork_pipe(t_pipe *p, char *envp[])
+int	create_pipes(t_pipe *p)
 {
 	t_pipe	*head;
 	
 	head = p->head;
+	p = head;
+	while (p!= NULL)
+	{
+		if (pipe(p->fd) == -1)
+			return (-1);
+		p = p->next;
+	}
+	return (0);
+}
+
+int	multiple_cmd(t_pipe *p, char *envp[])
+{
+	t_pipe	*head;
+	
+	head = p->head;
+	p = head;
+	if (create_pipes(p) == -1)
+		return (-1);	
 	p = head;
 	while (p != NULL)
 	{
@@ -154,41 +168,32 @@ int	create_fork_pipe(t_pipe *p, char *envp[])
 			run_child(p, envp);
 		p = p->next;
 	}
-	p = head;
-	if (run_parent(p) == -1)
-		return (free_pipe(p), -1);
+	if (run_parent(head) == -1)
+		return (free_pipe(head), -1);
 	return (0);
 }
 
-/*int	clean_inputs(t_pipe *p)
-{
-	sh_trim_list_strings(p->in_pipes, "\"");
-	sh_trim_list_strings(p->args[0], "\"");
-	sh_trim_list_strings(p->redirs[0], "\"");
-	
-	
-	return (0);
-}
-*/
 t_pipe	*fill_pipes(t_pipe *p, char *line, int n)
 {
 	t_pipe	*tmp;
 	int		i;
+	char	*t_line;
 
 	i = 0;
+	t_line = ft_strdup(line);
 	while (i < n)
 	{
-		line = sh_strtrim(&line, " ", 0);
+		t_line = sh_strtrim(t_line, " ", 0);
 		if (p == NULL)
-			tmp = p_lstnew(&line);
+			tmp = p_lstnew(&t_line);
 		else
-			tmp = p_lstadd_back(&p, &line);
+			tmp = p_lstadd_back(&p, &t_line);
 		if (tmp == NULL)
-			return (NULL);
+			return (free_s((void *)t_line), NULL);
 		p = tmp->head;
 		i++;
 	}
-	return (tmp->head);
+	return (free_s((void *)t_line), tmp->head);
 }
 
 int	subshell(t_shell *sh, char *envp[])
@@ -200,25 +205,14 @@ int	subshell(t_shell *sh, char *envp[])
 	p = NULL;
 	sh->p_count = count_pipes(sh->s_line);
 	p = fill_pipes(p, sh->s_line, sh->p_count);
-
-	/*
-	p->in_pipes = identify_pipes(sh->s_line, &p);
-	p->fd = create_fpipes(p);
-	p->pid = create_pids(p);
-	//p->cmd = create_cmd_names(p);
-	p->redirs = create_redirs(p);
-	sh_trim_list_strings(p->in_pipes, " ");
-	p->args = create_args(p);
-	if (p->fd == NULL || p->args == NULL || p->pid == NULL)
-		return (free_pipe(p), -1);
-	clean_inputs(p);*/
+	sh->pipes = p->head;
 	if (sh->p_count == 1)
 	{
 		if (ft_strncmp(p->args[0], "exit", 4) == 0)
 			exit_minishell(sh, EXIT_SUCCESS);
 		errnum = single_cmd(p, envp);
 	}
-	else if (create_fork_pipe(p, envp) == -1)
-		return (free_pipe(p), -1);
-	return (errnum);
+	else if (multiple_cmd(p, envp) == -1)
+		return (free_pipe(sh->pipes), -1);
+	return (free_pipe(sh->pipes), errnum);
 }

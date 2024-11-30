@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/07 15:12:52 by mfleury           #+#    #+#             */
-/*   Updated: 2024/11/29 10:20:11 by mfleury          ###   ########.fr       */
+/*   Updated: 2024/11/29 19:21:02 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ t_shell	*fill_sh(t_shell *sh, char *line, int n)
 			tmp = sh_lstadd_back(&sh, t_line);
 		if (tmp == NULL)
 			return (NULL);
-		tmp->s_line = sh_strtrim(&tmp->s_line, " ", 0);
+		tmp->s_line = sh_strtrim(tmp->s_line, " ", 0);
 		tmp->bracket[0] += x[0];
 		tmp->bracket[1] += x[1];
 		tk = get_tk(line + 2);
@@ -70,5 +70,5 @@ int	start_shell(char *envp[])
 	head = sh->head;
 	if (execute_tokens(sh, head, 0, envp) != 0)
 		return (free_sh(head), 1);
-	return (/*free_sh(head),*/ 0);
+	return (free_sh(head), 0);
 }

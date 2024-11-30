@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/25 14:10:00 by mfleury           #+#    #+#             */
-/*   Updated: 2024/11/29 10:17:34 by mfleury          ###   ########.fr       */
+/*   Updated: 2024/11/30 13:38:08 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,38 +32,27 @@ void	free_d(void **ptr)
 	ptr = NULL;
 }
 
+void	free_pipe_elts(t_pipe *p)
+{
+		free_d((void **)p->redirs);
+		free_s((void *)p->rd);
+		free_d((void **)p->args);//i = 0;
+}
+
 void	free_pipe(t_pipe *p)
 {
-	//int	i;
+	t_pipe *tmp;
 
-	if (p->mem_flag & (1 << 3))
+	if (p == NULL)
+		return ;
+	p = p->head;
+	tmp = p;
+	while (tmp != NULL)
 	{
-		//free_s((void *)p->pid);
-		unset_flag(p, 3);
-	}
-	if (p->mem_flag & (1 << 4))
-	{
-		//free_d((void **)p->redirs);
-		//free_s((void *)p->rd);
-		unset_flag(p, 4);
-	}
-	if (p->mem_flag & (1 << 0))
-	{
-		//free_d((void **)p->in_pipes);
-		unset_flag(p, 0);
-	}
-	if (p->mem_flag & (1 << 2))
-	{
-		//free_d((void **)p->fd);
-		unset_flag(p, 2);
-	}
-	if (p->mem_flag & (1 << 1))
-	{
-		//i = 0;
-		//while (p->args[i] != NULL)
-		//	free_s((void *)p->args[i++]);
-		//free_s((void **)p->args);
-		unset_flag(p, 1);
+		free_pipe_elts(p);
+		tmp = tmp->next;
+		free_s(p);
+		p = tmp;
 	}
 }
 
@@ -74,13 +63,13 @@ void	free_sh(t_shell *sh)
 	if (sh == NULL)
 		return ;
 	sh = sh->head;
-	while (sh != NULL)
+	tmp = sh;
+	while (tmp != NULL)
 	{
-		tmp = sh;
-		free_s(sh->s_line);
 		free_pipe(sh->pipes);
-		free_s(sh->pipes);
-		sh = sh->next;
-		free_s(tmp);
+		free_s(sh->s_line);
+		tmp = tmp->next;
+		free_s((void *)sh);
+		sh = tmp;
 	}
 }

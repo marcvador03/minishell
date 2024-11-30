@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/23 14:57:19 by mfleury           #+#    #+#             */
-/*   Updated: 2024/11/24 15:08:01 by mfleury          ###   ########.fr       */
+/*   Updated: 2024/11/29 19:09:58 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ char	*get_heredoc_eof(char **line, int pos1)
 
 	len = ft_strlen(*line);
 	t_line = ft_substr(*line, pos1, len);
-	t_line = sh_strtrim(&t_line, " ", 0); 
+	t_line = sh_strtrim(t_line, " ", 0); 
 	pos2 = sh_strpos(t_line, " ");
 	len = ft_strlen(t_line);
 	t_line = sh_strcut2(&t_line, 0, pos2);

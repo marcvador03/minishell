@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/25 13:59:57 by mfleury           #+#    #+#             */
-/*   Updated: 2024/11/29 15:29:42 by mfleury          ###   ########.fr       */
+/*   Updated: 2024/11/29 19:10:46 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,7 +94,7 @@ char	**create_args(t_pipe *p)
 	int		i;
 	int		n;
 
-	p->p_line = sh_strtrim(&p->p_line, " ", 0);
+	p->p_line = sh_strtrim(p->p_line, " ", 0);
 	n = count_args(p->p_line);
 	args = (char **)ft_calloc(sizeof(char *), n + 1);
 	if (args == NULL)
@@ -102,13 +102,13 @@ char	**create_args(t_pipe *p)
 	i = 0;
 	while (i < n)
 	{
-		p->p_line = sh_strtrim(&p->p_line, " ", 0);
+		p->p_line = sh_strtrim(p->p_line, " ", 0);
 		args[i] = get_args(&p->p_line);
-		args[i] = sh_strtrim(&args[i], " ", 0);
+		args[i] = sh_strtrim(args[i], " ", 0);
 		i++;
 	}
 	args[n] = NULL;
-	return (set_flag(p, 1), args);
+	return (set_flag(p, 2), args);
 }
 
 

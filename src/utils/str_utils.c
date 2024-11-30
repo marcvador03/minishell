@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/07 14:41:31 by mfleury           #+#    #+#             */
-/*   Updated: 2024/11/29 11:20:54 by mfleury          ###   ########.fr       */
+/*   Updated: 2024/11/29 19:10:16 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,12 +113,12 @@ char	*sh_strcut2(char **str, int start, int end)
 	return (res);
 }
 
-char	*sh_strtrim(char *str[], char *set, char offset)
+char	*sh_strtrim(char *str, char *set, char offset)
 {
 	char *res;
 	
-	res = ft_strtrim(*str + offset, set);
-	free(*str);
+	res = ft_strtrim(str + offset, set);
+	free_s(str);
 	return (res);
 }
 
@@ -131,7 +131,7 @@ void	sh_trim_list_strings(char **str, char *set)
 	i = 0;
 	while (str[i] != NULL)
 	{
-		str[i] = sh_strtrim(&str[i], set, 0);
+		str[i] = sh_strtrim(str[i], set, 0);
 		i++;
 	}
 }

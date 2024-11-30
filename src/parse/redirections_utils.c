@@ -6,17 +6,19 @@
 /*   By: mfleury <mfleury@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/18 17:20:19 by mfleury           #+#    #+#             */
-/*   Updated: 2024/11/29 16:09:22 by mfleury          ###   ########.fr       */
+/*   Updated: 2024/11/30 12:15:03 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 int	init_heredoc(char *line);
+int	get_rd_flag(char *rd);
 
 int	get_fdin_redir(t_pipe *p, int n)
 {
 	int	i;
 	int	fd;
+	int	rd;
 
 	/*fd = (int *)ft_calloc(sizeof(int), n);
 	if (fd == NULL)
@@ -27,9 +29,10 @@ int	get_fdin_redir(t_pipe *p, int n)
 	{
 		if (fd != -2)
 			close(fd);
-		if (p->rd[i] == 1)
+		rd = get_rd_flag(p->rd[i]);
+		if (rd == 2)
 			fd = open(p->redirs[i], O_RDONLY, 0700);
-		else if (p->rd[i] == 3)
+		else if (rd == 4)
 			fd = init_heredoc(p->redirs[i]);
 		/*if (p->rd[i] & (1 << 0))
 		{
@@ -48,6 +51,7 @@ int	get_fdout_redir(t_pipe *p)
 {
 	int	i;
 	int	fd;
+	int	rd;
 
 	/*fd = (int *)ft_calloc(sizeof(int), n);
 	if (fd == NULL)
@@ -58,9 +62,10 @@ int	get_fdout_redir(t_pipe *p)
 	{
 		if (fd != -2)
 			close(fd);
-		if (p->rd[i] == 2)
+		rd = get_rd_flag(p->rd[i]);
+		if (rd == 3)
 			fd = open(p->redirs[i], O_CREAT | O_RDWR | O_APPEND, 0644);
-		else if (p->rd[i] == 0)
+		else if (rd == 1)
 			fd = open(p->redirs[i], O_CREAT | O_RDWR | O_TRUNC, 0644);
 		/*if (!(p->rd[i] & (1 << 0)))
 		{

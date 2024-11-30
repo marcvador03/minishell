@@ -6,7 +6,7 @@
 /*   By: pmorello <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 12:17:09 by pmorello          #+#    #+#             */
-/*   Updated: 2024/11/29 15:49:06 by mfleury          ###   ########.fr       */
+/*   Updated: 2024/11/30 12:13:28 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,26 +55,25 @@ typedef int	(*t_func_arr)(char **args);
 
 
 /*flag bit position: bitvalue = 0 | bitvalue = 1
-0: pipes mem freed | pipes allocated on heap
-1: args mem freed | args allocated on heap
-2: fd mem freed | fd allocated on heap
-3: pid mem freed | pid allocated on heap
-4: redirs mem freed | redirs allocated on heap
-5: cmd mem freed | cmd allocated on heap
+0: p_line
+1: redirs
+2: args
+3: 
+4: 
+5: 
 6:
 7:
 */
 
 typedef struct s_pipe
 {
-	char	*p_line; //
+	char	*p_line;
 	pid_t	pid;
-	//char	**cmd;
-	char	**redirs;//
-	int		*rd;//
+	char	**redirs;
+	char	**rd;
 	int		r_fd[4];
-	char	**args;//
-	int		fd[2];//
+	char	**args;
+	int		fd[2];
 	char	mem_flag;
 	struct	s_pipe	*head;
 	struct	s_pipe	*prev;
@@ -125,7 +124,7 @@ void	free_s(void *ptr);
 void	free_d(void **ptr);
 void	free_pipe(t_pipe *p);
 void	free_sh(t_shell *sh);
-char	*sh_strtrim(char **str, char *set, char offset);
+char	*sh_strtrim(char *str, char *set, char offset);
 char	*get_full_path(char *arg0, char *envp[]);
 void	set_errno(int err);
 void	set_flag(t_pipe *p, int n);

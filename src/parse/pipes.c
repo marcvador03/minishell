@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/28 13:53:58 by mfleury           #+#    #+#             */
-/*   Updated: 2024/11/29 14:32:20 by mfleury          ###   ########.fr       */
+/*   Updated: 2024/11/29 19:44:47 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,8 @@ char	**create_args(t_pipe *p);
 char	**create_cmd_names(t_pipe *p);
 pid_t	*create_pids(t_pipe *p);
 char	**create_redirs(t_pipe *p);
+int		get_fdin_redir(t_pipe *p);
+int		get_fdout_redir(t_pipe *p);
 
 int	count_pipes(char *line)
 {
@@ -46,12 +48,14 @@ int	count_pipes(char *line)
 
 int	fill_in_pipe(t_pipe *p)
 {
-	//p->cmd = create_cmd_names(p);
 	p->redirs = create_redirs(p);
 	p->args = create_args(p);
 	if (p->redirs == NULL || p->args == NULL)
 		return (free_pipe(p), -1);
-	
+	sh_trim_list_strings(p->args, "\"");
+	sh_trim_list_strings(p->redirs, "\"");
+	p->r_fd[INPUT] = get_fdin_redir(p);
+	p->r_fd[OUTPUT] = get_fdout_redir(p);
 	return (0);
 }
 
@@ -69,16 +73,16 @@ int	get_next_pipe(t_pipe *p, char **line)
 		if ((*line)[i] == '|' || (*line)[i] == '\0')
 		{
 			p->p_line = sh_strcut(*line, 0, i);
-			p->p_line = sh_strtrim(&p->p_line, " ", 0);
+			p->p_line = sh_strtrim(p->p_line, " ", 0);
 			*line = sh_strstrip(line, 0, i);
-			*line = sh_strtrim(line, "|", 0);
+			*line = sh_strtrim(*line, "|", 0);
 			fill_in_pipe(p);
 			return (0);
 		}
 		i++;
 	}
 	p->p_line = sh_strcut(*line, 0, i);
-	p->p_line = sh_strtrim(&p->p_line, " ", 0);
+	p->p_line = sh_strtrim(p->p_line, " ", 0);
 	*line = sh_strstrip(line, 0, i);
 	fill_in_pipe(p);
 	return (0);
