@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 10:01:23 by mfleury           #+#    #+#             */
-/*   Updated: 2024/11/19 14:39:44 by mfleury          ###   ########.fr       */
+/*   Updated: 2024/12/01 19:03:40 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,13 @@ int	main(int argc, char *argv[], char *envp[])
 	char	term_buffer[2048];
 	char	*term_type;
 	int		success;
+	struct sigaction	sig;
 
+	ft_bzero(&sig, sizeof(sig));
+	g_status = 0;
+	sig.sa_handler = &signal_handler_main;
+	sigaction(SIGINT, &sig, NULL);
+	sigaction(SIGTERM, &sig, NULL);
 	if (argc > 1 || argv == NULL)
 		return (1);
 	term_type = getenv("TERM");

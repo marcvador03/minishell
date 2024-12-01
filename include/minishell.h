@@ -6,7 +6,7 @@
 /*   By: pmorello <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 12:17:09 by pmorello          #+#    #+#             */
-/*   Updated: 2024/11/30 21:08:36 by mfleury          ###   ########.fr       */
+/*   Updated: 2024/12/01 19:03:40 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 # include <unistd.h>
 # include <stdio.h>
 # include <fcntl.h>
+# include <signal.h>
 # include <sys/types.h>
 # include <sys/wait.h>
 # include <errno.h>
@@ -103,6 +104,8 @@ typedef struct	s_mini
 {
 	t_env	*env;
 }	t_mini;
+
+static int	g_status;
 /*minishell base prompt functions*/
 char	**get_cmd_args(char *cmd_in);
 int		exec_cmd(char *cmd, char **args, int pcount, char *envp[]);
@@ -150,6 +153,10 @@ void	sh_trim_list_strings(char **str, char *set);
 void	clean_spaces(char ***str, char *set); 
 int		sh_jump_to(char *str, char c);
 int		sh_skip(char *str, char c);
+
+/*signal handlers*/
+void    signal_handler_main(int sig);
+void    control_c_heredoc(int sig);
 
 /*subshell*/
 int		subshell(t_shell *sh, char *envp[]);

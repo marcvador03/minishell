@@ -14,7 +14,8 @@ BUILTINS = ft_cd.c \
 		   ft_env.c \
 		   ft_export.c \
 		   ft_pwd.c \
-		   built_utils.c
+		   built_utils.c \
+		   ft_signals.c
 		   #ft_unset.c \
 
 PARSE = prompt_creation.c \

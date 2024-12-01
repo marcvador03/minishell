@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/07 14:31:45 by mfleury           #+#    #+#             */
-/*   Updated: 2024/11/30 13:39:28 by mfleury          ###   ########.fr       */
+/*   Updated: 2024/12/01 18:38:07 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ int	execute_tokens(t_shell *sh, t_shell *head, int level, char *envp[])
 	pid_t	pid;
 	int		wstatus;
 	int		errnum;
-
+	
 	errnum = 0;
 	while (sh != NULL)
 	{
