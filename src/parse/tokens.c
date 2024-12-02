@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/07 14:31:45 by mfleury           #+#    #+#             */
-/*   Updated: 2024/12/02 19:35:13 by mfleury          ###   ########.fr       */
+/*   Updated: 2024/12/02 20:32:13 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,14 +65,13 @@ int	execute_tokens(t_shell *sh, t_shell *head, int level, char *envp[])
 		{
 			if (sh->token == 0 || (sh->token == 1 && errnum != 0))
 			{
-				errnum = subshell(sh, envp);
-				sh->pipes = NULL;
-				if (errnum != 0)
+				if (subshell(sh, envp) != 0)
 					perror("minishell: ");
+				sh->pipes = NULL;
 			}
 		}
 		else if (sh->bracket[1] < level)
-			exit(0);
+			exit(g_status);
 		sh = sh->next;
 	}
 	return (0);

@@ -6,7 +6,7 @@
 /*   By: pmorello <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 12:17:09 by pmorello          #+#    #+#             */
-/*   Updated: 2024/12/02 19:40:10 by mfleury          ###   ########.fr       */
+/*   Updated: 2024/12/02 23:48:22 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -130,6 +130,7 @@ char	*sh_strnstr(const char *big, const char *little, size_t len);
 char	*sh_strtrim(char *str, char *set, char offset);
 void	sh_strtrim2(char **str, char *set, char offset);
 int		sh_jump_to(char *str, char c);
+int		sh_jump_to2(char **str, char c);
 int		sh_skip(char *str, char c);
 /* list utils functions */
 t_shell	*sh_lstnew(char *line);

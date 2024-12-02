@@ -1,7 +1,7 @@
 1. manage '' and "" - Marc
 2. build '$' function for environment variables
 3. build '$?' function
-4. integrate signals function into main - Marc
+4. integrate signals function into main - Marc OK
 5. optional : move from readline to getnextline
 6. optional: add wildcards *
 
@@ -11,5 +11,7 @@
 
 BUGS TO FIX
 1. << EOF does not work in a pipeline - Marc
-2. 
+2. || seems not to work anymore - Marc
+3. No signal in heredec - Marc
+
 

@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/02 16:56:07 by mfleury           #+#    #+#             */
-/*   Updated: 2024/12/02 16:56:38 by mfleury          ###   ########.fr       */
+/*   Updated: 2024/12/02 23:47:56 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,25 @@ int	sh_jump_to(char *str, char c)
 	{
 		if (str[i] == c)
 			return (++i);
+		i++;
+	}
+	return (0);
+}
+
+int	sh_jump_to2(char **str, char c)
+{
+	int	i;
+
+	if (*str == NULL)
+		return (0);
+	i = 1;
+	while (*str[i] != '\0')
+	{
+		if (*str[i] == c)
+		{
+			*str = *str + ++i;
+			return (i);
+		}
 		i++;
 	}
 	return (0);
