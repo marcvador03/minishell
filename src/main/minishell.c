@@ -6,11 +6,13 @@
 /*   By: mfleury <mfleury@student.42barcelona.      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 10:01:23 by mfleury           #+#    #+#             */
-/*   Updated: 2024/12/02 12:53:29 by mfleury          ###   ########.fr       */
+/*   Updated: 2024/12/02 19:36:11 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+int	start_shell(char *envp[]);
 
 int	main_cmd_return(t_shell *sh, int wstatus)
 {
@@ -27,7 +29,7 @@ int	main_cmd_return(t_shell *sh, int wstatus)
 void	exit_minishell(t_shell *sh, int status)
 {
 	//if (errno == 0 || errno == 255)
-		printf("Minishell exited with success\n");
+	printf("Minishell exited with success\n");
 	/*else
 		perror("Minishell exited with error:\n");*/
 	free_sh(sh);
@@ -39,7 +41,6 @@ int	main(int argc, char *argv[], char *envp[])
 	/*char	term_buffer[2048];
 	char	*term_type;
 	int		success;*/
-
 	g_status = 0;
 	init_signal(1);
 	if (argc > 1 || argv == NULL)

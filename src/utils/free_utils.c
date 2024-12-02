@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/25 14:10:00 by mfleury           #+#    #+#             */
-/*   Updated: 2024/11/30 13:38:08 by mfleury          ###   ########.fr       */
+/*   Updated: 2024/12/02 19:29:40 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,16 +32,16 @@ void	free_d(void **ptr)
 	ptr = NULL;
 }
 
-void	free_pipe_elts(t_pipe *p)
+static void	free_pipe_elts(t_pipe *p)
 {
-		free_d((void **)p->redirs);
-		free_s((void *)p->rd);
-		free_d((void **)p->args);//i = 0;
+	free_d((void **)p->redirs);
+	free_s((void *)p->rd);
+	free_d((void **)p->args);
 }
 
 void	free_pipe(t_pipe *p)
 {
-	t_pipe *tmp;
+	t_pipe	*tmp;
 
 	if (p == NULL)
 		return ;

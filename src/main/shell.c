@@ -6,18 +6,27 @@
 /*   By: mfleury <mfleury@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/07 15:12:52 by mfleury           #+#    #+#             */
-/*   Updated: 2024/12/02 12:53:30 by mfleury          ###   ########.fr       */
+/*   Updated: 2024/12/02 19:50:02 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int		count_tokens(char *line);
-int		execute_tokens(t_shell *sh, t_shell *head, int level, char *envp[]);
 char	*get_tk(char *line);
+int		count_tokens(char *line);
 int		check_open_q(char *str);
+int		execute_tokens(t_shell *sh, t_shell *head, int level, char *envp[]);
 
-t_shell	*fill_sh(t_shell *sh, char *line, int n)
+static void	init_data_brackets(t_shell *tmp, int *a, int *b)
+{
+	tmp->bracket[0] += *a;
+	tmp->bracket[1] += *b;
+	*a = tmp->bracket[0];
+	*b = tmp->bracket[1];
+	return ;
+}
+
+static t_shell	*fill_sh(t_shell *sh, char *line, int n)
 {
 	int		i;
 	t_shell	*tmp;
@@ -37,15 +46,45 @@ t_shell	*fill_sh(t_shell *sh, char *line, int n)
 		if (tmp == NULL)
 			return (NULL);
 		tmp->s_line = sh_strtrim(tmp->s_line, " ", 0);
-		tmp->bracket[0] += x[0];
-		tmp->bracket[1] += x[1];
+		init_data_brackets(tmp, &x[0], &x[1]);
 		tk = get_tk(line + 2);
 		line = sh_strnstr(line + 2, tk, ft_strlen(line));
-		x[0] = tmp->bracket[0];
-		x[1] = tmp->bracket[1];
 		sh = tmp->head;
 	}
 	return (tmp->head);
+}
+
+static char	*create_prompt(void)
+{
+	char	*user;
+	char	*res;
+
+	user = getenv("USER");
+	if (user == NULL)
+		return (NULL);
+	res = ft_strjoin(user, "$ ");
+	if (res == NULL)
+		return (NULL);
+	return (res);
+}
+
+static char	*get_input(void)
+{
+	char	*line;
+	char	*line2;
+	char	*prompt;
+
+	prompt = create_prompt();
+	if (prompt == NULL)
+		return (NULL);
+	line = readline(prompt);
+	if (line == NULL)
+		return (free_s(prompt), NULL);
+	else if (ft_strlen(line) == 0 && line[0] == '\0')
+		return (free_s(prompt), free_s(line), get_input());
+	add_history(line);
+	line2 = ft_strjoin("&&", line);
+	return (free_s(prompt), free_s(line), line2);
 }
 
 int	start_shell(char *envp[])

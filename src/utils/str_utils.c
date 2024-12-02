@@ -6,43 +6,11 @@
 /*   By: mfleury <mfleury@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/07 14:41:31 by mfleury           #+#    #+#             */
-/*   Updated: 2024/11/30 21:10:06 by mfleury          ###   ########.fr       */
+/*   Updated: 2024/12/02 16:53:04 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-int	skip_quotes(char *str);
-
-int	sh_strpos(const char *big, const char *little)
-{
-	size_t	i;
-	int		j;
-	char	*str;
-
-	str = (char *)big;
-	if (ft_strlen(little) == 0)
-		return (ft_strlen(big) + 1);
-	i = 0;
-	while (*str != '\0')
-	{
-		if (*str == 34 || *str == 39)
-		{
-			i += sh_jump_to(str, *str);
-			str = str + sh_jump_to(str, *str);
-		}
-		if (*little == *str)
-		{
-			j = 0;
-			while (little[j] == str[j])
-				if (little[++j] == '\0')
-					return (i);
-		}
-		str++;
-		i++;
-	}
-	return (ft_strlen(big) + 1);
-}
 
 char	*sh_strcut(char *str, int start, int end)
 {
@@ -113,26 +81,6 @@ char	*sh_strcut2(char **str, int start, int end)
 	return (res);
 }
 
-char	*sh_strtrim(char *str, char *set, char offset)
-{
-	char *res;
-	
-	res = ft_strtrim(str + offset, set);
-	free_s(str);
-	return (res);
-}
-
-void	sh_strtrim2(char **str, char *set, char offset)
-{
-	char	*tmp;	
-	
-	tmp = ft_strdup(*str);
-	free(*str);
-	*str = ft_strtrim(tmp + offset, set);
-	free(tmp);
-	return ;
-}
-
 void	sh_trim_list_strings(char **str, char *set)
 {
 	int	i;
@@ -145,29 +93,4 @@ void	sh_trim_list_strings(char **str, char *set)
 		str[i] = sh_strtrim(str[i], set, 0);
 		i++;
 	}
-}
-
-char	*sh_strnstr(const char *big, const char *little, size_t len)
-{
-	size_t	i;
-	int		j;
-
-	if (ft_strlen(little) == 0)
-		return ((char *)big);
-	i = 0;
-	while (i < len && *big != '\0')
-	{
-		if (*big == 34 || *big == 39)
-			big = big + sh_jump_to((char *)big, *big);	
-		if (*little == *big)
-		{
-			j = 0;
-			while (little[j] == big[j] && (i + j++) < len)
-				if (little[j] == '\0')
-					return ((char *)big);
-		}
-		big++;
-		i++;
-	}
-	return (0);
 }

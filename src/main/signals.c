@@ -6,30 +6,30 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/18 09:19:54 by marvin            #+#    #+#             */
-/*   Updated: 2024/12/02 13:23:00 by mfleury          ###   ########.fr       */
+/*   Updated: 2024/12/02 19:31:00 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-static void    signal_handler_main(int sig)
+static void	signal_handler_main(int sig)
 {
-    if (sig == SIGINT)
-    {
+	if (sig == SIGINT)
+	{
 		write(STDIN_FILENO, "\n", 1);
-        rl_replace_line("", 0);
-        rl_on_new_line();
-        rl_redisplay();
-    }
+		rl_replace_line("", 0);
+		rl_on_new_line();
+		rl_redisplay();
+	}
 	return ;
 }
 
-static void    signal_handler_child(int sig)
+static void	signal_handler_child(int sig)
 {
-    if (sig == SIGINT)
-    {
+	if (sig == SIGINT)
+	{
 		rl_replace_line("", 0);
-        rl_on_new_line();
+		rl_on_new_line();
 	}
 	else if (sig == SIGQUIT)
 	{
@@ -39,19 +39,20 @@ static void    signal_handler_child(int sig)
 	}
 	return ;
 }
-void    control_c_heredoc(int sig)
-{
-    if (sig == SIGINT)
-    {
-        close(STDIN_FILENO);
-        write(STDERR_FILENO, "\n", 1);
-    }
-}
 
-void init_signal(int pid)
+/*void	control_c_heredoc(int sig)
+{
+	if (sig == SIGINT)
+	{
+		close(STDIN_FILENO);
+		write(STDERR_FILENO, "\n", 1);
+	}
+}*/
+
+void	init_signal(int pid)
 {
 	struct sigaction	sig;
-	
+
 	ft_bzero(&sig, sizeof(sig));
 	//sig.sa_flags = SA_RESTART;
 	if (pid == 0)

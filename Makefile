@@ -17,27 +17,30 @@ BUILTINS = ft_cd.c \
 		   built_utils.c \
 		   #ft_unset.c \
 
-PARSE = prompt_creation.c \
-		tokens.c \
-		tokens_utils.c \
+PARSE =	args.c \
+		heredoc.c \
 		pipes.c \
-		quotes.c \
 		redirections.c \
 		redirections_utils.c \
-		heredoc.c
+		tokens.c \
+		tokens_utils.c
 
-EXECUTE = commands.c
+EXECUTE = exec.c \
+		  pre_exec.c
 
 UTILS = core_utils.c \
 		free_utils.c \
 		list_utils.c \
-		str_utils.c
+		list_utils2.c \
+		str_utils.c \
+		str_utils2.c \
+		str_utils3.c
 
 MAIN = minishell.c \
 	   shell.c \
+	   signals.c \
 	   subshell.c \
-	   subshell_utils.c \
-	   signals.c
+	   subshell_utils.c
 
 
 SRC_NAMES =  $(addprefix $(SRC_DIR)/parse/, $(PARSE)) \

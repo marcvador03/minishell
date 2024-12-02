@@ -6,118 +6,52 @@
 /*   By: mfleury <mfleury@student.42barcelona.      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/25 13:59:57 by mfleury           #+#    #+#             */
-/*   Updated: 2024/11/29 19:10:46 by mfleury          ###   ########.fr       */
+/*   Updated: 2024/12/02 19:02:38 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-/*int	*create_fd_pipes(t_pipe *p)
+int	open_redir_fd(t_pipe *p)
 {
-	int	i;
-	int	*fd;
-
-	fd = (int *)ft_calloc(sizeof(int), p->count);
-	if (fd == NULL)
-		return ( NULL);
-	i = 0;
-	while (i < p->count - 1)
+	if (p->r_fd[INPUT] > 2)
 	{
-		fd[i] = (int *)ft_calloc(sizeof(int), 2);
-		if (fd[i] == NULL)
-			return (free_d((void **)fd), set_errno(ENOMEM), NULL);
-		if (pipe(fd[i++]) == -1)
-		{
-			fd[i] = NULL;
-			return (free_d((void **)fd), NULL);
-		}
+		p->r_fd[T_INPUT] = dup(STDIN_FILENO);
+		dup2(p->r_fd[INPUT], STDIN_FILENO);
 	}
-	fd[i] = NULL;
-	return (set_flag(p, 2), fd);
-}*/
-
-int	count_args(char *line)
-{
-	int	n;
-	int	i;
-
-	if (line == NULL)
-		return (0);
-	n = 1;
-	i = 0;
-	while (line[i] != '\0')
+	if (p->r_fd[OUTPUT] > 2)
 	{
-		if (line[i] == 34 || line[i] == 39)
-			i += sh_jump_to(line + i, line[i]);
-		if (line[i] == '\0')
-			break;
-		if (line[i] == ' ')
-		{
-			i += sh_skip(line, ' ');
-			n++;
-		}
-		i++;
+		p->r_fd[T_OUTPUT] = dup(STDOUT_FILENO);
+		dup2(p->r_fd[OUTPUT], STDOUT_FILENO);
 	}
-	return (n);
+	return (0);
 }
 
-char	*get_args(char **line)
+int	close_redir_fd(t_pipe *p)
 {
-	int		i;
-	int		pos;
-	char	*res;
-
-	if (line == NULL)
-		return (NULL);
-	i = 0;
-	pos = 0;
-	res = NULL;
-	while ((*line)[i] != '\0')
+	if (p->r_fd[INPUT] > 2)
 	{
-		if ((*line)[i] == 34 || (*line)[i] == 39)
-			pos = sh_jump_to(*line + i, (*line)[i]);
-		else if ((*line)[i] == ' ')
-			pos = i + sh_skip(*line + i, ' ');
-		if (pos > 0)
-		{
-			res = sh_strcut2(line, 0, pos);
-			return (res);
-		}
-		i++;
+		close(p->r_fd[INPUT]);
+		dup2(p->r_fd[T_INPUT], STDIN_FILENO);
+		close(p->r_fd[T_INPUT]);
 	}
-	return (*line);
+	if (p->r_fd[OUTPUT] > 2)
+	{
+		close(p->r_fd[OUTPUT]);
+		dup2(p->r_fd[T_OUTPUT], STDOUT_FILENO);
+		close(p->r_fd[T_OUTPUT]);
+	}
+	return (0);
 }
 
-char	**create_args(t_pipe *p)
+int	close_pipes(t_pipe *p)
 {
-	char	**args;
-	int		i;
-	int		n;
-
-	p->p_line = sh_strtrim(p->p_line, " ", 0);
-	n = count_args(p->p_line);
-	args = (char **)ft_calloc(sizeof(char *), n + 1);
-	if (args == NULL)
-		return (NULL);
-	i = 0;
-	while (i < n)
+	p = p->head;
+	while (p != NULL)
 	{
-		p->p_line = sh_strtrim(p->p_line, " ", 0);
-		args[i] = get_args(&p->p_line);
-		args[i] = sh_strtrim(args[i], " ", 0);
-		i++;
+		close(p->fd[READ_END]);
+		close(p->fd[WRITE_END]);
+		p = p->next;
 	}
-	args[n] = NULL;
-	return (set_flag(p, 2), args);
+	return (0);
 }
-
-
-/*pid_t	*create_pids(t_pipe *p)
-{
-	pid_t	*pid;
-
-	pid = (pid_t *)ft_calloc(sizeof(pid_t), p->count);
-	if (pid == NULL)
-		return (set_errno(ENOMEM), NULL);
-	return (set_flag(p, 3), pid);
-}*/

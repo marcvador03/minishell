@@ -6,7 +6,7 @@
 /*   By: pmorello <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 12:17:09 by pmorello          #+#    #+#             */
-/*   Updated: 2024/12/02 11:14:13 by mfleury          ###   ########.fr       */
+/*   Updated: 2024/12/02 19:40:10 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,15 +107,8 @@ typedef struct	s_mini
 }	t_mini;
 
 static int	g_status;
-/*minishell base prompt functions*/
-char	**get_cmd_args(char *cmd_in);
-int		exec_cmd(char *cmd, char **args, int pcount, char *envp[]);
-char	*get_input();
-int		start_shell(char *envp[]);
-void	exit_minishell(t_shell *sh, int status);
-int	main_cmd_return(t_shell *sh, int wstatus);
 
-/* built-ins*/
+/* built-ins functions*/
 int 	ft_unset(char **args); 
 int		ft_pwd(char **args);
 int 	ft_export(char **args);
@@ -123,42 +116,34 @@ int		ft_env(char **args);
 int		ft_echo(char **args);
 int 	ft_cd(char **args); 
 
-/*diverse utils functions*/
+/* core utils functions */
+char	*get_full_path(char *arg0, char *envp[]);
+void	set_flag(t_pipe *p, int n);
+void	unset_flag(t_pipe *p, int n);
+/* str utils functions */
+char	*sh_strcut(char *str, int start, int end);
+char	*sh_strcut2(char **str, int start, int end);
+char	*sh_strstrip(char **str, int start, int end);
+void	sh_trim_list_strings(char **str, char *set);
+int		sh_strpos(const char *big, const char *little);
+char	*sh_strnstr(const char *big, const char *little, size_t len);
+char	*sh_strtrim(char *str, char *set, char offset);
+void	sh_strtrim2(char **str, char *set, char offset);
+int		sh_jump_to(char *str, char c);
+int		sh_skip(char *str, char c);
+/* list utils functions */
+t_shell	*sh_lstnew(char *line);
+t_shell	*sh_lstadd_back(t_shell **sh, char *line);
+t_pipe	*p_lstnew(char **line);
+t_pipe	*p_lstadd_back(t_pipe **pipe, char **line);
+/* free utils functions */
 void	free_s(void *ptr);
 void	free_d(void **ptr);
 void	free_pipe(t_pipe *p);
 void	free_sh(t_shell *sh);
-char	*sh_strtrim(char *str, char *set, char offset);
-char	*get_full_path(char *arg0, char *envp[]);
-void	set_errno(int err);
-void	set_flag(t_pipe *p, int n);
-void	unset_flag(t_pipe *p, int n);
-/*list utils */
-t_shell	*sh_lstnew(char *line);
-t_shell	*sh_lstlast(t_shell *sh);
-t_shell	*sh_lstadd_back(t_shell **sh, char *line);
-t_pipe	*p_lstnew(char **line);
-t_pipe	*p_lstlast(t_pipe *pipe);
-t_pipe	*p_lstadd_back(t_pipe **pipe, char **line);
-
-
-/*str utils*/
-int		sh_strpos(const char *big, const char *little);
-char	*sh_strcut(char *str, int start, int end);
-char	*sh_strcut2(char **str, int start, int end);
-char	*sh_strstrip(char **str, int start, int end);
-char	*sh_strnstr(const char *big, const char *little, size_t len);
-char	*sh_strtrim(char *str, char *set, char offset);
-void	sh_strtrim2(char **str, char *set, char offset);
-void	sh_trim_list_strings(char **str, char *set);
-void	clean_spaces(char ***str, char *set); 
-int		sh_jump_to(char *str, char c);
-int		sh_skip(char *str, char c);
-
-/*signal handlers*/
-void 	init_signal(int pid);
-
-/*subshell*/
-int		subshell(t_shell *sh, char *envp[]);
+/* main functions */
+void	exit_minishell(t_shell *sh, int status);
+int		main_cmd_return(t_shell *sh, int wstatus);
+void	init_signal(int pid);
 
 #endif

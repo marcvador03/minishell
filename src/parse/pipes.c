@@ -6,18 +6,14 @@
 /*   By: mfleury <mfleury@student.42barcelona.      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/28 13:53:58 by mfleury           #+#    #+#             */
-/*   Updated: 2024/11/29 19:44:47 by mfleury          ###   ########.fr       */
+/*   Updated: 2024/12/02 19:50:21 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-int		skip_quotes(char *str);
-int		skip_spaces(char *str);
-int		**create_fd_pipes(t_pipe *p);
-char	**create_args(t_pipe *p);
-char	**create_cmd_names(t_pipe *p);
-pid_t	*create_pids(t_pipe *p);
+
 char	**create_redirs(t_pipe *p);
+char	**create_args(t_pipe *p);
 int		get_fdin_redir(t_pipe *p);
 int		get_fdout_redir(t_pipe *p);
 
@@ -35,7 +31,7 @@ int	count_pipes(char *line)
 		if (line[i] == 34 || line[i] == 39)
 			i += sh_jump_to(line + i, line[i]);
 		if (line[i] == '\0')
-			break;
+			break ;
 		if (line[i] == '|')
 		{
 			i += sh_skip(line, ' ');
@@ -46,7 +42,7 @@ int	count_pipes(char *line)
 	return (n);
 }
 
-int	fill_in_pipe(t_pipe *p)
+static int	fill_in_pipe(t_pipe *p)
 {
 	p->redirs = create_redirs(p);
 	p->args = create_args(p);
@@ -87,5 +83,3 @@ int	get_next_pipe(t_pipe *p, char **line)
 	fill_in_pipe(p);
 	return (0);
 }
-
-
