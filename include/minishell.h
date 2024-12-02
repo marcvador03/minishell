@@ -6,7 +6,7 @@
 /*   By: pmorello <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 12:17:09 by pmorello          #+#    #+#             */
-/*   Updated: 2024/12/01 19:03:40 by mfleury          ###   ########.fr       */
+/*   Updated: 2024/12/02 11:14:13 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@
 # include <signal.h>
 # include <sys/types.h>
 # include <sys/wait.h>
+# include <sys/ioctl.h>
 # include <errno.h>
 # include <readline/readline.h>
 # include <readline/history.h>
@@ -155,8 +156,7 @@ int		sh_jump_to(char *str, char c);
 int		sh_skip(char *str, char c);
 
 /*signal handlers*/
-void    signal_handler_main(int sig);
-void    control_c_heredoc(int sig);
+void 	init_signal(int pid);
 
 /*subshell*/
 int		subshell(t_shell *sh, char *envp[]);

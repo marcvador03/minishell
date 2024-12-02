@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/17 15:39:35 by mfleury           #+#    #+#             */
-/*   Updated: 2024/11/29 15:37:39 by mfleury          ###   ########.fr       */
+/*   Updated: 2024/12/02 12:15:53 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,6 +50,7 @@ int	exec_syscmd_fk(char *cmd, char **args, char *envp[])
 	pid_t	pid;
 	
 	t_cmd = get_full_path(cmd, envp);
+	init_signal(0);
 	if (t_cmd == NULL)
 		return (ENOENT);
 	pid = fork();

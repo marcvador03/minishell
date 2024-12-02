@@ -15,7 +15,6 @@ BUILTINS = ft_cd.c \
 		   ft_export.c \
 		   ft_pwd.c \
 		   built_utils.c \
-		   ft_signals.c
 		   #ft_unset.c \
 
 PARSE = prompt_creation.c \
@@ -37,7 +36,8 @@ UTILS = core_utils.c \
 MAIN = minishell.c \
 	   shell.c \
 	   subshell.c \
-	   subshell_utils.c
+	   subshell_utils.c \
+	   signals.c
 
 
 SRC_NAMES =  $(addprefix $(SRC_DIR)/parse/, $(PARSE)) \
