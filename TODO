@@ -12,6 +12,7 @@
 BUGS TO FIX
 1. << EOF does not work in a pipeline - Marc
 2. || seems not to work anymore - Marc
-3. No signal in heredec - Marc
+3. No signal in heredoc - Marc
+4. SIGINT only kill last pipe - Marc
 
 

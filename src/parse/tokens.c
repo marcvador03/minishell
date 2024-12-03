@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/07 14:31:45 by mfleury           #+#    #+#             */
-/*   Updated: 2024/12/02 20:32:13 by mfleury          ###   ########.fr       */
+/*   Updated: 2024/12/02 23:55:18 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ int	get_next_token(t_shell *sh, char *line)
 	return (free_s(line), 0);
 }
 
-static int	exec_token_fork(t_shell *sh, t_shell *head, int level, char *envp[])
+static void	exec_token_fork(t_shell *sh, t_shell *head, int level, char *envp[])
 {
 	pid_t	pid;
 	int		wstatus;
@@ -49,21 +49,18 @@ static int	exec_token_fork(t_shell *sh, t_shell *head, int level, char *envp[])
 	if (pid == 0)
 		exit(execute_tokens(sh, head, ++level, envp));
 	waitpid(pid, &wstatus, 0);
-	return (main_cmd_return(sh, wstatus));
+	return ;
 }
 
 int	execute_tokens(t_shell *sh, t_shell *head, int level, char *envp[])
 {
-	int		errnum;
-
-	errnum = 0;
 	while (sh != NULL)
 	{
 		if (sh->bracket[0] > level)
 			exec_token_fork(sh, head, level, envp);
 		else if (sh->bracket[0] == level)
 		{
-			if (sh->token == 0 || (sh->token == 1 && errnum != 0))
+			if (sh->token == 0 || (sh->token == 1 && g_status != 0))
 			{
 				if (subshell(sh, envp) != 0)
 					perror("minishell: ");

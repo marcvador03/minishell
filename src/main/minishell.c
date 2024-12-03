@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 10:01:23 by mfleury           #+#    #+#             */
-/*   Updated: 2024/12/02 19:36:11 by mfleury          ###   ########.fr       */
+/*   Updated: 2024/12/03 01:29:11 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,15 +14,24 @@
 
 int	start_shell(char *envp[]);
 
-int	main_cmd_return(t_shell *sh, int wstatus)
+void	flush_errors(int err_sig)
 {
-	if (WIFEXITED(wstatus))
+	if (err_sig == -1)
 	{
-		if (sh->pipes->mem_flag & (1 << 7))
-			exit_minishell(sh, EXIT_SUCCESS);
-		if (WEXITSTATUS(wstatus) > 0 && WEXITSTATUS(wstatus) < 255)
-			perror("minishell: ");
+		g_status = errno + 128;
+		perror("minishell: ");
 	}
+	else if (err_sig > 0)
+		g_status = errno + 128;
+	return ;
+}
+
+int	main_cmd_return(int wstatus)
+{
+	if (WIFEXITED(wstatus) != 0)
+		flush_errors(WEXITSTATUS(wstatus));
+	if (WIFSIGNALED(wstatus) != 0)
+		flush_errors(WTERMSIG(wstatus));
 	return (0);
 }
 

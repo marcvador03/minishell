@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/18 09:19:54 by marvin            #+#    #+#             */
-/*   Updated: 2024/12/02 19:31:00 by mfleury          ###   ########.fr       */
+/*   Updated: 2024/12/03 00:48:23 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,8 +53,9 @@ void	init_signal(int pid)
 {
 	struct sigaction	sig;
 
-	ft_bzero(&sig, sizeof(sig));
-	//sig.sa_flags = SA_RESTART;
+	sigemptyset(&sig.sa_mask);
+	//ft_bzero(&sig, sizeof(sig));
+	sig.sa_flags = 0;
 	if (pid == 0)
 	{
 		sig.sa_handler = &signal_handler_child;
@@ -64,7 +65,7 @@ void	init_signal(int pid)
 	else if (pid == 1)
 	{
 		sig.sa_handler = &signal_handler_main;
-		signal(SIGQUIT, SIG_IGN);
+		sigaddset(&sig.sa_mask, SIGQUIT);
 	}
 	sigaction(SIGINT, &sig, NULL);
 	sigaction(SIGTERM, &sig, NULL);

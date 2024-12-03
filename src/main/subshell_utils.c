@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/25 13:59:57 by mfleury           #+#    #+#             */
-/*   Updated: 2024/12/02 19:02:38 by mfleury          ###   ########.fr       */
+/*   Updated: 2024/12/03 01:07:14 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,12 +17,20 @@ int	open_redir_fd(t_pipe *p)
 	if (p->r_fd[INPUT] > 2)
 	{
 		p->r_fd[T_INPUT] = dup(STDIN_FILENO);
+		if (p->r_fd[T_INPUT] == -1)
+			return (-1);
 		dup2(p->r_fd[INPUT], STDIN_FILENO);
+		if (p->r_fd[INPUT] == -1)
+			return (-1);
 	}
 	if (p->r_fd[OUTPUT] > 2)
 	{
 		p->r_fd[T_OUTPUT] = dup(STDOUT_FILENO);
+		if (p->r_fd[T_OUTPUT] == -1)
+			return (-1);
 		dup2(p->r_fd[OUTPUT], STDOUT_FILENO);
+		if (p->r_fd[OUTPUT] == -1)
+			return (-1);
 	}
 	return (0);
 }
