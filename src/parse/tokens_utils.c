@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/07 14:53:29 by mfleury           #+#    #+#             */
-/*   Updated: 2024/12/02 19:32:52 by mfleury          ###   ########.fr       */
+/*   Updated: 2024/12/03 18:41:48 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,7 +92,7 @@ int	check_open_q(char *str)
 			cnt[(int)c]++;
 			i++;
 			while (str[i] != '\0')
-				open_quotes_loop(&cnt[(int)c], str, i, c);
+				open_quotes_loop(&cnt[(int)c], str, i++, c);
 			if (str[i] != '\0')
 				break ;
 		}

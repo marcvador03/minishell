@@ -6,11 +6,30 @@
 /*   By: mfleury <mfleury@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/10 08:52:08 by mfleury           #+#    #+#             */
-/*   Updated: 2024/12/02 19:41:44 by mfleury          ###   ########.fr       */
+/*   Updated: 2024/12/03 23:50:30 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+static int get_rd_loop(char *line, char c)
+{
+	int	i;
+
+	i = 0;
+	while (line[i] != '\0')
+	{
+		if (line[i] == '<' || line[i] == '>')
+			return (127);
+		if (line[i] == ' ')
+		{
+			i = sh_skip(line, ' ');
+			if (line[i] == '<' || line [i] == '>')
+				return (127);
+		}
+	}
+	return (0);
+}
 
 static char	*get_rd(char *line)
 {
@@ -25,7 +44,7 @@ static char	*get_rd(char *line)
 		{
 			if (line[i + 1] == '>')
 				return (">>");
-			else
+			else 
 				return (">");
 		}
 		else if (line[i] == '<')
@@ -89,6 +108,8 @@ char	**create_redirs(t_pipe *p)
 	while (i < n)
 	{
 		redirs[i] = create_redir_init(p, i);
+		if (sh_check_empty(redirs[i]) == -1)
+			return (set_gstatus(203), NULL);
 		i++;
 	}
 	redirs[n] = NULL;

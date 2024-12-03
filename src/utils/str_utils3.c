@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/02 16:56:07 by mfleury           #+#    #+#             */
-/*   Updated: 2024/12/02 23:47:56 by mfleury          ###   ########.fr       */
+/*   Updated: 2024/12/03 18:53:55 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,15 +31,17 @@ int	sh_jump_to(char *str, char c)
 int	sh_jump_to2(char **str, char c)
 {
 	int	i;
+	char	*ptr;
 
 	if (*str == NULL)
 		return (0);
 	i = 1;
-	while (*str[i] != '\0')
+	ptr = *str;
+	while (ptr[i] != '\0')
 	{
-		if (*str[i] == c)
+		if (ptr[i] == c)
 		{
-			*str = *str + ++i;
+			*str = ptr + ++i;
 			return (i);
 		}
 		i++;
@@ -57,4 +59,13 @@ int	sh_skip(char *str, char c)
 	while (str[i] == c)
 		i++;
 	return (i);
+}
+
+int	sh_check_empty(char *str)
+{
+	if (str == NULL)
+		return (0);
+	if (ft_strncmp(str, "", ft_strlen(str)) == 0)
+		return (-1);
+	return (0);	
 }

@@ -6,7 +6,7 @@
 /*   By: pmorello <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 12:17:09 by pmorello          #+#    #+#             */
-/*   Updated: 2024/12/03 13:16:37 by mfleury          ###   ########.fr       */
+/*   Updated: 2024/12/03 17:15:44 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,7 @@
 # define T_OUTPUT 3
 
 extern char	**environ;//variable global para la funcion de ft_env
+extern int	g_status;
 
 /*Enum to match command names input with a number*/
 typedef enum cmd_enum
@@ -106,7 +107,6 @@ typedef struct	s_mini
 	t_env	*env;
 }	t_mini;
 
-static int	g_status;
 
 /* built-ins functions*/
 int 	ft_unset(char **args); 
@@ -120,6 +120,7 @@ int 	ft_cd(char **args);
 char	*get_full_path(char *arg0, char *envp[]);
 void	set_flag(t_pipe *p, int n);
 void	unset_flag(t_pipe *p, int n);
+void	set_gstatus(int err_code);
 /* str utils functions */
 char	*sh_strcut(char *str, int start, int end);
 char	*sh_strcut2(char **str, int start, int end);
@@ -132,6 +133,7 @@ void	sh_strtrim2(char **str, char *set, char offset);
 int		sh_jump_to(char *str, char c);
 int		sh_jump_to2(char **str, char c);
 int		sh_skip(char *str, char c);
+int		sh_check_empty(char *str);
 /* list utils functions */
 t_shell	*sh_lstnew(char *line);
 t_shell	*sh_lstadd_back(t_shell **sh, char *line);
@@ -147,5 +149,6 @@ void	exit_minishell(t_shell *sh, int status);
 int		main_cmd_return(char *cmd, int wstatus);
 void	init_signal(int pid);
 void	flush_errors(char *cmd, int err_sig);
+void	custom_errors(int errnum);
 
 #endif

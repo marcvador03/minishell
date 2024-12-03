@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/28 13:53:58 by mfleury           #+#    #+#             */
-/*   Updated: 2024/12/02 19:50:21 by mfleury          ###   ########.fr       */
+/*   Updated: 2024/12/03 16:54:59 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,7 +72,8 @@ int	get_next_pipe(t_pipe *p, char **line)
 			p->p_line = sh_strtrim(p->p_line, " ", 0);
 			*line = sh_strstrip(line, 0, i);
 			*line = sh_strtrim(*line, "|", 0);
-			fill_in_pipe(p);
+			if (fill_in_pipe(p) == -1)
+				return (-1);
 			return (0);
 		}
 		i++;

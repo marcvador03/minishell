@@ -6,13 +6,14 @@
 /*   By: mfleury <mfleury@student.42barcelona.      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 10:01:23 by mfleury           #+#    #+#             */
-/*   Updated: 2024/12/03 16:25:08 by mfleury          ###   ########.fr       */
+/*   Updated: 2024/12/03 17:16:07 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
 int	start_shell(char *envp[]);
+int	g_status = 0;
 
 void	custom_errors(int errnum)
 {
@@ -21,6 +22,8 @@ void	custom_errors(int errnum)
 		ft_putendl_fd("Missing bracket ( or )", STDERR_FILENO);
 	if (errnum == 202)
 		ft_putendl_fd("Error during memory allocation malloc", STDERR_FILENO);
+	if (errnum == 203)
+		ft_putendl_fd("Error near redirection token", STDERR_FILENO);
 }
 
 void	flush_errors(char *cmd, int err_sig)

@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/16 16:32:42 by mfleury           #+#    #+#             */
-/*   Updated: 2024/11/19 14:40:38 by mfleury          ###   ########.fr       */
+/*   Updated: 2024/12/03 17:08:16 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,6 +60,11 @@ char	*get_full_path(char *arg0, char *envp[])
 void	set_errno(int err_code)
 {
 	errno = err_code;
+}
+
+void	set_gstatus(int err_code)
+{
+	g_status = err_code;
 }
 
 void	set_flag(t_pipe *p, int n)
