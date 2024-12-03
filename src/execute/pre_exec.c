@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/02 18:58:50 by mfleury           #+#    #+#             */
-/*   Updated: 2024/12/03 01:35:45 by mfleury          ###   ########.fr       */
+/*   Updated: 2024/12/03 13:18:07 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,7 @@ static int	run_parent(t_pipe *p)
 	while (p != NULL)
 	{
 		waitpid(p->pid, &wstatus, 0);
-		main_cmd_return(wstatus);
+		main_cmd_return(p->args[0], wstatus);
 		p = p->next;
 	}
 	rl_replace_line("", 0);
@@ -88,7 +88,6 @@ int	single_cmd(t_pipe *p, char *envp[])
 		return (close_redir_fd(p), -1);
 	exec_cmd(p->args[0], p->args, 1, envp);
 	close_redir_fd(p);
-	flush_errors(g_status);
 	rl_replace_line("", 0);
 	rl_on_new_line();
 	return (g_status);

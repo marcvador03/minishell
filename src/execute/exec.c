@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/17 15:39:35 by mfleury           #+#    #+#             */
-/*   Updated: 2024/12/03 00:58:48 by mfleury          ###   ########.fr       */
+/*   Updated: 2024/12/03 13:20:44 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ static t_cmd_enum	str_to_enum(const char *str)
 	return (-1);
 }
 
-static int	exec_syscmd(char *cmd, char **args, char *envp[])
+static int	exec_syscmd_multiple(char *cmd, char **args, char *envp[])
 {
 	char	*t_cmd;
 	int		errnum;
@@ -40,9 +40,10 @@ static int	exec_syscmd(char *cmd, char **args, char *envp[])
 	return (errnum);
 }
 
-static int	exec_syscmd_fk(char *cmd, char **args, char *envp[])
+static int	exec_syscmd_single(char *cmd, char **args, char *envp[])
 {
 	char	*t_cmd;
+	int		wstatus;
 	pid_t	pid;
 
 	init_signal(0);
@@ -54,15 +55,17 @@ static int	exec_syscmd_fk(char *cmd, char **args, char *envp[])
 		return (free_s(t_cmd), -1);
 	if (pid == 0)
 		return (execve(t_cmd, args, envp));
-	waitpid(pid, NULL, 0);
+	waitpid(pid, &wstatus, 0);
+	main_cmd_return(t_cmd, wstatus);
 	free_s(t_cmd);
 	return (0);
 }
 
-void	exec_cmd(char *cmd, char **args, int pcount, char *envp[])
+int	exec_cmd(char *cmd, char **args, int pcount, char *envp[])
 {
 	int			x;
 	t_func_arr	call_cmd[6];
+	int			wstatus;
 
 	call_cmd[0] = &ft_cd;
 	call_cmd[1] = &ft_pwd;
@@ -72,10 +75,12 @@ void	exec_cmd(char *cmd, char **args, int pcount, char *envp[])
 	call_cmd[5] = &ft_echo;
 	x = str_to_enum(cmd);
 	if (x != -1)
-		g_status = call_cmd[x](args);
+		wstatus = call_cmd[x](args);
 	else if (pcount == 1)
-		g_status = exec_syscmd_fk(cmd, args, envp);
+		wstatus = exec_syscmd_single(cmd, args, envp);
 	else
-		g_status = exec_syscmd(cmd, args, envp);
-	return ;
+		wstatus = exec_syscmd_multiple(cmd, args, envp);
+	if (wstatus == -1)
+		flush_errors(cmd, wstatus);
+	return (wstatus);	
 }

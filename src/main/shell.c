@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/07 15:12:52 by mfleury           #+#    #+#             */
-/*   Updated: 2024/12/02 19:50:02 by mfleury          ###   ########.fr       */
+/*   Updated: 2024/12/03 16:20:33 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,11 +101,11 @@ int	start_shell(char *envp[])
 	if (line == NULL)
 		exit_minishell(sh, 0);
 	if (check_open_q(line) == -1)
-		return (free_s((void *)line), 1);
+		return (free_s((void *)line), 201);
 	n = count_tokens(line);
 	sh = fill_sh(sh, line, n);
 	if (sh == NULL)
-		return (free_s((void *)line), 1);
+		return (free_s((void *)line), 202);
 	free_s((void *)line);
 	head = sh->head;
 	if (execute_tokens(sh, head, 0, envp) != 0)
