@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/07 15:12:52 by mfleury           #+#    #+#             */
-/*   Updated: 2024/12/03 16:48:20 by mfleury          ###   ########.fr       */
+/*   Updated: 2024/12/04 14:47:27 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,15 +57,25 @@ static t_shell	*fill_sh(t_shell *sh, char *line, int n)
 static char	*create_prompt(void)
 {
 	char	*user;
+	char	*tmp;
 	char	*res;
+	char	*status;
 
 	user = getenv("USER");
 	if (user == NULL)
 		return (NULL);
-	res = ft_strjoin(user, "$ ");
-	if (res == NULL)
+	res = ft_strjoin(user, "$(");
+	status = ft_itoa(g_status);
+	if (res == NULL || status == NULL)
 		return (NULL);
-	return (res);
+	tmp = ft_strjoin(res, status);
+	if (tmp == NULL)
+		return (free_s(res), free_s(status), NULL);
+	free_s(res);
+	res = ft_strjoin(tmp, ")> ");
+	if (res == NULL)
+		return (free_s(tmp), free_s(status), NULL);
+	return (free_s(tmp), free_s(status), res);
 }
 
 static char	*get_input(void)

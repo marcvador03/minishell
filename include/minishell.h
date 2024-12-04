@@ -6,7 +6,7 @@
 /*   By: pmorello <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 12:17:09 by pmorello          #+#    #+#             */
-/*   Updated: 2024/12/03 17:15:44 by mfleury          ###   ########.fr       */
+/*   Updated: 2024/12/04 16:34:25 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -125,7 +125,8 @@ void	set_gstatus(int err_code);
 char	*sh_strcut(char *str, int start, int end);
 char	*sh_strcut2(char **str, int start, int end);
 char	*sh_strstrip(char **str, int start, int end);
-void	sh_trim_list_strings(char **str, char *set);
+void	sh_trim_list_strings(char **str);
+char	*sh_trim_strings(char *s);
 int		sh_strpos(const char *big, const char *little);
 char	*sh_strnstr(const char *big, const char *little, size_t len);
 char	*sh_strtrim(char *str, char *set, char offset);

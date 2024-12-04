@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/28 13:53:58 by mfleury           #+#    #+#             */
-/*   Updated: 2024/12/03 16:54:59 by mfleury          ###   ########.fr       */
+/*   Updated: 2024/12/04 15:04:21 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,8 +48,8 @@ static int	fill_in_pipe(t_pipe *p)
 	p->args = create_args(p);
 	if (p->redirs == NULL || p->args == NULL)
 		return (free_pipe(p), -1);
-	sh_trim_list_strings(p->args, "\"");
-	sh_trim_list_strings(p->redirs, "\"");
+	sh_trim_list_strings(p->args);
+	sh_trim_list_strings(p->redirs);
 	p->r_fd[INPUT] = get_fdin_redir(p);
 	p->r_fd[OUTPUT] = get_fdout_redir(p);
 	return (0);
@@ -81,6 +81,5 @@ int	get_next_pipe(t_pipe *p, char **line)
 	p->p_line = sh_strcut(*line, 0, i);
 	p->p_line = sh_strtrim(p->p_line, " ", 0);
 	*line = sh_strstrip(line, 0, i);
-	fill_in_pipe(p);
-	return (0);
+	return (fill_in_pipe(p));
 }

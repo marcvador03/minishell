@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/22 16:08:01 by mfleury           #+#    #+#             */
-/*   Updated: 2024/12/03 17:06:54 by mfleury          ###   ########.fr       */
+/*   Updated: 2024/12/04 14:41:28 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ int	subshell(t_shell *sh, char *envp[])
 	p = NULL;
 	sh->p_count = count_pipes(sh->s_line);
 	p = fill_pipes(p, sh->s_line, sh->p_count);
-	if (p->p_line == NULL)
+	if (p == NULL /*|| (p != NULL && p->p_line == NULL)*/)
 		return (-1);
 	sh->pipes = p->head;
 	if (sh->p_count == 1)

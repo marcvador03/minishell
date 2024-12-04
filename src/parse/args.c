@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/02 18:52:16 by mfleury           #+#    #+#             */
-/*   Updated: 2024/12/02 19:40:10 by mfleury          ###   ########.fr       */
+/*   Updated: 2024/12/04 16:48:04 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,10 +48,11 @@ static char	*get_args(char **line)
 	i = 0;
 	pos = 0;
 	res = NULL;
+	sh_trim_strings(*line);
 	while ((*line)[i] != '\0')
 	{
 		if ((*line)[i] == 34 || (*line)[i] == 39)
-			pos = sh_jump_to(*line + i, (*line)[i]);
+			pos = i + sh_jump_to(*line + i, (*line)[i]);
 		else if ((*line)[i] == ' ')
 			pos = i + sh_skip(*line + i, ' ');
 		if (pos > 0)
@@ -81,7 +82,11 @@ char	**create_args(t_pipe *p)
 		p->p_line = sh_strtrim(p->p_line, " ", 0);
 		args[i] = get_args(&p->p_line);
 		args[i] = sh_strtrim(args[i], " ", 0);
-		i++;
+		sh_trim_strings(args[i]); 
+		if (sh_check_empty(args[i]) != 0)
+			free_s(args[i]);
+		else
+			i++;
 	}
 	args[n] = NULL;
 	return (set_flag(p, 2), args);

@@ -6,29 +6,32 @@
 /*   By: mfleury <mfleury@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/10 08:52:08 by mfleury           #+#    #+#             */
-/*   Updated: 2024/12/03 23:50:30 by mfleury          ###   ########.fr       */
+/*   Updated: 2024/12/04 12:07:02 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-static int get_rd_loop(char *line, char c)
+static char	*get_rd_check(char *line, char *res)
 {
-	int	i;
+	int		i;
 
 	i = 0;
 	while (line[i] != '\0')
 	{
 		if (line[i] == '<' || line[i] == '>')
-			return (127);
-		if (line[i] == ' ')
+			return (NULL);
+		else if (line[i] == ' ')
 		{
 			i = sh_skip(line, ' ');
 			if (line[i] == '<' || line [i] == '>')
-				return (127);
+				return (NULL);
 		}
+		else
+			return (res);
+		i++;
 	}
-	return (0);
+	return (res);
 }
 
 static char	*get_rd(char *line)
@@ -43,20 +46,20 @@ static char	*get_rd(char *line)
 		if (line[i] == '>')
 		{
 			if (line[i + 1] == '>')
-				return (">>");
+				return (get_rd_check(line + i + 2, ">>"));
 			else 
-				return (">");
+				return (get_rd_check(line + i + 1, ">"));
 		}
 		else if (line[i] == '<')
 		{
 			if (line[i + 1] == '<')
-				return ("<<");
+				return (get_rd_check(line + i + 2, "<<"));
 			else
-				return ("<");
+				return (get_rd_check(line + i + 1, "<"));
 		}
 		i++;
 	}
-	return (NULL);
+	return ("");
 }
 
 static int	count_redir(char *line)
@@ -68,8 +71,10 @@ static int	count_redir(char *line)
 	if (line == NULL)
 		return (n);
 	rd = get_rd(line);
-	if (rd == NULL)
+	if (sh_check_empty(rd) == -1)
 		return (n);
+	else if (rd == NULL)
+		return (-1);
 	else if (rd != NULL)
 		n += count_redir(line + sh_strpos(line, rd) + ft_strlen(rd));
 	return (++n);
@@ -100,6 +105,8 @@ char	**create_redirs(t_pipe *p)
 
 	p->p_line = sh_strtrim(p->p_line, " ", 0);
 	n = count_redir(p->p_line);
+	if (n == -1)
+		return (set_gstatus(203), NULL);
 	redirs = (char **)ft_calloc(sizeof(char *), n + 1);
 	p->rd = (char **)ft_calloc(sizeof(char *), n + 1);
 	if (redirs == NULL || p->rd == NULL)
