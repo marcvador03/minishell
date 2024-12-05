@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/07 14:41:31 by mfleury           #+#    #+#             */
-/*   Updated: 2024/12/05 16:42:58 by mfleury          ###   ########.fr       */
+/*   Updated: 2024/12/05 22:21:48 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,9 +110,9 @@ static int	count_quote_sections(char *s)
 		{
 			if (i != pos)
 				n++;
-			i += sh_jump_to(s, s[i]);
+			i += sh_jump_to(s + i, s[i]);
 			n++;
-			pos = i;
+			pos = i + 1;
 			if (s[i] == ' ' || s[i] == '\0')
 				break;
 		}
@@ -124,17 +124,18 @@ static int	count_quote_sections(char *s)
 
 }
 
-static char	*split_unquotes(char *s, int i, int pos, int *j)
+static char	*split_unquotes(char *s, int i, int *pos, int *j)
 {
 	char	*res;
 
 	res = NULL;
-	if (i != pos)
+	if (i != *pos)
 	{
-		res = ft_substr(s, pos, i - pos);
+		res = ft_substr(s, *pos, i - *pos);
 		if (res == NULL)
 			return (NULL);
 		*j = *j + 1;
+		*pos = i;
 	}
 	return (res);
 }
@@ -152,17 +153,21 @@ static void	split_quotes_loop(char *s, char **res)
 	{
 		if (s[i] == 34 || s[i] == 39)
 		{
-			(res[j]) = split_unquotes(s, i, pos, &j);
-			pos = sh_jump_to(s + i + 1, s[i]) + 1;
-//			pos = sh_skip(s + pos, s[i]);
-			(res[j]) = ft_substr(s, i + 1, pos - i - 2); 
-			if (res[j++] == NULL)
-				return ;
+			res[j] = split_unquotes(s, i, &pos, &j);
+			pos += sh_jump_to(s + i, s[i]);
+			i++;
+			//i += sh_skip(s + i, s[i]);
+			if (i != pos)
+			{
+				(res[j]) = ft_substr(s, i, pos - i - 1); 
+				if (res[j++] == NULL)
+					return ;
+			}
 			i = pos - 1;
 		}
 		i++;
 	}
-	(res[j]) = split_unquotes(s, i, pos, &j);
+	(res[j]) = split_unquotes(s, i, &pos, &j);
 }
 
 char	**split_quotes(char *s)
@@ -191,7 +196,9 @@ char	*sh_trim_strings(char *s)
 	i = 0;
 	len = 0;
 	while (res[i] != NULL)
+	{
 		len += ft_strlen(res[i++]);
+	}
 	cat_str = (char *)ft_calloc(sizeof(char), len + 1);
 	if (cat_str == NULL)
 		return (free_d((void **)res), NULL);
