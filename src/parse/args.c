@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/02 18:52:16 by mfleury           #+#    #+#             */
-/*   Updated: 2024/12/04 16:48:04 by mfleury          ###   ########.fr       */
+/*   Updated: 2024/12/05 16:12:49 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,24 +40,21 @@ static int	count_args(char *line)
 static char	*get_args(char **line)
 {
 	int		i;
-	int		pos;
 	char	*res;
 
 	if (line == NULL)
 		return (NULL);
 	i = 0;
-	pos = 0;
 	res = NULL;
-	sh_trim_strings(*line);
+	//sh_trim_strings(*line);
 	while ((*line)[i] != '\0')
 	{
 		if ((*line)[i] == 34 || (*line)[i] == 39)
-			pos = i + sh_jump_to(*line + i, (*line)[i]);
-		else if ((*line)[i] == ' ')
-			pos = i + sh_skip(*line + i, ' ');
-		if (pos > 0)
+			i += sh_jump_to(*line + i, (*line)[i]);
+		if ((*line)[i] == ' ')
 		{
-			res = sh_strcut2(line, 0, pos);
+			i += sh_skip(*line + i, ' ');
+			res = sh_strcut2(line, 0, i);
 			return (res);
 		}
 		i++;
