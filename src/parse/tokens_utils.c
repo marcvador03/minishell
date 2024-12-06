@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/07 14:53:29 by mfleury           #+#    #+#             */
-/*   Updated: 2024/12/03 18:41:48 by mfleury          ###   ########.fr       */
+/*   Updated: 2024/12/06 10:35:17 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,37 +68,25 @@ int	count_tokens(char *line)
 	return (n);
 }
 
-static void	open_quotes_loop(int *cnt, char *str, int i, char c)
+int	check_open_quotes(char *str)
 {
-	if (str[i++] == c)
-		*cnt = *cnt + 1;
-	return ;
-}
-
-int	check_open_q(char *str)
-{
-	int		i;
-	int		cnt[40];
-	char	c;
+	int	i;
+	int	x;
 
 	i = 0;
-	cnt[39] = 0;
-	cnt[34] = 0;
-	while (str[i] != '\0')
+	while (str[i] != 0)
 	{
-		if (str[i] == 39 || str[i] == 34)
+		if (str[i] == 34 || str[i] == 39)
 		{
-			c = str[i];
-			cnt[(int)c]++;
-			i++;
-			while (str[i] != '\0')
-				open_quotes_loop(&cnt[(int)c], str, i++, c);
-			if (str[i] != '\0')
-				break ;
+			x = sh_jump_to(str + i, str[i]);
+			if (x == 0)
+				return (-1);
+			else
+				i += x;	
 		}
-		i++;
+		else
+			i++;
 	}
-	if (cnt[39] % 2 != 0 || cnt[34] % 2 != 0)
-		return (-1);
 	return (0);
+	
 }

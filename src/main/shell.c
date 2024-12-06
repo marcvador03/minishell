@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/07 15:12:52 by mfleury           #+#    #+#             */
-/*   Updated: 2024/12/04 14:47:27 by mfleury          ###   ########.fr       */
+/*   Updated: 2024/12/06 10:45:43 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 char	*get_tk(char *line);
 int		count_tokens(char *line);
-int		check_open_q(char *str);
+int		check_open_quotes(char *str);
 int		execute_tokens(t_shell *sh, t_shell *head, int level, char *envp[]);
 
 static void	init_data_brackets(t_shell *tmp, int *a, int *b)
@@ -110,12 +110,12 @@ int	start_shell(char *envp[])
 	line = get_input();
 	if (line == NULL)
 		exit_minishell(sh, 0);
-	if (check_open_q(line) == -1)
-		return (free_s((void *)line), 201);
+	if (check_open_quotes(line) == -1)
+		return (free_s((void *)line), set_gstatus(201), -1);
 	n = count_tokens(line);
 	sh = fill_sh(sh, line, n);
 	if (sh == NULL)
-		return (free_s((void *)line), 202);
+		return (free_s((void *)line), set_gstatus(202), -1);
 	free_s((void *)line);
 	head = sh->head;
 	if (sh_check_empty(sh->s_line) == -1)

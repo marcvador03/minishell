@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/02 18:52:16 by mfleury           #+#    #+#             */
-/*   Updated: 2024/12/05 16:12:49 by mfleury          ###   ########.fr       */
+/*   Updated: 2024/12/05 23:01:39 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,6 @@ static char	*get_args(char **line)
 		return (NULL);
 	i = 0;
 	res = NULL;
-	//sh_trim_strings(*line);
 	while ((*line)[i] != '\0')
 	{
 		if ((*line)[i] == 34 || (*line)[i] == 39)

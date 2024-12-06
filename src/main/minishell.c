@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 10:01:23 by mfleury           #+#    #+#             */
-/*   Updated: 2024/12/03 17:16:07 by mfleury          ###   ########.fr       */
+/*   Updated: 2024/12/06 10:46:44 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ void	custom_errors(int errnum)
 {
 	g_status = errnum;
 	if (errnum == 201)
-		ft_putendl_fd("Missing bracket ( or )", STDERR_FILENO);
+		ft_putendl_fd("Missing quotes \" or \'", STDERR_FILENO);
 	if (errnum == 202)
 		ft_putendl_fd("Error during memory allocation malloc", STDERR_FILENO);
 	if (errnum == 203)
@@ -79,6 +79,6 @@ int	main(int argc, char *argv[], char *envp[])
 		exit_minishell(NULL, success);*/
 	while (1)
 		if (start_shell(envp) != 0)
-			perror("minishell: ");
+			flush_errors(NULL, g_status);
 	return (0);
 }
