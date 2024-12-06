@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/07 15:12:52 by mfleury           #+#    #+#             */
-/*   Updated: 2024/12/06 10:54:56 by mfleury          ###   ########.fr       */
+/*   Updated: 2024/12/06 11:37:07 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,7 +94,7 @@ static char	*get_input(void)
 		return (free_s(prompt), free_s(line), set_gstatus(0), get_input());
 	add_history(line);
 	line2 = ft_strjoin("&&", line);
-	return (free_s(prompt), free_s(line), line2);
+	return (free_s(prompt), free_s(line), set_gstatus(0), line2);
 }
 
 int	start_shell(char *envp[])
