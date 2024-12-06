@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/07 15:12:52 by mfleury           #+#    #+#             */
-/*   Updated: 2024/12/06 10:45:43 by mfleury          ###   ########.fr       */
+/*   Updated: 2024/12/06 10:54:56 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,7 +91,7 @@ static char	*get_input(void)
 	if (line == NULL)
 		return (free_s(prompt), NULL);
 	else if (ft_strlen(line) == 0 && line[0] == '\0')
-		return (free_s(prompt), free_s(line), get_input());
+		return (free_s(prompt), free_s(line), set_gstatus(0), get_input());
 	add_history(line);
 	line2 = ft_strjoin("&&", line);
 	return (free_s(prompt), free_s(line), line2);
