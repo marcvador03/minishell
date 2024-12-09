@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/07 14:31:45 by mfleury           #+#    #+#             */
-/*   Updated: 2024/12/06 11:52:28 by mfleury          ###   ########.fr       */
+/*   Updated: 2024/12/09 14:10:19 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ int	get_next_token(t_shell *sh, char *line)
 	tk2 = get_tk(line);
 	sh->s_line = sh_strcut(line, 0, sh_strpos(line, tk2));
 	sh->s_line = sh_strtrim(sh->s_line, " ", 0);
-	if (sh_check_empty(sh->s_line) == 0)
+	if (sh_check_empty(sh->s_line) != 0)
 		return (free_s(line), set_gstatus(204), -1);
 	count_brackets(sh, sh->s_line);
 	sh->s_line = sh_strtrim(sh->s_line, "(", 0);
