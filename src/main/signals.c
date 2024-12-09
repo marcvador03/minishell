@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/18 09:19:54 by marvin            #+#    #+#             */
-/*   Updated: 2024/12/03 00:48:23 by mfleury          ###   ########.fr       */
+/*   Updated: 2024/12/09 15:23:33 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@ static void	signal_handler_main(int sig)
 		rl_replace_line("", 0);
 		rl_on_new_line();
 		rl_redisplay();
+		g_status = sig + 128;
 	}
 	return ;
 }
@@ -30,11 +31,13 @@ static void	signal_handler_child(int sig)
 	{
 		rl_replace_line("", 0);
 		rl_on_new_line();
+		g_status = sig + 128;
 	}
 	else if (sig == SIGQUIT)
 	{
 		//ioctl(STDIN_FILENO, TIOCSTI, '\n');
 		//write(STDIN_FILENO, "Quit: ", 7);
+		g_status = sig + 128;
 		printf("Quit: %d\n", g_status);
 	}
 	return ;
