@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/18 17:20:19 by mfleury           #+#    #+#             */
-/*   Updated: 2024/12/03 01:05:34 by mfleury          ###   ########.fr       */
+/*   Updated: 2024/12/09 19:56:42 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,9 +37,9 @@ int	get_fdin_redir(t_pipe *p)
 	fd = -2;
 	while (p->redirs[i] != NULL)
 	{
-		if (fd != -2)
-			close(fd);
 		rd = get_rd_flag(p->rd[i]);
+		if (fd != -2 && (rd == 2 || rd == 4))
+			close(fd);
 		if (rd == 2)
 			fd = open(p->redirs[i], O_RDONLY, 0700);
 		else if (rd == 4)
@@ -61,9 +61,9 @@ int	get_fdout_redir(t_pipe *p)
 	fd = -2;
 	while (p->redirs[i] != NULL)
 	{
-		if (fd != -2)
-			close(fd);
 		rd = get_rd_flag(p->rd[i]);
+		if (fd != -2 && (rd == 1 || rd == 3))
+			close(fd);
 		if (rd == 3)
 			fd = open(p->redirs[i], O_CREAT | O_RDWR | O_APPEND, 0644);
 		else if (rd == 1)
