@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/07 15:12:52 by mfleury           #+#    #+#             */
-/*   Updated: 2024/12/06 11:37:07 by mfleury          ###   ########.fr       */
+/*   Updated: 2024/12/09 14:34:38 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -115,7 +115,7 @@ int	start_shell(char *envp[])
 	n = count_tokens(line);
 	sh = fill_sh(sh, line, n);
 	if (sh == NULL)
-		return (free_s((void *)line), set_gstatus(202), -1);
+		return (free_s((void *)line), -1);
 	free_s((void *)line);
 	head = sh->head;
 	if (sh_check_empty(sh->s_line) == -1)

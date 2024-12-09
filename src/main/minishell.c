@@ -6,11 +6,12 @@
 /*   By: mfleury <mfleury@student.42barcelona.      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 10:01:23 by mfleury           #+#    #+#             */
-/*   Updated: 2024/12/06 11:51:39 by mfleury          ###   ########.fr       */
+/*   Updated: 2024/12/09 15:10:49 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+#include "error_minishell.h"
 
 int	start_shell(char *envp[]);
 int	g_status = 0;
@@ -19,13 +20,13 @@ void	custom_errors(int errnum)
 {
 	g_status = errnum;
 	if (errnum == 201)
-		ft_putendl_fd("Missing quotes \" or \'", STDERR_FILENO);
+		ft_putendl_fd(E_201, STDERR_FILENO);
 	if (errnum == 202)
-		ft_putendl_fd("Error during memory allocation malloc", STDERR_FILENO);
+		ft_putendl_fd(E_202, STDERR_FILENO);
 	if (errnum == 203)
-		ft_putendl_fd("Error near redirection token", STDERR_FILENO);
+		ft_putendl_fd(E_203, STDERR_FILENO);
 	if (errnum == 204)
-		ft_putendl_fd("Error near token && or ||", STDERR_FILENO);
+		ft_putendl_fd(E_204, STDERR_FILENO);
 }
 
 void	flush_errors(char *cmd, int err_sig)
