@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/10 08:52:08 by mfleury           #+#    #+#             */
-/*   Updated: 2024/12/06 11:06:06 by mfleury          ###   ########.fr       */
+/*   Updated: 2024/12/09 18:55:53 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,11 +84,14 @@ static char	*create_redir_init(t_pipe *p, int i)
 {
 	int		pos[2];
 	char	*s_redirs;
+	char	*t_redirs;
 	int		len;
 
 	p->rd[i] = get_rd(p->p_line);
 	pos[0] = sh_strpos(p->p_line, p->rd[i]) + ft_strlen(p->rd[i]);
-	pos[1] = sh_strpos(ft_strtrim(p->p_line + pos[0], " "), " ") + 1; //leak
+	t_redirs = ft_strtrim(p->p_line + pos[0], " ");
+	pos[1] = sh_strpos(t_redirs, " ") + 1;
+	free_s(t_redirs);
 	s_redirs = sh_strcut(p->p_line, pos[0], pos[0] + pos[1]);
 	s_redirs = sh_strtrim(s_redirs, " ", 0);
 	len = ft_strlen(p->rd[i]);
@@ -101,6 +104,7 @@ char	**create_redirs(t_pipe *p)
 {
 	int		i;
 	char	**redirs;
+	//char	*t_redirs;
 	int		n;
 
 	p->p_line = sh_strtrim(p->p_line, " ", 0);
@@ -115,8 +119,9 @@ char	**create_redirs(t_pipe *p)
 	while (i < n)
 	{
 		redirs[i] = create_redir_init(p, i);
-		redirs[i] = sh_strtrim(redirs[i], " ", 0);
-		sh_trim_strings(redirs[i]); 
+		//redirs[i] = ft_strtrim(t_redirs, " ");
+		//free_s(t_redirs);
+		redirs[i] = sh_trim_strings(redirs[i]); 
 		if (sh_check_empty(redirs[i]) == -1)
 			return (set_gstatus(203), NULL);
 		i++;

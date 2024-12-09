@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/02 18:52:16 by mfleury           #+#    #+#             */
-/*   Updated: 2024/12/05 23:01:39 by mfleury          ###   ########.fr       */
+/*   Updated: 2024/12/09 15:43:22 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,7 +78,7 @@ char	**create_args(t_pipe *p)
 		p->p_line = sh_strtrim(p->p_line, " ", 0);
 		args[i] = get_args(&p->p_line);
 		args[i] = sh_strtrim(args[i], " ", 0);
-		sh_trim_strings(args[i]); 
+		args[i] = sh_trim_strings(args[i]); 
 		if (sh_check_empty(args[i]) != 0)
 			free_s(args[i]);
 		else

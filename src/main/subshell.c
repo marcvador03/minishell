@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/22 16:08:01 by mfleury           #+#    #+#             */
-/*   Updated: 2024/12/04 14:41:28 by mfleury          ###   ########.fr       */
+/*   Updated: 2024/12/09 18:26:02 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,20 +23,21 @@ static t_pipe	*fill_pipes(t_pipe *p, char *line, int n)
 	char	*t_line;
 
 	i = 0;
-	t_line = ft_strdup(line);
+	//t_line = ft_strdup(line);
 	while (i < n)
 	{
-		sh_strtrim2(&t_line, " ", 0); // leak
+		t_line = ft_strtrim(line, " ");
+		//free_s(line);// leak
 		if (p == NULL)
-			tmp = p_lstnew(&t_line);
+			tmp = p_lstnew(t_line);
 		else
-			tmp = p_lstadd_back(&p, &t_line);
+			tmp = p_lstadd_back(&p, t_line);
 		if (tmp == NULL)
-			return (free_s((void *)t_line), NULL);
+			return (free_s(t_line), NULL);
 		p = tmp->head;
 		i++;
 	}
-	return (free_s((void *)t_line), tmp->head);
+	return (free_s(t_line), tmp->head);
 }
 
 int	subshell(t_shell *sh, char *envp[])
@@ -49,6 +50,7 @@ int	subshell(t_shell *sh, char *envp[])
 	if (p == NULL /*|| (p != NULL && p->p_line == NULL)*/)
 		return (-1);
 	sh->pipes = p->head;
+	//free_s(sh->s_line);
 	if (sh->p_count == 1)
 	{
 		if (ft_strncmp(p->args[0], "exit", 4) == 0)

@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/07 14:41:31 by mfleury           #+#    #+#             */
-/*   Updated: 2024/12/06 11:29:05 by mfleury          ###   ########.fr       */
+/*   Updated: 2024/12/09 18:39:45 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -187,11 +187,11 @@ char	*sh_trim_strings(char *s)
 	}
 	cat_str = (char *)ft_calloc(sizeof(char), len + 1);
 	if (cat_str == NULL)
-		return (free_d((void **)res), NULL);
+		return (free_d((void **)res), free_s(s), NULL);
 	i = 0;
 	while (res[i] != NULL)
 		ft_strlcat(cat_str, res[i++], len + 1);
-	return (free_d((void **)res), cat_str);
+	return (free_d((void **)res), free_s(s), cat_str);
 }
 
 void	sh_trim_list_strings(char **str)
