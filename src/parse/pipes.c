@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/28 13:53:58 by mfleury           #+#    #+#             */
-/*   Updated: 2024/12/04 15:04:21 by mfleury          ###   ########.fr       */
+/*   Updated: 2024/12/09 15:13:25 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,6 +70,8 @@ int	get_next_pipe(t_pipe *p, char **line)
 		{
 			p->p_line = sh_strcut(*line, 0, i);
 			p->p_line = sh_strtrim(p->p_line, " ", 0);
+			if (p->p_line == NULL || sh_check_empty(p->p_line) != 0)
+				return (set_gstatus(205), -1);
 			*line = sh_strstrip(line, 0, i);
 			*line = sh_strtrim(*line, "|", 0);
 			if (fill_in_pipe(p) == -1)
