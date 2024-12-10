@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/10 08:52:08 by mfleury           #+#    #+#             */
-/*   Updated: 2024/12/09 18:55:53 by mfleury          ###   ########.fr       */
+/*   Updated: 2024/12/11 00:07:41 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,7 +80,7 @@ static int	count_redir(char *line)
 	return (++n);
 }
 
-static char	*create_redir_init(t_pipe *p, int i)
+/*static char	*create_redir_init(t_pipe *p, int i)
 {
 	int		pos[2];
 	char	*s_redirs;
@@ -98,13 +98,68 @@ static char	*create_redir_init(t_pipe *p, int i)
 	p->p_line = sh_strstrip(&p->p_line, pos[0] - len, pos[0] + pos[1]);
 	p->p_line = sh_strtrim(p->p_line, p->rd[i], 0);
 	return (s_redirs);
+}*/
+
+static char	*create_redir_init(t_pipe *p, int i, char *line)
+{
+	int		pos[2];
+	char	*t_redirs[2];
+	int		len[2];
+
+	p->rd[i] = get_rd(line);
+	pos[0] = sh_strpos(line, p->rd[i]) + ft_strlen(p->rd[i]);
+	t_redirs[0] = ft_strtrim(line + pos[0], " ");
+	pos[1] = sh_strpos(t_redirs[0], " ") + 1;
+	free_s(t_redirs[0]);
+	t_redirs[0] = ft_substr(line, pos[0], pos[1] - pos[0]);
+	t_redirs[1] = ft_strtrim(t_redirs[0], " ");
+	len[0] = ft_strlen(p->rd[i]);
+	len[1] = ft_strlen(t_redirs[0]);
+	free_s(t_redirs[0]);
+	ft_memset(line + pos[0] - len[0],' ' , len[0] + len[1]);	
+	//free_s(p->p_line);
+	p->p_line = line;
+	//p->p_line = sh_strstrip(&p->p_line, pos[0] - len, pos[0] + pos[1]);
+	//p->p_line = sh_strtrim(p->p_line, p->rd[i], 0);
+	return (t_redirs[1]);
 }
 
 char	**create_redirs(t_pipe *p)
 {
 	int		i;
 	char	**redirs;
-	//char	*t_redirs;
+	char	*t_line[2];
+	int		n;
+
+	t_line[0] = ft_strtrim(p->p_line, " ");
+	t_line[1] = t_line[0];
+	n = count_redir(t_line[0]);
+	if (n == -1)
+		return (free_s(t_line[0]), set_gstatus(203), NULL);
+	redirs = (char **)ft_calloc(sizeof(char *), n + 1);
+	p->rd = (char **)ft_calloc(sizeof(char *), n + 1);
+	if (redirs == NULL || p->rd == NULL)
+		return (free_s(t_line[1]), NULL);
+	i = 0;
+	while (i < n)
+	{
+		redirs[i] = create_redir_init(p, i, t_line[0]);
+		//redirs[i] = ft_strtrim(t_redirs, " ");
+		//free_s(t_redirs);
+		redirs[i] = sh_trim_strings(redirs[i]); 
+		if (sh_check_empty(redirs[i]) == -1)
+			return (set_gstatus(203), free_s(t_line[1]), NULL);
+		i++;
+	}
+	redirs[n] = NULL;
+	p->rd[n] = NULL;
+	return (set_flag(p, 1), free_s(t_line[1]), redirs);
+}
+
+/*char	**create_redirs(t_pipe *p)
+{
+	int		i;
+	char	**redirs;
 	int		n;
 
 	p->p_line = sh_strtrim(p->p_line, " ", 0);
@@ -129,4 +184,4 @@ char	**create_redirs(t_pipe *p)
 	redirs[n] = NULL;
 	p->rd[n] = NULL;
 	return (set_flag(p, 1), redirs);
-}
+}*/
