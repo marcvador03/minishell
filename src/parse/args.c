@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/02 18:52:16 by mfleury           #+#    #+#             */
-/*   Updated: 2024/12/10 17:04:45 by mfleury          ###   ########.fr       */
+/*   Updated: 2024/12/10 21:57:31 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,7 +82,7 @@ static char	*get_args(char *line)
 		}
 		i++;
 	}
-	return (line);
+	return (ft_strdup(line));
 }
 
 char	**create_args(t_pipe *p)
@@ -90,24 +90,26 @@ char	**create_args(t_pipe *p)
 	char	**args;
 	int		i;
 	int		n;
-	char	*t_line;
+	char	*t_line[3];
 
-	t_line = ft_strtrim(p->p_line, " ");
-	n = count_args(t_line);
+	t_line[0] = ft_strtrim(p->p_line, " ");
+	t_line[2] = t_line[0];
+	n = count_args(t_line[0]);
 	args = (char **)ft_calloc(sizeof(char *), n + 1);
 	if (args == NULL)
-		return (free_s(t_line), NULL);
+		return (free_s(t_line[0]), NULL);
 	i = 0;
 	while (i < n)
 	{
-		args[i] = get_args(t_line);
-		t_line = t_line + ft_strlen(args[i]);
-		args[i] = sh_strtrim(args[i], " ", 0);
+		t_line[1] = get_args(t_line[0]);
+		t_line[0] = t_line[0] + ft_strlen(t_line[1]);
+		args[i] = ft_strtrim(t_line[1], " ");
+		free_s(t_line[1]);
 		args[i] = sh_trim_strings(args[i]); 
 		i++;
 	}
 	args[n] = NULL;
-	return (set_flag(p, 2), free_s(t_line), args);
+	return (set_flag(p, 2), free_s(t_line[2]), args);
 }
 
 /*char	**create_args(t_pipe *p)
