@@ -43,23 +43,5 @@ char	*expand_env(char *s)
 	return (res);
 }
 
-int	main(int argc, char **argv) //aplicarlo al script ya hecho
-{
-	int	i;
-	char	*expand;
-
-	i = 1;
-	while (i < argc)
-	{
-		expand = expand_env(argv[i]);
-		if (expand)
-		{
-			printf("%s\n", expand);
-			free (expand);
-		}
-		i++;
-	}
-	return (0);
-}
 
 //echo $USER

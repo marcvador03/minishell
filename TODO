@@ -16,3 +16,6 @@ BUGS TO FIX
 4. SIGINT only kill last pipe - Marc
 
 
+echo Hola -n
+echo            hola
+

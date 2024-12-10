@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/22 16:08:01 by mfleury           #+#    #+#             */
-/*   Updated: 2024/12/09 18:26:02 by mfleury          ###   ########.fr       */
+/*   Updated: 2024/12/10 16:58:24 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,11 +23,9 @@ static t_pipe	*fill_pipes(t_pipe *p, char *line, int n)
 	char	*t_line;
 
 	i = 0;
-	//t_line = ft_strdup(line);
 	while (i < n)
 	{
 		t_line = ft_strtrim(line, " ");
-		//free_s(line);// leak
 		if (p == NULL)
 			tmp = p_lstnew(t_line);
 		else
@@ -35,9 +33,10 @@ static t_pipe	*fill_pipes(t_pipe *p, char *line, int n)
 		if (tmp == NULL)
 			return (free_s(t_line), NULL);
 		p = tmp->head;
+		free_s(t_line);
 		i++;
 	}
-	return (free_s(t_line), tmp->head);
+	return (tmp->head);
 }
 
 int	subshell(t_shell *sh, char *envp[])

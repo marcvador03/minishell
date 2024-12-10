@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/07 15:12:52 by mfleury           #+#    #+#             */
-/*   Updated: 2024/12/09 14:34:38 by mfleury          ###   ########.fr       */
+/*   Updated: 2024/12/10 15:28:51 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,6 +78,23 @@ static char	*create_prompt(void)
 	return (free_s(tmp), free_s(status), res);
 }
 
+static int	check_input(char *line)
+{
+	int	i;
+
+	i = 0;
+	while (line[i] != '\0')
+	{
+		if (line[i] == 32 || line[i] == 33 || line[i] == 58)
+			i++;
+		else if (line[i] == 59 || line[i] == 92)
+			i++;
+		else
+			return (0);
+	}
+	return (-1);
+}
+
 static char	*get_input(void)
 {
 	char	*line;
@@ -91,6 +108,8 @@ static char	*get_input(void)
 	if (line == NULL)
 		return (free_s(prompt), NULL);
 	else if (ft_strlen(line) == 0 && line[0] == '\0')
+		return (free_s(prompt), free_s(line), set_gstatus(0), get_input());
+	else if(check_input(line) != 0)
 		return (free_s(prompt), free_s(line), set_gstatus(0), get_input());
 	add_history(line);
 	line2 = ft_strjoin("&&", line);

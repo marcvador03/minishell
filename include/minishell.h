@@ -6,7 +6,7 @@
 /*   By: pmorello <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 12:17:09 by pmorello          #+#    #+#             */
-/*   Updated: 2024/12/09 18:25:46 by mfleury          ###   ########.fr       */
+/*   Updated: 2024/12/10 13:59:00 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,6 @@
 # define T_INPUT 2
 # define T_OUTPUT 3
 
-extern char	**environ;//variable global para la funcion de ft_env
 extern int	g_status;
 
 /*Enum to match command names input with a number*/

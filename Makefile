@@ -36,7 +36,8 @@ UTILS = core_utils.c \
 		str_utils2.c \
 		str_utils3.c
 
-MAIN = minishell.c \
+MAIN = environment.c \
+	   minishell.c \
 	   shell.c \
 	   signals.c \
 	   subshell.c \

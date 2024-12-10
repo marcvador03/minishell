@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/17 15:39:35 by mfleury           #+#    #+#             */
-/*   Updated: 2024/12/03 13:20:44 by mfleury          ###   ########.fr       */
+/*   Updated: 2024/12/10 16:12:09 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,8 @@ static t_cmd_enum	str_to_enum(const char *str)
 	int			i;
 
 	i = 0;
+	if (ft_strlen(str) == 0)
+		return (-1);
 	while (i < END)
 	{
 		if (ft_strncmp(enum_str[i], str, ft_strlen(str)) == 0)

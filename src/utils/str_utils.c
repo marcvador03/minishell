@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/07 14:41:31 by mfleury           #+#    #+#             */
-/*   Updated: 2024/12/09 18:39:45 by mfleury          ###   ########.fr       */
+/*   Updated: 2024/12/10 16:24:39 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@ char	*sh_strstrip(char **str, int start, int end)
 	res3 = ft_strjoin(res1, res2);
 	if (res3 == NULL)
 		return (NULL);
-	return (free_s(*str), free_s(res1), free_s(res2), res3);
+	return (free_s(res1), free_s(res2), res3);
 }
 
 char	*sh_strcut2(char **str, int start, int end)
@@ -131,6 +131,7 @@ static void	split_quotes_loop(char *s, char **res)
 	int	i;
 	int	j;
 	int	pos;
+	int	x;
 
 	i = 0;
 	j = 0;
@@ -139,7 +140,9 @@ static void	split_quotes_loop(char *s, char **res)
 	{
 		if (s[i] == 34 || s[i] == 39)
 		{
-			res[j] = split_unquotes(s, i, &pos, &j);
+			x = j;
+			res[x] = split_unquotes(s, i, &pos, &j);
+			x = j;
 			pos += sh_jump_to(s + i, s[i]);
 			i++;
 			//i += sh_skip(s + i, s[i]);
@@ -153,7 +156,9 @@ static void	split_quotes_loop(char *s, char **res)
 		}
 		i++;
 	}
-	(res[j]) = split_unquotes(s, i, &pos, &j);
+	x = j;
+	res[x] = split_unquotes(s, i, &pos, &j);
+	x = j;
 }
 
 char	**split_quotes(char *s)
