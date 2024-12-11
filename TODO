@@ -14,8 +14,6 @@ BUGS TO FIX
 2. || seems not to work anymore - Marc
 3. No signal in heredoc - Marc
 4. SIGINT only kill last pipe - Marc
+5. error code not passeda the end of pipe
 
-
-echo Hola -n
-echo            hola
 

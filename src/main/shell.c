@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/07 15:12:52 by mfleury           #+#    #+#             */
-/*   Updated: 2024/12/10 15:28:51 by mfleury          ###   ########.fr       */
+/*   Updated: 2024/12/11 18:21:36 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@ char	*get_tk(char *line);
 int		count_tokens(char *line);
 int		check_open_quotes(char *str);
 int		execute_tokens(t_shell *sh, t_shell *head, int level, char *envp[]);
+char	*expand_env(char *line);
 
 static void	init_data_brackets(t_shell *tmp, int *a, int *b)
 {
@@ -46,6 +47,9 @@ static t_shell	*fill_sh(t_shell *sh, char *line, int n)
 		if (tmp == NULL)
 			return (NULL);
 		tmp->s_line = sh_strtrim(tmp->s_line, " ", 0);
+		tmp->s_line = expand_env(tmp->s_line);
+		if (tmp->s_line == NULL)
+			return (NULL);	
 		init_data_brackets(tmp, &x[0], &x[1]);
 		tk = get_tk(line + 2);
 		line = sh_strnstr(line + 2, tk, ft_strlen(line));

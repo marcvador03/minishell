@@ -18,6 +18,7 @@ BUILTINS = ft_cd.c \
 		   #ft_unset.c \
 
 PARSE =	args.c \
+		environment.c \
 		heredoc.c \
 		pipes.c \
 		redirections.c \
@@ -36,8 +37,7 @@ UTILS = core_utils.c \
 		str_utils2.c \
 		str_utils3.c
 
-MAIN = environment.c \
-	   minishell.c \
+MAIN = minishell.c \
 	   shell.c \
 	   signals.c \
 	   subshell.c \
