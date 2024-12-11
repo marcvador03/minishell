@@ -6,7 +6,7 @@
 /*   By: pmorello <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 12:17:09 by pmorello          #+#    #+#             */
-/*   Updated: 2024/12/10 13:59:00 by mfleury          ###   ########.fr       */
+/*   Updated: 2024/12/12 00:30:33 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,7 @@
 # include <readline/readline.h>
 # include <readline/history.h>
 # include <termcap.h>
+# include <termios.h>
 
 # include "../libft/libft.h"
 # include "../libft/ft_printf/ft_printf.h"
@@ -51,7 +52,6 @@ typedef enum cmd_enum
 	echo,
 	END
 }	t_cmd_enum;
-//http://stackoverflow.com/questions/16844728/converting-from-string-to-enum-in-c
 
 typedef int	(*t_func_arr)(char **args);
 
@@ -94,6 +94,18 @@ typedef struct s_shell
 	struct s_shell	*next;
 }	t_shell;
 
+typedef struct s_termccaps
+{
+	struct termios	old_term;
+	struct termios	new_term;
+	char			*keys_on;
+	char			*keys_off;
+	char			*up_arrow;
+	char			*down_arrow;
+	char			*backspace;
+	char			*del_line;
+	char			*set_cursor_begin;
+}	t_terms;
 
 typedef struct	s_env
 {
@@ -146,9 +158,15 @@ void	free_pipe(t_pipe *p);
 void	free_sh(t_shell *sh);
 /* main functions */
 void	exit_minishell(t_shell *sh, int status);
+void	exit_minishell_error(t_shell *sh, int status);
 int		main_cmd_return(char *cmd, int wstatus);
 void	init_signal(int pid);
 void	flush_errors(char *cmd, int err_sig);
 void	custom_errors(int errnum);
+
+/*term caps*/
+void 	set_term_settings(t_terms *tcap);
+void	init_termcaps(t_terms *tcap);
+
 
 #endif

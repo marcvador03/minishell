@@ -41,7 +41,8 @@ MAIN = minishell.c \
 	   shell.c \
 	   signals.c \
 	   subshell.c \
-	   subshell_utils.c
+	   subshell_utils.c \
+	   termcaps.c
 
 
 SRC_NAMES =  $(addprefix $(SRC_DIR)/parse/, $(PARSE)) \

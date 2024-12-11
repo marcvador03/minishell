@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 10:01:23 by mfleury           #+#    #+#             */
-/*   Updated: 2024/12/09 15:23:33 by mfleury          ###   ########.fr       */
+/*   Updated: 2024/12/12 00:30:39 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,9 @@ int	main_cmd_return(char *cmd, int wstatus)
 
 void	exit_minishell_error(t_shell *sh, int status)
 {
-	ft_putstr_fd("minishell exited with error\n", 2);
+	ft_putstr_fd("minishell exited with error: ", 2);
+	ft_putnbr_fd(status, 2);
+	ft_putstr_fd("\n", 2);
 	free_sh(sh);
 	exit(status);
 }
@@ -69,19 +71,16 @@ void	exit_minishell(t_shell *sh, int status)
 
 int	main(int argc, char *argv[], char *envp[])
 {
-	/*char	term_buffer[2048];
-	char	*term_type;
-	int		success;*/
+	t_terms	tcap;	
+	
 	g_status = 0;
+	if (isatty(STDIN_FILENO) == 0)
+		exit_minishell_error(NULL, errno);
+	init_termcaps(&tcap);
+	set_term_settings(&tcap);
 	init_signal(1);
 	if (argc > 1 || argv == NULL)
 		exit_minishell_error(NULL, 1);
-	/*term_type = getenv("TERM");
-	if (term_type == 0)
-		exit_minishell(NULL, 1);
-	success = tgetent(term_buffer, term_type);
-	if (success <= 0)
-		exit_minishell(NULL, success);*/
 	while (1)
 		if (start_shell(envp) != 0)
 			flush_errors(NULL, g_status);
