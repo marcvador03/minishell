@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/11 16:34:27 by mfleury           #+#    #+#             */
-/*   Updated: 2024/12/11 18:38:06 by mfleury          ###   ########.fr       */
+/*   Updated: 2024/12/11 19:04:38 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,12 +49,14 @@ static char	*resize_line(char *line, char *out, char *in, int *i)
 	return (free_s(tmp[0]), free_s(tmp[1]), free_s(tmp[2]), res);
 }
 
-char	*get_dollar_in(char *line)
+static char	*get_dollar_in(char *line)
 {
 	char	*res;
 	int		i;
 
 	i = 1;
+	if (line[i] == '?')
+		return (ft_strdup("?"));
 	while (ft_isalnum(line[i]) == 1 && line[i] != '\0')
 		i++;
 	res = ft_substr(line + 1, 0, i - 1);
@@ -81,7 +83,10 @@ char	*expand_env(char *line)
 			dollar_in = get_dollar_in(line + i);
 			if (dollar_in == NULL)
 				return (set_gstatus(202), NULL);
-			dollar_out = expand_env_loop(dollar_in);
+			else if (*dollar_in == '?')
+				dollar_out = ft_itoa(g_status);
+			else
+				dollar_out = expand_env_loop(dollar_in);
 			line = resize_line(line, dollar_out, dollar_in, &i);
 			if (line == NULL)
 				return (set_gstatus(202), NULL);

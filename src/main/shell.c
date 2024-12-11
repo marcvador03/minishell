@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/07 15:12:52 by mfleury           #+#    #+#             */
-/*   Updated: 2024/12/11 18:21:36 by mfleury          ###   ########.fr       */
+/*   Updated: 2024/12/11 19:08:38 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -117,7 +117,7 @@ static char	*get_input(void)
 		return (free_s(prompt), free_s(line), set_gstatus(0), get_input());
 	add_history(line);
 	line2 = ft_strjoin("&&", line);
-	return (free_s(prompt), free_s(line), set_gstatus(0), line2);
+	return (free_s(prompt), free_s(line), line2);
 }
 
 int	start_shell(char *envp[])
@@ -141,6 +141,7 @@ int	start_shell(char *envp[])
 		return (free_s((void *)line), -1);
 	free_s((void *)line);
 	head = sh->head;
+	g_status = 0;
 	if (sh_check_empty(sh->s_line) == -1)
 		return (free_sh(head), 0);
 	if (execute_tokens(sh, head, 0, envp) != 0)
