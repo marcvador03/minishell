@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/28 13:53:58 by mfleury           #+#    #+#             */
-/*   Updated: 2024/12/11 13:14:30 by mfleury          ###   ########.fr       */
+/*   Updated: 2024/12/11 15:43:51 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,30 +87,34 @@ static int	fill_in_pipe(t_pipe *p)
 	line = sh_strstrip(&line, 0, i);
 	return (fill_in_pipe(p));
 }*/
-int	get_next_pipe(t_pipe *p, char *line)
+int	get_next_pipe(t_pipe *p, char *t_line)
 {
 	int		i;
 
-	if (line == NULL)
+	if (t_line == NULL)
 		return (-1);
 	i = 0;
-	while (line[i] != '\0')
+	while (t_line[i] != '\0')
 	{
-		if (line[i] == 34 || line[i] == 39)
-			i += sh_jump_to(line + i, line[i]);
-		if (line[i] == '|' || line[i] == '\0')
+		if (t_line[i] == 34 || t_line[i] == 39)
+			i += sh_jump_to(t_line + i, t_line[i]);
+		if (t_line[i] == '|' || t_line[i] == '\0')
 		{
-			p->p_line = ft_substr(line, 0, i - 0);
+			p->p_line = ft_substr(t_line, 0, i);
 			if (p->p_line == NULL || sh_check_empty(p->p_line) != 0)
 				return (set_gstatus(205), -1);
-			if (p->p_line != line)
-				free_s(line);
+			if (t_line[i] == '|')
+				ft_memset(t_line, ' ', i + 1);
+			else
+				ft_memset(t_line, ' ', i);
+			/*if (p->p_line != t_line)
+				free_s(t_line);*/
 			if (fill_in_pipe(p) == -1)
 				return (-1);
 			return (0);
 		}
 		i++;
 	}
-	p->p_line = line;
+	p->p_line = ft_strdup(t_line);
 	return (fill_in_pipe(p));
 }

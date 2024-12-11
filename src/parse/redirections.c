@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/10 08:52:08 by mfleury           #+#    #+#             */
-/*   Updated: 2024/12/11 14:43:40 by mfleury          ###   ########.fr       */
+/*   Updated: 2024/12/11 15:24:08 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -125,8 +125,8 @@ static char	*create_redir_init(t_pipe *p, int i, char *line)
 	//free_s(t_redirs[0]);
 	ft_memset(t_redirs[0],' ', len[1]);	
 	//ft_memset(line + pos[0] - len[0],' ' , len[0] + len[1]);	
-	if (p->p_line != line)
-		free_s(p->p_line);
+	/*if (p->p_line != line)
+		free_s(p->p_line);*/
 	p->p_line = line;
 	return (t_redirs[1]);
 }
@@ -138,19 +138,20 @@ char	**create_redirs(t_pipe *p)
 	char	*t_line[2];
 	int		n;
 
-	t_line[0] = ft_strtrim(p->p_line, " ");
-	t_line[1] = t_line[0];
+//	t_line[0] = ft_strtrim(p->p_line, " ");
+	t_line[0] = p->p_line + sh_skip(p->p_line, ' ');
+//	t_line[1] = t_line[0];
 	n = count_redir(t_line[0]);
 	if (n == -1)
-		return (free_s(t_line[0]), set_gstatus(203), NULL);
+		return (set_gstatus(203), NULL);
 	redirs = (char **)ft_calloc(sizeof(char *), n + 1);
 	p->rd = (char **)ft_calloc(sizeof(char *), n + 1);
 	if (redirs == NULL || p->rd == NULL)
-		return (free_s(t_line[0]), NULL);
+		return (NULL);
 	redirs[n] = NULL;
 	p->rd[n] = NULL;
 	if (n == 0)
-		return (set_flag(p, 1), free_s(t_line[0]), redirs);
+		return (set_flag(p, 1), redirs);
 	i = 0;
 	while (i < n)
 	{
@@ -159,7 +160,7 @@ char	**create_redirs(t_pipe *p)
 		//free_s(t_redirs);
 		redirs[i] = sh_trim_strings(redirs[i]); 
 		if (sh_check_empty(redirs[i]) == -1)
-			return (set_gstatus(203), free_s(t_line[1]), NULL);
+			return (set_gstatus(203), NULL);
 		i++;
 	}
 	return (set_flag(p, 1), redirs);

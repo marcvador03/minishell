@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/22 16:08:01 by mfleury           #+#    #+#             */
-/*   Updated: 2024/12/11 13:14:44 by mfleury          ###   ########.fr       */
+/*   Updated: 2024/12/11 15:09:37 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,8 @@ static t_pipe	*fill_pipes(t_pipe *p, char *line, int n)
 	i = 0;
 	while (i < n)
 	{
-		t_line = ft_strtrim(line, " ");
+		//t_line = ft_strtrim(line, " ");
+		t_line = line + sh_skip(line, ' ');
 		if (p == NULL)
 			tmp = p_lstnew(t_line);
 		else

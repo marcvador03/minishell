@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/02 18:52:16 by mfleury           #+#    #+#             */
-/*   Updated: 2024/12/11 12:34:09 by mfleury          ###   ########.fr       */
+/*   Updated: 2024/12/11 16:11:46 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,10 +26,12 @@ static int	count_args(char *line)
 		if (line[i] == 34 || line[i] == 39)
 			i += sh_jump_to(line + i, line[i]);
 		if (line[i] == '\0')
-			break ;
+			return (n);
 		if (line[i] == ' ')
 		{
-			i += sh_skip(line + i, ' ');
+			i += sh_skip(line + i, ' ') - 1;
+			if (line[i + 1] == '\0')
+				return (n);
 			n++;
 		}
 		i++;
@@ -94,12 +96,13 @@ char	**create_args(t_pipe *p)
 	int		n;
 	char	*t_line[3];
 
-	t_line[0] = ft_strtrim(p->p_line, " ");
-	t_line[2] = t_line[0];
+//	t_line[0] = ft_strtrim(p->p_line, " ");
+	t_line[0] = p->p_line + sh_skip(p->p_line, ' ');
+//	t_line[2] = t_line[0];
 	n = count_args(t_line[0]);
 	args = (char **)ft_calloc(sizeof(char *), n + 1);
 	if (args == NULL)
-		return (free_s(t_line[0]), NULL);
+		return (NULL);
 	i = 0;
 	while (i < n)
 	{
@@ -111,7 +114,7 @@ char	**create_args(t_pipe *p)
 		i++;
 	}
 	args[n] = NULL;
-	return (set_flag(p, 2), free_s(t_line[2]), args);
+	return (set_flag(p, 2), args);
 }
 
 /*char	**create_args(t_pipe *p)
