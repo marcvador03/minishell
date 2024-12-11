@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/02 16:51:35 by mfleury           #+#    #+#             */
-/*   Updated: 2024/12/09 18:19:06 by mfleury          ###   ########.fr       */
+/*   Updated: 2024/12/11 12:37:31 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,8 @@ int	sh_strpos(const char *big, const char *little)
 				if (little[++j] == '\0')
 					return (i);
 		}
+		else if (*str == '\0')
+			return(ft_strlen(big) + 1);
 		str++;
 		i++;
 	}

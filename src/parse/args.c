@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/02 18:52:16 by mfleury           #+#    #+#             */
-/*   Updated: 2024/12/10 21:57:31 by mfleury          ###   ########.fr       */
+/*   Updated: 2024/12/11 12:34:09 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,6 +80,8 @@ static char	*get_args(char *line)
 			res = ft_substr(line, 0, i - 0);
 			return (res);
 		}
+		else if (line[i] == '\0')
+			return (ft_strdup(line));
 		i++;
 	}
 	return (ft_strdup(line));

@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/25 14:10:00 by mfleury           #+#    #+#             */
-/*   Updated: 2024/12/03 17:06:54 by mfleury          ###   ########.fr       */
+/*   Updated: 2024/12/11 11:26:02 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,8 @@ void	free_d(void **ptr)
 
 static void	free_pipe_elts(t_pipe *p)
 {
+	if (p->p_line != NULL)
+		free_s((void *)p->p_line);
 	if (p->redirs != NULL)
 		free_d((void **)p->redirs);
 	if (p->rd != NULL)
