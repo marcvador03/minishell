@@ -6,7 +6,7 @@
 /*   By: pmorello <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 12:17:09 by pmorello          #+#    #+#             */
-/*   Updated: 2024/12/12 16:24:17 by mfleury          ###   ########.fr       */
+/*   Updated: 2024/12/12 18:44:36 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -117,8 +117,6 @@ int		ft_cd(char **args);
 
 /* core utils functions */
 char	*get_full_path(char *arg0, char *envp[]);
-void	set_flag(t_pipe *p, int n);
-void	unset_flag(t_pipe *p, int n);
 void	set_gstatus(int err_code);
 /* str utils functions */
 char	*sh_strcut(char *str, int start, int end);
@@ -128,7 +126,6 @@ char	*sh_trim_strings(char *s);
 int		sh_strpos(const char *big, const char *little);
 char	*sh_strnstr(const char *big, const char *little, size_t len);
 char	*sh_strtrim(char *str, char *set, char offset);
-void	sh_strtrim2(char **str, char *set, char offset);
 int		sh_jump_to(char *str, char c);
 int		sh_jump_to2(char **str, char c);
 int		sh_skip(char *str, char c);
@@ -147,7 +144,7 @@ void	free_sh(t_shell *sh);
 void	exit_minishell(t_shell *sh, int status);
 void	exit_minishell_error(t_shell *sh, int status);
 int		main_cmd_return(char *cmd, int wstatus);
-void	init_signal(int pid);
+void	init_signal(int pid, int hd);
 void	flush_errors(char *cmd, int err_sig);
 void	custom_errors(int errnum);
 

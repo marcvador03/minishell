@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/17 15:39:35 by mfleury           #+#    #+#             */
-/*   Updated: 2024/12/12 01:10:49 by mfleury          ###   ########.fr       */
+/*   Updated: 2024/12/12 18:43:29 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ static int	exec_syscmd_single(char *cmd, char **args, char *envp[])
 	int		wstatus;
 	pid_t	pid;
 
-	init_signal(0);
+	init_signal(0, 0);
 	wstatus = 0;
 	t_cmd = get_full_path(cmd, envp);
 	if (t_cmd == NULL)

@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/02 18:58:50 by mfleury           #+#    #+#             */
-/*   Updated: 2024/12/03 13:18:07 by mfleury          ###   ########.fr       */
+/*   Updated: 2024/12/12 18:44:05 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,7 +97,7 @@ int	multiple_cmd(t_pipe *p, char *envp[])
 {
 	t_pipe	*head;
 
-	init_signal(0);
+	init_signal(0, 0);
 	head = p->head;
 	p = head;
 	if (create_pipes(p) == -1)

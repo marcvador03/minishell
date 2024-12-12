@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/07 15:12:52 by mfleury           #+#    #+#             */
-/*   Updated: 2024/12/12 16:27:47 by mfleury          ###   ########.fr       */
+/*   Updated: 2024/12/12 18:44:53 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,7 +103,7 @@ int	start_shell(char *envp[], t_terms *tcap)
 
 	n = 0;
 	sh = NULL;
-	init_signal(1);
+	init_signal(1, 0);
 	line = get_input();
 	if (line == NULL)
 		exit_minishell(sh, 0);

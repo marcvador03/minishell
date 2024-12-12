@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 10:01:23 by mfleury           #+#    #+#             */
-/*   Updated: 2024/12/12 16:25:56 by mfleury          ###   ########.fr       */
+/*   Updated: 2024/12/12 18:42:59 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ int	main(int argc, char *argv[], char *envp[])
 		exit_minishell_error(NULL, errno);
 	init_termcaps(&tcap);
 	set_term_settings(&tcap);
-	init_signal(1);
+	init_signal(1, 0);
 	if (argc > 1 || argv == NULL)
 		exit_minishell_error(NULL, 1);
 	while (1)

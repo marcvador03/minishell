@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/23 14:57:19 by mfleury           #+#    #+#             */
-/*   Updated: 2024/12/02 19:42:35 by mfleury          ###   ########.fr       */
+/*   Updated: 2024/12/12 18:42:01 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@ static int	get_hd_input(char *eof, int fd)
 {
 	char	*hd_input;
 
+	init_signal(0, 1);
 	while (1)
 	{
 		hd_input = readline("> ");
@@ -31,21 +32,6 @@ static int	get_hd_input(char *eof, int fd)
 	}
 	return (0);
 }
-
-/*static char	*get_heredoc_eof(char **line, int pos1)
-{
-	char	*t_line;
-	int		pos2;
-	int		len;
-
-	len = ft_strlen(*line);
-	t_line = ft_substr(*line, pos1, len);
-	t_line = sh_strtrim(t_line, " ", 0);
-	pos2 = sh_strpos(t_line, " ");
-	len = ft_strlen(t_line);
-	t_line = sh_strcut2(&t_line, 0, pos2);
-	return (t_line);
-}*/
 
 int	init_heredoc(char *line)
 {
