@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/10 08:52:08 by mfleury           #+#    #+#             */
-/*   Updated: 2024/12/12 01:13:19 by mfleury          ###   ########.fr       */
+/*   Updated: 2024/12/12 22:22:54 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,7 +112,7 @@ char	**create_redirs(t_pipe *p)
 	redirs = (char **)ft_calloc(sizeof(char *), n + 1);
 	p->rd = (char **)ft_calloc(sizeof(char *), n + 1);
 	if (redirs == NULL || p->rd == NULL)
-		return (NULL);
+		return (free_s(redirs), NULL);
 	if (n == 0)
 		return (redirs);
 	i = 0;
@@ -121,7 +121,7 @@ char	**create_redirs(t_pipe *p)
 		redirs[i] = create_redir_init(p, i, t_line[0]);
 		redirs[i] = sh_trim_strings(redirs[i]);
 		if (sh_check_empty(redirs[i++]) == -1)
-			return (set_gstatus(203), NULL);
+			return (free_d((void **)redirs), set_gstatus(203), NULL);
 	}
 	return (redirs);
 }

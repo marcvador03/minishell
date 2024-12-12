@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/18 09:19:54 by marvin            #+#    #+#             */
-/*   Updated: 2024/12/12 18:42:51 by mfleury          ###   ########.fr       */
+/*   Updated: 2024/12/12 19:16:23 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,12 +34,14 @@ static void	signal_handler_child(int sig)
 {
 	if (sig == SIGINT)
 	{
+		//kill(0, SIGINT);
 		rl_replace_line("", 0);
 		rl_on_new_line();
 		g_status = sig + 128;
 	}
 	else if (sig == SIGQUIT)
 	{
+		//kill(0, SIGQUIT);
 		g_status = sig + 128;
 		printf("Quit: %d\n", g_status);
 	}
@@ -68,7 +70,7 @@ void	init_signal(int pid, int hd)
 {
 	struct sigaction	sig;
 
-	//sigemptyset(&sig.sa_mask);
+	sigemptyset(&sig.sa_mask);
 	signal(SIGQUIT, SIG_IGN);
 	sig.sa_flags = 0;
 	if (pid == 0 && hd == 0)

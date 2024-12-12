@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/22 16:08:01 by mfleury           #+#    #+#             */
-/*   Updated: 2024/12/12 01:04:53 by mfleury          ###   ########.fr       */
+/*   Updated: 2024/12/12 22:07:19 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ static t_pipe	*fill_pipes(t_pipe *p, char *line, int n)
 		else
 			tmp = p_lstadd_back(&p, t_line);
 		if (tmp == NULL)
-			return (free_s(t_line), NULL);
+			return (/*free_s(t_line),*/ NULL);
 		p = tmp->head;
 		i++;
 	}
