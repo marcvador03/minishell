@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/28 13:53:58 by mfleury           #+#    #+#             */
-/*   Updated: 2024/12/12 01:14:00 by mfleury          ###   ########.fr       */
+/*   Updated: 2024/12/12 22:31:24 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,7 +68,7 @@ int	get_next_pipe(t_pipe *p, char *t_line)
 		{
 			p->p_line = ft_substr(t_line, 0, i);
 			if (p->p_line == NULL || sh_check_empty(p->p_line) != 0)
-				return (set_gstatus(205), -1);
+				return (free_pipe(p), set_gstatus(205), -1);
 			if (t_line[i] == '|')
 				ft_memset(t_line, ' ', i + 1);
 			else
