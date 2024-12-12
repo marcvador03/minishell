@@ -6,7 +6,7 @@
 /*   By: pmorello <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 12:17:09 by pmorello          #+#    #+#             */
-/*   Updated: 2024/12/12 00:30:33 by mfleury          ###   ########.fr       */
+/*   Updated: 2024/12/12 01:34:53 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,37 +55,24 @@ typedef enum cmd_enum
 
 typedef int	(*t_func_arr)(char **args);
 
-
-/*flag bit position: bitvalue = 0 | bitvalue = 1
-0: p_line
-1: redirs
-2: args
-3: 
-4: 
-5: 
-6:
-7:
-*/
-
 typedef struct s_pipe
 {
-	char	*p_line;
-	pid_t	pid;
-	char	**redirs;
-	char	**rd;
-	int		r_fd[4];
-	char	**args;
-	int		fd[2];
-	char	mem_flag;
-	struct	s_pipe	*head;
-	struct	s_pipe	*prev;
-	struct	s_pipe	*next;
+	char			*p_line;
+	pid_t			pid;
+	char			**redirs;
+	char			**rd;
+	int				r_fd[4];
+	char			**args;
+	int				fd[2];
+	struct s_pipe	*head;
+	struct s_pipe	*prev;
+	struct s_pipe	*next;
 }	t_pipe;
 
 typedef struct s_shell
 {
 	char			*s_line;
-	int				token; // 0 = && | 1 = ||
+	int				token;
 	int				depth;
 	int				bracket[2];
 	int				p_count;
@@ -107,25 +94,24 @@ typedef struct s_termccaps
 	char			*set_cursor_begin;
 }	t_terms;
 
-typedef struct	s_env
+typedef struct s_env
 {
-	char 	*value;
+	char			*value;
 	struct s_env	*next;
 }	t_env;
 
-typedef struct	s_mini
+typedef struct s_mini
 {
 	t_env	*env;
 }	t_mini;
 
-
 /* built-ins functions*/
-int 	ft_unset(char **args); 
+int		ft_unset(char **args);
 int		ft_pwd(char **args);
-int 	ft_export(char **args);
+int		ft_export(char **args);
 int		ft_env(char **args);
 int		ft_echo(char **args);
-int 	ft_cd(char **args); 
+int		ft_cd(char **args);
 
 /* core utils functions */
 char	*get_full_path(char *arg0, char *envp[]);
@@ -134,7 +120,6 @@ void	unset_flag(t_pipe *p, int n);
 void	set_gstatus(int err_code);
 /* str utils functions */
 char	*sh_strcut(char *str, int start, int end);
-char	*sh_strcut2(char **str, int start, int end);
 char	*sh_strstrip(char **str, int start, int end);
 void	sh_trim_list_strings(char **str);
 char	*sh_trim_strings(char *s);
@@ -165,8 +150,7 @@ void	flush_errors(char *cmd, int err_sig);
 void	custom_errors(int errnum);
 
 /*term caps*/
-void 	set_term_settings(t_terms *tcap);
+void	set_term_settings(t_terms *tcap);
 void	init_termcaps(t_terms *tcap);
-
 
 #endif

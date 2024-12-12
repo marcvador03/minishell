@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/22 16:08:01 by mfleury           #+#    #+#             */
-/*   Updated: 2024/12/11 15:09:37 by mfleury          ###   ########.fr       */
+/*   Updated: 2024/12/12 01:04:53 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,6 @@ static t_pipe	*fill_pipes(t_pipe *p, char *line, int n)
 	i = 0;
 	while (i < n)
 	{
-		//t_line = ft_strtrim(line, " ");
 		t_line = line + sh_skip(line, ' ');
 		if (p == NULL)
 			tmp = p_lstnew(t_line);
@@ -34,8 +33,6 @@ static t_pipe	*fill_pipes(t_pipe *p, char *line, int n)
 		if (tmp == NULL)
 			return (free_s(t_line), NULL);
 		p = tmp->head;
-		//if (t_line != p->p_line)
-		//	free_s(t_line);
 		i++;
 	}
 	return (tmp->head);
@@ -48,10 +45,9 @@ int	subshell(t_shell *sh, char *envp[])
 	p = NULL;
 	sh->p_count = count_pipes(sh->s_line);
 	p = fill_pipes(p, sh->s_line, sh->p_count);
-	if (p == NULL /*|| (p != NULL && p->p_line == NULL)*/)
+	if (p == NULL)
 		return (-1);
 	sh->pipes = p->head;
-	//free_s(sh->s_line);
 	if (sh->p_count == 1)
 	{
 		if (ft_strncmp(p->args[0], "exit", 4) == 0)

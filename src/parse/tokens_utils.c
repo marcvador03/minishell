@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/07 14:53:29 by mfleury           #+#    #+#             */
-/*   Updated: 2024/12/06 10:35:17 by mfleury          ###   ########.fr       */
+/*   Updated: 2024/12/12 01:14:26 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,11 +82,10 @@ int	check_open_quotes(char *str)
 			if (x == 0)
 				return (-1);
 			else
-				i += x;	
+				i += x;
 		}
 		else
 			i++;
 	}
 	return (0);
-	
 }

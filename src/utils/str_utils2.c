@@ -1,90 +1,71 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   str_utils2.c                                       :+:      :+:    :+:   */
+/*   str_utils3.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mfleury <mfleury@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/12/02 16:51:35 by mfleury           #+#    #+#             */
-/*   Updated: 2024/12/11 12:37:31 by mfleury          ###   ########.fr       */
+/*   Created: 2024/12/02 16:56:07 by mfleury           #+#    #+#             */
+/*   Updated: 2024/12/12 01:29:38 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	sh_strpos(const char *big, const char *little)
+int	sh_jump_to(char *str, char c)
 {
-	size_t	i;
-	int		j;
-	char	*str;
+	int	i;
 
-	str = (char *)big;
-	if (ft_strlen(little) == 0)
-		return (ft_strlen(big) + 1);
-	i = 0;
-	while (*str != '\0')
+	if (str == NULL)
+		return (0);
+	i = 1;
+	while (str[i] != '\0')
 	{
-		if (*str == 34 || *str == 39)
-		{
-			i += sh_jump_to2(&str, *str);
-//			str = str + sh_jump_to(str, *str);
-		}
-		if (*little == *str)
-		{
-			j = 0;
-			while (little[j] == str[j])
-				if (little[++j] == '\0')
-					return (i);
-		}
-		else if (*str == '\0')
-			return(ft_strlen(big) + 1);
-		str++;
-		i++;
-	}
-	return (ft_strlen(big) + 1);
-}
-
-char	*sh_strnstr(const char *big, const char *little, size_t len)
-{
-	size_t	i;
-	int		j;
-
-	if (ft_strlen(little) == 0)
-		return ((char *)big);
-	i = 0;
-	while (i < len && *big != '\0')
-	{
-		if (*big == 34 || *big == 39)
-			big = big + sh_jump_to((char *)big, *big);
-		if (*little == *big)
-		{
-			j = 0;
-			while (little[j] == big[j] && (i + j++) < len)
-				if (little[j] == '\0')
-					return ((char *)big);
-		}
-		big++;
+		if (str[i] == c)
+			return (++i);
 		i++;
 	}
 	return (0);
 }
 
-char	*sh_strtrim(char *str, char *set, char offset)
+int	sh_jump_to2(char **str, char c)
 {
-	char	*res;
+	int		i;
+	char	*ptr;
 
-	res = ft_strtrim(str + offset, set);
-	free_s(str);
-	return (res);
+	if (*str == NULL)
+		return (0);
+	i = 1;
+	ptr = *str;
+	while (ptr[i] != '\0')
+	{
+		if (ptr[i] == c)
+		{
+			*str = ptr + ++i;
+			return (i);
+		}
+		i++;
+	}
+	return (0);
 }
 
-void	sh_strtrim2(char **str, char *set, char offset)
+int	sh_skip(char *str, char c)
 {
-	char	*tmp;	
+	int	i;
 
-	tmp = ft_strdup(*str);
-	free(*str);
-	*str = ft_strtrim(tmp + offset, set);
-	free(tmp);
-	return ;
+	if (str == NULL)
+		return (0);
+	i = 0;
+	while (str[i] == c)
+		i++;
+	return (i);
+}
+
+int	sh_check_empty(char *str)
+{
+	if (str == NULL)
+		return (0);
+	if (ft_strncmp(str, "", ft_strlen(str)) == 0)
+		return (-1);
+	return (0);
 }

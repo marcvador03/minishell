@@ -21,6 +21,8 @@ PARSE =	args.c \
 		environment.c \
 		heredoc.c \
 		pipes.c \
+		quotes.c \
+		quotes_utils.c \
 		redirections.c \
 		redirections_utils.c \
 		tokens.c \
@@ -34,11 +36,11 @@ UTILS = core_utils.c \
 		list_utils.c \
 		list_utils2.c \
 		str_utils.c \
-		str_utils2.c \
-		str_utils3.c
+		str_utils2.c
 
 MAIN = minishell.c \
 	   shell.c \
+	   shell_utils.c \
 	   signals.c \
 	   subshell.c \
 	   subshell_utils.c \

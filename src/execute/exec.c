@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/17 15:39:35 by mfleury           #+#    #+#             */
-/*   Updated: 2024/12/12 00:16:18 by mfleury          ###   ########.fr       */
+/*   Updated: 2024/12/12 01:10:49 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,5 +85,5 @@ int	exec_cmd(char *cmd, char **args, int pcount, char *envp[])
 		wstatus = exec_syscmd_multiple(cmd, args, envp);
 	if (wstatus == -1)
 		flush_errors(cmd, wstatus);
-	return (wstatus);	
+	return (wstatus);
 }

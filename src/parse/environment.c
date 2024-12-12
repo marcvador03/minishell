@@ -6,13 +6,13 @@
 /*   By: mfleury <mfleury@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/11 16:34:27 by mfleury           #+#    #+#             */
-/*   Updated: 2024/12/11 19:04:38 by mfleury          ###   ########.fr       */
+/*   Updated: 2024/12/12 01:19:06 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-static char	*expand_env_loop(char *s)
+static char	*expand_getenv(char *s)
 {
 	char	*value;
 	char	*res;
@@ -30,7 +30,7 @@ static char	*resize_line(char *line, char *out, char *in, int *i)
 	char	*res;
 	char	*tmp[3];
 	int		len[3];
-	
+
 	len[0] = ft_strlen(in);
 	len[1] = ft_strlen(line);
 	len[2] = ft_strlen(out);
@@ -65,6 +65,17 @@ static char	*get_dollar_in(char *line)
 	return (res);
 }
 
+int	expand_env_loop(char *line, char **dollar_in, char **dollar_out, int i)
+{
+	*dollar_in = get_dollar_in(line + i);
+	if (dollar_in == NULL)
+		return (set_gstatus(202), -1);
+	else if (*dollar_in[0] == '?')
+		*dollar_out = ft_itoa(g_status);
+	else
+		*dollar_out = expand_getenv(*dollar_in);
+}
+
 char	*expand_env(char *line)
 {
 	int		i;
@@ -80,13 +91,8 @@ char	*expand_env(char *line)
 			return (line);
 		if (line[i] == '$')
 		{
-			dollar_in = get_dollar_in(line + i);
-			if (dollar_in == NULL)
-				return (set_gstatus(202), NULL);
-			else if (*dollar_in == '?')
-				dollar_out = ft_itoa(g_status);
-			else
-				dollar_out = expand_env_loop(dollar_in);
+			if (expand_env_loop(line, &dollar_in, &dollar_out, i) == -1)
+				return (NULL);
 			line = resize_line(line, dollar_out, dollar_in, &i);
 			if (line == NULL)
 				return (set_gstatus(202), NULL);

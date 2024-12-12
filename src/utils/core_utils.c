@@ -6,11 +6,12 @@
 /*   By: mfleury <mfleury@student.42barcelona.      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/16 16:32:42 by mfleury           #+#    #+#             */
-/*   Updated: 2024/12/03 17:08:16 by mfleury          ###   ########.fr       */
+/*   Updated: 2024/12/12 01:30:26 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+#include "error_minishell.h"
 
 static char	**search_path(char *envp[])
 {
@@ -57,22 +58,35 @@ char	*get_full_path(char *arg0, char *envp[])
 	return (free_d((void **)paths), free_s(cmd_in), NULL);
 }
 
-void	set_errno(int err_code)
-{
-	errno = err_code;
-}
-
 void	set_gstatus(int err_code)
 {
 	g_status = err_code;
 }
 
-void	set_flag(t_pipe *p, int n)
+void	custom_errors(int errnum)
 {
-	p->mem_flag = p->mem_flag | (1 << n);
+	g_status = errnum;
+	if (errnum == 201)
+		ft_putendl_fd(E_201, STDERR_FILENO);
+	if (errnum == 202)
+		ft_putendl_fd(E_202, STDERR_FILENO);
+	if (errnum == 203)
+		ft_putendl_fd(E_203, STDERR_FILENO);
+	if (errnum == 204)
+		ft_putendl_fd(E_204, STDERR_FILENO);
+	if (errnum == 205)
+		ft_putendl_fd(E_205, STDERR_FILENO);
 }
 
-void	unset_flag(t_pipe *p, int n)
+void	flush_errors(char *cmd, int err_sig)
 {
-	p->mem_flag = p->mem_flag & ~ (1 << n);
+	if (err_sig == -1)
+	{
+		g_status = errno;
+		ft_putstr_fd("minishell: ", 2);
+		perror(cmd);
+	}
+	else if (err_sig > 200 && err_sig < 256)
+		custom_errors(err_sig);
+	return ;
 }
