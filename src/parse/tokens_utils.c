@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/07 14:53:29 by mfleury           #+#    #+#             */
-/*   Updated: 2024/12/12 23:24:58 by mfleury          ###   ########.fr       */
+/*   Updated: 2024/12/12 23:28:35 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,20 +28,6 @@ int	get_tk2(char *line)
 		return (pos[1]);
 }
 
-static char	*get_tk(char *line)
-{
-	int		len;
-
-	len = ft_strlen(line);
-	if (sh_strpos(line, "&&") == len && sh_strpos(line, "||") == len)
-		return (NULL);
-	else if (sh_strpos(line, "&&") < sh_strpos(line, "||"))
-		return ("&&");
-	else if (sh_strpos(line, "||") < sh_strpos(line, "&&"))
-		return ("||");
-	return (NULL);
-}
-
 void	count_brackets(t_shell *sh, char *line)
 {
 	char	*t_line;
@@ -60,6 +46,21 @@ void	count_brackets(t_shell *sh, char *line)
 		t_line = ft_strchr(t_line, ')') + 1;
 	}
 }
+
+static char	*get_tk(char *line)
+{
+	int		len;
+
+	len = ft_strlen(line);
+	if (sh_strpos(line, "&&") == len && sh_strpos(line, "||") == len)
+		return (NULL);
+	else if (sh_strpos(line, "&&") < sh_strpos(line, "||"))
+		return ("&&");
+	else if (sh_strpos(line, "||") < sh_strpos(line, "&&"))
+		return ("||");
+	return (NULL);
+}
+
 
 int	count_tokens(char *line)
 {

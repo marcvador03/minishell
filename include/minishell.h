@@ -6,7 +6,7 @@
 /*   By: pmorello <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 12:17:09 by pmorello          #+#    #+#             */
-/*   Updated: 2024/12/12 23:25:35 by mfleury          ###   ########.fr       */
+/*   Updated: 2024/12/12 23:28:10 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -119,12 +119,9 @@ int		ft_cd(char **args);
 char	*get_full_path(char *arg0, char *envp[]);
 void	set_gstatus(int err_code);
 /* str utils functions */
-char	*sh_strcut(char *str, int start, int end);
-char	*sh_strstrip(char **str, int start, int end);
 void	sh_trim_list_strings(char **str);
 char	*sh_trim_strings(char *s);
 int		sh_strpos(const char *big, const char *little);
-char	*sh_strnstr(const char *big, const char *little, size_t len);
 int		sh_jump_to(char *str, char c);
 int		sh_jump_to2(char **str, char c);
 int		sh_skip(char *str, char c);
