@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/02 18:58:50 by mfleury           #+#    #+#             */
-/*   Updated: 2024/12/12 18:44:05 by mfleury          ###   ########.fr       */
+/*   Updated: 2024/12/13 00:03:25 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,11 +15,12 @@
 int		open_redir_fd(t_pipe *p);
 int		close_redir_fd(t_pipe *p);
 int		close_pipes(t_pipe *p);
-void	exec_cmd(char *cmd, char **args, int pcount, char *envp[]);
+int		exec_cmd(char *cmd, char **args, int pcount, char *envp[]);
 
 static int	run_child(t_pipe *p, char *envp[])
 {
 	t_pipe	*o;
+	int		wstatus;
 
 	o = p->prev;
 	if (p == p->head)
@@ -37,9 +38,9 @@ static int	run_child(t_pipe *p, char *envp[])
 	close_pipes(p);
 	if (open_redir_fd(p) == -1)
 		return (close_redir_fd(p), -1);
-	exec_cmd(p->args[0], p->args, 0, envp);
+	wstatus = exec_cmd(p->args[0], p->args, 0, envp);
 	close_redir_fd(p);
-	exit (g_status);
+	exit (wstatus);
 }
 
 static int	run_parent(t_pipe *p)

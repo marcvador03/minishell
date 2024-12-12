@@ -6,15 +6,18 @@ done 4. integrate signals function into main - Marc OK
 6. optional: add wildcards *
 
 
-7. Full test
 
 
-BUGS TO FIX
+TODO
 OK 1. << EOF does not work in a pipeline - Marc
 OK 2. || seems not to work anymore - Marc
 OK 3. No signal in heredoc - Marc 
 4. SIGINT only kill last pipe - Marc
-5. error code not passeda the end of pipe
+OK 5. error code not passeda the end of pipe
+6. Remove Wildcard in Makefile
+7. Check / and directories
+8. Review brackets mgt
+9. Redo EXIT function
 
 
 	tcap->new_term.c_lflag &= ~PARENB;

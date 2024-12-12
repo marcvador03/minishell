@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/07 14:53:29 by mfleury           #+#    #+#             */
-/*   Updated: 2024/12/12 23:28:35 by mfleury          ###   ########.fr       */
+/*   Updated: 2024/12/12 23:34:26 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,6 @@ static char	*get_tk(char *line)
 		return ("||");
 	return (NULL);
 }
-
 
 int	count_tokens(char *line)
 {
