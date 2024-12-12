@@ -17,3 +17,57 @@ BUGS TO FIX
 5. error code not passeda the end of pipe
 
 
+	tcap->new_term.c_lflag &= ~PARENB;
+	tcap->new_term.c_lflag &= ~PARODD;
+	//tcap->new_term.c_lflag &= ~CMSPAR;
+	tcap->new_term.c_lflag |= CS8;
+	tcap->new_term.c_lflag &= ~HUPCL;
+	tcap->new_term.c_lflag &= ~CSTOPB;
+	tcap->new_term.c_lflag |= CREAD;
+	tcap->new_term.c_lflag &= ~CLOCAL;
+	//tcap->new_term.c_lflag &= ~CRTSCTS;
+	tcap->new_term.c_lflag &= ~IGNBRK;
+	tcap->new_term.c_lflag &= ~BRKINT;//
+	tcap->new_term.c_lflag &= ~IGNPAR;
+	tcap->new_term.c_lflag &= ~PARMRK;
+	tcap->new_term.c_lflag &= ~INPCK;
+	tcap->new_term.c_lflag &= ~ISTRIP;
+	tcap->new_term.c_lflag &= ~INLCR;
+	tcap->new_term.c_lflag &= ~IGNCR;
+	tcap->new_term.c_lflag |= ICRNL;
+	tcap->new_term.c_lflag |= IXON;
+	tcap->new_term.c_lflag |= IXOFF;//
+	tcap->new_term.c_lflag &= ~IUCLC;
+	tcap->new_term.c_lflag &= ~IXANY;
+	tcap->new_term.c_lflag &= ~IMAXBEL;//
+	tcap->new_term.c_lflag |= IUTF8;//
+	tcap->new_term.c_lflag |= OPOST;
+	tcap->new_term.c_lflag &= ~OLCUC;
+	tcap->new_term.c_lflag &= ~OCRNL;
+	tcap->new_term.c_lflag |= ONLCR;
+	tcap->new_term.c_lflag &= ~ONOCR;
+	tcap->new_term.c_lflag &= ~ONLRET;
+	tcap->new_term.c_lflag &= ~OFILL;
+	tcap->new_term.c_lflag &= ~OFDEL;
+	tcap->new_term.c_lflag |= ISIG;
+	tcap->new_term.c_lflag |= ICANON;
+	tcap->new_term.c_lflag |= IEXTEN;
+	tcap->new_term.c_lflag |= ECHO;
+	tcap->new_term.c_lflag |= ECHOE;
+	tcap->new_term.c_lflag |= ECHOK;
+	tcap->new_term.c_lflag &= ~ECHONL;
+	tcap->new_term.c_lflag &= ~NOFLSH;
+	//tcap->new_term.c_lflag &= ~XCASE;//
+	tcap->new_term.c_lflag &= ~TOSTOP;
+	//tcap->new_term.c_lflag &= ~ECHOPRT;//
+	//tcap->new_term.c_lflag |= ECHOCTL;//
+	//tcap->new_term.c_lflag |= ECHOKE;//
+	//tcap->new_term.c_lflag &= ~FLUSHO;
+	//tcap->new_term.c_lflag &= ~EXTPROC;
+	//tcap->new_term.c_lflag &= ~ISIG;
+	//tcap->new_term.c_lflag &= ~IEXTEN;
+	//tcap->new_term.c_lflag &= ~IXON;
+	//tcap->new_term.c_lflag |= ISIG;
+	//tcap->new_term.c_iflag &= ~IGNCR;
+	//tcap->new_term.c_iflag |= ICRNL;
+

@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/18 09:19:54 by marvin            #+#    #+#             */
-/*   Updated: 2024/12/12 01:06:50 by mfleury          ###   ########.fr       */
+/*   Updated: 2024/12/12 18:31:30 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,11 @@ static void	signal_handler_main(int sig)
 		rl_redisplay();
 		g_status = sig + 128;
 	}
+	/*else if (sig == SIGQUIT)
+	{
+		rl_on_new_line();
+		rl_redisplay();
+	}*/
 	return ;
 }
 
@@ -45,7 +50,8 @@ void	init_signal(int pid)
 {
 	struct sigaction	sig;
 
-	sigemptyset(&sig.sa_mask);
+	//sigemptyset(&sig.sa_mask);
+	signal(SIGQUIT, SIG_IGN);
 	sig.sa_flags = 0;
 	if (pid == 0)
 	{
@@ -56,7 +62,7 @@ void	init_signal(int pid)
 	else if (pid == 1)
 	{
 		sig.sa_handler = &signal_handler_main;
-		sigaddset(&sig.sa_mask, SIGQUIT);
+	//	sigaddset(&sig.sa_mask, SIGQUIT);
 	}
 	sigaction(SIGINT, &sig, NULL);
 	sigaction(SIGTERM, &sig, NULL);

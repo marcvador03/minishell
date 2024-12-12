@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/07 15:12:52 by mfleury           #+#    #+#             */
-/*   Updated: 2024/12/12 01:19:06 by mfleury          ###   ########.fr       */
+/*   Updated: 2024/12/12 16:27:47 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,8 @@ int		execute_tokens(t_shell *sh, t_shell *head, int level, char *envp[]);
 int		check_input(char *line);
 int		init_data_brackets(t_shell *tmp, int *a, int *b);
 
-static t_shell	*fill_sh(t_shell *sh, char *line, int n)
+
+static t_shell	*fill_sh(t_shell *sh, char *line, int n, t_terms *tcap)
 {
 	int		i;
 	t_shell	*tmp;
@@ -43,6 +44,7 @@ static t_shell	*fill_sh(t_shell *sh, char *line, int n)
 		tk = get_tk(line + 2);
 		line = sh_strnstr(line + 2, tk, ft_strlen(line));
 		sh = tmp->head;
+		sh->tcap = tcap;
 	}
 	return (tmp->head);
 }
@@ -92,7 +94,7 @@ static char	*get_input(void)
 	return (free_s(prompt), free_s(line), line2);
 }
 
-int	start_shell(char *envp[])
+int	start_shell(char *envp[], t_terms *tcap)
 {
 	char	*line;
 	t_shell	*sh;
@@ -108,7 +110,7 @@ int	start_shell(char *envp[])
 	if (check_open_quotes(line) == -1)
 		return (free_s((void *)line), set_gstatus(201), -1);
 	n = count_tokens(line);
-	sh = fill_sh(sh, line, n);
+	sh = fill_sh(sh, line, n, tcap);
 	if (sh == NULL)
 		return (free_s((void *)line), -1);
 	free_s((void *)line);

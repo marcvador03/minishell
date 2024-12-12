@@ -6,7 +6,7 @@
 /*   By: pmorello <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 12:17:09 by pmorello          #+#    #+#             */
-/*   Updated: 2024/12/12 01:34:53 by mfleury          ###   ########.fr       */
+/*   Updated: 2024/12/12 16:24:17 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,19 +69,7 @@ typedef struct s_pipe
 	struct s_pipe	*next;
 }	t_pipe;
 
-typedef struct s_shell
-{
-	char			*s_line;
-	int				token;
-	int				depth;
-	int				bracket[2];
-	int				p_count;
-	struct s_pipe	*pipes;
-	struct s_shell	*head;
-	struct s_shell	*next;
-}	t_shell;
-
-typedef struct s_termccaps
+typedef struct s_termcaps
 {
 	struct termios	old_term;
 	struct termios	new_term;
@@ -93,6 +81,20 @@ typedef struct s_termccaps
 	char			*del_line;
 	char			*set_cursor_begin;
 }	t_terms;
+
+
+typedef struct s_shell
+{
+	char			*s_line;
+	int				token;
+	int				depth;
+	int				bracket[2];
+	int				p_count;
+	t_pipe			*pipes;
+	t_terms			*tcap;
+	struct s_shell	*head;
+	struct s_shell	*next;
+}	t_shell;
 
 typedef struct s_env
 {
@@ -151,6 +153,7 @@ void	custom_errors(int errnum);
 
 /*term caps*/
 void	set_term_settings(t_terms *tcap);
+void	unset_term_settings(t_terms *tcap);
 void	init_termcaps(t_terms *tcap);
 
 #endif
