@@ -6,13 +6,29 @@
 /*   By: mfleury <mfleury@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/07 14:53:29 by mfleury           #+#    #+#             */
-/*   Updated: 2024/12/12 01:14:26 by mfleury          ###   ########.fr       */
+/*   Updated: 2024/12/12 23:24:58 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-char	*get_tk(char *line)
+int	get_tk2(char *line)
+{
+	int	len;
+	int	pos[2];
+
+	len = ft_strlen(line);
+	if (ft_strnstr(line, "&&", len) == 0 && ft_strnstr(line, "||", len) == 0)
+		return (len);
+	pos[0] = sh_strpos(line, "&&");
+	pos[1] = sh_strpos(line, "||");
+	if (pos[0] < pos[1])
+		return (pos[0]);
+	else
+		return (pos[1]);
+}
+
+static char	*get_tk(char *line)
 {
 	int		len;
 

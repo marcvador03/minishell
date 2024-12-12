@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/07 14:41:31 by mfleury           #+#    #+#             */
-/*   Updated: 2024/12/12 01:29:15 by mfleury          ###   ########.fr       */
+/*   Updated: 2024/12/12 23:25:51 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,13 +107,4 @@ char	*sh_strnstr(const char *big, const char *little, size_t len)
 		i++;
 	}
 	return (0);
-}
-
-char	*sh_strtrim(char *str, char *set, char offset)
-{
-	char	*res;
-
-	res = ft_strtrim(str + offset, set);
-	free_s(str);
-	return (res);
 }

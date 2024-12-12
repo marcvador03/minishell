@@ -6,38 +6,34 @@
 /*   By: mfleury <mfleury@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/07 14:31:45 by mfleury           #+#    #+#             */
-/*   Updated: 2024/12/09 14:20:35 by mfleury          ###   ########.fr       */
+/*   Updated: 2024/12/12 23:25:40 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-char	*get_tk(char *line);
 void	count_brackets(t_shell *sh, char *line);
 int		execute_tokens(t_shell *sh, t_shell *head, int level, char *envp[]);
 int		subshell(t_shell *sh, char *envp[]);
+int		get_tk2(char *line);
 
 int	get_next_token(t_shell *sh, char *line)
 {
-	char	*tk1;
-	char	*tk2;
+	char	*t_line;
+	int		pos;
 
-	line = sh_strtrim(line, " ", 0);
-	tk1 = get_tk(line);
-	line = sh_strtrim(line, " ", 2);
-	tk2 = get_tk(line);
-	sh->s_line = sh_strcut(line, 0, sh_strpos(line, tk2));
-	sh->s_line = sh_strtrim(sh->s_line, " ", 0);
+	if (ft_strncmp(line, "||", 2) == 0)
+		sh->token = 1;	
+	t_line = line + 2;
+	pos = get_tk2(t_line);
+	sh->s_line = ft_substr(t_line, 0, pos);
 	if (sh->s_line == NULL || sh_check_empty(sh->s_line) != 0)
-		return (free_s(line), set_gstatus(204), -1);
+		return (free_sh(sh), set_gstatus(204), -1);
+	ft_memset(line, ' ', pos + 2);
 	count_brackets(sh, sh->s_line);
-	sh->s_line = sh_strtrim(sh->s_line, "(", 0);
-	sh->s_line = sh_strtrim(sh->s_line, ")", 0);
 	if (sh->s_line == NULL)
-		return (free_s(line), -1);
-	if (tk1 != NULL && ft_strncmp(tk1, "||", 2) == 0)
-		sh->token = 1;
-	return (free_s(line), 0);
+		return (-1);
+	return (0);
 }
 
 static void	exec_token_fork(t_shell *sh, t_shell *head, int level, char *envp[])

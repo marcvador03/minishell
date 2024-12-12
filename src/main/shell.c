@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/07 15:12:52 by mfleury           #+#    #+#             */
-/*   Updated: 2024/12/12 18:44:53 by mfleury          ###   ########.fr       */
+/*   Updated: 2024/12/12 23:24:12 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,14 +25,13 @@ static t_shell	*fill_sh(t_shell *sh, char *line, int n, t_terms *tcap)
 	int		i;
 	t_shell	*tmp;
 	int		x[2];
-	char	*tk;
 	char	*t_line;
 
 	i = 0;
 	ft_memset(x, 0, 2 * sizeof(int));
 	while (i++ < n && *line != '\0')
 	{
-		t_line = ft_strtrim(line, " ");
+		t_line = line + sh_skip(line, ' ');
 		if (sh == NULL)
 			tmp = sh_lstnew(t_line);
 		else
@@ -41,8 +40,6 @@ static t_shell	*fill_sh(t_shell *sh, char *line, int n, t_terms *tcap)
 			return (NULL);
 		if (init_data_brackets(tmp, &x[0], &x[1]) == -1)
 			return (set_gstatus(202), NULL);
-		tk = get_tk(line + 2);
-		line = sh_strnstr(line + 2, tk, ft_strlen(line));
 		sh = tmp->head;
 		sh->tcap = tcap;
 	}
