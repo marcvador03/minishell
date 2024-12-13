@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/18 12:17:52 by mfleury           #+#    #+#             */
-/*   Updated: 2024/12/12 01:31:14 by mfleury          ###   ########.fr       */
+/*   Updated: 2024/12/13 11:46:55 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,5 +19,6 @@
 # define E_203 "minishell: error near redirection token \'<\' or \'>\'"
 # define E_204 "minishell: error near token \'&&\' or \'||\'"
 # define E_205 "minishell: error near pipe token \'|\'"
+# define E_206 "minishell: error near parenthesis \'(\' or \')\'"
 
 #endif

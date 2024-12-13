@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/18 09:19:54 by marvin            #+#    #+#             */
-/*   Updated: 2024/12/12 19:16:23 by mfleury          ###   ########.fr       */
+/*   Updated: 2024/12/13 11:06:30 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,17 +34,17 @@ static void	signal_handler_child(int sig)
 {
 	if (sig == SIGINT)
 	{
-		//kill(0, SIGINT);
 		rl_replace_line("", 0);
 		rl_on_new_line();
 		g_status = sig + 128;
 	}
 	else if (sig == SIGQUIT)
 	{
-		//kill(0, SIGQUIT);
 		g_status = sig + 128;
 		printf("Quit: %d\n", g_status);
 	}
+	/*if (kill(0, sig) != 0)
+		perror("kill");*/
 	return ;
 }
 

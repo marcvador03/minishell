@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/12 01:02:14 by mfleury           #+#    #+#             */
-/*   Updated: 2024/12/12 22:04:54 by mfleury          ###   ########.fr       */
+/*   Updated: 2024/12/13 12:32:55 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,14 +15,14 @@ char	*expand_env(char *line);
 
 int	init_data_brackets(t_shell *tmp, int *a, int *b)
 {
-	//tmp->s_line = sh_strtrim(tmp->s_line, " ", 0);
 	tmp->s_line = expand_env(tmp->s_line);
 	if (tmp->s_line == NULL)
 		return (-1);
 	tmp->bracket[0] += *a;
-	tmp->bracket[1] += *b;
+	tmp->bracket[1] += *a;
 	*a = tmp->bracket[0];
-	*b = tmp->bracket[1];
+	*a = tmp->bracket[1];
+	*b = 0;
 	return (0);
 }
 

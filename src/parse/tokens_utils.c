@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/07 14:53:29 by mfleury           #+#    #+#             */
-/*   Updated: 2024/12/12 23:34:26 by mfleury          ###   ########.fr       */
+/*   Updated: 2024/12/13 14:01:47 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,49 @@ int	get_tk2(char *line)
 		return (pos[1]);
 }
 
-void	count_brackets(t_shell *sh, char *line)
+int	check_brackets(char *line, int i)
+{
+	if (line[i] == 34 || line[i] == 39)
+		i += sh_jump_to(line + i, line[i]);
+	if (line[i] == '\0')
+		return (-1);
+	if (line[i + 1] == '\0' || line[i + 1] == ')')
+		return (-1);
+	
+	return (0);
+}
+
+int	count_brackets(t_shell *sh, char *line)
+{
+	int	i;
+
+	i = 0;
+	while (line[i] != '\0')
+	{
+		if (line[i] == 34 || line[i] == 39)
+			i += sh_jump_to(line + i, line[i]);
+		if (line[i] == '\0')
+			return (0);
+		if (line[i] == '(')
+		{		
+			if (check_brackets(line, i) == -1)
+				return (-1);
+			sh->bracket[0]++;	
+			sh->bracket[1]++;
+			ft_memset(line + i, ' ', 1);	
+		}
+		else if (line[i] == ')')
+		{
+			sh->bracket[1]--;
+			ft_memset(line + i, ' ', 1);
+			if (sh->bracket[1] < 0)
+				return (-1);	
+		}
+		i++;	
+	}
+	return (0);	
+}
+/*void	count_brackets(t_shell *sh, char *line)
 {
 	char	*t_line;
 
@@ -45,7 +87,7 @@ void	count_brackets(t_shell *sh, char *line)
 		sh->bracket[1]--;
 		t_line = ft_strchr(t_line, ')') + 1;
 	}
-}
+}*/
 
 static char	*get_tk(char *line)
 {

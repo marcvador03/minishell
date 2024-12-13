@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 10:01:23 by mfleury           #+#    #+#             */
-/*   Updated: 2024/12/13 09:47:10 by mfleury          ###   ########.fr       */
+/*   Updated: 2024/12/13 11:10:43 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,15 +15,23 @@
 int	start_shell(char *envp[], t_terms *tcap);
 int	g_status = 0;
 
-int	main_cmd_return(/*char *cmd,*/ int wstatus)
+int	main_cmd_return(t_pipe *p, int wstatus)
 {
-	/*if (WIFSTOPPED(wstatus))
+	t_pipe *tmp;
+
+	tmp = p;
+	p = p->head;
+	if (WIFSIGNALED(wstatus))
 	{
+		while (p != NULL)
+		{
+			if(kill(p->pid, SIGKILL) == -1)
+				perror("kill");
+			p = p->next;
+		}
 		//flush_errors(cmd, WTERMSIG(wstatus));
-		printf("test");
-		return (0);
-	}*/
-	if (WIFEXITED(wstatus) && g_status == 0)
+	}
+	else if (WIFEXITED(wstatus))
 		g_status = WEXITSTATUS(wstatus);
 	return (0);
 }

@@ -18,6 +18,8 @@ OK 5. error code not passeda the end of pipe
 7. Check / and directories !!
 8. Review brackets mgt
 9. Redo EXIT function
+10. check quotes (l196)
+11. check builtins 
 
 
 	tcap->new_term.c_lflag &= ~PARENB;

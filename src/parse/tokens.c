@@ -6,14 +6,14 @@
 /*   By: mfleury <mfleury@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/07 14:31:45 by mfleury           #+#    #+#             */
-/*   Updated: 2024/12/12 23:25:40 by mfleury          ###   ########.fr       */
+/*   Updated: 2024/12/13 14:06:05 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	count_brackets(t_shell *sh, char *line);
-int		execute_tokens(t_shell *sh, t_shell *head, int level, char *envp[]);
+int		count_brackets(t_shell *sh, char *line);
+int		execute_tokens(t_shell *sh, int i, int level, char *envp[]);
 int		subshell(t_shell *sh, char *envp[]);
 int		get_tk2(char *line);
 
@@ -27,34 +27,54 @@ int	get_next_token(t_shell *sh, char *line)
 	t_line = line + 2;
 	pos = get_tk2(t_line);
 	sh->s_line = ft_substr(t_line, 0, pos);
-	if (sh->s_line == NULL || sh_check_empty(sh->s_line) != 0)
+	if (sh->s_line == NULL)
+		return (free_sh(sh), set_gstatus(202), -1);
+	if (sh_check_empty(sh->s_line) != 0)
 		return (free_sh(sh), set_gstatus(204), -1);
 	ft_memset(line, ' ', pos + 2);
-	count_brackets(sh, sh->s_line);
+	if (count_brackets(sh, sh->s_line) == -1)
+		return (set_gstatus(206), -1);
 	if (sh->s_line == NULL)
 		return (-1);
 	return (0);
 }
 
-static void	exec_token_fork(t_shell *sh, t_shell *head, int level, char *envp[])
+static int	exec_token_fork(t_shell *sh, int i, int level, char *envp[])
 {
 	pid_t	pid;
-
+	int		cnt;
+	
+	cnt = 0;
 	pid = fork();
 	if (pid == -1)
 		perror("minishell: ");
 	if (pid == 0)
-		exit(execute_tokens(sh, head, ++level, envp));
-	waitpid(pid, 0, 0);
-	return ;
+		exit(execute_tokens(sh, i, ++level, envp));
+	waitpid(pid, &cnt, 0);
+	g_status = 0;
+	if (WIFEXITED(cnt))
+		cnt = WEXITSTATUS(cnt);
+	return (cnt);
 }
 
-int	execute_tokens(t_shell *sh, t_shell *head, int level, char *envp[])
+static void	move_sh(t_shell **sh, int n)
+{
+	int	i;
+
+	i = 0;
+	while (i < n)
+	{
+		*sh = (*sh)->next;
+		i++;
+	}
+}
+
+int	execute_tokens(t_shell *sh, int i, int level, char *envp[])
 {
 	while (sh != NULL)
 	{
 		if (sh->bracket[0] > level)
-			exec_token_fork(sh, head, level, envp);
+			move_sh(&sh, exec_token_fork(sh, i, level, envp));
 		else if (sh->bracket[0] == level)
 		{
 			if (sh->token == 0 || (sh->token == 1 && g_status != 0))
@@ -64,9 +84,10 @@ int	execute_tokens(t_shell *sh, t_shell *head, int level, char *envp[])
 				sh->pipes = NULL;
 			}
 		}
-		else if (sh->bracket[1] < level)
-			exit(g_status);
+		if (sh->bracket[1] < level && level > 0)
+			exit (i);
 		sh = sh->next;
+		i++;
 	}
 	return (0);
 }
