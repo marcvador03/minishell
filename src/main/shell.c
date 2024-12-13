@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/07 15:12:52 by mfleury           #+#    #+#             */
-/*   Updated: 2024/12/12 23:24:12 by mfleury          ###   ########.fr       */
+/*   Updated: 2024/12/13 09:48:38 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,7 +103,7 @@ int	start_shell(char *envp[], t_terms *tcap)
 	init_signal(1, 0);
 	line = get_input();
 	if (line == NULL)
-		exit_minishell(sh, 0);
+		exit_minishell(sh);
 	if (check_open_quotes(line) == -1)
 		return (free_s((void *)line), set_gstatus(201), -1);
 	n = count_tokens(line);

@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/02 18:58:50 by mfleury           #+#    #+#             */
-/*   Updated: 2024/12/13 00:03:25 by mfleury          ###   ########.fr       */
+/*   Updated: 2024/12/13 09:48:22 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,7 @@ static int	run_parent(t_pipe *p)
 	while (p != NULL)
 	{
 		waitpid(p->pid, &wstatus, 0);
-		main_cmd_return(p->args[0], wstatus);
+		main_cmd_return(wstatus);
 		p = p->next;
 	}
 	rl_replace_line("", 0);

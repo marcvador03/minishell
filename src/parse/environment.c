@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/11 16:34:27 by mfleury           #+#    #+#             */
-/*   Updated: 2024/12/12 01:19:06 by mfleury          ###   ########.fr       */
+/*   Updated: 2024/12/13 09:46:23 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,6 +74,7 @@ int	expand_env_loop(char *line, char **dollar_in, char **dollar_out, int i)
 		*dollar_out = ft_itoa(g_status);
 	else
 		*dollar_out = expand_getenv(*dollar_in);
+	return (0);
 }
 
 char	*expand_env(char *line)

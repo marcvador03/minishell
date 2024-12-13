@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/17 15:39:35 by mfleury           #+#    #+#             */
-/*   Updated: 2024/12/13 00:08:53 by mfleury          ###   ########.fr       */
+/*   Updated: 2024/12/13 09:48:05 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,7 @@ static int	exec_syscmd_single(char *cmd, char **args, char *envp[])
 	if (pid == 0)
 		return (execve(t_cmd, args, envp));
 	waitpid(pid, &wstatus, 0);
-	main_cmd_return(t_cmd, wstatus);
+	main_cmd_return(wstatus);
 	free_s(t_cmd);
 	return (0);
 }

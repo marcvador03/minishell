@@ -6,7 +6,7 @@
 /*   By: pmorello <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 12:17:09 by pmorello          #+#    #+#             */
-/*   Updated: 2024/12/12 23:28:10 by mfleury          ###   ########.fr       */
+/*   Updated: 2024/12/13 09:47:47 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -137,9 +137,9 @@ void	free_d(void **ptr);
 void	free_pipe(t_pipe *p);
 void	free_sh(t_shell *sh);
 /* main functions */
-void	exit_minishell(t_shell *sh, int status);
+void	exit_minishell(t_shell *sh);
 void	exit_minishell_error(t_shell *sh, int status);
-int		main_cmd_return(char *cmd, int wstatus);
+int		main_cmd_return(int wstatus);
 void	init_signal(int pid, int hd);
 void	flush_errors(char *cmd, int err_sig);
 void	custom_errors(int errnum);

@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 10:01:23 by mfleury           #+#    #+#             */
-/*   Updated: 2024/12/13 00:24:58 by mfleury          ###   ########.fr       */
+/*   Updated: 2024/12/13 09:47:10 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 int	start_shell(char *envp[], t_terms *tcap);
 int	g_status = 0;
 
-int	main_cmd_return(char *cmd, int wstatus)
+int	main_cmd_return(/*char *cmd,*/ int wstatus)
 {
 	/*if (WIFSTOPPED(wstatus))
 	{
@@ -38,7 +38,7 @@ void	exit_minishell_error(t_shell *sh, int status)
 	exit(status);
 }
 
-void	exit_minishell(t_shell *sh, int status)
+void	exit_minishell(t_shell *sh)
 {
 	printf("minishell exited with success\n");
 	free_sh(sh);
