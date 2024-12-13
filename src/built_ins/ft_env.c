@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/14 09:52:16 by pmorello          #+#    #+#             */
-/*   Updated: 2024/11/21 10:22:07 by mfleury          ###   ########.fr       */
+/*   Updated: 2024/12/10 16:10:35 by pmorello         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,13 +14,21 @@
 
 extern char **environ;
 
-int	ft_env(char **envp)
+int	ft_env(char **args)
 {
 	char	**env;
 
-	env = envp;
-	while (*env)
+	if (args[1])
 	{
+		if (ft_strncmp(args[1], "env", 3) != 0)
+		{
+			printf("'%s': No such file or directory\n", args[1]);
+			return (0);
+		}
+	}
+	env = environ;
+	while (*env)
+	{	
 		printf("%s\n", *env);
 		env++;
 	}

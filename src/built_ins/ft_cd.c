@@ -6,72 +6,75 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/14 09:20:49 by pmorello          #+#    #+#             */
-/*   Updated: 2024/11/21 09:32:04 by mfleury          ###   ########.fr       */
+/*   Updated: 2024/12/10 14:23:18 by pmorello         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-char *handle_absolute_path(const char *path) 
+char	*h_abs_path(const char *path)
 {
-    char *absolute_path;
-	
-	absolute_path = ft_strdup(path);
+	char	*abs_path;
 
-    if (!absolute_path) 
-	        perror("Error al asignar memoria para la ruta absoluta");
-    return (absolute_path);
+	abs_path = ft_strdup(path);
+	if (!abs_path)
+		return (NULL);
+	return (abs_path);
 }
 
-char *handle_relative_path(const char *path) 
+char	*h_rel_path(const char *path)
 {
-    char current_path[1024];
-    char *relative_path;
+	char	cur_path[1024];
+	char	*rel_path;
+	char	*tmp;
 
-    if (getcwd(current_path, sizeof(current_path)) == NULL) 
+	if (getcwd(cur_path, sizeof(cur_path)) == NULL)
+		return (NULL);
+	rel_path = ft_strjoin(cur_path, "/");
+	if (rel_path)
 	{
-        perror("Error al obtener el directorio actual");
-        return NULL;
-    }
-    relative_path = ft_strjoin(current_path, path);
-    if (!relative_path)
-        perror("Error al asignar memoria para la ruta relativa");
-    return (relative_path);
+		tmp = ft_strjoin(rel_path, path);
+		free(rel_path);
+		rel_path = tmp;
+	}
+	if (!rel_path)
+		return (NULL);
+	return (rel_path);
 }
 
-int ft_cd(char **args) 
+char	*get_target_path(char **args)
 {
-    char *path;
-    char *newPath;
+	char	*path;
+	char	*home;
 
-    if (args[1] != NULL && args[2] != NULL) 
+	path = args[1];
+	if (args[1] != NULL && args[2] != NULL)
+		return (NULL);
+	if (args[1] == NULL)
 	{
-        printf("Error: Demasiados argumentos\n");
-        return E2BIG;
-    }
-    if (args[1] == NULL) 
-	{
-        path = getenv("HOME");
-        if (!path) 
-		{
-            printf("Error: HOME no está configurado\n");
-            return ENOENT;
-        }
-    } 
+		home = getenv("HOME");
+		if (!home)
+			return (NULL);
+		return (h_abs_path(home));
+	}
+	if (path[0] == '/')
+		return (h_abs_path(path));
 	else
-		path = args[1];
-    if (path[0] == '/') 
-        newPath = handle_absolute_path(path);
-	else
-        newPath = handle_relative_path(path);
-    if (!newPath)
-        return ENOMEM;
-    if (chdir(newPath) != 0) 
+		return (h_rel_path(path));
+}
+
+int	ft_cd(char **args)
+{
+	char	*new_path;
+
+	new_path = get_target_path(args);
+	if (!new_path)
+		return (-1);
+	if (chdir(new_path) != 0)
 	{
-        perror("Error al cambiar de directorio");
-        free(newPath);
-        return errno;
-    }
-    free(newPath);
-    return 0;
+		free (new_path);
+		return (-1);
+	}
+	free (new_path);
+	return (0);
 }
