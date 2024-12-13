@@ -15,7 +15,7 @@ OK 3. No signal in heredoc - Marc
 4. SIGINT only kill last pipe - Marc
 OK 5. error code not passeda the end of pipe
 6. Remove Wildcard in Makefile
-7. Check / and directories
+7. Check / and directories !!
 8. Review brackets mgt
 9. Redo EXIT function
 
