@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/12 00:48:00 by mfleury           #+#    #+#             */
-/*   Updated: 2024/12/12 01:28:31 by mfleury          ###   ########.fr       */
+/*   Updated: 2024/12/13 22:24:52 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,20 @@ static char	*split_unquotes(char *s, int i, int *pos, int *j)
 	return (res);
 }
 
+static char	*split_move(char *s, int cnt[4], int *j)
+{
+	char	*res;
+
+	res = NULL;
+	if (cnt[0] != cnt[2])
+		res = ft_substr(s, cnt[0], cnt[2] - cnt[0] - 1);
+	//else if (cnt[2] - cnt[0] == 1)
+	//	res = ft_strdup(" ");
+	if (res != NULL)
+		*j = *j + 1;
+	return (res);
+}
+
 static void	split_quotes_loop(char *s, char **res)
 {
 	int	cnt[4];
@@ -46,8 +60,7 @@ static void	split_quotes_loop(char *s, char **res)
 			cnt[3] = cnt[1];
 			cnt[2] += sh_jump_to(s + cnt[0], s[cnt[0]]);
 			cnt[0]++;
-			if (cnt[0] != cnt[2])
-				(res[cnt[1]++]) = ft_substr(s, cnt[0], cnt[2] - cnt[0] - 1);
+			res[cnt[1]] = split_move(s, cnt, &cnt[1]);
 			cnt[0] = cnt[2] - 1;
 		}
 		cnt[0]++;
@@ -96,7 +109,7 @@ char	*sh_trim_strings(char *s)
 	return (free_d((void **)res), free_s(s), cat_str);
 }
 
-void	sh_trim_list_strings(char **str)
+/*void	sh_trim_list_strings(char **str)
 {
 	int		i;
 
@@ -108,4 +121,4 @@ void	sh_trim_list_strings(char **str)
 		str[i] = sh_trim_strings(str[i]);
 		i++;
 	}
-}
+}*/

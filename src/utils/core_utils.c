@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/16 16:32:42 by mfleury           #+#    #+#             */
-/*   Updated: 2024/12/13 11:47:17 by mfleury          ###   ########.fr       */
+/*   Updated: 2024/12/13 16:24:00 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,9 +63,12 @@ void	set_gstatus(int err_code)
 	g_status = err_code;
 }
 
-void	custom_errors(int errnum)
+static void	custom_errors(char *cmd, int errnum)
 {
 	g_status = errnum;
+	ft_putstr_fd(cmd, STDERR_FILENO);
+	if (errnum == 7)
+		ft_putendl_fd(E_007, STDERR_FILENO);
 	if (errnum == 201)
 		ft_putendl_fd(E_201, STDERR_FILENO);
 	if (errnum == 202)
@@ -88,7 +91,9 @@ void	flush_errors(char *cmd, int err_sig)
 		ft_putstr_fd("minishell: ", 2);
 		perror(cmd);
 	}
+	else if (err_sig > 1 && err_sig < 128)
+		custom_errors(cmd, err_sig);
 	else if (err_sig > 200 && err_sig < 256)
-		custom_errors(err_sig);
+		custom_errors("minishell", err_sig);
 	return ;
 }

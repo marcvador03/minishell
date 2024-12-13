@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/22 16:08:01 by mfleury           #+#    #+#             */
-/*   Updated: 2024/12/13 09:48:55 by mfleury          ###   ########.fr       */
+/*   Updated: 2024/12/13 16:15:29 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,7 @@ int	subshell(t_shell *sh, char *envp[])
 	if (sh->p_count == 1)
 	{
 		if (ft_strncmp(p->args[0], "exit", 4) == 0)
-			exit_minishell(sh);
+			ft_exit(sh, p->args);
 		single_cmd(p, envp);
 	}
 	else if (multiple_cmd(p, envp) == -1)

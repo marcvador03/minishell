@@ -6,7 +6,7 @@
 /*   By: pmorello <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 12:17:09 by pmorello          #+#    #+#             */
-/*   Updated: 2024/12/13 10:13:25 by mfleury          ###   ########.fr       */
+/*   Updated: 2024/12/13 16:22:47 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@
 # define T_INPUT 2
 # define T_OUTPUT 3
 
-extern int	g_status;
+extern unsigned int	g_status;
 
 /*Enum to match command names input with a number*/
 typedef enum cmd_enum
@@ -114,6 +114,7 @@ int		ft_export(char **args);
 int		ft_env(char **args);
 int		ft_echo(char **args);
 int		ft_cd(char **args);
+void	ft_exit(t_shell *sh, char **args);
 
 /* core utils functions */
 char	*get_full_path(char *arg0, char *envp[]);
@@ -142,7 +143,6 @@ void	exit_minishell_error(t_shell *sh, int status);
 int		main_cmd_return(t_pipe *p, int wstatus);
 void	init_signal(int pid, int hd);
 void	flush_errors(char *cmd, int err_sig);
-void	custom_errors(int errnum);
 
 /*term caps*/
 void	set_term_settings(t_terms *tcap);

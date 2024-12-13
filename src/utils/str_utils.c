@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/07 14:41:31 by mfleury           #+#    #+#             */
-/*   Updated: 2024/12/12 23:28:10 by mfleury          ###   ########.fr       */
+/*   Updated: 2024/12/13 21:17:22 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ int	sh_strpos(const char *big, const char *little)
 	i = 0;
 	while (*str != '\0')
 	{
-		if (*str == 34 || *str == 39)
+		while (*str == 34 || *str == 39)
 			i += sh_jump_to2(&str, *str);
 		if (*little == *str)
 		{

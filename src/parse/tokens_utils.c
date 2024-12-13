@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/07 14:53:29 by mfleury           #+#    #+#             */
-/*   Updated: 2024/12/13 14:01:47 by mfleury          ###   ########.fr       */
+/*   Updated: 2024/12/13 21:16:57 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ int	get_tk2(char *line)
 
 int	check_brackets(char *line, int i)
 {
-	if (line[i] == 34 || line[i] == 39)
+	while (line[i] == 34 || line[i] == 39)
 		i += sh_jump_to(line + i, line[i]);
 	if (line[i] == '\0')
 		return (-1);
@@ -47,7 +47,7 @@ int	count_brackets(t_shell *sh, char *line)
 	i = 0;
 	while (line[i] != '\0')
 	{
-		if (line[i] == 34 || line[i] == 39)
+		while (line[i] == 34 || line[i] == 39)
 			i += sh_jump_to(line + i, line[i]);
 		if (line[i] == '\0')
 			return (0);

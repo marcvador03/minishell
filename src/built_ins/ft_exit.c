@@ -1,41 +1,40 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   quotes_utils.c                                     :+:      :+:    :+:   */
+/*   ft_exit.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mfleury <mfleury@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/12/12 01:27:07 by mfleury           #+#    #+#             */
-/*   Updated: 2024/12/13 21:19:53 by mfleury          ###   ########.fr       */
+/*   Created: 2024/12/13 15:34:22 by mfleury           #+#    #+#             */
+/*   Updated: 2024/12/13 16:27:51 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	count_quote_sections(char *s)
+void	ft_exit(t_shell *sh, char **args)
 {
-	int	n;
 	int	i;
-	int	pos;
 
-	n = 0;
 	i = 0;
-	pos = 0;
-	while (s[i] != ' ' && s[i] != '\0')
+	if (args[1] != NULL && args[2] != NULL)
+		return (flush_errors("exit", 7));
+	else if (args[1] != NULL)
 	{
-		if (s[i] == 34 || s[i] == 39)
+		while (args[1][i] != 0)
 		{
-			if (i != pos)
-				n++;
-			i += sh_jump_to(s + i, s[i]);
-			n++;
-			pos = i;
-			if (s[i] == ' ' || s[i] == '\0')
-				break ;
+			if (ft_isdigit(args[1][i]) == 0)
+			{
+				if (args[1][i] != ' ' && args[1][i] != '-')
+					return (flush_errors("exit", 7));
+			}
+			i++;
 		}
-		i++;
 	}
-	if (i != pos)
-		n++;
-	return (n);
+	g_status = 0;
+	if (args[1] != NULL)
+		g_status = ft_atoi(args[1]);
+	exit_minishell(sh);
+	return ;
 }
+

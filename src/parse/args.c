@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/02 18:52:16 by mfleury           #+#    #+#             */
-/*   Updated: 2024/12/12 01:19:45 by mfleury          ###   ########.fr       */
+/*   Updated: 2024/12/13 23:21:30 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ static int	count_args(char *line)
 	i = 0;
 	while (line[i] != '\0')
 	{
-		if (line[i] == 34 || line[i] == 39)
+		while (line[i] == 34 || line[i] == 39)
 			i += sh_jump_to(line + i, line[i]);
 		if (line[i] == '\0')
 			return (n);
@@ -50,12 +50,12 @@ static char	*get_args(char *line)
 	res = NULL;
 	while (line[i] != '\0')
 	{
-		if (line[i] == 34 || line[i] == 39)
+		while (line[i] == 34 || line[i] == 39)
 			i += sh_jump_to(line + i, line[i]);
 		if (line[i] == ' ')
 		{
 			i += sh_skip(line + i, ' ');
-			res = ft_substr(line, 0, i - 0);
+			res = ft_substr(line, 0, i);
 			return (res);
 		}
 		else if (line[i] == '\0')
@@ -80,10 +80,12 @@ char	**create_args(t_pipe *p)
 	i = 0;
 	while (i < n)
 	{
-		t_line[1] = get_args(t_line[0]);
-		t_line[0] = t_line[0] + ft_strlen(t_line[1]);
-		args[i] = ft_strtrim(t_line[1], " ");
-		free_s(t_line[1]);
+		//t_line[1] = get_args(t_line[0]);
+		//t_line[0] = t_line[0] + ft_strlen(t_line[1]);
+		args[i] = get_args(t_line[0]);
+		t_line[0] = t_line[0] + ft_strlen(args[i]);
+		//args[i] = ft_strtrim(t_line[1], " ");
+		//free_s(t_line[1]);
 		args[i] = sh_trim_strings(args[i]);
 		i++;
 	}

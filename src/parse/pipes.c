@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/28 13:53:58 by mfleury           #+#    #+#             */
-/*   Updated: 2024/12/12 22:31:24 by mfleury          ###   ########.fr       */
+/*   Updated: 2024/12/13 21:09:44 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,7 @@ int	get_next_pipe(t_pipe *p, char *t_line)
 	i = 0;
 	while (t_line[i] != '\0')
 	{
-		if (t_line[i] == 34 || t_line[i] == 39)
+		while (t_line[i] == 34 || t_line[i] == 39)
 			i += sh_jump_to(t_line + i, t_line[i]);
 		if (t_line[i] == '|' || t_line[i] == '\0')
 		{

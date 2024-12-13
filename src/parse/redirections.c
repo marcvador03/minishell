@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/10 08:52:08 by mfleury           #+#    #+#             */
-/*   Updated: 2024/12/12 22:22:54 by mfleury          ###   ########.fr       */
+/*   Updated: 2024/12/13 21:16:26 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ static char	*get_rd(char *line)
 	i = 0;
 	while (line[i] != '\0')
 	{
-		if (line[i] == 34 || line[i] == 39)
+		while (line[i] == 34 || line[i] == 39)
 			i += sh_jump_to(line + i, line[i]);
 		if (line[i] == '>')
 		{

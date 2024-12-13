@@ -6,20 +6,17 @@
 /*   By: mfleury <mfleury@student.42barcelona.      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 10:01:23 by mfleury           #+#    #+#             */
-/*   Updated: 2024/12/13 11:10:43 by mfleury          ###   ########.fr       */
+/*   Updated: 2024/12/13 16:15:09 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
 int	start_shell(char *envp[], t_terms *tcap);
-int	g_status = 0;
+unsigned int	g_status = 0;
 
 int	main_cmd_return(t_pipe *p, int wstatus)
 {
-	t_pipe *tmp;
-
-	tmp = p;
 	p = p->head;
 	if (WIFSIGNALED(wstatus))
 	{
