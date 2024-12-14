@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/11 22:55:30 by mfleury           #+#    #+#             */
-/*   Updated: 2024/12/14 09:20:41 by mfleury          ###   ########.fr       */
+/*   Updated: 2024/12/14 18:46:05 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ int	ft_putchar(int c)
 	return (0);
 }*/
 
-void	set_term_settings(t_terms *tcap)
+void	set_term_settings(t_terms *tcap, char **env)
 {
 	tcap->new_term = tcap->old_term;
 	//tcap->new_term.c_iflag &= ~IGNCR;
@@ -48,31 +48,31 @@ void	set_term_settings(t_terms *tcap)
 	//tcap->new_term.c_iflag &= ~IXON;
 	//tcap->new_term.c_iflag &= ~IXOFF;
 	if (tcsetattr(STDIN_FILENO, TCSANOW, &tcap->new_term) == -1)
-		exit_minishell_error(NULL, 200);
+		exit_minishell_error(NULL, 200, env);
 }
 
-void	unset_term_settings(t_terms *tcap)
+void	unset_term_settings(t_terms *tcap, char **env)
 {
 	if (tcap == NULL)
 		return ;
 	if (tcsetattr(STDIN_FILENO, TCSANOW, &tcap->old_term) == -1)
-		exit_minishell_error(NULL, 200);
+		exit_minishell_error(NULL, 200, env);
 }
 
-void	init_termcaps(t_terms *tcap)
+void	init_termcaps(t_terms *tcap, char **env)
 {
 	int		success;
 	char	term_buffer[2048];
 	char	*term_type;
 
 	if (tcgetattr(STDIN_FILENO, &tcap->old_term) == -1)
-		exit_minishell_error(NULL, 200);
-	term_type = getenv("TERM");
+		exit_minishell_error(NULL, 200, env);
+	term_type = sh_getenv(env, "TERM");
 	if (term_type == 0)
-		exit_minishell_error(NULL, 200);
+		exit_minishell_error(NULL, 200, env);
 	success = tgetent(term_buffer, term_type);
 	if (success <= 0)
-		exit_minishell_error(NULL, 200);
+		exit_minishell_error(NULL, 200, env);
 	/*if (term_settings(tcap, term_buffer) == -1)
 		exit_minishell_error(NULL, 200);*/
 }

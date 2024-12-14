@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 10:01:23 by mfleury           #+#    #+#             */
-/*   Updated: 2024/12/14 10:02:23 by mfleury          ###   ########.fr       */
+/*   Updated: 2024/12/14 18:47:19 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,20 +33,27 @@ int	main_cmd_return(t_pipe *p, int wstatus)
 	return (0);
 }
 
-void	exit_minishell_error(t_shell *sh, int status)
+void	exit_minishell_error(t_shell *sh, int status, char **env)
 {
 	ft_putstr_fd("minishell exited with error: ", 2);
 	ft_putnbr_fd(status, 2);
 	ft_putstr_fd("\n", 2);
-	unset_term_settings(sh->tcap);
+	if (sh != NULL)
+		unset_term_settings(sh->tcap, env);
 	free_sh(sh);
+	if (env != NULL)
+		free_d((void **)env);
 	exit(status);
 }
 
-void	exit_minishell(t_shell *sh)
+void	exit_minishell(t_shell *sh, char **env)
 {
 	printf("minishell exited with success\n");
+	if (sh != NULL)
+		unset_term_settings(sh->tcap, env);
 	free_sh(sh);
+	if (env != NULL)
+		free_d((void **)env);
 	exit(g_status);
 }
 
@@ -57,15 +64,15 @@ int	main(int argc, char *argv[], char *envp[])
 
 	g_status = 0;
 	if (isatty(STDIN_FILENO) == 0)
-		exit_minishell_error(NULL, errno);
-	init_termcaps(&tcap);
-	set_term_settings(&tcap);
-	init_signal(1, 0);
+		exit_minishell_error(NULL, errno, NULL);
 	env = fill_env(envp); 
 	if (env == NULL)
-		exit_minishell_error(NULL, 1);
+		exit_minishell_error(NULL, 1, NULL);
+	init_termcaps(&tcap, env);
+	set_term_settings(&tcap, env);
+	init_signal(1, 0);
 	if (argc > 1 || argv == NULL)
-		exit_minishell_error(NULL, 1);
+		exit_minishell_error(NULL, 1, env);
 	while (1)
 		if (start_shell(env, &tcap) != 0)
 			flush_errors(NULL, g_status);

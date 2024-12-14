@@ -6,16 +6,16 @@
 /*   By: mfleury <mfleury@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/12 01:02:14 by mfleury           #+#    #+#             */
-/*   Updated: 2024/12/13 12:32:55 by mfleury          ###   ########.fr       */
+/*   Updated: 2024/12/14 18:12:13 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-char	*expand_env(char *line);
+char	*expand_env(char *line, char **env);
 
-int	init_data_brackets(t_shell *tmp, int *a, int *b)
+int	init_data_brackets(t_shell *tmp, int *a, int *b, char **env)
 {
-	tmp->s_line = expand_env(tmp->s_line);
+	tmp->s_line = expand_env(tmp->s_line, env);
 	if (tmp->s_line == NULL)
 		return (-1);
 	tmp->bracket[0] += *a;

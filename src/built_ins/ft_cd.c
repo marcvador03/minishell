@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/14 09:20:49 by pmorello          #+#    #+#             */
-/*   Updated: 2024/12/14 10:12:50 by mfleury          ###   ########.fr       */
+/*   Updated: 2024/12/14 18:38:08 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,21 +42,31 @@ char	*h_rel_path(const char *path)
 	return (rel_path);
 }
 
+char	*old_path(char **env)
+{
+	char	*old_path;
+
+	old_path = sh_getenv(env, "OLDPWD");
+	if (old_path == NULL || *old_path == '\0')
+		return (set_gstatus(9), NULL);
+	return (ft_strdup(old_path));
+}
+
 char	*get_target_path(char **args, char **env)
 {
 	char	*path;
 	char	*home;
 
 	path = args[1];
-	if (args[1] != NULL && args[2] != NULL)
-		return (NULL);
 	if (args[1] == NULL)
 	{
 		home = sh_getenv(env, "HOME");
-		if (!home)
-			return (NULL);
+		if (home == NULL || *home == '\0')
+			return (set_gstatus(8), NULL);
 		return (h_abs_path(home));
 	}
+	if (path[0] == '-' && path[1] == '\0')
+		return (old_path(env));
 	if (path[0] == '/')
 		return (h_abs_path(path));
 	else
@@ -66,15 +76,24 @@ char	*get_target_path(char **args, char **env)
 int	ft_cd(char **args, char **env)
 {
 	char	*new_path;
-
+	char	*cur_path;
+	
+	if (args[1] != NULL && args[2] != NULL)
+		return (7);
+	cur_path = getcwd(NULL, 0); 
+	if (cur_path == NULL)
+		return (-1);
 	new_path = get_target_path(args, env);
 	if (!new_path)
-		return (-1);
+		return (free_s(cur_path), 202);
 	if (chdir(new_path) != 0)
+		return (free_s(new_path), free_s(cur_path), -1);
+	else
 	{
-		free (new_path);
-		return (-1);
+		sh_update_env(env,"OLDPWD", cur_path);	
+		free_s(new_path);
+		new_path = getcwd(NULL, 0); 
+		sh_update_env(env,"PWD", new_path);	
 	}
-	free (new_path);
 	return (0);
 }

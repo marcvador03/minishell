@@ -6,13 +6,13 @@
 /*   By: mfleury <mfleury@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/13 15:34:22 by mfleury           #+#    #+#             */
-/*   Updated: 2024/12/13 16:27:51 by mfleury          ###   ########.fr       */
+/*   Updated: 2024/12/14 18:47:44 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	ft_exit(t_shell *sh, char **args)
+void	ft_exit(t_shell *sh, char **args, char **env)
 {
 	int	i;
 
@@ -34,7 +34,7 @@ void	ft_exit(t_shell *sh, char **args)
 	g_status = 0;
 	if (args[1] != NULL)
 		g_status = ft_atoi(args[1]);
-	exit_minishell(sh);
+	exit_minishell(sh, env);
 	return ;
 }
 

@@ -6,7 +6,7 @@
 /*   By: pmorello <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 12:17:09 by pmorello          #+#    #+#             */
-/*   Updated: 2024/12/14 10:12:50 by mfleury          ###   ########.fr       */
+/*   Updated: 2024/12/14 18:47:55 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 # define MINISHELL_H
 
 # include <unistd.h>
+# include <limits.h>
 # include <stdio.h>
 # include <fcntl.h>
 # include <signal.h>
@@ -38,6 +39,9 @@
 # define OUTPUT 1
 # define T_INPUT 2
 # define T_OUTPUT 3
+# ifndef PATH_MAX
+#  define PATH_MAX 4096
+# endif
 
 extern unsigned int	g_status;
 
@@ -114,7 +118,7 @@ int		ft_export(char **args, char **env);
 int		ft_env(char **args, char **env);
 int		ft_echo(char **args, char **env);
 int		ft_cd(char **args, char **env);
-void	ft_exit(t_shell *sh, char **args);
+void	ft_exit(t_shell *sh, char **args, char **env);
 
 /* core utils functions */
 char	*get_full_path(char *arg0, char *envp[]);
@@ -138,17 +142,18 @@ void	free_d(void **ptr);
 void	free_pipe(t_pipe *p);
 void	free_sh(t_shell *sh);
 /* main functions */
-void	exit_minishell(t_shell *sh);
-void	exit_minishell_error(t_shell *sh, int status);
+void	exit_minishell(t_shell *sh, char **env);
+void	exit_minishell_error(t_shell *sh, int status, char **env);
 int		main_cmd_return(t_pipe *p, int wstatus);
 void	init_signal(int pid, int hd);
 void	flush_errors(char *cmd, int err_sig);
 char	**fill_env(char *envp[]);
 char	*sh_getenv(char **env, char *str);
+void	sh_update_env(char **env, char *str, char *new_value);
 
 /*term caps*/
-void	set_term_settings(t_terms *tcap);
-void	unset_term_settings(t_terms *tcap);
-void	init_termcaps(t_terms *tcap);
+void	set_term_settings(t_terms *tcap, char **env);
+void	unset_term_settings(t_terms *tcap, char **env);
+void	init_termcaps(t_terms *tcap, char **env);
 
 #endif

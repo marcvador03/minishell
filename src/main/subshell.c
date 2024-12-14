@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/22 16:08:01 by mfleury           #+#    #+#             */
-/*   Updated: 2024/12/14 10:04:21 by mfleury          ###   ########.fr       */
+/*   Updated: 2024/12/14 18:48:07 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,7 @@ int	subshell(t_shell *sh, char **env)
 	if (sh->p_count == 1)
 	{
 		if (ft_strncmp(p->args[0], "exit", 4) == 0)
-			ft_exit(sh, p->args);
+			ft_exit(sh, p->args, env);
 		single_cmd(p, env);
 	}
 	else if (multiple_cmd(p, env) == -1)
