@@ -19,7 +19,7 @@ BUILTINS = ft_cd.c \
 		   #ft_unset.c \
 
 PARSE =	args.c \
-		environment.c \
+		env_var.c \
 		heredoc.c \
 		pipes.c \
 		quotes.c \
@@ -39,7 +39,8 @@ UTILS = core_utils.c \
 		str_utils.c \
 		str_utils2.c
 
-MAIN = minishell.c \
+MAIN = environment.c \
+	   minishell.c \
 	   shell.c \
 	   shell_utils.c \
 	   signals.c \

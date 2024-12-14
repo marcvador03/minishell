@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/11 22:55:30 by mfleury           #+#    #+#             */
-/*   Updated: 2024/12/12 18:20:40 by mfleury          ###   ########.fr       */
+/*   Updated: 2024/12/14 09:20:41 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,6 +53,8 @@ void	set_term_settings(t_terms *tcap)
 
 void	unset_term_settings(t_terms *tcap)
 {
+	if (tcap == NULL)
+		return ;
 	if (tcsetattr(STDIN_FILENO, TCSANOW, &tcap->old_term) == -1)
 		exit_minishell_error(NULL, 200);
 }

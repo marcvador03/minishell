@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/07 14:31:45 by mfleury           #+#    #+#             */
-/*   Updated: 2024/12/13 14:06:05 by mfleury          ###   ########.fr       */
+/*   Updated: 2024/12/14 08:55:48 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,7 +85,7 @@ int	execute_tokens(t_shell *sh, int i, int level, char *envp[])
 			}
 		}
 		if (sh->bracket[1] < level && level > 0)
-			exit (i);
+			exit (++i);
 		sh = sh->next;
 		i++;
 	}

@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/07 15:12:52 by mfleury           #+#    #+#             */
-/*   Updated: 2024/12/13 14:06:05 by mfleury          ###   ########.fr       */
+/*   Updated: 2024/12/14 09:52:41 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,14 +20,16 @@ int		check_input(char *line);
 int		init_data_brackets(t_shell *tmp, int *a, int *b);
 
 
-static t_shell	*fill_sh(t_shell *sh, char *line, int n, t_terms *tcap)
+static t_shell	*fill_sh(t_shell *sh, char *line, t_terms *tcap, char *envp[])
 {
 	int		i;
 	t_shell	*tmp;
 	int		x[2];
 	char	*t_line;
+	int		n;
 
 	i = 0;
+	n = count_tokens(line);
 	ft_memset(x, 0, 2 * sizeof(int));
 	while (i++ < n && *line != '\0')
 	{
@@ -42,6 +44,9 @@ static t_shell	*fill_sh(t_shell *sh, char *line, int n, t_terms *tcap)
 			return (set_gstatus(202), NULL);
 		sh = tmp->head;
 		sh->tcap = tcap;
+		sh->env = fill_env(envp);
+		if (sh->tcap == NULL || sh->env == NULL)
+			return (NULL);
 	}
 	return (tmp->head);
 }
@@ -96,9 +101,7 @@ int	start_shell(char *envp[], t_terms *tcap)
 	char	*line;
 	t_shell	*sh;
 	t_shell	*head;
-	int		n;
 
-	n = 0;
 	sh = NULL;
 	init_signal(1, 0);
 	line = get_input();
@@ -106,8 +109,7 @@ int	start_shell(char *envp[], t_terms *tcap)
 		exit_minishell(sh);
 	if (check_open_quotes(line) == -1)
 		return (free_s((void *)line), set_gstatus(201), -1);
-	n = count_tokens(line);
-	sh = fill_sh(sh, line, n, tcap);
+	sh = fill_sh(sh, line, tcap, envp);
 	if (sh == NULL)
 		return (free_s((void *)line), -1);
 	free_s((void *)line);
