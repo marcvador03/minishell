@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/17 15:39:35 by mfleury           #+#    #+#             */
-/*   Updated: 2024/12/13 15:39:34 by mfleury          ###   ########.fr       */
+/*   Updated: 2024/12/14 10:09:17 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,22 +29,22 @@ static t_cmd_enum	str_to_enum(const char *str)
 	return (-1);
 }
 
-static int	exec_syscmd_multiple(char *cmd, char **args, char *envp[])
+static int	exec_syscmd_multiple(char *cmd, char **args, char **env)
 {
 	char	*t_cmd;
 	int		errnum;
 
-	t_cmd = get_full_path(cmd, envp);
+	t_cmd = get_full_path(cmd, env);
 	if (t_cmd == NULL)
 		return (-1);
-	errnum = execve(t_cmd, args, envp);
+	errnum = execve(t_cmd, args, env);
 	if (errnum != 0)
 		g_status = errnum;
 	free_s(t_cmd);
 	return (errnum);
 }
 
-static int	exec_syscmd_single(char *cmd, char **args, char *envp[])
+static int	exec_syscmd_single(char *cmd, char **args, char **env)
 {
 	char	*t_cmd;
 	int		wstatus;
@@ -52,14 +52,14 @@ static int	exec_syscmd_single(char *cmd, char **args, char *envp[])
 
 	init_signal(0, 0);
 	wstatus = 0;
-	t_cmd = get_full_path(cmd, envp);
+	t_cmd = get_full_path(cmd, env);
 	if (t_cmd == NULL)
 		return (-1);
 	pid = fork();
 	if (pid == -1)
 		return (free_s(t_cmd), -1);
 	if (pid == 0)
-		return (execve(t_cmd, args, envp));
+		return (execve(t_cmd, args, env));
 	waitpid(pid, &wstatus, 0);
 	//main_cmd_return(NULL, wstatus);
 	if (WIFSIGNALED(wstatus))
@@ -70,7 +70,7 @@ static int	exec_syscmd_single(char *cmd, char **args, char *envp[])
 	return (0);
 }
 
-int	exec_cmd(char *cmd, char **args, int pcount, char *envp[])
+int	exec_cmd(char *cmd, char **args, int pcount, char **env)
 {
 	int			x;
 	t_func_arr	call_cmd[6];
@@ -84,11 +84,11 @@ int	exec_cmd(char *cmd, char **args, int pcount, char *envp[])
 	call_cmd[5] = &ft_echo;
 	x = str_to_enum(cmd);
 	if (x != -1)
-		wstatus = call_cmd[x](args);
+		wstatus = call_cmd[x](args, env);
 	else if (pcount == 1)
-		wstatus = exec_syscmd_single(cmd, args, envp);
+		wstatus = exec_syscmd_single(cmd, args, env);
 	else
-		wstatus = exec_syscmd_multiple(cmd, args, envp);
+		wstatus = exec_syscmd_multiple(cmd, args, env);
 	if (wstatus != 0)
 		flush_errors(cmd, wstatus);
 	return (g_status);

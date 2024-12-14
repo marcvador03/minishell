@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/14 09:54:49 by pmorello          #+#    #+#             */
-/*   Updated: 2024/12/10 16:44:05 by pmorello         ###   ########.fr       */
+/*   Updated: 2024/12/14 10:09:38 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,16 +66,14 @@ void	add_env_var(const char *var)
 	}
 }
 
-int	ft_export(char **args)
+int	ft_export(char **args, char **env)
 {
 	char	*env_value;
-	char	**env;
 	int	i;
 
 	i = 1;
 	if (args[1] == NULL)
 	{
-		env = environ;
 		while (*env)
 		{
 			printf ("declarxe -x %s\n", *env);

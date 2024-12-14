@@ -6,15 +6,15 @@
 /*   By: mfleury <mfleury@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/07 14:31:45 by mfleury           #+#    #+#             */
-/*   Updated: 2024/12/14 08:55:48 by mfleury          ###   ########.fr       */
+/*   Updated: 2024/12/14 10:00:32 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
 int		count_brackets(t_shell *sh, char *line);
-int		execute_tokens(t_shell *sh, int i, int level, char *envp[]);
-int		subshell(t_shell *sh, char *envp[]);
+int		execute_tokens(t_shell *sh, int i, int level, char **env);
+int		subshell(t_shell *sh, char **env);
 int		get_tk2(char *line);
 
 int	get_next_token(t_shell *sh, char *line)
@@ -39,7 +39,7 @@ int	get_next_token(t_shell *sh, char *line)
 	return (0);
 }
 
-static int	exec_token_fork(t_shell *sh, int i, int level, char *envp[])
+static int	exec_token_fork(t_shell *sh, int i, int level, char **env)
 {
 	pid_t	pid;
 	int		cnt;
@@ -49,7 +49,7 @@ static int	exec_token_fork(t_shell *sh, int i, int level, char *envp[])
 	if (pid == -1)
 		perror("minishell: ");
 	if (pid == 0)
-		exit(execute_tokens(sh, i, ++level, envp));
+		exit(execute_tokens(sh, i, ++level, env));
 	waitpid(pid, &cnt, 0);
 	g_status = 0;
 	if (WIFEXITED(cnt))
@@ -69,17 +69,17 @@ static void	move_sh(t_shell **sh, int n)
 	}
 }
 
-int	execute_tokens(t_shell *sh, int i, int level, char *envp[])
+int	execute_tokens(t_shell *sh, int i, int level, char **env)
 {
 	while (sh != NULL)
 	{
 		if (sh->bracket[0] > level)
-			move_sh(&sh, exec_token_fork(sh, i, level, envp));
+			move_sh(&sh, exec_token_fork(sh, i, level, env));
 		else if (sh->bracket[0] == level)
 		{
 			if (sh->token == 0 || (sh->token == 1 && g_status != 0))
 			{
-				if (subshell(sh, envp) != 0)
+				if (subshell(sh, env) != 0)
 					flush_errors(NULL, g_status);
 				sh->pipes = NULL;
 			}

@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 10:01:23 by mfleury           #+#    #+#             */
-/*   Updated: 2024/12/13 16:15:09 by mfleury          ###   ########.fr       */
+/*   Updated: 2024/12/14 10:02:23 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,8 @@ void	exit_minishell(t_shell *sh)
 
 int	main(int argc, char *argv[], char *envp[])
 {
-	t_terms	tcap;	
+	t_terms	tcap;
+	char	**env;
 
 	g_status = 0;
 	if (isatty(STDIN_FILENO) == 0)
@@ -60,10 +61,13 @@ int	main(int argc, char *argv[], char *envp[])
 	init_termcaps(&tcap);
 	set_term_settings(&tcap);
 	init_signal(1, 0);
+	env = fill_env(envp); 
+	if (env == NULL)
+		exit_minishell_error(NULL, 1);
 	if (argc > 1 || argv == NULL)
 		exit_minishell_error(NULL, 1);
 	while (1)
-		if (start_shell(envp, &tcap) != 0)
+		if (start_shell(env, &tcap) != 0)
 			flush_errors(NULL, g_status);
 	return (0);
 }

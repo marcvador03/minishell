@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/14 09:20:49 by pmorello          #+#    #+#             */
-/*   Updated: 2024/12/10 14:23:18 by pmorello         ###   ########.fr       */
+/*   Updated: 2024/12/14 10:12:50 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ char	*h_rel_path(const char *path)
 	return (rel_path);
 }
 
-char	*get_target_path(char **args)
+char	*get_target_path(char **args, char **env)
 {
 	char	*path;
 	char	*home;
@@ -52,7 +52,7 @@ char	*get_target_path(char **args)
 		return (NULL);
 	if (args[1] == NULL)
 	{
-		home = getenv("HOME");
+		home = sh_getenv(env, "HOME");
 		if (!home)
 			return (NULL);
 		return (h_abs_path(home));
@@ -63,11 +63,11 @@ char	*get_target_path(char **args)
 		return (h_rel_path(path));
 }
 
-int	ft_cd(char **args)
+int	ft_cd(char **args, char **env)
 {
 	char	*new_path;
 
-	new_path = get_target_path(args);
+	new_path = get_target_path(args, env);
 	if (!new_path)
 		return (-1);
 	if (chdir(new_path) != 0)

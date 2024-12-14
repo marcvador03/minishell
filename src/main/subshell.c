@@ -6,15 +6,15 @@
 /*   By: mfleury <mfleury@student.42barcelona.      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/22 16:08:01 by mfleury           #+#    #+#             */
-/*   Updated: 2024/12/13 16:15:29 by mfleury          ###   ########.fr       */
+/*   Updated: 2024/12/14 10:04:21 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
 int	count_pipes(char *line);
-int	single_cmd(t_pipe *p, char *envp[]);
-int	multiple_cmd(t_pipe *p, char *envp[]);
+int	single_cmd(t_pipe *p, char **env);
+int	multiple_cmd(t_pipe *p, char **env);
 
 static t_pipe	*fill_pipes(t_pipe *p, char *line, int n)
 {
@@ -38,7 +38,7 @@ static t_pipe	*fill_pipes(t_pipe *p, char *line, int n)
 	return (tmp->head);
 }
 
-int	subshell(t_shell *sh, char *envp[])
+int	subshell(t_shell *sh, char **env)
 {
 	t_pipe	*p;
 
@@ -52,9 +52,9 @@ int	subshell(t_shell *sh, char *envp[])
 	{
 		if (ft_strncmp(p->args[0], "exit", 4) == 0)
 			ft_exit(sh, p->args);
-		single_cmd(p, envp);
+		single_cmd(p, env);
 	}
-	else if (multiple_cmd(p, envp) == -1)
+	else if (multiple_cmd(p, env) == -1)
 		return (free_pipe(sh->pipes), -1);
 	return (free_pipe(sh->pipes), 0);
 }

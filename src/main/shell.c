@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/07 15:12:52 by mfleury           #+#    #+#             */
-/*   Updated: 2024/12/14 09:52:41 by mfleury          ###   ########.fr       */
+/*   Updated: 2024/12/14 10:03:19 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,12 +15,12 @@
 char	*get_tk(char *line);
 int		count_tokens(char *line);
 int		check_open_quotes(char *str);
-int		execute_tokens(t_shell *sh, int i, int level, char *envp[]);
+int		execute_tokens(t_shell *sh, int i, int level, char **env);
 int		check_input(char *line);
 int		init_data_brackets(t_shell *tmp, int *a, int *b);
 
 
-static t_shell	*fill_sh(t_shell *sh, char *line, t_terms *tcap, char *envp[])
+static t_shell	*fill_sh(t_shell *sh, char *line, t_terms *tcap)
 {
 	int		i;
 	t_shell	*tmp;
@@ -44,8 +44,7 @@ static t_shell	*fill_sh(t_shell *sh, char *line, t_terms *tcap, char *envp[])
 			return (set_gstatus(202), NULL);
 		sh = tmp->head;
 		sh->tcap = tcap;
-		sh->env = fill_env(envp);
-		if (sh->tcap == NULL || sh->env == NULL)
+		if (sh->tcap == NULL )
 			return (NULL);
 	}
 	return (tmp->head);
@@ -96,7 +95,7 @@ static char	*get_input(void)
 	return (free_s(prompt), free_s(line), line2);
 }
 
-int	start_shell(char *envp[], t_terms *tcap)
+int	start_shell(char **env, t_terms *tcap)
 {
 	char	*line;
 	t_shell	*sh;
@@ -109,7 +108,7 @@ int	start_shell(char *envp[], t_terms *tcap)
 		exit_minishell(sh);
 	if (check_open_quotes(line) == -1)
 		return (free_s((void *)line), set_gstatus(201), -1);
-	sh = fill_sh(sh, line, tcap, envp);
+	sh = fill_sh(sh, line, tcap);
 	if (sh == NULL)
 		return (free_s((void *)line), -1);
 	free_s((void *)line);
@@ -119,7 +118,7 @@ int	start_shell(char *envp[], t_terms *tcap)
 	g_status = 0;
 	if (sh_check_empty(sh->s_line) == -1)
 		return (free_sh(head), 0);
-	if (execute_tokens(sh, 0, 0, envp) != 0)
+	if (execute_tokens(sh, 0, 0, env) != 0)
 		return (free_sh(head), 1);
 	return (free_sh(head), 0);
 }

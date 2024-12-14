@@ -6,18 +6,14 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/14 09:52:16 by pmorello          #+#    #+#             */
-/*   Updated: 2024/12/10 16:10:35 by pmorello         ###   ########.fr       */
+/*   Updated: 2024/12/14 10:09:52 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-extern char **environ;
-
-int	ft_env(char **args)
+int	ft_env(char **args, char **env)
 {
-	char	**env;
-
 	if (args[1])
 	{
 		if (ft_strncmp(args[1], "env", 3) != 0)
@@ -26,7 +22,6 @@ int	ft_env(char **args)
 			return (0);
 		}
 	}
-	env = environ;
 	while (*env)
 	{	
 		printf("%s\n", *env);

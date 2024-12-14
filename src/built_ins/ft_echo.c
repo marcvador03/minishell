@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/14 09:16:56 by pmorello          #+#    #+#             */
-/*   Updated: 2024/12/13 23:58:55 by mfleury          ###   ########.fr       */
+/*   Updated: 2024/12/14 10:13:32 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,12 +37,14 @@ int	check_params(char **args)
 	return (1);
 }
 
-int	ft_echo(char **args)
+int	ft_echo(char **args, char **env)
 {
 //	size_t	len;
 	int	i;
 	int new_line;
 
+	if (env == NULL)
+		return (-1);
 	new_line = check_params(args);
 	i = new_line;
 	while (args[i] != NULL)

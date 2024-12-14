@@ -6,7 +6,7 @@
 /*   By: pmorello <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 12:17:09 by pmorello          #+#    #+#             */
-/*   Updated: 2024/12/14 09:32:32 by mfleury          ###   ########.fr       */
+/*   Updated: 2024/12/14 10:12:50 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,7 @@ typedef enum cmd_enum
 	END
 }	t_cmd_enum;
 
-typedef int	(*t_func_arr)(char **args);
+typedef int	(*t_func_arr)(char **args, char **env);
 
 typedef struct s_pipe
 {
@@ -92,7 +92,6 @@ typedef struct s_shell
 	int				p_count;
 	t_pipe			*pipes;
 	t_terms			*tcap;
-	char			**env;
 	struct s_shell	*head;
 	struct s_shell	*next;
 }	t_shell;
@@ -109,12 +108,12 @@ typedef struct s_mini
 }	t_mini;
 
 /* built-ins functions*/
-int		ft_unset(char **args);
-int		ft_pwd(char **args);
-int		ft_export(char **args);
-int		ft_env(char **args);
-int		ft_echo(char **args);
-int		ft_cd(char **args);
+int		ft_unset(char **args, char **env);
+int		ft_pwd(char **args, char **env);
+int		ft_export(char **args, char **env);
+int		ft_env(char **args, char **env);
+int		ft_echo(char **args, char **env);
+int		ft_cd(char **args, char **env);
 void	ft_exit(t_shell *sh, char **args);
 
 /* core utils functions */
@@ -145,6 +144,7 @@ int		main_cmd_return(t_pipe *p, int wstatus);
 void	init_signal(int pid, int hd);
 void	flush_errors(char *cmd, int err_sig);
 char	**fill_env(char *envp[]);
+char	*sh_getenv(char **env, char *str);
 
 /*term caps*/
 void	set_term_settings(t_terms *tcap);

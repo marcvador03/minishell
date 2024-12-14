@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/02 18:58:50 by mfleury           #+#    #+#             */
-/*   Updated: 2024/12/13 10:16:55 by mfleury          ###   ########.fr       */
+/*   Updated: 2024/12/14 10:04:21 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,18 +83,18 @@ static int	create_pipes(t_pipe *p)
 	return (0);
 }
 
-int	single_cmd(t_pipe *p, char *envp[])
+int	single_cmd(t_pipe *p, char **env)
 {
 	if (open_redir_fd(p) == -1)
 		return (close_redir_fd(p), -1);
-	exec_cmd(p->args[0], p->args, 1, envp);
+	exec_cmd(p->args[0], p->args, 1, env);
 	close_redir_fd(p);
 	rl_replace_line("", 0);
 	rl_on_new_line();
 	return (g_status);
 }
 
-int	multiple_cmd(t_pipe *p, char *envp[])
+int	multiple_cmd(t_pipe *p, char **env)
 {
 	t_pipe	*head;
 
@@ -110,7 +110,7 @@ int	multiple_cmd(t_pipe *p, char *envp[])
 		if (p->pid == -1)
 			return (-1);
 		if (p->pid == 0)
-			run_child(p, envp);
+			run_child(p, env);
 		p = p->next;
 	}
 	if (run_parent(head) == -1)
