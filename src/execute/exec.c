@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/17 15:39:35 by mfleury           #+#    #+#             */
-/*   Updated: 2024/12/14 10:09:17 by mfleury          ###   ########.fr       */
+/*   Updated: 2024/12/14 19:19:41 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,6 +76,8 @@ int	exec_cmd(char *cmd, char **args, int pcount, char **env)
 	t_func_arr	call_cmd[6];
 	int			wstatus;
 
+	if (ft_strncmp(cmd, "exit", ft_strlen(cmd)) == 0)
+		return (0);
 	call_cmd[0] = &ft_cd;
 	call_cmd[1] = &ft_pwd;
 	//call_cmd[2] = &ft_unset;

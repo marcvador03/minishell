@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 10:01:23 by mfleury           #+#    #+#             */
-/*   Updated: 2024/12/14 18:47:19 by mfleury          ###   ########.fr       */
+/*   Updated: 2024/12/14 19:17:35 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ unsigned int	g_status = 0;
 int	main_cmd_return(t_pipe *p, int wstatus)
 {
 	p = p->head;
-	if (WIFSIGNALED(wstatus))
+	/*if (WIFSIGNALED(wstatus))
 	{
 		while (p != NULL)
 		{
@@ -27,8 +27,8 @@ int	main_cmd_return(t_pipe *p, int wstatus)
 			p = p->next;
 		}
 		//flush_errors(cmd, WTERMSIG(wstatus));
-	}
-	else if (WIFEXITED(wstatus))
+	}*/
+	if (WIFEXITED(wstatus))
 		g_status = WEXITSTATUS(wstatus);
 	return (0);
 }
