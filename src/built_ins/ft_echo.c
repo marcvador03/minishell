@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/14 09:16:56 by pmorello          #+#    #+#             */
-/*   Updated: 2024/12/14 10:13:32 by mfleury          ###   ########.fr       */
+/*   Updated: 2024/12/14 18:54:59 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,8 @@ int	check_params(char **args)
 			{
 				if (args[i][j] != 'n')
 					return (i);
+			//	if (args[i][j + 1] == '\0')
+			//		return (i);
 				j++;
 			}
 		}
@@ -34,7 +36,7 @@ int	check_params(char **args)
 			return (i);
 		i++;
 	}
-	return (1);
+	return (i);
 }
 
 int	ft_echo(char **args, char **env)
