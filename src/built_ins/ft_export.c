@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/14 09:54:49 by pmorello          #+#    #+#             */
-/*   Updated: 2024/12/14 10:09:38 by mfleury          ###   ########.fr       */
+/*   Updated: 2024/12/15 00:04:59 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,6 +66,70 @@ void	add_env_var(const char *var)
 	}
 }
 
+static void	swap(char **str1, char **str2)
+{
+	char	*tmp;
+	
+	tmp = *str1;
+	*str1 = *str2;
+	*str2 = tmp;
+}
+
+static void	sort_array(char **s_env, int o, int n)
+{
+	char	*pivot;
+	int		i;
+	int		j;
+	int		len[2];
+
+	if (o < n)
+	{
+		pivot = s_env[n];
+		len[0] = ft_strlen(pivot);
+		i = o - 1;
+		j = o;
+		while (j < n)
+		{
+			len[1] = ft_strlen(s_env[j]);
+			if (ft_strncmp(pivot, s_env[j], max(len[0], len[1])) > 0)
+				swap(&s_env[i++], &s_env[j]);
+			j++;
+		}
+		swap(&s_env[++i], &s_env[n]);
+		sort_array(s_env, o, i - 1);
+		sort_array(s_env, i + 1, n);
+	}
+}
+
+static int	print_sorted(char **env)
+{
+	int		i;
+	int		j;
+	int		n;
+	char	**s_env;
+
+	s_env = env;
+	n = 0;
+	while (s_env[n] != NULL)
+		n++;
+	sort_array(s_env, 0, n - 1);
+	i = 0;
+	while (s_env[i] != NULL)
+	{
+		if (ft_strchr(s_env[i], '=') != 0)
+		{
+			j = 0;
+			ft_putstr_fd("declare -x ", STDOUT_FILENO);
+			while (s_env[i][j] != '=')
+				ft_putchar_fd(s_env[i][j++], STDOUT_FILENO);
+		}
+		else
+			printf ("declarxe -x %s\n", s_env[i]);
+		i++;
+	}
+	return (0);	
+}
+
 int	ft_export(char **args, char **env)
 {
 	char	*env_value;
@@ -73,14 +137,7 @@ int	ft_export(char **args, char **env)
 
 	i = 1;
 	if (args[1] == NULL)
-	{
-		while (*env)
-		{
-			printf ("declarxe -x %s\n", *env);
-			env++;
-		}
-		return (0);
-	}
+		return (print_sorted(env));
 	while (args[i])
 	{
 		env_value = args[i];

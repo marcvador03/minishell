@@ -17,9 +17,17 @@ OK 5. error code not passeda the end of pipe
 6. Remove Wildcard in Makefile
 7. Check / and directories !!
 8. Review brackets mgt
-9. Redo EXIT function
-10. check quotes (l196)
-11. check builtins 
+OK 9. Redo EXIT function
+OK 10. check quotes (l196)
+11. check builtins
+11.1 echo - OK
+11.2 cd - OK
+11.3 pwd
+11.4 env
+11.5 export
+11.6 unset
+12 add ~
+13 correct $ bugs ($, ignore nonalpha characters,...) 
 
 
 	tcap->new_term.c_lflag &= ~PARENB;

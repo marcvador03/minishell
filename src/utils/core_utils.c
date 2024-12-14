@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/16 16:32:42 by mfleury           #+#    #+#             */
-/*   Updated: 2024/12/14 18:30:12 by mfleury          ###   ########.fr       */
+/*   Updated: 2024/12/14 23:07:54 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,4 +102,12 @@ void	flush_errors(char *cmd, int err_sig)
 	else if (err_sig > 200 && err_sig < 256)
 		custom_errors("minishell", err_sig);
 	return ;
+}
+
+int	max(int n1, int n2)
+{
+	if (n1 > n2)
+		return (n1);
+	else
+		return (n2);
 }

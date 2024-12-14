@@ -6,7 +6,7 @@
 /*   By: pmorello <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 12:17:09 by pmorello          #+#    #+#             */
-/*   Updated: 2024/12/14 18:47:55 by mfleury          ###   ########.fr       */
+/*   Updated: 2024/12/14 23:07:54 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -123,6 +123,7 @@ void	ft_exit(t_shell *sh, char **args, char **env);
 /* core utils functions */
 char	*get_full_path(char *arg0, char *envp[]);
 void	set_gstatus(int err_code);
+int		max(int n1, int n2);
 /* str utils functions */
 void	sh_trim_list_strings(char **str);
 char	*sh_trim_strings(char *s);
