@@ -6,7 +6,7 @@
 /*   By: pmorello <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 12:17:09 by pmorello          #+#    #+#             */
-/*   Updated: 2024/12/14 23:07:54 by mfleury          ###   ########.fr       */
+/*   Updated: 2024/12/15 11:15:41 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -148,9 +148,13 @@ void	exit_minishell_error(t_shell *sh, int status, char **env);
 int		main_cmd_return(t_pipe *p, int wstatus);
 void	init_signal(int pid, int hd);
 void	flush_errors(char *cmd, int err_sig);
-char	**fill_env(char *envp[]);
+
+/* environment functions */
 char	*sh_getenv(char **env, char *str);
-void	sh_update_env(char **env, char *str, char *new_value);
+char	**fill_env(char *envp[]);
+char	**sh_update_env(char **env, char *str, char *new_value);
+char	**sh_add_env(char **env, char *str, char *new_value);
+char	**sh_del_env(char **env, char *str);
 
 /*term caps*/
 void	set_term_settings(t_terms *tcap, char **env);

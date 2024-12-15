@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/18 12:17:52 by mfleury           #+#    #+#             */
-/*   Updated: 2024/12/14 18:30:52 by mfleury          ###   ########.fr       */
+/*   Updated: 2024/12/15 11:31:04 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,9 @@
 # define ERROR_MINISHELL_H
 
 # define E_007 ": too many arguments"
-# define E_008 ": too many arguments"
-# define E_009 ": too many arguments"
+# define E_008 ": $HOME is not set"
+# define E_009 ": $OLDPWD is not set"
+# define E_010 ": export variable name is not valid"
 
 # define E_200 ": error encountered during terminal setup"
 # define E_201 ": missing quotes \" or \'"

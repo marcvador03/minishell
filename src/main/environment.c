@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/14 09:05:40 by mfleury           #+#    #+#             */
-/*   Updated: 2024/12/14 17:53:45 by mfleury          ###   ########.fr       */
+/*   Updated: 2024/12/15 12:02:16 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,35 +65,60 @@ char	*sh_getenv(char **env, char *str)
 	return (NULL);
 }
 
-void	sh_update_env(char **env, char *str, char *new_value)
+char	**sh_add_env(char **env, char *var_name, char *new_value)
+{
+	int		i;
+	char	**new_env;
+	char	*ptr;
+	char	*entry;
+
+	if (env == NULL || var_name == NULL)
+		return (NULL);
+	new_env = create_env(env, 1);
+	ptr = ft_strjoin(var_name, "=");
+	entry = ft_strjoin(ptr, new_value);
+	if (new_env == NULL || ptr == NULL || entry == NULL)
+		return (set_gstatus(202), NULL);
+	i = 0;
+	while (env[i] != NULL)
+	{
+		new_env[i] = ft_strdup(env[i]);
+		if (new_env[i++] == NULL)
+			return (set_gstatus(202), NULL);
+	}
+	new_env[i] = ft_strdup(entry);
+	if (new_env[i] == NULL)
+		return (set_gstatus(202), NULL);
+	return (free_d((void **)env), new_env);
+}
+
+char	**sh_update_env(char **env, char *var_name, char *new_value)
 {
 	int		i;
 	int		len;
 	char	*tmp[2];
 	char	*new_value2;
 	
-	if (env == NULL || str == NULL)
-		return ;
-	len = ft_strlen(str);
+	if (env == NULL || var_name == NULL)
+		return (NULL);
+	len = ft_strlen(var_name);
 	i = 0;
-
 	while (env[i] != NULL)
 	{
-		if (ft_strncmp(env[i], str, len) == 0)
+		if (ft_strncmp(env[i], var_name, len) == 0)
 		{
 			tmp[0] = env[i];
-			tmp[1] = ft_strjoin(str, "=");
+			tmp[1] = ft_strjoin(var_name, "=");
 			new_value2 = ft_strjoin(tmp[1], new_value);
 			env[i] = new_value2;
 			free_s(tmp[0]);
 			free_s(tmp[1]);
 			free_s(new_value);
-			return ;
+			return (env);
 		}
 		i++;
 	}
-	//insert new value function
-	return;
+	return(sh_add_env(env, var_name, new_value));
 }
 
 char	**sh_del_env(char **env, char *str)
