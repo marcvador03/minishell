@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/14 09:54:49 by pmorello          #+#    #+#             */
-/*   Updated: 2024/12/15 12:03:36 by mfleury          ###   ########.fr       */
+/*   Updated: 2024/12/15 12:43:49 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -127,7 +127,7 @@ static int	print_sorted(char **env, int n)
 			printf ("declarxe -x %s\n", s_env[i]);
 		i++;
 	}
-	return (free_d((void **)s_env), 0);	
+	return (free_d(s_env), 0);	
 }
 
 int	check_export_var(char *str)
@@ -143,7 +143,7 @@ int	check_export_var(char *str)
 	return (0);
 }
 
-int	ft_export(char **args, char **env)
+int	ft_export(char **args, char ***env)
 {
 	char	*var_name;
 	char	*env_value;
@@ -155,7 +155,7 @@ int	ft_export(char **args, char **env)
 	while (env[n] != NULL)
 		n++;
 	if (args[1] == NULL)
-		return (print_sorted(env, n));
+		return (print_sorted(*env, n));
 	while (args[i])
 	{
 		if (check_export_var(args[i]) == -1)
@@ -166,8 +166,8 @@ int	ft_export(char **args, char **env)
 			env_value = NULL;
 		else
 			env_value = &args[i][n + 1];
-		env = sh_update_env(env, var_name, env_value);
+		*env = sh_update_env(env, var_name, env_value);
 		i++;
 	}
-	return (0);
+	return (free_s(var_name), 0);
 }

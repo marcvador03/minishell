@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/02 18:58:50 by mfleury           #+#    #+#             */
-/*   Updated: 2024/12/14 10:04:21 by mfleury          ###   ########.fr       */
+/*   Updated: 2024/12/15 12:17:20 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,9 +15,9 @@
 int		open_redir_fd(t_pipe *p);
 int		close_redir_fd(t_pipe *p);
 int		close_pipes(t_pipe *p);
-int		exec_cmd(char *cmd, char **args, int pcount, char *envp[]);
+int		exec_cmd(char *cmd, char **args, int pcount, char ***env);
 
-static int	run_child(t_pipe *p, char *envp[])
+static int	run_child(t_pipe *p, char ***env)
 {
 	t_pipe	*o;
 	int		wstatus;
@@ -38,7 +38,7 @@ static int	run_child(t_pipe *p, char *envp[])
 	close_pipes(p);
 	if (open_redir_fd(p) == -1)
 		return (close_redir_fd(p), -1);
-	wstatus = exec_cmd(p->args[0], p->args, 0, envp);
+	wstatus = exec_cmd(p->args[0], p->args, 0, env);
 	close_redir_fd(p);
 	exit (wstatus);
 }
@@ -83,7 +83,7 @@ static int	create_pipes(t_pipe *p)
 	return (0);
 }
 
-int	single_cmd(t_pipe *p, char **env)
+int	single_cmd(t_pipe *p, char ***env)
 {
 	if (open_redir_fd(p) == -1)
 		return (close_redir_fd(p), -1);
@@ -94,7 +94,7 @@ int	single_cmd(t_pipe *p, char **env)
 	return (g_status);
 }
 
-int	multiple_cmd(t_pipe *p, char **env)
+int	multiple_cmd(t_pipe *p, char ***env)
 {
 	t_pipe	*head;
 

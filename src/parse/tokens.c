@@ -6,15 +6,15 @@
 /*   By: mfleury <mfleury@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/07 14:31:45 by mfleury           #+#    #+#             */
-/*   Updated: 2024/12/14 10:00:32 by mfleury          ###   ########.fr       */
+/*   Updated: 2024/12/15 12:19:24 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
 int		count_brackets(t_shell *sh, char *line);
-int		execute_tokens(t_shell *sh, int i, int level, char **env);
-int		subshell(t_shell *sh, char **env);
+int		execute_tokens(t_shell *sh, int i, int level, char ***env);
+int		subshell(t_shell *sh, char ***env);
 int		get_tk2(char *line);
 
 int	get_next_token(t_shell *sh, char *line)
@@ -39,7 +39,7 @@ int	get_next_token(t_shell *sh, char *line)
 	return (0);
 }
 
-static int	exec_token_fork(t_shell *sh, int i, int level, char **env)
+static int	exec_token_fork(t_shell *sh, int i, int level, char ***env)
 {
 	pid_t	pid;
 	int		cnt;
@@ -69,7 +69,7 @@ static void	move_sh(t_shell **sh, int n)
 	}
 }
 
-int	execute_tokens(t_shell *sh, int i, int level, char **env)
+int	execute_tokens(t_shell *sh, int i, int level, char ***env)
 {
 	while (sh != NULL)
 	{

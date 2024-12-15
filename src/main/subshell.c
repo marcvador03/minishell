@@ -6,15 +6,15 @@
 /*   By: mfleury <mfleury@student.42barcelona.      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/22 16:08:01 by mfleury           #+#    #+#             */
-/*   Updated: 2024/12/14 18:48:07 by mfleury          ###   ########.fr       */
+/*   Updated: 2024/12/15 12:12:28 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
 int	count_pipes(char *line);
-int	single_cmd(t_pipe *p, char **env);
-int	multiple_cmd(t_pipe *p, char **env);
+int	single_cmd(t_pipe *p, char ***env);
+int	multiple_cmd(t_pipe *p, char ***env);
 
 static t_pipe	*fill_pipes(t_pipe *p, char *line, int n)
 {
@@ -38,7 +38,7 @@ static t_pipe	*fill_pipes(t_pipe *p, char *line, int n)
 	return (tmp->head);
 }
 
-int	subshell(t_shell *sh, char **env)
+int	subshell(t_shell *sh, char ***env)
 {
 	t_pipe	*p;
 
@@ -51,7 +51,7 @@ int	subshell(t_shell *sh, char **env)
 	if (sh->p_count == 1)
 	{
 		if (ft_strncmp(p->args[0], "exit", 4) == 0)
-			ft_exit(sh, p->args, env);
+			ft_exit(sh, p->args, *env);
 		single_cmd(p, env);
 	}
 	else if (multiple_cmd(p, env) == -1)

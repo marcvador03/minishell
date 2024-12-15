@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/07 15:12:52 by mfleury           #+#    #+#             */
-/*   Updated: 2024/12/14 18:45:02 by mfleury          ###   ########.fr       */
+/*   Updated: 2024/12/15 12:20:49 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 char	*get_tk(char *line);
 int		count_tokens(char *line);
 int		check_open_quotes(char *str);
-int		execute_tokens(t_shell *sh, int i, int level, char **env);
+int		execute_tokens(t_shell *sh, int i, int level, char ***env);
 int		check_input(char *line);
 int		init_data_brackets(t_shell *tmp, int *a, int *b, char **env);
 
@@ -96,7 +96,7 @@ static char	*get_input(char **env)
 	return (free_s(prompt), free_s(line), line2);
 }
 
-int	start_shell(char **env, t_terms *tcap)
+int	start_shell(char ***env, t_terms *tcap)
 {
 	char	*line;
 	t_shell	*sh;
@@ -104,14 +104,14 @@ int	start_shell(char **env, t_terms *tcap)
 
 	sh = NULL;
 	init_signal(1, 0);
-	line = get_input(env);
+	line = get_input(*env);
 	if (line == NULL && g_status == 0)
-		exit_minishell(sh, env);
+		exit_minishell(sh, *env);
 	else if (line == NULL && g_status != 0)
-		exit_minishell_error(sh, g_status, env);
+		exit_minishell_error(sh, g_status, *env);
 	if (check_open_quotes(line) == -1)
 		return (free_s((void *)line), set_gstatus(201), -1);
-	sh = fill_sh(sh, line, tcap, env);
+	sh = fill_sh(sh, line, tcap, *env);
 	if (sh == NULL)
 		return (free_s((void *)line), -1);
 	free_s((void *)line);

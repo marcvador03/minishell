@@ -6,13 +6,13 @@
 /*   By: mfleury <mfleury@student.42barcelona.      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 10:01:23 by mfleury           #+#    #+#             */
-/*   Updated: 2024/12/15 12:09:26 by mfleury          ###   ########.fr       */
+/*   Updated: 2024/12/15 12:40:05 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	start_shell(char *envp[], t_terms *tcap);
+int	start_shell(char ***env, t_terms *tcap);
 unsigned int	g_status = 0;
 
 int	main_cmd_return(t_pipe *p, int wstatus)
@@ -42,7 +42,7 @@ void	exit_minishell_error(t_shell *sh, int status, char **env)
 		unset_term_settings(sh->tcap, env);
 	free_sh(sh);
 	if (env != NULL)
-		free_d((void **)env);
+		free_d(env);
 	exit(status);
 }
 
@@ -53,7 +53,7 @@ void	exit_minishell(t_shell *sh, char **env)
 		unset_term_settings(sh->tcap, env);
 	free_sh(sh);
 	if (env != NULL)
-		free_d((void **)env);
+		free_d(env);
 	exit(g_status);
 }
 
@@ -74,7 +74,7 @@ int	main(int argc, char *argv[], char *envp[])
 	if (argc > 1 || argv == NULL)
 		exit_minishell_error(NULL, 1, env);
 	while (1)
-		if (start_shell(env, &tcap) != 0)
+		if (start_shell(&env, &tcap) != 0)
 			flush_errors(NULL, g_status);
 	return (0);
 }

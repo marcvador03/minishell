@@ -6,13 +6,13 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/14 11:23:34 by pmorello          #+#    #+#             */
-/*   Updated: 2024/12/14 10:08:01 by mfleury          ###   ########.fr       */
+/*   Updated: 2024/12/15 12:16:32 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int ft_unset(char **args, char **env) 
+int ft_unset(char **args, char ***env) 
 {
     if (args[1] == NULL)
 	{

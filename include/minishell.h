@@ -6,7 +6,7 @@
 /*   By: pmorello <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 12:17:09 by pmorello          #+#    #+#             */
-/*   Updated: 2024/12/15 11:15:41 by mfleury          ###   ########.fr       */
+/*   Updated: 2024/12/15 12:37:14 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,7 @@ typedef enum cmd_enum
 	END
 }	t_cmd_enum;
 
-typedef int	(*t_func_arr)(char **args, char **env);
+typedef int	(*t_func_arr)(char **args, char ***env);
 
 typedef struct s_pipe
 {
@@ -112,12 +112,12 @@ typedef struct s_mini
 }	t_mini;
 
 /* built-ins functions*/
-int		ft_unset(char **args, char **env);
-int		ft_pwd(char **args, char **env);
-int		ft_export(char **args, char **env);
-int		ft_env(char **args, char **env);
-int		ft_echo(char **args, char **env);
-int		ft_cd(char **args, char **env);
+int		ft_unset(char **args, char ***env);
+int		ft_pwd(char **args, char ***env);
+int		ft_export(char **args, char ***env);
+int		ft_env(char **args, char ***env);
+int		ft_echo(char **args, char ***env);
+int		ft_cd(char **args, char ***env);
 void	ft_exit(t_shell *sh, char **args, char **env);
 
 /* core utils functions */
@@ -139,7 +139,7 @@ t_pipe	*p_lstnew(char *line);
 t_pipe	*p_lstadd_back(t_pipe **pipe, char *line);
 /* free utils functions */
 void	free_s(void *ptr);
-void	free_d(void **ptr);
+void	free_d(char **ptr);
 void	free_pipe(t_pipe *p);
 void	free_sh(t_shell *sh);
 /* main functions */
@@ -152,9 +152,9 @@ void	flush_errors(char *cmd, int err_sig);
 /* environment functions */
 char	*sh_getenv(char **env, char *str);
 char	**fill_env(char *envp[]);
-char	**sh_update_env(char **env, char *str, char *new_value);
-char	**sh_add_env(char **env, char *str, char *new_value);
-char	**sh_del_env(char **env, char *str);
+char	**sh_update_env(char ***env, char *str, char *new_value);
+char	**sh_add_env(char ***env, char *str, char *new_value);
+char	**sh_del_env(char ***env, char *str);
 
 /*term caps*/
 void	set_term_settings(t_terms *tcap, char **env);

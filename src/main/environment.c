@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/14 09:05:40 by mfleury           #+#    #+#             */
-/*   Updated: 2024/12/15 12:02:16 by mfleury          ###   ########.fr       */
+/*   Updated: 2024/12/15 12:40:48 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,85 +65,94 @@ char	*sh_getenv(char **env, char *str)
 	return (NULL);
 }
 
-char	**sh_add_env(char **env, char *var_name, char *new_value)
+char	*create_entry(char *var_name, char *new_value) 
+{
+	char	*res;
+	char	*tmp;
+
+	tmp = ft_strjoin(var_name, "=");
+	if (tmp == NULL)
+		return (NULL);
+	res = ft_strjoin(tmp, new_value);
+	if (res == NULL)
+		return (NULL);
+	return (free_s(tmp), res);
+}
+
+char	**sh_add_env(char ***env, char *var_name, char *new_value)
 {
 	int		i;
 	char	**new_env;
-	char	*ptr;
 	char	*entry;
 
-	if (env == NULL || var_name == NULL)
+	if (*env == NULL || var_name == NULL)
 		return (NULL);
-	new_env = create_env(env, 1);
-	ptr = ft_strjoin(var_name, "=");
-	entry = ft_strjoin(ptr, new_value);
-	if (new_env == NULL || ptr == NULL || entry == NULL)
+	new_env = create_env(*env, 1);
+	if (new_env == NULL)
 		return (set_gstatus(202), NULL);
+	entry = create_entry(var_name, new_value);
+	if (entry == NULL)
+		return (free_d(new_env), set_gstatus(202), NULL);
 	i = 0;
-	while (env[i] != NULL)
+	while ((*env)[i] != NULL)
 	{
-		new_env[i] = ft_strdup(env[i]);
+		new_env[i] = ft_strdup((*env)[i]);
 		if (new_env[i++] == NULL)
-			return (set_gstatus(202), NULL);
+			return (free_d(new_env), free_s(entry), set_gstatus(202), NULL);
 	}
 	new_env[i] = ft_strdup(entry);
 	if (new_env[i] == NULL)
-		return (set_gstatus(202), NULL);
-	return (free_d((void **)env), new_env);
+		return (free_d(new_env), free_s(entry), set_gstatus(202), NULL);
+	return (free_s(entry), free_d((*env)), new_env);
 }
 
-char	**sh_update_env(char **env, char *var_name, char *new_value)
+char	**sh_update_env(char ***env, char *var_name, char *new_value)
 {
 	int		i;
 	int		len;
-	char	*tmp[2];
-	char	*new_value2;
+	char	*entry;
 	
-	if (env == NULL || var_name == NULL)
+	if (*env == NULL || var_name == NULL)
 		return (NULL);
 	len = ft_strlen(var_name);
+	entry = NULL;
 	i = 0;
-	while (env[i] != NULL)
+	while ((*env)[i] != NULL)
 	{
-		if (ft_strncmp(env[i], var_name, len) == 0)
+		if (ft_strncmp((*env)[i], var_name, len) == 0)
 		{
-			tmp[0] = env[i];
-			tmp[1] = ft_strjoin(var_name, "=");
-			new_value2 = ft_strjoin(tmp[1], new_value);
-			env[i] = new_value2;
-			free_s(tmp[0]);
-			free_s(tmp[1]);
-			free_s(new_value);
-			return (env);
+			entry = create_entry(var_name, new_value);
+			(*env)[i] = entry;
+			return (free_s(entry), *env);
 		}
 		i++;
 	}
-	return(sh_add_env(env, var_name, new_value));
+	return(free_s(entry), sh_add_env(env, var_name, new_value));
 }
 
-char	**sh_del_env(char **env, char *str)
+char	**sh_del_env(char ***env, char *str)
 {
 	int		i;
 	int		len;
 	char	**new_env;
 
-	if (env == NULL || str == NULL)
+	if (*env == NULL || str == NULL)
 		return (NULL);
-	new_env = create_env(env, -1);
+	new_env = create_env(*env, -1);
 	if (new_env == NULL)
 		return (set_gstatus(202), NULL);
 	len = ft_strlen(str);
 	i = 0;
-	while (env[i] != NULL)
+	while ((*env)[i] != NULL)
 	{
-		if (ft_strncmp(env[i], str, len) != 0)
+		if (ft_strncmp((*env)[i], str, len) != 0)
 		{
-			new_env[i] = ft_strdup(env[i]);
+			new_env[i] = ft_strdup((*env)[i]);
 			if (new_env[i] == NULL)
 				return (set_gstatus(202), NULL);
 		}
 		i++;
 	}
-	return (free_d((void **)env), new_env);
+	return (free_d(*env), new_env);
 }
 

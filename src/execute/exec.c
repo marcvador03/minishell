@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/17 15:39:35 by mfleury           #+#    #+#             */
-/*   Updated: 2024/12/14 19:19:41 by mfleury          ###   ########.fr       */
+/*   Updated: 2024/12/15 12:14:16 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,7 @@ static int	exec_syscmd_single(char *cmd, char **args, char **env)
 	return (0);
 }
 
-int	exec_cmd(char *cmd, char **args, int pcount, char **env)
+int	exec_cmd(char *cmd, char **args, int pcount, char ***env)
 {
 	int			x;
 	t_func_arr	call_cmd[6];
@@ -88,9 +88,9 @@ int	exec_cmd(char *cmd, char **args, int pcount, char **env)
 	if (x != -1)
 		wstatus = call_cmd[x](args, env);
 	else if (pcount == 1)
-		wstatus = exec_syscmd_single(cmd, args, env);
+		wstatus = exec_syscmd_single(cmd, args, *env);
 	else
-		wstatus = exec_syscmd_multiple(cmd, args, env);
+		wstatus = exec_syscmd_multiple(cmd, args, *env);
 	if (wstatus != 0)
 		flush_errors(cmd, wstatus);
 	return (g_status);

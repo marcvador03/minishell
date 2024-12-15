@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/16 16:32:42 by mfleury           #+#    #+#             */
-/*   Updated: 2024/12/14 23:07:54 by mfleury          ###   ########.fr       */
+/*   Updated: 2024/12/15 12:41:54 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,19 +43,19 @@ char	*get_full_path(char *arg0, char *envp[])
 		return (NULL);
 	cmd_in = ft_strjoin("/", arg0);
 	if (cmd_in == NULL)
-		return (free_d((void **)paths), NULL);
+		return (free_d(paths), NULL);
 	i = 0;
 	while (paths[i] != NULL)
 	{
 		cmd_out = ft_strjoin(paths[i], cmd_in);
 		if (cmd_out == NULL)
-			return (free_d((void **)paths), free_s(cmd_in), NULL);
+			return (free_d(paths), free_s(cmd_in), NULL);
 		if (access(cmd_out, F_OK) == 0)
-			return (free_d((void **)paths), free_s(cmd_in), cmd_out);
+			return (free_d(paths), free_s(cmd_in), cmd_out);
 		i++;
 		free_s(cmd_out);
 	}
-	return (free_d((void **)paths), free_s(cmd_in), NULL);
+	return (free_d(paths), free_s(cmd_in), NULL);
 }
 
 void	set_gstatus(int err_code)

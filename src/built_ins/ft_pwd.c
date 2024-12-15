@@ -6,13 +6,13 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/14 09:44:34 by pmorello          #+#    #+#             */
-/*   Updated: 2024/12/14 10:13:56 by mfleury          ###   ########.fr       */
+/*   Updated: 2024/12/15 12:16:33 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	ft_pwd(char **args, char **env)
+int	ft_pwd(char **args, char ***env)
 {
 	char *buffer;
 	size_t	size;
