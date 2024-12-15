@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 10:01:23 by mfleury           #+#    #+#             */
-/*   Updated: 2024/12/15 12:40:05 by mfleury          ###   ########.fr       */
+/*   Updated: 2024/12/15 16:52:38 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,16 +18,6 @@ unsigned int	g_status = 0;
 int	main_cmd_return(t_pipe *p, int wstatus)
 {
 	p = p->head;
-	/*if (WIFSIGNALED(wstatus))
-	{
-		while (p != NULL)
-		{
-			if(kill(p->pid, SIGKILL) == -1)
-				perror("kill");
-			p = p->next;
-		}
-		//flush_errors(cmd, WTERMSIG(wstatus));
-	}*/
 	if (WIFEXITED(wstatus))
 		g_status = WEXITSTATUS(wstatus);
 	return (0);

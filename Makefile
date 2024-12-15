@@ -15,8 +15,8 @@ BUILTINS = ft_cd.c \
 		   ft_exit.c \
 		   ft_export.c \
 		   ft_pwd.c \
-		   built_utils.c \
-		   #ft_unset.c \
+		   ft_unset.c \
+		   built_utils.c
 
 PARSE =	args.c \
 		env_var.c \

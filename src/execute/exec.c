@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/17 15:39:35 by mfleury           #+#    #+#             */
-/*   Updated: 2024/12/15 12:14:16 by mfleury          ###   ########.fr       */
+/*   Updated: 2024/12/15 17:11:45 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,18 @@ static t_cmd_enum	str_to_enum(const char *str)
 	return (-1);
 }
 
+static int	check_directory(char *cmd)
+{
+	int	len;
+
+	len = ft_strlen(cmd);
+	if (len > 0 && cmd[len - 1] == '/')
+		return (-1);
+	if (len > 1 && cmd[len - 2] == '/' && cmd[len - 1] == '.')
+		return (-1);
+	return (0);
+}
+
 static int	exec_syscmd_multiple(char *cmd, char **args, char **env)
 {
 	char	*t_cmd;
@@ -36,7 +48,9 @@ static int	exec_syscmd_multiple(char *cmd, char **args, char **env)
 
 	t_cmd = get_full_path(cmd, env);
 	if (t_cmd == NULL)
-		return (-1);
+		return (g_status);
+	if (check_directory(cmd) == -1)	
+		return (126);
 	errnum = execve(t_cmd, args, env);
 	if (errnum != 0)
 		g_status = errnum;
@@ -46,15 +60,17 @@ static int	exec_syscmd_multiple(char *cmd, char **args, char **env)
 
 static int	exec_syscmd_single(char *cmd, char **args, char **env)
 {
-	char	*t_cmd;
-	int		wstatus;
-	pid_t	pid;
+	char		*t_cmd;
+	int			wstatus;
+	pid_t		pid;
 
 	init_signal(0, 0);
 	wstatus = 0;
 	t_cmd = get_full_path(cmd, env);
 	if (t_cmd == NULL)
-		return (-1);
+		return (g_status);
+	if (check_directory(cmd) == -1)	
+		return (126);
 	pid = fork();
 	if (pid == -1)
 		return (free_s(t_cmd), -1);
@@ -66,8 +82,7 @@ static int	exec_syscmd_single(char *cmd, char **args, char **env)
 		kill(pid, 9);
 	if (WIFEXITED(wstatus) && WIFSIGNALED(wstatus) != 0)
 		g_status = WEXITSTATUS(wstatus);
-	free_s(t_cmd);
-	return (0);
+	return (free_s(t_cmd), 0);
 }
 
 int	exec_cmd(char *cmd, char **args, int pcount, char ***env)
@@ -80,7 +95,7 @@ int	exec_cmd(char *cmd, char **args, int pcount, char ***env)
 		return (0);
 	call_cmd[0] = &ft_cd;
 	call_cmd[1] = &ft_pwd;
-	//call_cmd[2] = &ft_unset;
+	call_cmd[2] = &ft_unset;
 	call_cmd[3] = &ft_export;
 	call_cmd[4] = &ft_env;
 	call_cmd[5] = &ft_echo;

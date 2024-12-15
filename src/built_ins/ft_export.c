@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/14 09:54:49 by pmorello          #+#    #+#             */
-/*   Updated: 2024/12/15 12:43:49 by mfleury          ###   ########.fr       */
+/*   Updated: 2024/12/15 15:06:59 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,7 +75,7 @@ static void	swap(char **str1, char **str2)
 	*str2 = tmp;
 }
 
-static void	sort_array(char **s_env, int o, int n)
+static char	**sort_array(char **s_env, int o, int n)
 {
 	char	*pivot;
 	int		i;
@@ -96,9 +96,10 @@ static void	sort_array(char **s_env, int o, int n)
 			j++;
 		}
 		swap(&s_env[++i], &s_env[n]);
-		sort_array(s_env, o, i - 1);
-		sort_array(s_env, i + 1, n);
+		s_env = sort_array(s_env, o, i - 1);
+		s_env = sort_array(s_env, i + 1, n);
 	}
+	return (s_env);
 }
 
 static int	print_sorted(char **env, int n)
@@ -110,7 +111,7 @@ static int	print_sorted(char **env, int n)
 	s_env = fill_env(env);
 	if (s_env == NULL)
 		return (202);
-	sort_array(s_env, 0, n - 1);
+	s_env = sort_array(s_env, 0, n - 1);
 	i = 0;
 	while (s_env[i] != NULL)
 	{
@@ -120,8 +121,9 @@ static int	print_sorted(char **env, int n)
 			ft_putstr_fd("declare -x ", STDOUT_FILENO);
 			while (s_env[i][j] != '=')
 				ft_putchar_fd(s_env[i][j++], STDOUT_FILENO);
-			ft_putstr_fd("\"=\"", STDOUT_FILENO);
-			ft_putendl_fd(&s_env[i][++j], STDOUT_FILENO);
+			ft_putstr_fd("=\"", STDOUT_FILENO);
+			ft_putstr_fd(&s_env[i][++j], STDOUT_FILENO);
+			ft_putstr_fd("\"\n", STDOUT_FILENO);
 		}
 		else
 			printf ("declarxe -x %s\n", s_env[i]);
@@ -152,7 +154,7 @@ int	ft_export(char **args, char ***env)
 
 	i = 1;
 	n = 0;
-	while (env[n] != NULL)
+	while ((*env)[n] != NULL)
 		n++;
 	if (args[1] == NULL)
 		return (print_sorted(*env, n));
@@ -162,7 +164,7 @@ int	ft_export(char **args, char ***env)
 			return (10);
 		n = sh_strpos(args[i], "=");
 		var_name = ft_substr(args[i], 0, n); 
-		if (args[i][n + 1] == '\0')
+		if (args[i][n] == '\0')
 			env_value = NULL;
 		else
 			env_value = &args[i][n + 1];

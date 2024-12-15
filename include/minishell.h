@@ -6,7 +6,7 @@
 /*   By: pmorello <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 12:17:09 by pmorello          #+#    #+#             */
-/*   Updated: 2024/12/15 12:37:14 by mfleury          ###   ########.fr       */
+/*   Updated: 2024/12/15 16:53:38 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,7 @@
 # include <sys/types.h>
 # include <sys/wait.h>
 # include <sys/ioctl.h>
+# include <sys/stat.h>
 # include <errno.h>
 # include <readline/readline.h>
 # include <readline/history.h>
@@ -118,10 +119,11 @@ int		ft_export(char **args, char ***env);
 int		ft_env(char **args, char ***env);
 int		ft_echo(char **args, char ***env);
 int		ft_cd(char **args, char ***env);
+int		ft_unset(char **args, char ***env);
 void	ft_exit(t_shell *sh, char **args, char **env);
 
 /* core utils functions */
-char	*get_full_path(char *arg0, char *envp[]);
+char	*get_full_path(char *arg0, char **env);
 void	set_gstatus(int err_code);
 int		max(int n1, int n2);
 /* str utils functions */

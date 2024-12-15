@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/14 09:05:40 by mfleury           #+#    #+#             */
-/*   Updated: 2024/12/15 13:07:48 by mfleury          ###   ########.fr       */
+/*   Updated: 2024/12/15 14:44:40 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -135,6 +135,7 @@ char	**sh_update_env(char ***env, char *var_name, char *new_value)
 char	**sh_del_env(char ***env, char *str)
 {
 	int		i;
+	int		j;
 	int		len;
 	char	**new_env;
 
@@ -145,13 +146,15 @@ char	**sh_del_env(char ***env, char *str)
 		return (set_gstatus(202), NULL);
 	len = ft_strlen(str);
 	i = 0;
+	j = i;
 	while ((*env)[i] != NULL)
 	{
 		if (ft_strncmp((*env)[i], str, len) != 0)
 		{
-			new_env[i] = ft_strdup((*env)[i]);
-			if (new_env[i] == NULL)
+			new_env[j] = ft_strdup((*env)[i]);
+			if (new_env[j] == NULL)
 				return (set_gstatus(202), NULL);
+			j++;
 		}
 		i++;
 	}
