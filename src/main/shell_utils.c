@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/12 01:02:14 by mfleury           #+#    #+#             */
-/*   Updated: 2024/12/15 18:13:17 by mfleury          ###   ########.fr       */
+/*   Updated: 2024/12/15 19:46:57 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,8 @@ int	check_input(char *line)
 		if (line[i] == ' ' || line[i] == '!' || line[i] == ':')
 			i++;
 		else if (line[i] == ';' || line[i] == '\\' || line[i] == '.')
+			i++;
+		else if (line[i] == '~')
 			i++;
 		else
 			return (0);

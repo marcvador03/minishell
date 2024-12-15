@@ -26,8 +26,8 @@ OK 11. check builtins
 11.4 env - OK
 11.5 export- OK
 11.6 unset - OK
-12 add ~
-13 correct $ bugs ($, ignore nonalpha characters,...) 
+NOT REQUIRED 12 add ~
+ OK 13 correct $ bugs ($, ignore nonalpha characters,...) 
 
 
 	tcap->new_term.c_lflag &= ~PARENB;
