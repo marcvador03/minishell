@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/18 09:19:54 by marvin            #+#    #+#             */
-/*   Updated: 2024/12/13 11:06:30 by mfleury          ###   ########.fr       */
+/*   Updated: 2024/12/15 23:20:45 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,11 +22,6 @@ static void	signal_handler_main(int sig)
 		rl_redisplay();
 		g_status = sig + 128;
 	}
-	/*else if (sig == SIGQUIT)
-	{
-		rl_on_new_line();
-		rl_redisplay();
-	}*/
 	return ;
 }
 
@@ -34,7 +29,6 @@ static void	signal_handler_child(int sig)
 {
 	if (sig == SIGINT)
 	{
-		rl_replace_line("", 0);
 		rl_on_new_line();
 		g_status = sig + 128;
 	}
@@ -43,8 +37,6 @@ static void	signal_handler_child(int sig)
 		g_status = sig + 128;
 		printf("Quit: %d\n", g_status);
 	}
-	/*if (kill(0, sig) != 0)
-		perror("kill");*/
 	return ;
 }
 
@@ -70,9 +62,7 @@ void	init_signal(int pid, int hd)
 {
 	struct sigaction	sig;
 
-	sigemptyset(&sig.sa_mask);
 	signal(SIGQUIT, SIG_IGN);
-	sig.sa_flags = 0;
 	if (pid == 0 && hd == 0)
 	{
 		sig.sa_handler = &signal_handler_child;
@@ -80,9 +70,13 @@ void	init_signal(int pid, int hd)
 		sigaction(SIGQUIT, &sig, NULL);
 	}
 	else if (pid == 1 && hd == 0)
+	{
+		sigemptyset(&sig.sa_mask);
 		sig.sa_handler = &signal_handler_main;
+	}
 	else if (pid == 0 && hd == 1)
 		sig.sa_handler = &signal_handler_heredoc;
+	//sig.sa_flags = 0;
 	sigaction(SIGINT, &sig, NULL);
 	sigaction(SIGTERM, &sig, NULL);
 }
