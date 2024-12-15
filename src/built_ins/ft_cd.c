@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/14 09:20:49 by pmorello          #+#    #+#             */
-/*   Updated: 2024/12/15 12:16:14 by mfleury          ###   ########.fr       */
+/*   Updated: 2024/12/15 13:13:06 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,5 +95,5 @@ int	ft_cd(char **args, char ***env)
 		new_path = getcwd(NULL, 0); 
 		*env = sh_update_env(env,"PWD", new_path);	
 	}
-	return (0);
+	return (free_s(cur_path), free_s(new_path), 0);
 }

@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/14 09:05:40 by mfleury           #+#    #+#             */
-/*   Updated: 2024/12/15 12:40:48 by mfleury          ###   ########.fr       */
+/*   Updated: 2024/12/15 13:07:48 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -111,6 +111,7 @@ char	**sh_update_env(char ***env, char *var_name, char *new_value)
 	int		i;
 	int		len;
 	char	*entry;
+	char	*tmp;
 	
 	if (*env == NULL || var_name == NULL)
 		return (NULL);
@@ -122,8 +123,9 @@ char	**sh_update_env(char ***env, char *var_name, char *new_value)
 		if (ft_strncmp((*env)[i], var_name, len) == 0)
 		{
 			entry = create_entry(var_name, new_value);
+			tmp = (*env)[i];
 			(*env)[i] = entry;
-			return (free_s(entry), *env);
+			return (free_s(tmp), *env);
 		}
 		i++;
 	}
