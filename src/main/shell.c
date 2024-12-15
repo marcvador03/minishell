@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/07 15:12:52 by mfleury           #+#    #+#             */
-/*   Updated: 2024/12/15 12:20:49 by mfleury          ###   ########.fr       */
+/*   Updated: 2024/12/15 18:42:26 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,36 +17,51 @@ int		count_tokens(char *line);
 int		check_open_quotes(char *str);
 int		execute_tokens(t_shell *sh, int i, int level, char ***env);
 int		check_input(char *line);
-int		init_data_brackets(t_shell *tmp, int *a, int *b, char **env);
+int		init_data_brackets(t_shell *tmp, int *a, int *b);
+char	*expand_env(char *line, char **env);
+
+static int	fill_sh_init(t_shell *tmp, t_terms *tcap, char **env, int **x)
+{
+	tmp->s_line = expand_env(tmp->s_line, env);
+	if (tmp->s_line == NULL)
+		return (set_gstatus(202), 202);
+	tmp->tcap = tcap;
+	if (tmp->tcap == NULL )
+		return (set_gstatus(202), 202);
+	(*x)[0] = (*x)[0] + tmp->bracket[0];
+	(*x)[1] = (*x)[1] + tmp->bracket[1];
+	//tmp->bracket[0] = (*x)[0];
+	//tmp->bracket[1] = (*x)[1];
+	return (0);
+}
 
 static t_shell	*fill_sh(t_shell *sh, char *line, t_terms *tcap, char **env)
 {
 	int		i;
 	t_shell	*tmp;
-	int		x[2];
+	int		*s_bracket;
 	char	*t_line;
 	int		n;
 
 	i = 0;
 	n = count_tokens(line);
-	ft_memset(x, 0, 2 * sizeof(int));
-	while (i++ < n && *line != '\0')
+	s_bracket = (int *)ft_calloc(sizeof(int), 2);
+	if (s_bracket == NULL)
+		return (set_gstatus(202), NULL);
+	while (i++ < n)
 	{
 		t_line = line + sh_skip(line, ' ');
 		if (sh == NULL)
-			tmp = sh_lstnew(t_line);
+			tmp = sh_lstnew(t_line, s_bracket);
 		else
-			tmp = sh_lstadd_back(&sh, t_line);
-		if (tmp == NULL)
-			return (NULL);
-		if (init_data_brackets(tmp, &x[0], &x[1], env) == -1)
-			return (set_gstatus(202), NULL);
-		sh = tmp->head;
-		sh->tcap = tcap;
-		if (sh->tcap == NULL )
-			return (NULL);
+			tmp = sh_lstadd_back(&sh, t_line, s_bracket);
+		if (tmp == NULL || fill_sh_init(tmp, tcap, env, &s_bracket) != 0)
+			return (free_s(s_bracket), NULL);
+		sh = tmp;
 	}
-	return (tmp->head);
+	if (sh->bracket[1] != 0)
+		return (set_gstatus(206), free_s(s_bracket), NULL);
+	return (free_s(s_bracket), sh->head);
 }
 
 static char	*create_prompt(char **env)
@@ -55,13 +70,11 @@ static char	*create_prompt(char **env)
 	char	*pwd;
 	char	*tmp;
 	char	*res;
-	//char	*status;
 
 	user = sh_getenv(env, "USER");
 	if (user == NULL)
 		return (set_gstatus(207), NULL);
 	res = ft_strjoin(user, ":");
-	//status = ft_itoa(g_status);
 	pwd = sh_getenv(env, "PWD");
 	if (pwd == NULL)
 		return (set_gstatus(207), NULL);
@@ -115,8 +128,6 @@ int	start_shell(char ***env, t_terms *tcap)
 	if (sh == NULL)
 		return (free_s((void *)line), -1);
 	free_s((void *)line);
-	if (sh->bracket[1] != 0)
-		return (free_sh(sh->head), set_gstatus(206), -1);
 	head = sh->head;
 	g_status = 0;
 	if (sh_check_empty(sh->s_line) == -1)

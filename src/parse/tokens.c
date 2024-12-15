@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/07 14:31:45 by mfleury           #+#    #+#             */
-/*   Updated: 2024/12/15 12:19:24 by mfleury          ###   ########.fr       */
+/*   Updated: 2024/12/15 19:05:16 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,7 @@ static int	exec_token_fork(t_shell *sh, int i, int level, char ***env)
 {
 	pid_t	pid;
 	int		cnt;
+	int		wstatus;
 	
 	cnt = 0;
 	pid = fork();
@@ -50,23 +51,25 @@ static int	exec_token_fork(t_shell *sh, int i, int level, char ***env)
 		perror("minishell: ");
 	if (pid == 0)
 		exit(execute_tokens(sh, i, ++level, env));
-	waitpid(pid, &cnt, 0);
+	wait(&wstatus);
 	g_status = 0;
-	if (WIFEXITED(cnt))
-		cnt = WEXITSTATUS(cnt);
+	cnt = WEXITSTATUS(wstatus);
 	return (cnt);
 }
 
-static void	move_sh(t_shell **sh, int n)
+static t_shell	*move_sh(t_shell *sh, int n)
 {
-	int	i;
+	int		i;
+	t_shell	*tmp;
 
 	i = 0;
+	tmp = sh;
 	while (i < n)
 	{
-		*sh = (*sh)->next;
+		tmp = tmp->next;
 		i++;
 	}
+	return (tmp);
 }
 
 int	execute_tokens(t_shell *sh, int i, int level, char ***env)
@@ -74,8 +77,12 @@ int	execute_tokens(t_shell *sh, int i, int level, char ***env)
 	while (sh != NULL)
 	{
 		if (sh->bracket[0] > level)
-			move_sh(&sh, exec_token_fork(sh, i, level, env));
-		else if (sh->bracket[0] == level)
+		{
+			sh = move_sh(sh, exec_token_fork(sh, i, level, env));
+			if (sh == NULL)
+				return (i);
+		}
+		else if (sh->bracket[0] <= level)
 		{
 			if (sh->token == 0 || (sh->token == 1 && g_status != 0))
 			{
@@ -85,7 +92,7 @@ int	execute_tokens(t_shell *sh, int i, int level, char ***env)
 			}
 		}
 		if (sh->bracket[1] < level && level > 0)
-			exit (++i);
+			exit (i);
 		sh = sh->next;
 		i++;
 	}

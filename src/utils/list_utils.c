@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/30 17:25:00 by mfleury           #+#    #+#             */
-/*   Updated: 2024/12/12 22:31:41 by mfleury          ###   ########.fr       */
+/*   Updated: 2024/12/15 18:28:07 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 int	get_next_token(t_shell *sh, char *line);
 
-t_shell	*sh_lstnew(char *line)
+t_shell	*sh_lstnew(char *line, int *s_bracket)
 {
 	t_shell	*ptr;
 
@@ -23,6 +23,8 @@ t_shell	*sh_lstnew(char *line)
 		return (set_gstatus(202), NULL);
 	ptr->next = NULL;
 	ptr->head = ptr;
+	ptr->bracket[0] = s_bracket[0];
+	ptr->bracket[1] = s_bracket[1];
 	if (get_next_token(ptr, line) != 0)
 		return (NULL);
 	return (ptr);
@@ -40,12 +42,12 @@ static t_shell	*sh_lstlast(t_shell *sh)
 	return (tmp);
 }
 
-t_shell	*sh_lstadd_back(t_shell **sh, char *line)
+t_shell	*sh_lstadd_back(t_shell **sh, char *line, int *s_bracket)
 {
 	t_shell	*tmp;
 	t_shell	*new_node;
 
-	new_node = sh_lstnew(line);
+	new_node = sh_lstnew(line, s_bracket);
 	if (new_node == NULL)
 		return (NULL);
 	else

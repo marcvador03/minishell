@@ -19,7 +19,7 @@ OK 7. Check / and directories !!
 8. Review brackets mgt
 OK 9. Redo EXIT function
 OK 10. check quotes (l196)
-11. check builtins
+OK 11. check builtins
 11.1 echo - OK
 11.2 cd - OK
 11.3 pwd - OK
