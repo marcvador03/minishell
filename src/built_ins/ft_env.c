@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/14 09:52:16 by pmorello          #+#    #+#             */
-/*   Updated: 2024/12/15 12:21:28 by mfleury          ###   ########.fr       */
+/*   Updated: 2024/12/15 17:23:12 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,18 +14,15 @@
 
 int	ft_env(char **args, char ***env)
 {
-	if (args[1])
-	{
-		if (ft_strncmp(args[1], "env", 3) != 0)
-		{
-			printf("'%s': No such file or directory\n", args[1]);
-			return (0);
-		}
-	}
-	while (**env)
+	int	i;
+
+	if (args[0] == NULL)
+		return (-1);
+	i = 0;
+	while ((*env)[i] != NULL)
 	{	
-		printf("%s\n", **env);
-		env++;
+		printf("%s\n", (*env)[i]);
+		i++;
 	}
 	return (0);
 }

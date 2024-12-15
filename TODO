@@ -15,15 +15,15 @@ OK 3. No signal in heredoc - Marc
 4. SIGINT only kill last pipe - Marc
 OK 5. error code not passeda the end of pipe
 6. Remove Wildcard in Makefile
-7. Check / and directories !!
+OK 7. Check / and directories !!
 8. Review brackets mgt
 OK 9. Redo EXIT function
 OK 10. check quotes (l196)
 11. check builtins
 11.1 echo - OK
 11.2 cd - OK
-11.3 pwd
-11.4 env
+11.3 pwd - OK
+11.4 env - OK
 11.5 export- OK
 11.6 unset - OK
 12 add ~
