@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/17 15:39:35 by mfleury           #+#    #+#             */
-/*   Updated: 2024/12/16 14:28:35 by mfleury          ###   ########.fr       */
+/*   Updated: 2024/12/16 16:18:52 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,11 @@ static int	check_directory(char *cmd)
 		return (-1);
 	if (len > 1 && cmd[len - 2] == '/' && cmd[len - 1] == '.')
 		return (-1);
+	if (len > 2 && cmd[len - 3] == '/' && cmd[len - 2] == '.')
+	{	
+		if (cmd[len - 1] == '.')
+			return (-1);
+	}
 	return (0);
 }
 
