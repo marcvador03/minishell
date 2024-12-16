@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/14 09:54:49 by pmorello          #+#    #+#             */
-/*   Updated: 2024/12/16 18:35:58 by mfleury          ###   ########.fr       */
+/*   Updated: 2024/12/16 19:05:02 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -131,8 +131,9 @@ int	ft_export(char **args, char ***env)
 			else
 				env_value = &args[i][n + 1];
 			*env = sh_update_env(env, var_name, env_value);
+			free_s(var_name);
 		}
 		i++;
 	}
-	return (free_s(var_name), 0);
+	return (0);
 }

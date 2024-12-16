@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/07 15:12:52 by mfleury           #+#    #+#             */
-/*   Updated: 2024/12/16 14:25:33 by mfleury          ###   ########.fr       */
+/*   Updated: 2024/12/16 19:01:31 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,25 +63,16 @@ static t_shell	*fill_sh(t_shell *sh, char *line, t_terms *tcap, char **env)
 static char	*create_prompt(char **env)
 {
 	char	*user;
-	char	*pwd;
-	char	*tmp;
 	char	*res;
 
 	user = sh_getenv(env, "USER");
 	if (user == NULL)
-		return (set_gstatus(207), NULL);
-	res = ft_strjoin(user, ":");
-	pwd = sh_getenv(env, "PWD");
-	if (pwd == NULL)
-		return (set_gstatus(207), NULL);
-	tmp = ft_strjoin(res, pwd);
-	if (tmp == NULL)
-		return (free_s(res), NULL);
-	free_s(res);
-	res = ft_strjoin(tmp, "$ ");
+		res = ft_strjoin("UNDEFINED", ":$ ");
+	else
+		res = ft_strjoin(user, ":$ ");
 	if (res == NULL)
-		return (free_s(tmp), NULL);
-	return (free_s(tmp), res);
+		return (free_s(res), NULL);
+	return (res);
 }
 
 static char	*get_input(char **env)
