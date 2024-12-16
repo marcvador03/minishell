@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/07 14:31:45 by mfleury           #+#    #+#             */
-/*   Updated: 2024/12/15 19:05:16 by mfleury          ###   ########.fr       */
+/*   Updated: 2024/12/16 12:10:47 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,18 +57,19 @@ static int	exec_token_fork(t_shell *sh, int i, int level, char ***env)
 	return (cnt);
 }
 
-static t_shell	*move_sh(t_shell *sh, int n)
+static t_shell	*move_sh(t_shell *sh, int n, int *i)
 {
-	int		i;
+	int		j;
 	t_shell	*tmp;
 
-	i = 0;
+	j = 0;
 	tmp = sh;
-	while (i < n)
+	while (j < n)
 	{
 		tmp = tmp->next;
-		i++;
+		j++;
 	}
+	*i = n;
 	return (tmp);
 }
 
@@ -78,11 +79,11 @@ int	execute_tokens(t_shell *sh, int i, int level, char ***env)
 	{
 		if (sh->bracket[0] > level)
 		{
-			sh = move_sh(sh, exec_token_fork(sh, i, level, env));
+			sh = move_sh(sh, exec_token_fork(sh, i, level, env), &i);
 			if (sh == NULL)
 				return (i);
 		}
-		else if (sh->bracket[0] <= level)
+		else if (sh->bracket[0] == level)
 		{
 			if (sh->token == 0 || (sh->token == 1 && g_status != 0))
 			{
@@ -91,7 +92,7 @@ int	execute_tokens(t_shell *sh, int i, int level, char ***env)
 				sh->pipes = NULL;
 			}
 		}
-		if (sh->bracket[1] < level && level > 0)
+		if (sh->bracket[1] > 0 && level > 0)
 			exit (i);
 		sh = sh->next;
 		i++;

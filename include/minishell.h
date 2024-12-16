@@ -6,7 +6,7 @@
 /*   By: pmorello <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 12:17:09 by pmorello          #+#    #+#             */
-/*   Updated: 2024/12/15 18:28:35 by mfleury          ###   ########.fr       */
+/*   Updated: 2024/12/16 11:47:22 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,7 +93,7 @@ typedef struct s_shell
 	char			*s_line;
 	int				token;
 	int				depth;
-	int				bracket[2];
+	int				bracket[4];
 	int				p_count;
 	t_pipe			*pipes;
 	t_terms			*tcap;
@@ -136,8 +136,8 @@ int		sh_skip(char *str, char c);
 int		sh_check_empty(char *str);
 
 /* list utils functions */
-t_shell	*sh_lstnew(char *line, int *s_bracket);
-t_shell	*sh_lstadd_back(t_shell **sh, char *line, int *s_bracket);
+t_shell	*sh_lstnew(char *line);
+t_shell	*sh_lstadd_back(t_shell **sh, char *line);
 t_pipe	*p_lstnew(char *line);
 t_pipe	*p_lstadd_back(t_pipe **pipe, char *line);
 

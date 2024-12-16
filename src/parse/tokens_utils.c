@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/07 14:53:29 by mfleury           #+#    #+#             */
-/*   Updated: 2024/12/15 18:33:17 by mfleury          ###   ########.fr       */
+/*   Updated: 2024/12/16 11:36:21 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,15 +56,12 @@ int	count_brackets(t_shell *sh, char *line)
 			if (check_brackets(line, i) == -1)
 				return (-1);
 			sh->bracket[0]++;	
-			sh->bracket[1]++;
 			ft_memset(line + i, ' ', 1);	
 		}
 		else if (line[i] == ')')
 		{
-			sh->bracket[1]--;
+			sh->bracket[1]++;
 			ft_memset(line + i, ' ', 1);
-			if (sh->bracket[1] < 0)
-				return (-1);	
 		}
 		i++;	
 	}

@@ -12,7 +12,7 @@ TODO
 OK 1. << EOF does not work in a pipeline - Marc
 OK 2. || seems not to work anymore - Marc
 OK 3. No signal in heredoc - Marc 
-4. SIGINT only kill last pipe - Marc
+NO 4. SIGINT only kill last pipe - Marc
 OK 5. error code not passeda the end of pipe
 6. Remove Wildcard in Makefile
 OK 7. Check / and directories !!
@@ -27,8 +27,9 @@ OK 11. check builtins
 11.5 export- OK
 11.6 unset - OK
 NOT REQUIRED 12 add ~
- OK 13 correct $ bugs ($, ignore nonalpha characters,...) 
-
+OK 13 correct $ bugs ($, ignore nonalpha characters,...) 
+14 check ctrl-Z
+15 check signals
 
 	tcap->new_term.c_lflag &= ~PARENB;
 	tcap->new_term.c_QUITag &= ~PARODD;
