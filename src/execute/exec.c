@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/17 15:39:35 by mfleury           #+#    #+#             */
-/*   Updated: 2024/12/16 16:18:52 by mfleury          ###   ########.fr       */
+/*   Updated: 2024/12/16 17:41:52 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,8 +28,24 @@ static t_cmd_enum	str_to_enum(const char *str)
 	}
 	return (-1);
 }
-
 static int	check_directory(char *cmd)
+{
+	struct stat	statbuf;
+
+	if (stat(cmd, &statbuf) != 0)
+		return (-1);
+	return S_ISDIR(statbuf.st_mode);
+		
+	/*int	len;
+
+	len = ft_strlen(cmd);
+	if (cmd[0] == '/')	
+		return (-1);
+	else if (len > 1 && cmd[0] == '/' && cmd[1] == '.')
+		return (-1);
+	return (0);*/
+}
+/*static int	check_directory(char *cmd)
 {
 	int	len;
 
@@ -44,7 +60,7 @@ static int	check_directory(char *cmd)
 			return (-1);
 	}
 	return (0);
-}
+}*/
 
 static int	exec_syscmd_multiple(char *cmd, char **args, char **env)
 {
@@ -54,7 +70,7 @@ static int	exec_syscmd_multiple(char *cmd, char **args, char **env)
 	t_cmd = get_full_path(cmd, env);
 	if (t_cmd == NULL)
 		return (g_status);
-	if (check_directory(cmd) == -1)
+	if (check_directory(cmd) != 0)
 		return (126);
 	errnum = execve(t_cmd, args, env);
 	if (errnum != 0)
@@ -74,7 +90,7 @@ static int	exec_syscmd_single(char *cmd, char **args, char **env)
 	t_cmd = get_full_path(cmd, env);
 	if (t_cmd == NULL)
 		return (g_status);
-	if (check_directory(cmd) == -1)
+	if (check_directory(cmd) != 0)
 		return (126);
 	pid = fork();
 	if (pid == -1)

@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/11 16:34:27 by mfleury           #+#    #+#             */
-/*   Updated: 2024/12/16 15:00:14 by mfleury          ###   ########.fr       */
+/*   Updated: 2024/12/16 17:29:04 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,6 @@ static char	*resize_line(char *line, char *out, char *in, int *i)
 	if (res == NULL)
 		return (NULL);
 	free_s(out);
-	free_s(in);
 	free_s(line);
 	return (free_s(tmp[0]), free_s(tmp[1]), free_s(tmp[2]), res);
 }
@@ -86,11 +85,11 @@ static char	*expand_env_loop(char **env, char *line, int *i)
 	else if (ft_isalnum(line[*i + 1]) == 1)
 		dollar_out = expand_getenv(dollar_in, env);
 	else
-		return (line);
+		return (free_s(dollar_in), line);
 	res = resize_line(line, dollar_out, dollar_in, i);
 	if (res == NULL)
-		return (NULL);
-	return (res);
+		return (free_s(dollar_in), NULL);
+	return (free_s(dollar_in), res);
 }
 
 char	*expand_env(char *line, char **env)
