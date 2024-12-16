@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/22 16:08:01 by mfleury           #+#    #+#             */
-/*   Updated: 2024/12/16 14:27:42 by mfleury          ###   ########.fr       */
+/*   Updated: 2024/12/17 00:25:24 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,7 @@ static t_pipe	*fill_pipes(t_pipe *p, char *line, int n)
 int	subshell(t_shell *sh, char ***env)
 {
 	t_pipe	*p;
+	int		len;
 
 	p = NULL;
 	sh->p_count = count_pipes(sh->s_line);
@@ -50,7 +51,8 @@ int	subshell(t_shell *sh, char ***env)
 	sh->pipes = p->head;
 	if (sh->p_count == 1)
 	{
-		if (ft_strncmp(p->args[0], "exit", 4) == 0)
+		len = ft_strlen(p->args[0]);
+		if (ft_strncmp(p->args[0], "exit", max(len, 4)) == 0)
 			ft_exit(sh, p->args, *env);
 		single_cmd(p, env);
 	}

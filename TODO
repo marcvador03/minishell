@@ -14,7 +14,7 @@ OK 2. || seems not to work anymore - Marc
 OK 3. No signal in heredoc - Marc 
 NO 4. SIGINT only kill last pipe - Marc
 OK 5. error code not passeda the end of pipe
-6. Remove Wildcard in Makefile
+OK 6. Remove Wildcard in Makefile
 OK 7. Check / and directories !!
 OK 8. Review brackets mgt
 OK 9. Redo EXIT function

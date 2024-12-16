@@ -81,7 +81,15 @@ all: libft $(OBJECTS) $(NAME)
 $(NAME): libft/libft.a Makefile $(INCLUDES) $(OBJECTS)
 	cc $(CFLAGS) -L libft $(DEBUG) -g $(OBJECTS) -o $@ $(LIBS_TAG) $(LIBS_TAG)
 
-$(OBJ_DIR)/%.o: $(SRC_DIR)/*/%.c | $(OBJ_DIR)
+$(OBJ_DIR)/%.o: $(SRC_DIR)/parse/%.c | $(OBJ_DIR)
+	cc $(CFLAGS) $(DEBUG) -g -c $< -o $@ 
+$(OBJ_DIR)/%.o: $(SRC_DIR)/execute/%.c | $(OBJ_DIR)
+	cc $(CFLAGS) $(DEBUG) -g -c $< -o $@ 
+$(OBJ_DIR)/%.o: $(SRC_DIR)/utils/%.c | $(OBJ_DIR)
+	cc $(CFLAGS) $(DEBUG) -g -c $< -o $@ 
+$(OBJ_DIR)/%.o: $(SRC_DIR)/main/%.c | $(OBJ_DIR)
+	cc $(CFLAGS) $(DEBUG) -g -c $< -o $@ 
+$(OBJ_DIR)/%.o: $(SRC_DIR)/built_ins/%.c | $(OBJ_DIR)
 	cc $(CFLAGS) $(DEBUG) -g -c $< -o $@ 
 
 libft: 
@@ -101,6 +109,7 @@ flags:
 
 show:
 	@echo $(OBJECTS)
+	@echo $(SRC_NAMES)
 
 
 clean: 
@@ -110,7 +119,6 @@ clean:
 fclean: clean
 	@rm -rf $(NAME)
 	@$(MAKE) fclean -C $(LIBFT_DIR)
-	@rm -rf $(LIB_DIR)/*
 
 re: fclean all
 ifneq ($(DEPS), )
