@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/17 15:39:35 by mfleury           #+#    #+#             */
-/*   Updated: 2024/12/16 17:41:52 by mfleury          ###   ########.fr       */
+/*   Updated: 2024/12/16 17:48:23 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,9 +31,12 @@ static t_cmd_enum	str_to_enum(const char *str)
 static int	check_directory(char *cmd)
 {
 	struct stat	statbuf;
+	int	n;
 
 	if (stat(cmd, &statbuf) != 0)
-		return (-1);
+		return (0);
+	n = S_ISDIR(statbuf.st_mode);
+	return (n);
 	return S_ISDIR(statbuf.st_mode);
 		
 	/*int	len;
