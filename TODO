@@ -16,7 +16,7 @@ NO 4. SIGINT only kill last pipe - Marc
 OK 5. error code not passeda the end of pipe
 6. Remove Wildcard in Makefile
 OK 7. Check / and directories !!
-8. Review brackets mgt
+OK 8. Review brackets mgt
 OK 9. Redo EXIT function
 OK 10. check quotes (l196)
 OK 11. check builtins
@@ -28,8 +28,11 @@ OK 11. check builtins
 11.6 unset - OK
 NOT REQUIRED 12 add ~
 OK 13 correct $ bugs ($, ignore nonalpha characters,...) 
-14 check ctrl-Z
-15 check signals
+OK 14 check ctrl-Z
+OK 15 check signals
+16 change builtins calls
+17 review when env is NULL env -i
+
 
 	tcap->new_term.c_lflag &= ~PARENB;
 	tcap->new_term.c_QUITag &= ~PARODD;

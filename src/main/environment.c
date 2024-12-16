@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/14 09:05:40 by mfleury           #+#    #+#             */
-/*   Updated: 2024/12/16 14:27:17 by mfleury          ###   ########.fr       */
+/*   Updated: 2024/12/16 23:32:20 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,17 +49,26 @@ char	**fill_env(char *envp[])
 
 char	*sh_getenv(char **env, char *str)
 {
-	int	i;
-	int	len;
+	int		i;
+	char	*var_name;
+	int		len;
+	int		len2;
+	int		n;
 
 	if (env == NULL || str == NULL)
 		return (NULL);
-	len = ft_strlen(str);
 	i = 0;
+	len = ft_strlen(str);
 	while (env[i] != NULL)
 	{
-		if (ft_strncmp(env[i], str, len) == 0)
-			return (env[i] + len + 1);
+		n = sh_strpos(env[i], "=");
+		var_name = ft_substr(env[i], 0, n);
+		if (var_name == NULL)
+		return (set_gstatus(202), NULL);	
+		len2 = max(len, ft_strlen(var_name));
+		if (ft_strncmp(env[i], str, len2) == 0)
+			return (free_s(var_name), env[i] + len + 1);
+		free_s(var_name);
 		i++;
 	}
 	return (NULL);
