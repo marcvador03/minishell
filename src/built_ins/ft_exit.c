@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/13 15:34:22 by mfleury           #+#    #+#             */
-/*   Updated: 2024/12/14 19:16:06 by mfleury          ###   ########.fr       */
+/*   Updated: 2024/12/16 14:31:38 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ void	ft_exit(t_shell *sh, char **args, char **env)
 		{
 			if (ft_isdigit(args[1][i]) == 0)
 			{
-				if (args[1][i] != ' ' && args[1][i] != '-'&& args[1][i] != '+')
+				if (args[1][i] != ' ' && args[1][i] != '-' && args[1][i] != '+')
 					return (flush_errors("exit", 7));
 			}
 			i++;
@@ -37,4 +37,3 @@ void	ft_exit(t_shell *sh, char **args, char **env)
 	exit_minishell(sh, env);
 	return ;
 }
-

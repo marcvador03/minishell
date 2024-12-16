@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/14 09:20:49 by pmorello          #+#    #+#             */
-/*   Updated: 2024/12/15 13:13:06 by mfleury          ###   ########.fr       */
+/*   Updated: 2024/12/16 14:32:48 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,10 +77,10 @@ int	ft_cd(char **args, char ***env)
 {
 	char	*new_path;
 	char	*cur_path;
-	
+
 	if (args[1] != NULL && args[2] != NULL)
 		return (7);
-	cur_path = getcwd(NULL, 0); 
+	cur_path = getcwd(NULL, 0);
 	if (cur_path == NULL)
 		return (-1);
 	new_path = get_target_path(args, *env);
@@ -90,10 +90,10 @@ int	ft_cd(char **args, char ***env)
 		return (free_s(new_path), free_s(cur_path), -1);
 	else
 	{
-		*env = sh_update_env(env,"OLDPWD", cur_path);	
+		*env = sh_update_env(env, "OLDPWD", cur_path);
 		free_s(new_path);
-		new_path = getcwd(NULL, 0); 
-		*env = sh_update_env(env,"PWD", new_path);	
+		new_path = getcwd(NULL, 0);
+		*env = sh_update_env(env, "PWD", new_path);
 	}
 	return (free_s(cur_path), free_s(new_path), 0);
 }

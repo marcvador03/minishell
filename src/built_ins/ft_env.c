@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/14 09:52:16 by pmorello          #+#    #+#             */
-/*   Updated: 2024/12/15 17:23:12 by mfleury          ###   ########.fr       */
+/*   Updated: 2024/12/16 14:33:39 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ int	ft_env(char **args, char ***env)
 		return (-1);
 	i = 0;
 	while ((*env)[i] != NULL)
-	{	
+	{
 		printf("%s\n", (*env)[i]);
 		i++;
 	}

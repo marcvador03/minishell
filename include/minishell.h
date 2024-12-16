@@ -6,7 +6,7 @@
 /*   By: pmorello <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 12:17:09 by pmorello          #+#    #+#             */
-/*   Updated: 2024/12/16 11:47:22 by mfleury          ###   ########.fr       */
+/*   Updated: 2024/12/16 15:01:16 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,7 @@ typedef enum cmd_enum
 	END
 }	t_cmd_enum;
 
-typedef int	(*t_func_arr)(char **args, char ***env);
+typedef int			(*t_func_arr)(char **args, char ***env);
 
 typedef struct s_pipe
 {
@@ -86,7 +86,6 @@ typedef struct s_termcaps
 	char			*del_line;
 	char			*set_cursor_begin;
 }	t_terms;
-
 
 typedef struct s_shell
 {

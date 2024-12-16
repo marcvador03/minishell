@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/14 09:44:34 by pmorello          #+#    #+#             */
-/*   Updated: 2024/12/15 17:30:07 by mfleury          ###   ########.fr       */
+/*   Updated: 2024/12/16 14:33:21 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,14 +14,14 @@
 
 int	ft_pwd(char **args, char ***env)
 {
-	char *pwd;
-	
+	char	*pwd;
+
 	if (env == NULL)
 		return (207);
 	if (args[1] != NULL)
 	{
 		if (args[1][0] == '-')
-		return (7);
+			return (7);
 	}
 	pwd = getcwd(NULL, 0);
 	printf("%s\n", pwd);

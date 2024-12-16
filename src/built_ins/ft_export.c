@@ -6,70 +6,16 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/14 09:54:49 by pmorello          #+#    #+#             */
-/*   Updated: 2024/12/15 15:06:59 by mfleury          ###   ########.fr       */
+/*   Updated: 2024/12/16 14:37:06 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-extern char **environ;
-
-int	find_env_var(const char *name)
-{
-	int	i;
-	size_t	len;
-
-	i = 0;
-	len = ft_strlen(name);
-	while (environ[i])
-	{
-		if (ft_strncmp(environ[i], name, len) == 0 &&
-			environ[i][len] == '=')
-			return (i);
-		i++;
-	}
-	return (-1);
-}
-
-/*void	add_env_var(const char *var)
-{
-	int	index;
-	int	len;
-	char	*new_env;
-	char	**my_env;
-
-	index = find_env_var(var);
-	new_env = ft_strdup(var);
-	if (!new_env)
-	{
-		exit (1);
-	}
-	if (index >= 0)
-	{
-		free(environ[index]);
-		environ[index] = new_env;
-	}
-	else
-	{
-		len = 0;
-		while (environ[len] != NULL)
-			len++;
-		my_env = realloc(environ, sizeof(char *) * (len + 2));
-		if (!my_env)
-		{
-			free (my_env);
-			exit (1);
-		}
-		my_env[len] = new_env;
-		my_env[len + 1] = NULL;
-		environ = my_env;
-	}
-}*/
-
 static void	swap(char **str1, char **str2)
 {
 	char	*tmp;
-	
+
 	tmp = *str1;
 	*str1 = *str2;
 	*str2 = tmp;
@@ -102,10 +48,22 @@ static char	**sort_array(char **s_env, int o, int n)
 	return (s_env);
 }
 
+static void	print_sorted_loop(char **s_env, int i)
+{
+	int	j;
+
+	j = 0;
+	ft_putstr_fd("declare -x ", STDOUT_FILENO);
+	while (s_env[i][j] != '=')
+		ft_putchar_fd(s_env[i][j++], STDOUT_FILENO);
+	ft_putstr_fd("=\"", STDOUT_FILENO);
+	ft_putstr_fd(&s_env[i][++j], STDOUT_FILENO);
+	ft_putstr_fd("\"\n", STDOUT_FILENO);
+}
+
 static int	print_sorted(char **env, int n)
 {
 	int		i;
-	int		j;
 	char	**s_env;
 
 	s_env = fill_env(env);
@@ -116,20 +74,12 @@ static int	print_sorted(char **env, int n)
 	while (s_env[i] != NULL)
 	{
 		if (ft_strchr(s_env[i], '=') != 0)
-		{
-			j = 0;
-			ft_putstr_fd("declare -x ", STDOUT_FILENO);
-			while (s_env[i][j] != '=')
-				ft_putchar_fd(s_env[i][j++], STDOUT_FILENO);
-			ft_putstr_fd("=\"", STDOUT_FILENO);
-			ft_putstr_fd(&s_env[i][++j], STDOUT_FILENO);
-			ft_putstr_fd("\"\n", STDOUT_FILENO);
-		}
+			print_sorted_loop(s_env, i);
 		else
 			printf ("declarxe -x %s\n", s_env[i]);
 		i++;
 	}
-	return (free_d(s_env), 0);	
+	return (free_d(s_env), 0);
 }
 
 int	check_export_var(char *str)
@@ -140,7 +90,7 @@ int	check_export_var(char *str)
 		return (-1);
 	i = 0;
 	while (str[i] != '\0' && str[i] != '=')
-		if (ft_isalnum(str[i++]) != 1) 
+		if (ft_isalnum(str[i++]) != 1)
 			return (-1);
 	return (0);
 }
@@ -163,7 +113,7 @@ int	ft_export(char **args, char ***env)
 		if (check_export_var(args[i]) == -1)
 			return (10);
 		n = sh_strpos(args[i], "=");
-		var_name = ft_substr(args[i], 0, n); 
+		var_name = ft_substr(args[i], 0, n);
 		if (args[i][n] == '\0')
 			env_value = NULL;
 		else

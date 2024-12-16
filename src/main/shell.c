@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/07 15:12:52 by mfleury           #+#    #+#             */
-/*   Updated: 2024/12/16 11:57:59 by mfleury          ###   ########.fr       */
+/*   Updated: 2024/12/16 14:25:33 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ static int	fill_sh_init(t_shell *tmp, t_terms *tcap, char **env, int (*x)[2])
 	if (tmp->s_line == NULL)
 		return (set_gstatus(202), 202);
 	tmp->tcap = tcap;
-	tmp->bracket[0] = *x[0] + tmp->bracket[0] - (*x)[1];	
+	tmp->bracket[0] = *x[0] + tmp->bracket[0] - (*x)[1];
 	(*x)[0] = tmp->bracket[0];
 	(*x)[1] = tmp->bracket[1];
 	return (0);
@@ -55,7 +55,7 @@ static t_shell	*fill_sh(t_shell *sh, char *line, t_terms *tcap, char **env)
 			return (NULL);
 		sh = tmp;
 	}
-	if (sh->bracket[1] != 0)
+	if (sh->bracket[1] != sh->bracket[0])
 		return (set_gstatus(206), NULL);
 	return (sh->head);
 }

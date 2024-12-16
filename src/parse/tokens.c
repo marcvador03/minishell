@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/07 14:31:45 by mfleury           #+#    #+#             */
-/*   Updated: 2024/12/16 12:10:47 by mfleury          ###   ########.fr       */
+/*   Updated: 2024/12/16 14:37:48 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ int	get_next_token(t_shell *sh, char *line)
 	int		pos;
 
 	if (ft_strncmp(line, "||", 2) == 0)
-		sh->token = 1;	
+		sh->token = 1;
 	t_line = line + 2;
 	pos = get_tk2(t_line);
 	sh->s_line = ft_substr(t_line, 0, pos);
@@ -44,7 +44,7 @@ static int	exec_token_fork(t_shell *sh, int i, int level, char ***env)
 	pid_t	pid;
 	int		cnt;
 	int		wstatus;
-	
+
 	cnt = 0;
 	pid = fork();
 	if (pid == -1)

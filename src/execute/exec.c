@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/17 15:39:35 by mfleury           #+#    #+#             */
-/*   Updated: 2024/12/15 23:19:26 by mfleury          ###   ########.fr       */
+/*   Updated: 2024/12/16 14:28:35 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ static int	exec_syscmd_multiple(char *cmd, char **args, char **env)
 	t_cmd = get_full_path(cmd, env);
 	if (t_cmd == NULL)
 		return (g_status);
-	if (check_directory(cmd) == -1)	
+	if (check_directory(cmd) == -1)
 		return (126);
 	errnum = execve(t_cmd, args, env);
 	if (errnum != 0)
@@ -69,7 +69,7 @@ static int	exec_syscmd_single(char *cmd, char **args, char **env)
 	t_cmd = get_full_path(cmd, env);
 	if (t_cmd == NULL)
 		return (g_status);
-	if (check_directory(cmd) == -1)	
+	if (check_directory(cmd) == -1)
 		return (126);
 	pid = fork();
 	if (pid == -1)

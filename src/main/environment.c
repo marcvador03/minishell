@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/14 09:05:40 by mfleury           #+#    #+#             */
-/*   Updated: 2024/12/15 14:44:40 by mfleury          ###   ########.fr       */
+/*   Updated: 2024/12/16 14:27:17 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ static char	**create_env(char **env, int offset)
 {
 	int		i;
 	char	**new_env;
-		
+
 	i = 0;
 	while (env[i] != NULL)
 		i++;
@@ -51,7 +51,7 @@ char	*sh_getenv(char **env, char *str)
 {
 	int	i;
 	int	len;
-	
+
 	if (env == NULL || str == NULL)
 		return (NULL);
 	len = ft_strlen(str);
@@ -65,7 +65,7 @@ char	*sh_getenv(char **env, char *str)
 	return (NULL);
 }
 
-char	*create_entry(char *var_name, char *new_value) 
+char	*create_entry(char *var_name, char *new_value)
 {
 	char	*res;
 	char	*tmp;
@@ -112,7 +112,7 @@ char	**sh_update_env(char ***env, char *var_name, char *new_value)
 	int		len;
 	char	*entry;
 	char	*tmp;
-	
+
 	if (*env == NULL || var_name == NULL)
 		return (NULL);
 	len = ft_strlen(var_name);
@@ -129,7 +129,7 @@ char	**sh_update_env(char ***env, char *var_name, char *new_value)
 		}
 		i++;
 	}
-	return(free_s(entry), sh_add_env(env, var_name, new_value));
+	return (free_s(entry), sh_add_env(env, var_name, new_value));
 }
 
 char	**sh_del_env(char ***env, char *str)
@@ -160,4 +160,3 @@ char	**sh_del_env(char ***env, char *str)
 	}
 	return (free_d(*env), new_env);
 }
-
