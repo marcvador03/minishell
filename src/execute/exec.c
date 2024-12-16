@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/17 15:39:35 by mfleury           #+#    #+#             */
-/*   Updated: 2024/12/16 17:48:23 by mfleury          ###   ########.fr       */
+/*   Updated: 2024/12/16 19:16:24 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,34 +37,8 @@ static int	check_directory(char *cmd)
 		return (0);
 	n = S_ISDIR(statbuf.st_mode);
 	return (n);
-	return S_ISDIR(statbuf.st_mode);
-		
-	/*int	len;
-
-	len = ft_strlen(cmd);
-	if (cmd[0] == '/')	
-		return (-1);
-	else if (len > 1 && cmd[0] == '/' && cmd[1] == '.')
-		return (-1);
-	return (0);*/
 }
-/*static int	check_directory(char *cmd)
-{
-	int	len;
-
-	len = ft_strlen(cmd);
-	if (len > 0 && cmd[len - 1] == '/')
-		return (-1);
-	if (len > 1 && cmd[len - 2] == '/' && cmd[len - 1] == '.')
-		return (-1);
-	if (len > 2 && cmd[len - 3] == '/' && cmd[len - 2] == '.')
-	{	
-		if (cmd[len - 1] == '.')
-			return (-1);
-	}
-	return (0);
-}*/
-
+		
 static int	exec_syscmd_multiple(char *cmd, char **args, char **env)
 {
 	char	*t_cmd;

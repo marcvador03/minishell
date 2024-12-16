@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/07 14:53:29 by mfleury           #+#    #+#             */
-/*   Updated: 2024/12/16 14:38:33 by mfleury          ###   ########.fr       */
+/*   Updated: 2024/12/16 22:44:42 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,9 @@ int	check_brackets(char *line, int i)
 {
 	while (line[i] == 34 || line[i] == 39)
 		i += sh_jump_to(line + i, line[i]);
+	if (line[i] == '\0')
+		return (-1);
+	i += sh_skip(line + i + 1, ' '); 
 	if (line[i] == '\0')
 		return (-1);
 	if (line[i + 1] == '\0' || line[i + 1] == ')')
