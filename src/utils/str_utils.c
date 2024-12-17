@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/02 16:56:07 by mfleury           #+#    #+#             */
-/*   Updated: 2024/12/17 17:10:51 by mfleury          ###   ########.fr       */
+/*   Updated: 2024/12/17 23:22:54 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ int	sh_jump_to(char *str, char c)
 			return (++i);
 		i++;
 	}
-	return (0);
+	return (i);
 }
 
 int	sh_jump_to2(char **str, char c)

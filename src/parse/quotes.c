@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/12 00:48:00 by mfleury           #+#    #+#             */
-/*   Updated: 2024/12/17 09:59:28 by mfleury          ###   ########.fr       */
+/*   Updated: 2024/12/17 23:35:07 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,7 +78,7 @@ char	**split_quotes(char *s)
 	if (res == NULL)
 		return (NULL);
 	split_quotes_loop(s, res);
-	res[n] = NULL;
+	//res[n] = NULL;
 	return (res);
 }
 

@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/12 01:27:07 by mfleury           #+#    #+#             */
-/*   Updated: 2024/12/17 10:03:53 by mfleury          ###   ########.fr       */
+/*   Updated: 2024/12/17 23:40:21 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ int	count_quote_sections(char *s)
 		{
 			if (i != pos)
 				n++;
-			i += sh_jump_to(s + i, s[i]);
+			i += sh_jump_to(s + i, s[i]) - 1;
 			n++;
 			pos = i;
 			if (s[i] == ' ' || s[i] == '\0')
