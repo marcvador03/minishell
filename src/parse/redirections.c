@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/10 08:52:08 by mfleury           #+#    #+#             */
-/*   Updated: 2024/12/17 15:26:37 by mfleury          ###   ########.fr       */
+/*   Updated: 2024/12/17 17:01:47 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,9 +23,11 @@ static char	*get_rd_check(char *line, char *res)
 			return (NULL);
 		else if (line[i] == ' ')
 		{
-			i = sh_skip(line, ' ');
+			i = i + sh_skip(line + i, ' ');
 			if (line[i] == '<' || line [i] == '>')
 				return (NULL);
+			else
+				return (res);
 		}
 		else
 			return (res);

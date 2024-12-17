@@ -1,0 +1,12 @@
+Makefile
+TODO
+a
+b
+c
+d
+ignore_readline.supp
+include
+libft
+minishell
+obj
+src

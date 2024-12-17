@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/28 13:53:58 by mfleury           #+#    #+#             */
-/*   Updated: 2024/12/17 15:25:24 by mfleury          ###   ########.fr       */
+/*   Updated: 2024/12/17 17:06:15 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,10 +46,10 @@ static int	fill_in_pipe(t_pipe *p, char **env)
 {
 	p->redirs = create_redirs(p, env);
 	if (p->redirs == NULL)
-		return (free_pipe(p), -1);
+		return (-1);
 	p->args = create_args(p, env);
 	if (p->args == NULL)
-		return (free_pipe(p), -1);
+		return (-1);
 	p->r_fd[INPUT] = get_fdin_redir(p);
 	p->r_fd[OUTPUT] = get_fdout_redir(p);
 	return (0);
