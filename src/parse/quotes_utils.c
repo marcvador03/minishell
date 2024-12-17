@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/12 01:27:07 by mfleury           #+#    #+#             */
-/*   Updated: 2024/12/13 21:19:53 by mfleury          ###   ########.fr       */
+/*   Updated: 2024/12/17 10:03:53 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,4 +38,26 @@ int	count_quote_sections(char *s)
 	if (i != pos)
 		n++;
 	return (n);
+}
+
+int	check_open_quotes(char *str)
+{
+	int	i;
+	int	x;
+
+	i = 0;
+	while (str[i] != 0)
+	{
+		if (str[i] == 34 || str[i] == 39)
+		{
+			x = sh_jump_to(str + i, str[i]);
+			if (x == 0)
+				return (-1);
+			else
+				i += x;
+		}
+		else
+			i++;
+	}
+	return (0);
 }

@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/12 00:48:00 by mfleury           #+#    #+#             */
-/*   Updated: 2024/12/15 12:41:15 by mfleury          ###   ########.fr       */
+/*   Updated: 2024/12/17 09:59:28 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,8 +37,6 @@ static char	*split_move(char *s, int cnt[4], int *j)
 	res = NULL;
 	if (cnt[0] != cnt[2])
 		res = ft_substr(s, cnt[0], cnt[2] - cnt[0] - 1);
-	//else if (cnt[2] - cnt[0] == 1)
-	//	res = ft_strdup(" ");
 	if (res != NULL)
 		*j = *j + 1;
 	return (res);
@@ -108,17 +106,3 @@ char	*sh_trim_strings(char *s)
 		ft_strlcat(cat_str, res[i++], len + 1);
 	return (free_d(res), free_s(s), cat_str);
 }
-
-/*void	sh_trim_list_strings(char **str)
-{
-	int		i;
-
-	if (str == NULL)
-		return ;
-	i = 0;
-	while (str[i] != NULL)
-	{
-		str[i] = sh_trim_strings(str[i]);
-		i++;
-	}
-}*/

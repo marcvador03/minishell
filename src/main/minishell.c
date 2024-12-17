@@ -6,13 +6,14 @@
 /*   By: mfleury <mfleury@student.42barcelona.      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 10:01:23 by mfleury           #+#    #+#             */
-/*   Updated: 2024/12/16 23:48:35 by mfleury          ###   ########.fr       */
+/*   Updated: 2024/12/17 10:14:47 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
 int	start_shell(char ***env, t_terms *tcap);
+
 unsigned int	g_status = 0;
 
 int	main_cmd_return(t_pipe *p, int wstatus)
@@ -52,7 +53,6 @@ int	main(int argc, char *argv[], char *envp[])
 	t_terms	tcap;
 	char	**env;
 
-	g_status = 0;
 	if (isatty(STDIN_FILENO) == 0)
 		exit_minishell_error(NULL, errno, NULL);
 	env = fill_env(envp);

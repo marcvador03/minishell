@@ -6,46 +6,15 @@
 /*   By: mfleury <mfleury@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/14 09:05:40 by mfleury           #+#    #+#             */
-/*   Updated: 2024/12/16 23:32:20 by mfleury          ###   ########.fr       */
+/*   Updated: 2024/12/17 09:55:07 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-static char	**create_env(char **env, int offset)
-{
-	int		i;
-	char	**new_env;
-
-	i = 0;
-	while (env[i] != NULL)
-		i++;
-	new_env = (char **)ft_calloc(sizeof(char *), i + offset + 1);
-	if (new_env == NULL)
-		return (NULL);
-	return (new_env);
-}
-
-char	**fill_env(char *envp[])
-{
-	char	**env;
-	int		i;
-
-	if (envp == NULL || envp[0] == NULL)
-		return (NULL);
-	env = create_env(envp, 0);
-	if (env == NULL)
-		return (set_gstatus(202), NULL);
-	i = 0;
-	while (envp[i] != NULL)
-	{
-		env[i] = ft_strdup(envp[i]);
-		if (env[i] == NULL)
-			return (set_gstatus(202), NULL);
-		i++;
-	}
-	return (env);
-}
+char	**create_env(char **env, int offset);
+char	**fill_env(char *envp[]);
+char	*create_entry(char *var_name, char *new_value);
 
 char	*sh_getenv(char **env, char *str)
 {
@@ -64,7 +33,7 @@ char	*sh_getenv(char **env, char *str)
 		n = sh_strpos(env[i], "=");
 		var_name = ft_substr(env[i], 0, n);
 		if (var_name == NULL)
-		return (set_gstatus(202), NULL);	
+			return (set_gstatus(202), NULL);
 		len2 = max(len, ft_strlen(var_name));
 		if (ft_strncmp(env[i], str, len2) == 0)
 			return (free_s(var_name), env[i] + len + 1);
@@ -72,20 +41,6 @@ char	*sh_getenv(char **env, char *str)
 		i++;
 	}
 	return (NULL);
-}
-
-char	*create_entry(char *var_name, char *new_value)
-{
-	char	*res;
-	char	*tmp;
-
-	tmp = ft_strjoin(var_name, "=");
-	if (tmp == NULL)
-		return (NULL);
-	res = ft_strjoin(tmp, new_value);
-	if (res == NULL)
-		return (NULL);
-	return (free_s(tmp), res);
 }
 
 char	**sh_add_env(char ***env, char *var_name, char *new_value)

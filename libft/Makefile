@@ -50,27 +50,16 @@ SRC_NAMES := ft_isalpha.c \
 		 ft_lstiter.c \
 		 ft_lstmap.c
 
-FT_PRINTF_NAMES := ft_printf.c \
-				   ft_printf_char.c \
-				   ft_printf_dec.c \
-				   ft_printf_hexa.c \
-				   ft_printf_string.c \
-				   ft_printf_unsigned.c \
-				   ft_printf_utils.c
-
 GNL_NAMES := get_next_line.c \
 			 get_next_line_utils.c 
 
 INC_NAMES := libft.h \
-			 ft_printf/ft_printf.h \
 			 getnextline/get_next_line.h
 
 SOURCES := $(patsubst %.c, %.c, $(SRC_NAMES))
-FT_PRINTF_SOURCES := $(patsubst %.c, ft_printf/%.c, $(FT_PRINTF_NAMES))
 GNL_SOURCES := $(patsubst %.c, getnextline/%.c, $(GNL_NAMES))
 
 OBJECTS := $(patsubst %.c, %.o, $(SOURCES))
-OBJECTS += $(patsubst %.c, %.o, $(FT_PRINTF_SOURCES))
 OBJECTS += $(patsubst %.c, %.o, $(GNL_SOURCES))
 
 DEPS := $(OBJECTS:.o=.d)
@@ -94,7 +83,7 @@ $(NAME): $(OBJECTS)
 	ar rc $(NAME) $(OBJECTS)
 	@ranlib $(NAME)
 
-%.o: %.c libft.h ft_printf/ft_printf.h getnextline/get_next_line.h Makefile 
+%.o: %.c libft.h getnextline/get_next_line.h Makefile 
 	cc $(CFLAGS) $(DEBUG) -c $< -o $@
 
 $(TARGET_LIB):

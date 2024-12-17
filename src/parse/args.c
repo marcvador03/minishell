@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/02 18:52:16 by mfleury           #+#    #+#             */
-/*   Updated: 2024/12/13 23:21:30 by mfleury          ###   ########.fr       */
+/*   Updated: 2024/12/17 10:04:48 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,12 +80,8 @@ char	**create_args(t_pipe *p)
 	i = 0;
 	while (i < n)
 	{
-		//t_line[1] = get_args(t_line[0]);
-		//t_line[0] = t_line[0] + ft_strlen(t_line[1]);
 		args[i] = get_args(t_line[0]);
 		t_line[0] = t_line[0] + ft_strlen(args[i]);
-		//args[i] = ft_strtrim(t_line[1], " ");
-		//free_s(t_line[1]);
 		args[i] = sh_trim_strings(args[i]);
 		i++;
 	}

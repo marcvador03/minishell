@@ -6,57 +6,12 @@
 /*   By: mfleury <mfleury@student.42barcelona.      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/16 16:32:42 by mfleury           #+#    #+#             */
-/*   Updated: 2024/12/15 16:56:31 by mfleury          ###   ########.fr       */
+/*   Updated: 2024/12/17 10:01:17 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 #include "error_minishell.h"
-
-static char	**search_path(char **env)
-{
-	int		i;
-	char	**res;
-
-	i = 0;
-	res = NULL;
-	while (env[i] != NULL)
-	{
-		if (ft_strncmp(env[i], "PATH=", 5) == 0 && ft_strlen(env[i]) > 5)
-			res = ft_split(env[i] + 5, ':');
-		i++;
-	}
-	return (res);
-}
-
-char	*get_full_path(char *arg0, char **env)
-{
-	char	*cmd_in;
-	char	*cmd_out;
-	char	**paths;
-	int		i;
-
-	if (access(arg0, X_OK) == 0)
-		return (arg0);
-	paths = search_path(env);
-	if (paths == NULL)
-		return (set_gstatus(2), NULL);
-	cmd_in = ft_strjoin("/", arg0);
-	if (cmd_in == NULL)
-		return (free_d(paths), set_gstatus(202), NULL);
-	i = 0;
-	while (paths[i] != NULL)
-	{
-		cmd_out = ft_strjoin(paths[i], cmd_in);
-		if (cmd_out == NULL)
-			return (free_d(paths), free_s(cmd_in), set_gstatus(202), NULL);
-		if (access(cmd_out, X_OK) == 0)
-			return (free_d(paths), free_s(cmd_in), cmd_out);
-		i++;
-		free_s(cmd_out);
-	}
-	return (free_d(paths), free_s(cmd_in), set_gstatus(127), NULL);
-}
 
 void	set_gstatus(int err_code)
 {

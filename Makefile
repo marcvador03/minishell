@@ -19,6 +19,7 @@ BUILTINS = ft_cd.c \
 		   built_utils.c
 
 PARSE =	args.c \
+		brackets.c \
 		env_var.c \
 		heredoc.c \
 		pipes.c \
@@ -36,10 +37,10 @@ UTILS = core_utils.c \
 		free_utils.c \
 		list_utils.c \
 		list_utils2.c \
-		str_utils.c \
-		str_utils2.c
+		str_utils.c
 
 MAIN = environment.c \
+	   environment_utils.c \
 	   minishell.c \
 	   shell.c \
 	   shell_utils.c \
@@ -54,11 +55,9 @@ SRC_NAMES =  $(addprefix $(SRC_DIR)/parse/, $(PARSE)) \
 			 $(addprefix $(SRC_DIR)/utils/, $(UTILS)) \
 			 $(addprefix $(SRC_DIR)/main/, $(MAIN)) \
 			$(addprefix $(SRC_DIR)/built_ins/, $(BUILTINS))
+
 INC_NAMES := minishell.h
 
-#SOURCES := $((SRC_NAMES): %.c=$(SRC_DIR)/%.c)
-
-#OBJECTS := $(SRC_NAMES:.c=.o)
 OBJECTS := $(patsubst %.c, $(OBJ_DIR)/%.o, $(notdir $(SRC_NAMES)))
 
 INCLUDES := $(patsubst %.h, $(INC_DIR)/%.h, $(INC_NAMES))
@@ -97,12 +96,6 @@ libft:
 
 $(OBJ_DIR):
 	@mkdir $(OBJ_DIR)
-
-#$(LIB_DIR):
-#	@mkdir $(LIB_DIR)
-
-#$(INC_DIR):
-#	@mkdir $(INC_DIR)
 
 flags:
 	@echo $(CFLAGS)

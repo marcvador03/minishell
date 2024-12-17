@@ -6,7 +6,7 @@
 /*   By: pmorello <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 12:17:09 by pmorello          #+#    #+#             */
-/*   Updated: 2024/12/16 15:01:16 by mfleury          ###   ########.fr       */
+/*   Updated: 2024/12/17 10:13:52 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,6 @@
 # include <termios.h>
 
 # include "../libft/libft.h"
-# include "../libft/ft_printf/ft_printf.h"
 # include "../libft/getnextline/get_next_line.h"
 
 # define TRUE 1
