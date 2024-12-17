@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/18 12:17:52 by mfleury           #+#    #+#             */
-/*   Updated: 2024/12/15 17:28:47 by mfleury          ###   ########.fr       */
+/*   Updated: 2024/12/17 20:23:02 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,7 @@
 # define E_011 ": unset variable name is not valid"
 # define E_126 ": Is a directory"
 # define E_127 ": command not found"
+# define E_012 ": numeric argument expected"
 
 # define E_200 ": error encountered during terminal setup"
 # define E_201 ": missing quotes \" or \'"
@@ -30,5 +31,6 @@
 # define E_205 ": error near pipe token \'|\'"
 # define E_206 ": error near parenthesis \'(\' or \')\'"
 # define E_207 ": error while fecthing env value"
+# define E_208 ": target directory does not exist"
 
 #endif

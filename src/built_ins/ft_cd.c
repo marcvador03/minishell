@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/14 09:20:49 by pmorello          #+#    #+#             */
-/*   Updated: 2024/12/16 14:32:48 by mfleury          ###   ########.fr       */
+/*   Updated: 2024/12/17 20:04:09 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,10 +82,10 @@ int	ft_cd(char **args, char ***env)
 		return (7);
 	cur_path = getcwd(NULL, 0);
 	if (cur_path == NULL)
-		return (-1);
+		cur_path = ft_strdup(sh_getenv(*env, "PWD"));
 	new_path = get_target_path(args, *env);
 	if (!new_path)
-		return (free_s(cur_path), 202);
+		return (free_s(cur_path), 208);
 	if (chdir(new_path) != 0)
 		return (free_s(new_path), free_s(cur_path), -1);
 	else

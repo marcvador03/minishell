@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/14 11:23:34 by pmorello          #+#    #+#             */
-/*   Updated: 2024/12/17 17:37:58 by mfleury          ###   ########.fr       */
+/*   Updated: 2024/12/17 21:56:54 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,6 @@ int	check_unset_var(char *str)
 		i++;
 	}
 	return (0);
-
 }
 
 int	ft_unset(char **args, char ***env)

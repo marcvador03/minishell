@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/14 09:44:34 by pmorello          #+#    #+#             */
-/*   Updated: 2024/12/16 14:33:21 by mfleury          ###   ########.fr       */
+/*   Updated: 2024/12/17 20:00:22 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,8 @@ int	ft_pwd(char **args, char ***env)
 			return (7);
 	}
 	pwd = getcwd(NULL, 0);
+	if (pwd == NULL)
+		pwd = ft_strdup(sh_getenv(*env, "PWD"));
 	printf("%s\n", pwd);
 	return (free(pwd), 0);
 }
