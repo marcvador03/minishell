@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/02 18:58:50 by mfleury           #+#    #+#             */
-/*   Updated: 2024/12/15 12:17:20 by mfleury          ###   ########.fr       */
+/*   Updated: 2024/12/18 00:40:19 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,7 @@ static int	run_child(t_pipe *p, char ***env)
 	t_pipe	*o;
 	int		wstatus;
 
+	wstatus = 0;
 	o = p->prev;
 	if (p == p->head)
 		if (dup2(p->fd[WRITE_END], STDOUT_FILENO) == -1)
@@ -38,7 +39,8 @@ static int	run_child(t_pipe *p, char ***env)
 	close_pipes(p);
 	if (open_redir_fd(p) == -1)
 		return (close_redir_fd(p), -1);
-	wstatus = exec_cmd(p->args[0], p->args, 0, env);
+	if (sh_check_empty(p->args[0]) == 0)
+		wstatus = exec_cmd(p->args[0], p->args, 0, env);
 	close_redir_fd(p);
 	exit (wstatus);
 }
@@ -87,7 +89,8 @@ int	single_cmd(t_pipe *p, char ***env)
 {
 	if (open_redir_fd(p) == -1)
 		return (close_redir_fd(p), -1);
-	exec_cmd(p->args[0], p->args, 1, env);
+	if (sh_check_empty(p->args[0]) == 0)
+		exec_cmd(p->args[0], p->args, 1, env);
 	close_redir_fd(p);
 	rl_replace_line("", 0);
 	rl_on_new_line();
