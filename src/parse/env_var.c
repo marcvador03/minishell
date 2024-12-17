@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/11 16:34:27 by mfleury           #+#    #+#             */
-/*   Updated: 2024/12/17 00:12:27 by mfleury          ###   ########.fr       */
+/*   Updated: 2024/12/17 14:57:48 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,13 +97,13 @@ static char	*expand_env_loop(char **env, char *line, int *i, int flag)
 	return (free_s(dollar_in), res);
 }
 
-char	*expand_env(char *line, char **env)
+char	*expand_env(char *line, char **env, int x)
 {
 	int	i;
 	int	flag;
 
 	i = 0;
-	flag = 1;
+	flag = x;
 	while (line[i] != '\0')
 	{
 		if (line[i] == 34)
@@ -112,7 +112,8 @@ char	*expand_env(char *line, char **env)
 			i += sh_jump_to(line + i, line[i]);
 		if (line[i] == '\0')
 			return (line);
-		if (line[i] == '$' && (line[i] == '$' && i > 0 && line[i - 1] != '\\'))
+		if (line[i] == '$' && flag != -1 && \
+			(line[i] == '$' && i > 0 && line[i - 1] != '\\'))
 		{
 			line = expand_env_loop(env, line, &i, flag);
 			if (line == NULL)

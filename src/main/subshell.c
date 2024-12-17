@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/22 16:08:01 by mfleury           #+#    #+#             */
-/*   Updated: 2024/12/17 00:25:24 by mfleury          ###   ########.fr       */
+/*   Updated: 2024/12/17 15:26:20 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,20 +16,22 @@ int	count_pipes(char *line);
 int	single_cmd(t_pipe *p, char ***env);
 int	multiple_cmd(t_pipe *p, char ***env);
 
-static t_pipe	*fill_pipes(t_pipe *p, char *line, int n)
+static t_pipe	*fill_pipes(t_pipe *p, char *line, int n, char **env)
 {
 	t_pipe	*tmp;
 	int		i;
 	char	*t_line;
 
 	i = 0;
+	if (line == NULL)
+		return (set_gstatus(202), NULL);
 	while (i < n)
 	{
 		t_line = line + sh_skip(line, ' ');
 		if (p == NULL)
-			tmp = p_lstnew(t_line);
+			tmp = p_lstnew(t_line, env);
 		else
-			tmp = p_lstadd_back(&p, t_line);
+			tmp = p_lstadd_back(&p, t_line, env);
 		if (tmp == NULL)
 			return (NULL);
 		p = tmp->head;
@@ -45,7 +47,7 @@ int	subshell(t_shell *sh, char ***env)
 
 	p = NULL;
 	sh->p_count = count_pipes(sh->s_line);
-	p = fill_pipes(p, sh->s_line, sh->p_count);
+	p = fill_pipes(p, sh->s_line, sh->p_count, *env);
 	if (p == NULL)
 		return (-1);
 	sh->pipes = p->head;

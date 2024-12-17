@@ -6,7 +6,7 @@
 /*   By: pmorello <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 12:17:09 by pmorello          #+#    #+#             */
-/*   Updated: 2024/12/17 10:13:52 by mfleury          ###   ########.fr       */
+/*   Updated: 2024/12/17 15:25:36 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,6 @@
 # endif
 
 extern unsigned int	g_status;
-
 /*Enum to match command names input with a number*/
 typedef enum cmd_enum
 {
@@ -136,8 +135,8 @@ int		sh_check_empty(char *str);
 /* list utils functions */
 t_shell	*sh_lstnew(char *line);
 t_shell	*sh_lstadd_back(t_shell **sh, char *line);
-t_pipe	*p_lstnew(char *line);
-t_pipe	*p_lstadd_back(t_pipe **pipe, char *line);
+t_pipe	*p_lstnew(char *line, char **env);
+t_pipe	*p_lstadd_back(t_pipe **pipe, char *line, char **env);
 
 /* free utils functions */
 void	free_s(void *ptr);
@@ -158,6 +157,7 @@ char	**fill_env(char *envp[]);
 char	**sh_update_env(char ***env, char *str, char *new_value);
 char	**sh_add_env(char ***env, char *str, char *new_value);
 char	**sh_del_env(char ***env, char *str);
+char	*expand_env(char *line, char **env, int x);
 
 /*term caps*/
 void	set_term_settings(t_terms *tcap, char **env);

@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/07 15:12:52 by mfleury           #+#    #+#             */
-/*   Updated: 2024/12/16 19:01:31 by mfleury          ###   ########.fr       */
+/*   Updated: 2024/12/17 14:53:03 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,11 +18,10 @@ int		check_open_quotes(char *str);
 int		execute_tokens(t_shell *sh, int i, int level, char ***env);
 int		check_input(char *line);
 int		init_data_brackets(t_shell *tmp, int *a, int *b);
-char	*expand_env(char *line, char **env);
 
 static int	fill_sh_init(t_shell *tmp, t_terms *tcap, char **env, int (*x)[2])
 {
-	tmp->s_line = expand_env(tmp->s_line, env);
+	tmp->s_line = expand_env(tmp->s_line, env, 1);
 	if (tmp->s_line == NULL)
 		return (set_gstatus(202), 202);
 	tmp->tcap = tcap;

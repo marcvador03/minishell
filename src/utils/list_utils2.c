@@ -6,15 +6,15 @@
 /*   By: mfleury <mfleury@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/02 16:48:32 by mfleury           #+#    #+#             */
-/*   Updated: 2024/12/16 17:08:14 by mfleury          ###   ########.fr       */
+/*   Updated: 2024/12/17 15:25:24 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	get_next_pipe(t_pipe *p, char *line);
+int	get_next_pipe(t_pipe *p, char *line, char **env);
 
-t_pipe	*p_lstnew(char *line)
+t_pipe	*p_lstnew(char *line, char **env)
 {
 	t_pipe	*ptr;
 
@@ -24,7 +24,7 @@ t_pipe	*p_lstnew(char *line)
 	ptr->prev = NULL;
 	ptr->next = NULL;
 	ptr->head = ptr;
-	if (get_next_pipe(ptr, line) != 0)
+	if (get_next_pipe(ptr, line, env) != 0)
 		return (free_pipe(ptr), NULL);
 	return (ptr);
 }
@@ -41,12 +41,12 @@ static t_pipe	*p_lstlast(t_pipe *pipe)
 	return (tmp);
 }
 
-t_pipe	*p_lstadd_back(t_pipe **pipe, char *line)
+t_pipe	*p_lstadd_back(t_pipe **pipe, char *line, char **env)
 {
 	t_pipe	*tmp;
 	t_pipe	*new_node;
 
-	new_node = p_lstnew(line);
+	new_node = p_lstnew(line, env);
 	if (new_node == NULL)
 		return (free_pipe(*pipe), NULL);
 	else

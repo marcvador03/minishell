@@ -6,14 +6,14 @@
 /*   By: mfleury <mfleury@student.42barcelona.      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/28 13:53:58 by mfleury           #+#    #+#             */
-/*   Updated: 2024/12/16 17:08:14 by mfleury          ###   ########.fr       */
+/*   Updated: 2024/12/17 15:25:24 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-char	**create_redirs(t_pipe *p);
-char	**create_args(t_pipe *p);
+char	**create_redirs(t_pipe *p, char **env);
+char	**create_args(t_pipe *p, char **env);
 int		get_fdin_redir(t_pipe *p);
 int		get_fdout_redir(t_pipe *p);
 
@@ -42,12 +42,12 @@ int	count_pipes(char *line)
 	return (n);
 }
 
-static int	fill_in_pipe(t_pipe *p)
+static int	fill_in_pipe(t_pipe *p, char **env)
 {
-	p->redirs = create_redirs(p);
+	p->redirs = create_redirs(p, env);
 	if (p->redirs == NULL)
 		return (free_pipe(p), -1);
-	p->args = create_args(p);
+	p->args = create_args(p, env);
 	if (p->args == NULL)
 		return (free_pipe(p), -1);
 	p->r_fd[INPUT] = get_fdin_redir(p);
@@ -55,7 +55,7 @@ static int	fill_in_pipe(t_pipe *p)
 	return (0);
 }
 
-int	get_next_pipe(t_pipe *p, char *t_line)
+int	get_next_pipe(t_pipe *p, char *t_line, char **env)
 {
 	int		i;
 
@@ -73,12 +73,12 @@ int	get_next_pipe(t_pipe *p, char *t_line)
 				ft_memset(t_line, ' ', i + 1);
 			else
 				ft_memset(t_line, ' ', i);
-			if (fill_in_pipe(p) == -1)
+			if (fill_in_pipe(p, env) == -1)
 				return (-1);
 			return (0);
 		}
 		i++;
 	}
 	p->p_line = ft_strdup(t_line);
-	return (fill_in_pipe(p));
+	return (fill_in_pipe(p, env));
 }
