@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/22 16:08:01 by mfleury           #+#    #+#             */
-/*   Updated: 2024/12/17 15:26:20 by mfleury          ###   ########.fr       */
+/*   Updated: 2024/12/17 17:14:49 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,14 +51,17 @@ int	subshell(t_shell *sh, char ***env)
 	if (p == NULL)
 		return (-1);
 	sh->pipes = p->head;
-	if (sh->p_count == 1)
+	if (sh->p_count == 1 && sh_check_empty(p->args[0]) == 0)
 	{
 		len = ft_strlen(p->args[0]);
 		if (ft_strncmp(p->args[0], "exit", max(len, 4)) == 0)
 			ft_exit(sh, p->args, *env);
 		single_cmd(p, env);
 	}
-	else if (multiple_cmd(p, env) == -1)
-		return (free_pipe(sh->pipes), -1);
+	else if (sh_check_empty(p->args[0]) == 0)
+	{
+		if (multiple_cmd(p, env) == -1)
+			return (free_pipe(sh->pipes), -1);
+	}
 	return (free_pipe(sh->pipes), 0);
 }

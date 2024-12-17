@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/16 16:32:42 by mfleury           #+#    #+#             */
-/*   Updated: 2024/12/17 10:01:17 by mfleury          ###   ########.fr       */
+/*   Updated: 2024/12/17 17:23:50 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,8 +30,6 @@ static void	custom_errors1(char *cmd, int errnum)
 		ft_putendl_fd(E_008, STDERR_FILENO);
 	if (errnum == 9)
 		ft_putendl_fd(E_009, STDERR_FILENO);
-	if (errnum == 10)
-		ft_putendl_fd(E_010, STDERR_FILENO);
 	if (errnum == 11)
 		ft_putendl_fd(E_011, STDERR_FILENO);
 	if (errnum == 126)

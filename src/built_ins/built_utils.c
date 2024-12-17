@@ -6,7 +6,7 @@
 /*   By: pmorello <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/14 10:05:20 by pmorello          #+#    #+#             */
-/*   Updated: 2024/12/17 15:40:52 by mfleury          ###   ########.fr       */
+/*   Updated: 2024/12/17 17:33:00 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ int	check_export_var(char *str)
 	{
 		if (ft_isalnum(str[i]) != 1 && str[i] != '_')
 		{
-			g_status = 1;
+			g_status = 10;
 			printf("minishell: export: '%s': not a valid identifier\n", str);
 			return (-1);
 		}

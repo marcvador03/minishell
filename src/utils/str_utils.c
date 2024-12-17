@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/02 16:56:07 by mfleury           #+#    #+#             */
-/*   Updated: 2024/12/17 10:05:57 by mfleury          ###   ########.fr       */
+/*   Updated: 2024/12/17 17:10:51 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,7 @@ int	sh_check_empty(char *str)
 {
 	if (str == NULL)
 		return (0);
-	if (ft_strncmp(str, "", ft_strlen(str)) == 0)
+	if (ft_strncmp(str, "", max(ft_strlen(str), 2)) == 0)
 		return (-1);
 	return (0);
 }
