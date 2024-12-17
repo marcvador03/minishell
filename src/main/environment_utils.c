@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/17 09:53:05 by mfleury           #+#    #+#             */
-/*   Updated: 2024/12/17 10:01:03 by mfleury          ###   ########.fr       */
+/*   Updated: 2024/12/17 16:09:29 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,7 +85,7 @@ char	*get_full_path(char *arg0, char **env)
 	int		i;
 
 	if (access(arg0, X_OK) == 0)
-		return (arg0);
+		return (ft_strdup(arg0));
 	paths = search_path(env);
 	if (paths == NULL)
 		return (set_gstatus(2), NULL);

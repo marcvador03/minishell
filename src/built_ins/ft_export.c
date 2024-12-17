@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/14 09:54:49 by pmorello          #+#    #+#             */
-/*   Updated: 2024/12/17 09:57:33 by mfleury          ###   ########.fr       */
+/*   Updated: 2024/12/17 15:38:27 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,15 +90,16 @@ int	ft_export(char **args, char ***env)
 		return (print_sorted(*env, export_count(*env)));
 	while (args[i])
 	{
-		if (check_export_var(args[i]) == -1)
-			return (10);
-		n = sh_strpos(args[i], "=");
-		if (args[i][n] != '\0')
+		if (check_export_var(args[i]) != -1)
 		{
-			var_name = ft_substr(args[i], 0, n);
-			env_value = export_env_value(args[i], n);
-			*env = sh_update_env(env, var_name, env_value);
-			free_s(var_name);
+			n = sh_strpos(args[i], "=");
+			if (args[i][n] != '\0')
+			{
+				var_name = ft_substr(args[i], 0, n);
+				env_value = export_env_value(args[i], n);
+				*env = sh_update_env(env, var_name, env_value);
+				free_s(var_name);
+			}
 		}
 		i++;
 	}

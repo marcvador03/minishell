@@ -6,7 +6,7 @@
 /*   By: pmorello <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/14 10:05:20 by pmorello          #+#    #+#             */
-/*   Updated: 2024/12/17 09:57:33 by mfleury          ###   ########.fr       */
+/*   Updated: 2024/12/17 15:40:52 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,12 +36,20 @@ int	check_export_var(char *str)
 	int	i;
 
 	if (ft_isdigit(str[0]) == 1 || str[0] == '=' || str[0] == '\0')
+	{
+		g_status = 10;
+		printf("minishell: export: '%s': not a valid identifier\n", str);
 		return (-1);
+	}
 	i = 0;
 	while (str[i] != '\0' && str[i] != '=')
 	{
 		if (ft_isalnum(str[i]) != 1 && str[i] != '_')
+		{
+			g_status = 1;
+			printf("minishell: export: '%s': not a valid identifier\n", str);
 			return (-1);
+		}
 		i++;
 	}
 	return (0);
