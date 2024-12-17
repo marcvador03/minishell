@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/07 14:31:45 by mfleury           #+#    #+#             */
-/*   Updated: 2024/12/16 22:42:16 by mfleury          ###   ########.fr       */
+/*   Updated: 2024/12/18 00:27:16 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,8 @@ int	get_next_token(t_shell *sh, char *line)
 	sh->s_line = ft_substr(t_line, 0, pos);
 	if (sh->s_line == NULL)
 		return (free_sh(sh), set_gstatus(202), -1);
+	if (sh->s_line[0] == '&' || sh->s_line[0] == '|')
+		return (free_sh(sh), set_gstatus(204), -1);
 	if (sh_check_empty(sh->s_line) != 0)
 		return (free_sh(sh), set_gstatus(204), -1);
 	ft_memset(line, ' ', pos + 2);

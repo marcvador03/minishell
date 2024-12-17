@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/02 18:52:16 by mfleury           #+#    #+#             */
-/*   Updated: 2024/12/17 23:12:23 by mfleury          ###   ########.fr       */
+/*   Updated: 2024/12/17 23:58:26 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,7 +82,7 @@ char	**create_args(t_pipe *p, char **env)
 	{
 		args[i] = get_args(t_line[0]);
 		t_line[0] = t_line[0] + ft_strlen(args[i]);
-		args[i] = expand_env(args[i], env, 0);
+		args[i] = expand_env(args[i], env, 1);
 		args[i] = sh_trim_strings(args[i]);
 		i++;
 	}
