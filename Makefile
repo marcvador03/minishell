@@ -78,18 +78,18 @@ CUR_DIR := $(shell pwd)
 all: libft $(OBJECTS) $(NAME) 
 
 $(NAME): libft/libft.a Makefile $(INCLUDES) $(OBJECTS)
-	cc $(CFLAGS) -L libft $(DEBUG) -g $(OBJECTS) -o $@ $(LIBS_TAG) $(LIBS_TAG)
+	cc $(CFLAGS) -L libft $(DEBUG) $(OBJECTS) -o $@ $(LIBS_TAG) $(LIBS_TAG)
 
 $(OBJ_DIR)/%.o: $(SRC_DIR)/parse/%.c | $(OBJ_DIR)
-	cc $(CFLAGS) $(DEBUG) -g -c $< -o $@ 
+	cc $(CFLAGS) $(DEBUG) -c $< -o $@ 
 $(OBJ_DIR)/%.o: $(SRC_DIR)/execute/%.c | $(OBJ_DIR)
-	cc $(CFLAGS) $(DEBUG) -g -c $< -o $@ 
+	cc $(CFLAGS) $(DEBUG) -c $< -o $@ 
 $(OBJ_DIR)/%.o: $(SRC_DIR)/utils/%.c | $(OBJ_DIR)
-	cc $(CFLAGS) $(DEBUG) -g -c $< -o $@ 
+	cc $(CFLAGS) $(DEBUG) -c $< -o $@ 
 $(OBJ_DIR)/%.o: $(SRC_DIR)/main/%.c | $(OBJ_DIR)
-	cc $(CFLAGS) $(DEBUG) -g -c $< -o $@ 
+	cc $(CFLAGS) $(DEBUG) -c $< -o $@ 
 $(OBJ_DIR)/%.o: $(SRC_DIR)/built_ins/%.c | $(OBJ_DIR)
-	cc $(CFLAGS) $(DEBUG) -g -c $< -o $@ 
+	cc $(CFLAGS) $(DEBUG) -c $< -o $@ 
 
 libft: 
 	@$(MAKE) -C $(LIBFT_DIR)
