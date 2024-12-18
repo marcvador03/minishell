@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/12 00:48:00 by mfleury           #+#    #+#             */
-/*   Updated: 2024/12/18 00:29:52 by mfleury          ###   ########.fr       */
+/*   Updated: 2024/12/18 10:54:10 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,15 +30,13 @@ static char	*split_unquotes(char *s, int i, int *pos, int *j)
 	return (res);
 }
 
-static char	*split_move(char *s, int cnt[4], int *j)
+static char	*split_move(char *s, int cnt[4])
 {
 	char	*res;
 
 	res = NULL;
 	if (cnt[0] != cnt[2])
 		res = ft_substr(s, cnt[0], cnt[2] - cnt[0] - 1);
-	if (res != NULL)
-		*j = *j + 1;
 	return (res);
 }
 
@@ -58,7 +56,9 @@ static void	split_quotes_loop(char *s, char **res)
 			cnt[3] = cnt[1];
 			cnt[2] += sh_jump_to(s + cnt[0], s[cnt[0]]);
 			cnt[0]++;
-			res[cnt[1]] = split_move(s, cnt, &cnt[1]);
+			res[cnt[1]] = split_move(s, cnt);
+			if (res[cnt[1]] != NULL)
+				cnt[1]++;
 			cnt[0] = cnt[2] - 1;
 		}
 		cnt[0]++;
