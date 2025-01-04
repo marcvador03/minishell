@@ -1,0 +1,25 @@
+exit
+	must update exit code when run in multiple commands
+	check order of wrong arguments (bash comparison)
+	update max input to long long int (update atoi also)
+	full testing
+
+exit_status
+	correct status exit code of single command - OK
+
+redirection
+	check when file is not accessible - should display error message (as bash)
+
+heredoc
+	correct EOF check (currently fails as validates any partial string)
+	signal handling?
+
+quotes
+	correct case "" at the end of the input
+	full testing
+
+export
+	space behind = sign
+	full testing
+
+
