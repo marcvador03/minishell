@@ -1,25 +1,25 @@
-exit
-	must update exit code when run in multiple commands
-	check order of wrong arguments (bash comparison)
-	update max input to long long int (update atoi also)
+1. exit
+	1.1 must update exit code when run in multiple commands
+	1.2 check order of wrong arguments (bash comparison)
+	1.3 update max input to long long int (update atoi also)
 	full testing
 
-exit_status
-	correct status exit code of single command - OK
+2. exit_status
+	2.1 correct status exit code of single command - OK
 
-redirection
-	check when file is not accessible - should display error message (as bash)
+3. redirection
+	3.1 check when file is not accessible - should display error message (as bash)
 
-heredoc
-	correct EOF check (currently fails as validates any partial string)
-	signal handling?
+4. heredoc
+	4.1 correct EOF check (currently fails as validates any partial string)
+	4.2 signal handling?
 
-quotes
-	correct case "" at the end of the input
-	full testing
+5. quotes
+	5.1 correct case "" at the end of the input
+	5.2 full testing
 
-export
-	space behind = sign
+6. export
+	6.1 space behind = sign
 	full testing
 
 
