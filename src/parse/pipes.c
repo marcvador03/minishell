@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/28 13:53:58 by mfleury           #+#    #+#             */
-/*   Updated: 2024/12/17 17:06:15 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/01/04 16:30:42 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,11 @@ static int	fill_in_pipe(t_pipe *p, char **env)
 	if (p->args == NULL)
 		return (-1);
 	p->r_fd[INPUT] = get_fdin_redir(p);
+	if (p->r_fd[INPUT] == -1)
+		return (-1);
 	p->r_fd[OUTPUT] = get_fdout_redir(p);
+	if (p->r_fd[OUTPUT] == -1)
+		return (-1);
 	return (0);
 }
 
@@ -74,11 +78,13 @@ int	get_next_pipe(t_pipe *p, char *t_line, char **env)
 			else
 				ft_memset(t_line, ' ', i);
 			if (fill_in_pipe(p, env) == -1)
-				return (-1);
+				return (set_gstatus(-1), -1);
 			return (0);
 		}
 		i++;
 	}
 	p->p_line = ft_strdup(t_line);
-	return (fill_in_pipe(p, env));
+	if (fill_in_pipe(p, env) == -1)
+		return (set_gstatus(-1), -1);
+	return (0);
 }
