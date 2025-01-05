@@ -64,7 +64,7 @@ INCLUDES := $(patsubst %.h, $(INC_DIR)/%.h, $(INC_NAMES))
 
 DEPS := $(OBJECTS:.o=.d)
 
-CFLAGS += -Wall -Werror -Wextra -MMD -MP -I $(INC_DIR)
+CFLAGS += -Wall -Werror -Wextra -g -MMD -MP -I $(INC_DIR)
 
 LIB_NAMES := libft.a 
 LIBS_TAG := $(patsubst lib%.a, -l%, $(LIB_NAMES))
@@ -80,15 +80,15 @@ all: libft $(OBJECTS) $(NAME)
 $(NAME): libft/libft.a Makefile $(INCLUDES) $(OBJECTS)
 	cc $(CFLAGS) -L libft $(DEBUG) $(OBJECTS) -o $@ $(LIBS_TAG) $(LIBS_TAG)
 
-$(OBJ_DIR)/%.o: $(SRC_DIR)/parse/%.c | $(OBJ_DIR)
+$(OBJ_DIR)/%.o: $(SRC_DIR)/parse/%.c Makefile | $(OBJ_DIR)
 	cc $(CFLAGS) $(DEBUG) -c $< -o $@ 
-$(OBJ_DIR)/%.o: $(SRC_DIR)/execute/%.c | $(OBJ_DIR)
+$(OBJ_DIR)/%.o: $(SRC_DIR)/execute/%.c Makefile | $(OBJ_DIR)
 	cc $(CFLAGS) $(DEBUG) -c $< -o $@ 
-$(OBJ_DIR)/%.o: $(SRC_DIR)/utils/%.c | $(OBJ_DIR)
+$(OBJ_DIR)/%.o: $(SRC_DIR)/utils/%.c Makefile | $(OBJ_DIR)
 	cc $(CFLAGS) $(DEBUG) -c $< -o $@ 
-$(OBJ_DIR)/%.o: $(SRC_DIR)/main/%.c | $(OBJ_DIR)
+$(OBJ_DIR)/%.o: $(SRC_DIR)/main/%.c Makefile | $(OBJ_DIR)
 	cc $(CFLAGS) $(DEBUG) -c $< -o $@ 
-$(OBJ_DIR)/%.o: $(SRC_DIR)/built_ins/%.c | $(OBJ_DIR)
+$(OBJ_DIR)/%.o: $(SRC_DIR)/built_ins/%.c Makefile | $(OBJ_DIR)
 	cc $(CFLAGS) $(DEBUG) -c $< -o $@ 
 
 libft: 
