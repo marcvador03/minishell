@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/02 18:58:50 by mfleury           #+#    #+#             */
-/*   Updated: 2024/12/18 00:40:19 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/01/05 16:02:39 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 int		open_redir_fd(t_pipe *p);
 int		close_redir_fd(t_pipe *p);
 int		close_pipes(t_pipe *p);
-int		exec_cmd(char *cmd, char **args, int pcount, char ***env);
+int		exec_cmd(char *cmd, char **args, t_pipe *p, char ***env);
 
 static int	run_child(t_pipe *p, char ***env)
 {
@@ -40,7 +40,7 @@ static int	run_child(t_pipe *p, char ***env)
 	if (open_redir_fd(p) == -1)
 		return (close_redir_fd(p), -1);
 	if (sh_check_empty(p->args[0]) == 0)
-		wstatus = exec_cmd(p->args[0], p->args, 0, env);
+		wstatus = exec_cmd(p->args[0], p->args, p, env);
 	close_redir_fd(p);
 	exit (wstatus);
 }
@@ -90,7 +90,7 @@ int	single_cmd(t_pipe *p, char ***env)
 	if (open_redir_fd(p) == -1)
 		return (close_redir_fd(p), -1);
 	if (sh_check_empty(p->args[0]) == 0)
-		exec_cmd(p->args[0], p->args, 1, env);
+		exec_cmd(p->args[0], p->args, p, env);
 	close_redir_fd(p);
 	rl_replace_line("", 0);
 	rl_on_new_line();

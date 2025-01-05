@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 10:01:23 by mfleury           #+#    #+#             */
-/*   Updated: 2024/12/17 12:54:39 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/01/05 16:15:12 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,13 +39,18 @@ void	exit_minishell_error(t_shell *sh, int status, char **env)
 
 void	exit_minishell(t_shell *sh, char **env)
 {
-	printf("minishell exited with success\n");
-	if (sh != NULL)
-		unset_term_settings(sh->tcap, env);
-	free_sh(sh);
-	if (env != NULL)
-		free_d(env);
-	exit(g_status);
+	if (sh->head == sh && sh->next == NULL)
+	{
+		if (sh != NULL)
+			unset_term_settings(sh->tcap, env);
+		printf("minishell exited with success\n");
+		free_sh(sh);
+		if (env != NULL)
+			free_d(env);
+		exit(g_status);
+	}
+//	free_sh(sh);
+	return ;
 }
 
 int	main(int argc, char *argv[], char *envp[])

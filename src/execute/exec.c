@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/17 15:39:35 by mfleury           #+#    #+#             */
-/*   Updated: 2025/01/04 15:55:49 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/01/05 16:02:26 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,14 +86,14 @@ static int	exec_syscmd_single(char *cmd, char **args, char **env)
 	return (free_s(t_cmd), 0);
 }
 
-int	exec_cmd(char *cmd, char **args, int pcount, char ***env)
+int	exec_cmd(char *cmd, char **args, t_pipe *p, char ***env)
 {
 	int			x;
 	t_func_arr	call_cmd[6];
 	int			wstatus;
 
 	if (ft_strncmp(cmd, "exit", max(ft_strlen(cmd), 4)) == 0)
-		return (0);
+		return (ft_exit(p->sh, args, *env), g_status);
 	call_cmd[0] = &ft_cd;
 	call_cmd[1] = &ft_pwd;
 	call_cmd[2] = &ft_unset;
@@ -103,7 +103,7 @@ int	exec_cmd(char *cmd, char **args, int pcount, char ***env)
 	x = str_to_enum(cmd);
 	if (x != -1)
 		wstatus = call_cmd[x](args, env);
-	else if (pcount == 1)
+	else if (p->sh->p_count == 1)
 		wstatus = exec_syscmd_single(cmd, args, *env);
 	else
 		wstatus = exec_syscmd_multiple(cmd, args, *env);

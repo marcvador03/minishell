@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/13 15:34:22 by mfleury           #+#    #+#             */
-/*   Updated: 2024/12/17 21:56:38 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/01/05 15:59:16 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,11 +45,8 @@ void	ft_exit(t_shell *sh, char **args, char **env)
 	else if (args[1] != NULL)
 	{
 		while (args[1][i] != 0)
-		{
-			if (check_errors(args[1], i) == -1)
+			if (check_errors(args[1], i++) == -1)
 				return (flush_errors("exit", 12));
-			i++;
-		}
 	}
 	g_status = 0;
 	if (args[1] != NULL)
@@ -59,6 +56,7 @@ void	ft_exit(t_shell *sh, char **args, char **env)
 		else
 			g_status = ft_atoi(args[1]);
 	}
-	exit_minishell(sh, env);
+	if (sh->p_count == 1)
+		exit_minishell(sh, env);
 	return ;
 }

@@ -22,4 +22,6 @@
 	6.1 space behind = sign
 	full testing
 
+7.	"cat" interrupted returns unexpected error message
+8.	ctrl-D on empty line exits but with error (exit normally with 0 in bash)
 
