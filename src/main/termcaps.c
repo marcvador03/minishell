@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/11 22:55:30 by mfleury           #+#    #+#             */
-/*   Updated: 2024/12/17 22:28:37 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/01/06 13:59:37 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,8 +22,8 @@ void	set_term_settings(t_terms *tcap, char **env)
 	tcap->new_term = tcap->old_term;
 	tcap->new_term.c_iflag &= ~(IGNBRK | BRKINT | IGNPAR | PARMRK | INPCK);
 	tcap->new_term.c_iflag &= ~(ISTRIP | INLCR | IGNCR | IUCLC | IXANY);
-	tcap->new_term.c_iflag &= ~(IMAXBEL);
-	tcap->new_term.c_iflag |= (ICRNL | IXON | IXOFF);
+	tcap->new_term.c_iflag &= ~(IMAXBEL | IXOFF);
+	tcap->new_term.c_iflag |= (ICRNL | IXON);
 	tcap->new_term.c_oflag &= ~(OLCUC | OCRNL | ONLRET | OFILL | OFDEL);
 	tcap->new_term.c_oflag |= (OPOST | ONLCR);
 	tcap->new_term.c_cflag &= ~(CSTOPB | PARENB | PARODD | HUPCL | CLOCAL);
