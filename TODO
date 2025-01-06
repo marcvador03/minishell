@@ -17,7 +17,7 @@
 	4.3 cat << "" gives strange message (expected nothing and reprompt as not supported)
 
 5. quotes
-	5.1 correct case "" at the end of the input
+	OK 5.1 correct case echo ''"'"" at the end of the input
 	5.2 full testing
 
 6. export
