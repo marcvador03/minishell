@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 10:01:23 by mfleury           #+#    #+#             */
-/*   Updated: 2025/01/06 17:08:08 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/01/06 18:39:02 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,7 @@ void	exit_minishell_error(t_shell *sh, int status, char **env)
 		free_sh(sh);
 		if (env != NULL)
 			free_d(env);
+		exit(status);
 	}
 }
 

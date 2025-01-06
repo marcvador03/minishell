@@ -24,11 +24,10 @@
 	6.1 space behind = sign
 	full testing
 
-7.	"cat" interrupted returns unexpected error message
+10. misc
 
-8.	ctrl-D on empty line exits but with error (exit normally with 0 in bash)
-
-9. 	cat | exit 4564, ctrl C then history with echo $? displays mixed lines
-
-10.	cat | exit 4564 then enter displays weird characters instead of returning prompt
+	10.1	"cat" interrupted returns unexpected error message
+	OK 10.2.	ctrl-D on empty line exits but with error (exit normally with 0 in bash)
+	10.3. 	cat | exit 4564, ctrl C then history with echo $? displays mixed lines
+	10.4	cat | exit 4564 then enter displays weird characters instead of returning prompt
 
