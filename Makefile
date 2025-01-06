@@ -34,6 +34,7 @@ EXECUTE = exec.c \
 		  pre_exec.c
 
 UTILS = core_utils.c \
+		core_utils2.c \
 		free_utils.c \
 		list_utils.c \
 		list_utils2.c \
