@@ -24,4 +24,6 @@
 
 7.	"cat" interrupted returns unexpected error message
 8.	ctrl-D on empty line exits but with error (exit normally with 0 in bash)
+9. 	cat | exit 4564, ctrl C then history with echo $? displays mixed lines
+10.	cat | exit 4564 then enter displays weird characters instead of returning prompt
 
