@@ -12,8 +12,9 @@
 	OK 3.1 check when file is not accessible - should display error message (as bash)
 
 4. heredoc
-	4.1 correct EOF check (currently fails as validates any partial string)
+	OK 4.1 correct EOF check (currently fails as validates any partial string)
 	4.2 signal handling?
+	4.3 cat << "" gives strange message (expected nothing and reprompt as not supported)
 
 5. quotes
 	5.1 correct case "" at the end of the input

@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/23 14:57:19 by mfleury           #+#    #+#             */
-/*   Updated: 2024/12/17 22:41:51 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/01/06 18:32:31 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 static int	get_hd_input(char *eof, int fd)
 {
 	char	*hd_input;
+	int		len;
 
 	init_signal(0, 1);
 	while (1)
@@ -22,10 +23,9 @@ static int	get_hd_input(char *eof, int fd)
 		hd_input = readline("> ");
 		if (hd_input == NULL)
 			return (-1);
-		if (ft_strncmp(hd_input, eof, ft_strlen(eof)) != 0)
-		{
+		len = max(ft_strlen(eof), ft_strlen(hd_input));
+		if (ft_strncmp(hd_input, eof, len) != 0)
 			ft_putendl_fd(hd_input, fd);
-		}
 		else
 			return (free(hd_input), 0);
 		free(hd_input);
