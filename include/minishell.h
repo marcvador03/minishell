@@ -6,7 +6,7 @@
 /*   By: pmorello <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 12:17:09 by pmorello          #+#    #+#             */
-/*   Updated: 2025/01/05 15:59:32 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/01/06 17:15:26 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,8 @@ typedef enum cmd_enum
 }	t_cmd_enum;
 
 typedef int			(*t_func_arr)(char **args, char ***env);
-typedef struct s_shell	t_shell;
+typedef struct s_shell \
+					t_shell;
 
 typedef struct s_pipe
 {
@@ -87,7 +88,7 @@ typedef struct s_termcaps
 	char			*set_cursor_begin;
 }	t_terms;
 
-typedef struct s_shell
+struct s_shell
 {
 	char			*s_line;
 	int				token;
@@ -98,7 +99,7 @@ typedef struct s_shell
 	t_terms			*tcap;
 	struct s_shell	*head;
 	struct s_shell	*next;
-}	t_shell;
+};
 
 typedef struct s_env
 {
@@ -119,7 +120,7 @@ int		ft_env(char **args, char ***env);
 int		ft_echo(char **args, char ***env);
 int		ft_cd(char **args, char ***env);
 int		ft_unset(char **args, char ***env);
-void	ft_exit(t_shell *sh, char **args, char **env);
+void	ft_exit(t_pipe *p, char **args, char **env);
 
 /* core utils functions */
 char	*get_full_path(char *arg0, char **env);
@@ -147,7 +148,7 @@ void	free_pipe(t_pipe *p);
 void	free_sh(t_shell *sh);
 
 /* main functions */
-void	exit_minishell(t_shell *sh, char **env);
+void	exit_minishell(t_pipe *p, char **env);
 void	exit_minishell_error(t_shell *sh, int status, char **env);
 int		main_cmd_return(t_pipe *p, int wstatus);
 void	init_signal(int pid, int hd);

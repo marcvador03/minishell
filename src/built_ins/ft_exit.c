@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/13 15:34:22 by mfleury           #+#    #+#             */
-/*   Updated: 2025/01/05 15:59:16 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/01/06 17:08:24 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ static int	check_overflow(char *str)
 	return (free_s(tmp), 0);
 }
 
-void	ft_exit(t_shell *sh, char **args, char **env)
+void	ft_exit(t_pipe *p, char **args, char **env)
 {
 	int	i;
 
@@ -56,7 +56,6 @@ void	ft_exit(t_shell *sh, char **args, char **env)
 		else
 			g_status = ft_atoi(args[1]);
 	}
-	if (sh->p_count == 1)
-		exit_minishell(sh, env);
+	exit_minishell(p, env);
 	return ;
 }
