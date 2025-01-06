@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/18 12:17:52 by mfleury           #+#    #+#             */
-/*   Updated: 2024/12/17 20:23:02 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/01/06 17:28:29 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@
 # define E_204 ": error near token \'&&\' or \'||\'"
 # define E_205 ": error near pipe token \'|\'"
 # define E_206 ": error near parenthesis \'(\' or \')\'"
-# define E_207 ": error while fecthing env value"
+# define E_207 ": error while fetching env value"
 # define E_208 ": target directory does not exist"
 
 #endif
