@@ -6,7 +6,7 @@
 /*   By: pmorello <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 12:17:09 by pmorello          #+#    #+#             */
-/*   Updated: 2025/01/06 17:15:26 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/01/06 18:08:49 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,59 +57,60 @@ typedef enum cmd_enum
 }	t_cmd_enum;
 
 typedef int			(*t_func_arr)(char **args, char ***env);
+typedef long long	t_ll;
 typedef struct s_shell \
 					t_shell;
 
 typedef struct s_pipe
 {
-	char			*p_line;
-	pid_t			pid;
-	char			**redirs;
-	char			**rd;
-	int				r_fd[4];
-	char			**args;
-	int				fd[2];
-	t_shell			*sh;
-	struct s_pipe	*head;
-	struct s_pipe	*prev;
-	struct s_pipe	*next;
+	char				*p_line;
+	pid_t				pid;
+	char				**redirs;
+	char				**rd;
+	int					r_fd[4];
+	char				**args;
+	int					fd[2];
+	t_shell				*sh;
+	struct s_pipe		*head;
+	struct s_pipe		*prev;
+	struct s_pipe		*next;
 }	t_pipe;
 
 typedef struct s_termcaps
 {
-	struct termios	old_term;
-	struct termios	new_term;
-	char			*keys_on;
-	char			*keys_off;
-	char			*up_arrow;
-	char			*down_arrow;
-	char			*backspace;
-	char			*del_line;
-	char			*set_cursor_begin;
+	struct termios		old_term;
+	struct termios		new_term;
+	char				*keys_on;
+	char				*keys_off;
+	char				*up_arrow;
+	char				*down_arrow;
+	char				*backspace;
+	char				*del_line;
+	char				*set_cursor_begin;
 }	t_terms;
 
 struct s_shell
 {
-	char			*s_line;
-	int				token;
-	int				depth;
-	int				bracket[4];
-	int				p_count;
-	t_pipe			*pipes;
-	t_terms			*tcap;
-	struct s_shell	*head;
-	struct s_shell	*next;
+	char				*s_line;
+	int					token;
+	int					depth;
+	int					bracket[4];
+	int					p_count;
+	t_pipe				*pipes;
+	t_terms				*tcap;
+	struct s_shell		*head;
+	struct s_shell		*next;
 };
 
 typedef struct s_env
 {
-	char			*value;
-	struct s_env	*next;
+	char				*value;
+	struct s_env		*next;
 }	t_env;
 
 typedef struct s_mini
 {
-	t_env	*env;
+	t_env				*env;
 }	t_mini;
 
 /* built-ins functions*/
@@ -140,6 +141,8 @@ t_shell	*sh_lstnew(char *line);
 t_shell	*sh_lstadd_back(t_shell **sh, char *line);
 t_pipe	*p_lstnew(char *line, char **env);
 t_pipe	*p_lstadd_back(t_pipe **pipe, char *line, char **env);
+t_ll	ll_atoi(const char *nptr);
+char	*ll_itoa(t_ll n);
 
 /* free utils functions */
 void	free_s(void *ptr);
