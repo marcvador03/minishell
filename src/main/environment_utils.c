@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/17 09:53:05 by mfleury           #+#    #+#             */
-/*   Updated: 2024/12/18 10:15:26 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/01/07 16:46:04 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,6 +52,10 @@ char	*create_entry(char *var_name, char *new_value)
 	char	*res;
 	char	*tmp;
 
+	if (var_name == NULL)
+		return (NULL);
+	if (new_value == NULL)
+		return (var_name);
 	tmp = ft_strjoin(var_name, "=");
 	if (tmp == NULL)
 		return (NULL);

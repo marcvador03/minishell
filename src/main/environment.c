@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/14 09:05:40 by mfleury           #+#    #+#             */
-/*   Updated: 2024/12/17 09:55:07 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/01/07 16:32:27 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,19 +73,22 @@ char	**sh_add_env(char ***env, char *var_name, char *new_value)
 char	**sh_update_env(char ***env, char *var_name, char *new_value)
 {
 	int		i;
-	int		len;
+	int		len[2];
 	char	*entry;
 	char	*tmp;
 
 	if (*env == NULL || var_name == NULL)
 		return (NULL);
-	len = ft_strlen(var_name);
+	len[0] = ft_strlen(var_name);
 	entry = NULL;
 	i = 0;
 	while ((*env)[i] != NULL)
 	{
-		if (ft_strncmp((*env)[i], var_name, len) == 0)
+		len[1] = ft_strlen((*env)[i]);
+		if (ft_strncmp((*env)[i], var_name, max(len[0], len[1])) == 0)
 		{
+			if (new_value == NULL)
+				return (*env);
 			entry = create_entry(var_name, new_value);
 			tmp = (*env)[i];
 			(*env)[i] = entry;

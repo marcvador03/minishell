@@ -6,7 +6,7 @@
 /*   By: pmorello <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 12:17:09 by pmorello          #+#    #+#             */
-/*   Updated: 2025/01/06 18:08:49 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/01/07 16:42:28 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,7 +102,7 @@ struct s_shell
 	struct s_shell		*next;
 };
 
-typedef struct s_env
+/*typedef struct s_env
 {
 	char				*value;
 	struct s_env		*next;
@@ -111,7 +111,7 @@ typedef struct s_env
 typedef struct s_mini
 {
 	t_env				*env;
-}	t_mini;
+}	t_mini;*/
 
 /* built-ins functions*/
 int		ft_unset(char **args, char ***env);

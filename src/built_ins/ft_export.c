@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/14 09:54:49 by pmorello          #+#    #+#             */
-/*   Updated: 2024/12/17 15:38:27 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/01/07 16:50:18 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,8 +50,13 @@ static void	print_sorted_loop(char **s_env, int i)
 
 	j = 0;
 	ft_putstr_fd("declare -x ", STDOUT_FILENO);
-	while (s_env[i][j] != '=')
+	while (s_env[i][j] != '=' && s_env[i][j] != '\0')
 		ft_putchar_fd(s_env[i][j++], STDOUT_FILENO);
+	if (s_env[i][j] == '\0' || (s_env[i][j] == '=' && s_env[i][j + 1] == '\0'))
+	{
+		ft_putstr_fd("\n", STDOUT_FILENO);
+		return ;
+	}
 	ft_putstr_fd("=\"", STDOUT_FILENO);
 	ft_putstr_fd(&s_env[i][++j], STDOUT_FILENO);
 	ft_putstr_fd("\"\n", STDOUT_FILENO);
@@ -93,13 +98,14 @@ int	ft_export(char **args, char ***env)
 		if (check_export_var(args[i]) != -1)
 		{
 			n = sh_strpos(args[i], "=");
+			var_name = ft_substr(args[i], 0, n);
 			if (args[i][n] != '\0')
-			{
-				var_name = ft_substr(args[i], 0, n);
 				env_value = export_env_value(args[i], n);
-				*env = sh_update_env(env, var_name, env_value);
+			else
+				env_value = NULL;
+			*env = sh_update_env(env, var_name, env_value);
+			if (env_value != NULL)
 				free_s(var_name);
-			}
 		}
 		i++;
 	}
