@@ -6,13 +6,13 @@
 /*   By: mfleury <mfleury@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/11 16:34:27 by mfleury           #+#    #+#             */
-/*   Updated: 2024/12/17 23:17:01 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/01/07 22:57:20 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-static char	*expand_getenv(char *s, char **env)
+static char	*expand_getenv(char *s, t_env *env)
 {
 	char	*value;
 	char	*res;
@@ -71,7 +71,7 @@ static char	*get_dollar_in(char *line)
 	return (res);
 }
 
-static char	*expand_env_loop(char **env, char *line, int *i, int flag)
+static char	*expand_env_loop(t_env *env, char *line, int *i, int flag)
 {
 	char	*res;
 	char	*dollar_out;
@@ -97,7 +97,7 @@ static char	*expand_env_loop(char **env, char *line, int *i, int flag)
 	return (free_s(dollar_in), res);
 }
 
-char	*expand_env(char *line, char **env, int x)
+char	*expand_env(char *line, t_env *env, int x)
 {
 	int	i;
 	int	flag;

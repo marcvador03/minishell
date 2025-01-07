@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/07 15:12:52 by mfleury           #+#    #+#             */
-/*   Updated: 2025/01/06 17:07:26 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/01/07 23:00:21 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,11 +15,11 @@
 char	*get_tk(char *line);
 int		count_tokens(char *line);
 int		check_open_quotes(char *str);
-int		execute_tokens(t_shell *sh, int i, int level, char ***env);
+int		execute_tokens(t_shell *sh, int i, int level);
 int		check_input(char *line);
 int		init_data_brackets(t_shell *tmp, int *a, int *b);
 
-static int	fill_sh_init(t_shell *tmp, t_terms *tcap, char **env, int (*x)[2])
+static int	fill_sh_init(t_shell *tmp, t_terms *tcap, t_env *env, int (*x)[2])
 {
 	tmp->s_line = expand_env(tmp->s_line, env, 1);
 	if (tmp->s_line == NULL)
@@ -31,7 +31,7 @@ static int	fill_sh_init(t_shell *tmp, t_terms *tcap, char **env, int (*x)[2])
 	return (0);
 }
 
-static t_shell	*fill_sh(t_shell *sh, char *line, t_terms *tcap, char **env)
+static t_shell	*fill_sh(t_shell *sh, char *line, t_terms *tcap, t_env *env)
 {
 	int		i;
 	t_shell	*tmp;
@@ -47,9 +47,9 @@ static t_shell	*fill_sh(t_shell *sh, char *line, t_terms *tcap, char **env)
 	{
 		t_line = line + sh_skip(line, ' ');
 		if (sh == NULL)
-			tmp = sh_lstnew(t_line);
+			tmp = sh_lstnew(t_line, env);
 		else
-			tmp = sh_lstadd_back(&sh, t_line);
+			tmp = sh_lstadd_back(&sh, t_line, env);
 		if (tmp == NULL || fill_sh_init(tmp, tcap, env, &s_bracket) != 0)
 			return (NULL);
 		sh = tmp;
@@ -59,7 +59,7 @@ static t_shell	*fill_sh(t_shell *sh, char *line, t_terms *tcap, char **env)
 	return (sh->head);
 }
 
-static char	*create_prompt(char **env)
+static char	*create_prompt(t_env *env)
 {
 	char	*user;
 	char	*res;
@@ -74,7 +74,7 @@ static char	*create_prompt(char **env)
 	return (res);
 }
 
-static char	*get_input(char **env)
+static char	*get_input(t_env *env)
 {
 	char	*line;
 	char	*line2;
@@ -95,7 +95,7 @@ static char	*get_input(char **env)
 	return (free_s(prompt), free_s(line), line2);
 }
 
-int	start_shell(char ***env, t_terms *tcap)
+int	start_shell(t_env *env, t_terms *tcap)
 {
 	char	*line;
 	t_shell	*sh;
@@ -103,12 +103,12 @@ int	start_shell(char ***env, t_terms *tcap)
 
 	sh = NULL;
 	init_signal(1, 0);
-	line = get_input(*env);
+	line = get_input(env);
 	if (line == NULL)
-		exit_minishell_error(sh, g_status, *env);
+		exit_minishell_error(sh, g_status, env);
 	if (check_open_quotes(line) == -1)
 		return (free_s((void *)line), set_gstatus(201), -1);
-	sh = fill_sh(sh, line, tcap, *env);
+	sh = fill_sh(sh, line, tcap, env);
 	if (sh == NULL)
 		return (free_s((void *)line), -1);
 	free_s((void *)line);
@@ -116,7 +116,7 @@ int	start_shell(char ***env, t_terms *tcap)
 	g_status = 0;
 	if (sh_check_empty(sh->s_line) == -1)
 		return (free_sh(head), 0);
-	if (execute_tokens(sh, 0, 0, env) != 0)
+	if (execute_tokens(sh, 0, 0) != 0)
 		return (free_sh(head), 1);
 	return (free_sh(head), 0);
 }

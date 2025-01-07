@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/17 15:39:35 by mfleury           #+#    #+#             */
-/*   Updated: 2025/01/06 16:53:21 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/01/07 23:38:17 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ static int	check_directory(char *cmd)
 	return (n);
 }
 
-static int	exec_syscmd_multiple(char *cmd, char **args, char **env)
+static int	exec_syscmd_multipl(char *cmd, char **args, t_env *env, char **env2)
 {
 	char	*t_cmd;
 	int		errnum;
@@ -52,14 +52,14 @@ static int	exec_syscmd_multiple(char *cmd, char **args, char **env)
 		return (g_status);
 	if (check_directory(cmd) != 0)
 		return (free_s(t_cmd), 126);
-	errnum = execve(t_cmd, args, env);
+	errnum = execve(t_cmd, args, env2);
 	if (errnum != 0)
 		g_status = errnum;
 	free_s(t_cmd);
 	return (errnum);
 }
 
-static int	exec_syscmd_single(char *cmd, char **args, char **env)
+static int	exec_syscmd_single(char *cmd, char **args, t_env *env, char **env2)
 {
 	char		*t_cmd;
 	int			wstatus;
@@ -76,7 +76,7 @@ static int	exec_syscmd_single(char *cmd, char **args, char **env)
 	if (pid == -1)
 		return (free_s(t_cmd), -1);
 	if (pid == 0)
-		return (execve(t_cmd, args, env));
+		return (execve(t_cmd, args, env2));
 	waitpid(pid, &wstatus, 0);
 	kill(pid, SIGINT);
 	if (WIFEXITED(wstatus))
@@ -86,14 +86,15 @@ static int	exec_syscmd_single(char *cmd, char **args, char **env)
 	return (free_s(t_cmd), 0);
 }
 
-int	exec_cmd(char *cmd, char **args, t_pipe *p, char ***env)
+int	exec_cmd(char *cmd, char **args, t_pipe *p, t_env *env)
 {
 	int			x;
 	t_func_arr	call_cmd[6];
 	int			wstatus;
+	char		**env_arr;
 
 	if (ft_strncmp(cmd, "exit", max(ft_strlen(cmd), 4)) == 0)
-		return (ft_exit(p, args, *env), g_status);
+		return (ft_exit(p, args, env), g_status);
 	call_cmd[0] = &ft_cd;
 	call_cmd[1] = &ft_pwd;
 	call_cmd[2] = &ft_unset;
@@ -101,13 +102,15 @@ int	exec_cmd(char *cmd, char **args, t_pipe *p, char ***env)
 	call_cmd[4] = &ft_env;
 	call_cmd[5] = &ft_echo;
 	x = str_to_enum(cmd);
+	env_arr = get_env_array(env);
+	if (env_arr == NULL)
+		return(g_status);
 	if (x != -1)
 		wstatus = call_cmd[x](args, env);
 	else if (p->sh->p_count == 1)
-		wstatus = exec_syscmd_single(cmd, args, *env);
+		wstatus = exec_syscmd_single(cmd, args, env, env_arr);
 	else
-		wstatus = exec_syscmd_multiple(cmd, args, *env);
-	if (wstatus != 0)
-		flush_errors(cmd, wstatus);
-	return (g_status);
+		wstatus = exec_syscmd_multipl(cmd, args, env, env_arr);
+	flush_errors(cmd, wstatus);
+	return (free_d(env_arr), g_status);
 }

@@ -6,7 +6,7 @@
 /*   By: pmorello <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 12:17:09 by pmorello          #+#    #+#             */
-/*   Updated: 2025/01/07 16:42:28 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/01/08 00:48:09 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,10 +56,16 @@ typedef enum cmd_enum
 	END
 }	t_cmd_enum;
 
-typedef int			(*t_func_arr)(char **args, char ***env);
 typedef long long	t_ll;
 typedef struct s_shell \
 					t_shell;
+typedef struct s_env
+{
+	char				*varname;
+	char				*value;
+	struct s_env		*head;
+	struct s_env		*next;
+}	t_env;
 
 typedef struct s_pipe
 {
@@ -98,35 +104,29 @@ struct s_shell
 	int					p_count;
 	t_pipe				*pipes;
 	t_terms				*tcap;
+	t_env				*env;
 	struct s_shell		*head;
 	struct s_shell		*next;
 };
-
-/*typedef struct s_env
-{
-	char				*value;
-	struct s_env		*next;
-}	t_env;
-
-typedef struct s_mini
-{
-	t_env				*env;
-}	t_mini;*/
+typedef int			(*t_func_arr)(char **args, t_env *env);
 
 /* built-ins functions*/
-int		ft_unset(char **args, char ***env);
-int		ft_pwd(char **args, char ***env);
-int		ft_export(char **args, char ***env);
-int		ft_env(char **args, char ***env);
-int		ft_echo(char **args, char ***env);
-int		ft_cd(char **args, char ***env);
-int		ft_unset(char **args, char ***env);
-void	ft_exit(t_pipe *p, char **args, char **env);
+int		ft_unset(char **args, t_env *env);
+int		ft_pwd(char **args, t_env *env);
+int		ft_export(char **args, t_env *env);
+int		ft_env(char **args, t_env *env);
+int		ft_echo(char **args, t_env *env);
+int		ft_cd(char **args, t_env *env);
+int		ft_unset(char **args, t_env *env);
+void	ft_exit(t_pipe *p, char **args, t_env *env);
 
 /* core utils functions */
-char	*get_full_path(char *arg0, char **env);
+char	*get_full_path(char *arg0, t_env *env);
 void	set_gstatus(int err_code);
 int		max(int n1, int n2);
+t_ll	ll_atoi(const char *nptr);
+char	*ll_itoa(t_ll n);
+
 /* str utils functions */
 void	sh_trim_list_strings(char **str);
 char	*sh_trim_strings(char *s);
@@ -137,37 +137,38 @@ int		sh_skip(char *str, char c);
 int		sh_check_empty(char *str);
 
 /* list utils functions */
-t_shell	*sh_lstnew(char *line);
-t_shell	*sh_lstadd_back(t_shell **sh, char *line);
-t_pipe	*p_lstnew(char *line, char **env);
-t_pipe	*p_lstadd_back(t_pipe **pipe, char *line, char **env);
-t_ll	ll_atoi(const char *nptr);
-char	*ll_itoa(t_ll n);
+t_shell	*sh_lstnew(char *line, t_env *env);
+t_shell	*sh_lstadd_back(t_shell **sh, char *line, t_env *env);
+t_pipe	*p_lstnew(char *line, t_env *env);
+t_pipe	*p_lstadd_back(t_pipe **pipe, char *line, t_env *env);
+int		env_size(t_env *lst);
 
 /* free utils functions */
 void	free_s(void *ptr);
 void	free_d(char **ptr);
 void	free_pipe(t_pipe *p);
 void	free_sh(t_shell *sh);
+void	free_env(t_env *env);
 
 /* main functions */
-void	exit_minishell(t_pipe *p, char **env);
-void	exit_minishell_error(t_shell *sh, int status, char **env);
+void	exit_minishell(t_pipe *p, t_env *env);
+void	exit_minishell_error(t_shell *sh, int status, t_env *env);
 int		main_cmd_return(t_pipe *p, int wstatus);
 void	init_signal(int pid, int hd);
 void	flush_errors(char *cmd, int err_sig);
 
 /* environment functions */
-char	*sh_getenv(char **env, char *str);
-char	**fill_env(char *envp[]);
-char	**sh_update_env(char ***env, char *str, char *new_value);
-char	**sh_add_env(char ***env, char *str, char *new_value);
-char	**sh_del_env(char ***env, char *str);
-char	*expand_env(char *line, char **env, int x);
+char	*sh_getenv(t_env *env, char *str);
+t_env	*fill_env(char *envp[]);
+void	sh_updateenv(t_env *env, char *var_name, char *new_value);
+void	sh_addenv(t_env *env, char *var_name, char *value);
+t_env	*sh_delenv(t_env *env, char *var_name);
+char	*expand_env(char *line, t_env *env, int x);
+char	**get_env_array(t_env *env);
 
 /*term caps*/
-void	set_term_settings(t_terms *tcap, char **env);
-void	unset_term_settings(t_terms *tcap, char **env);
-void	init_termcaps(t_terms *tcap, char **env);
+void	set_term_settings(t_terms *tcap, t_env *env);
+void	unset_term_settings(t_terms *tcap, t_env *env);
+void	init_termcaps(t_terms *tcap, t_env *env);
 
 #endif

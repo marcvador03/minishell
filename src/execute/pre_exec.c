@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/02 18:58:50 by mfleury           #+#    #+#             */
-/*   Updated: 2025/01/05 16:02:39 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/01/07 23:08:16 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,9 +15,9 @@
 int		open_redir_fd(t_pipe *p);
 int		close_redir_fd(t_pipe *p);
 int		close_pipes(t_pipe *p);
-int		exec_cmd(char *cmd, char **args, t_pipe *p, char ***env);
+int		exec_cmd(char *cmd, char **args, t_pipe *p, t_env *env);
 
-static int	run_child(t_pipe *p, char ***env)
+static int	run_child(t_pipe *p, t_env *env)
 {
 	t_pipe	*o;
 	int		wstatus;
@@ -85,7 +85,7 @@ static int	create_pipes(t_pipe *p)
 	return (0);
 }
 
-int	single_cmd(t_pipe *p, char ***env)
+int	single_cmd(t_pipe *p, t_env *env)
 {
 	if (open_redir_fd(p) == -1)
 		return (close_redir_fd(p), -1);
@@ -97,7 +97,7 @@ int	single_cmd(t_pipe *p, char ***env)
 	return (g_status);
 }
 
-int	multiple_cmd(t_pipe *p, char ***env)
+int	multiple_cmd(t_pipe *p, t_env *env)
 {
 	t_pipe	*head;
 

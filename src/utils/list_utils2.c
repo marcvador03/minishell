@@ -6,15 +6,15 @@
 /*   By: mfleury <mfleury@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/02 16:48:32 by mfleury           #+#    #+#             */
-/*   Updated: 2024/12/17 15:25:24 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/01/07 23:04:27 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	get_next_pipe(t_pipe *p, char *line, char **env);
+int	get_next_pipe(t_pipe *p, char *line, t_env *env);
 
-t_pipe	*p_lstnew(char *line, char **env)
+t_pipe	*p_lstnew(char *line, t_env *env)
 {
 	t_pipe	*ptr;
 
@@ -41,7 +41,7 @@ static t_pipe	*p_lstlast(t_pipe *pipe)
 	return (tmp);
 }
 
-t_pipe	*p_lstadd_back(t_pipe **pipe, char *line, char **env)
+t_pipe	*p_lstadd_back(t_pipe **pipe, char *line, t_env *env)
 {
 	t_pipe	*tmp;
 	t_pipe	*new_node;

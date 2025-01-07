@@ -6,14 +6,14 @@
 /*   By: mfleury <mfleury@student.42barcelona.      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/28 13:53:58 by mfleury           #+#    #+#             */
-/*   Updated: 2025/01/06 17:10:33 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/01/07 23:06:34 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-char	**create_redirs(t_pipe *p, char **env);
-char	**create_args(t_pipe *p, char **env);
+char	**create_redirs(t_pipe *p, t_env *env);
+char	**create_args(t_pipe *p, t_env *env);
 int		get_fdin_redir(t_pipe *p);
 int		get_fdout_redir(t_pipe *p);
 
@@ -42,7 +42,7 @@ int	count_pipes(char *line)
 	return (n);
 }
 
-static int	fill_in_pipe(t_pipe *p, char **env)
+static int	fill_in_pipe(t_pipe *p, t_env *env)
 {
 	p->redirs = create_redirs(p, env);
 	if (p->redirs == NULL)
@@ -59,7 +59,7 @@ static int	fill_in_pipe(t_pipe *p, char **env)
 	return (0);
 }
 
-int	get_next_pipe(t_pipe *p, char *t_line, char **env)
+int	get_next_pipe(t_pipe *p, char *t_line, t_env *env)
 {
 	int		i;
 

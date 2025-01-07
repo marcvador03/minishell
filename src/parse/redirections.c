@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/10 08:52:08 by mfleury           #+#    #+#             */
-/*   Updated: 2024/12/17 23:58:38 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/01/07 23:06:43 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,7 +100,7 @@ static char	*create_redir_init(t_pipe *p, int i, char *line)
 	return (t_redirs[1]);
 }
 
-char	**create_redirs(t_pipe *p, char **env)
+char	**create_redirs(t_pipe *p, t_env *env)
 {
 	int		i;
 	char	**redirs;

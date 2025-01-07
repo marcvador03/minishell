@@ -6,23 +6,21 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/14 09:52:16 by pmorello          #+#    #+#             */
-/*   Updated: 2024/12/16 14:33:39 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/01/07 23:40:56 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	ft_env(char **args, char ***env)
+int	ft_env(char **args, t_env *env)
 {
-	int	i;
-
 	if (args[0] == NULL)
 		return (-1);
-	i = 0;
-	while ((*env)[i] != NULL)
+	while (env != NULL)
 	{
-		printf("%s\n", (*env)[i]);
-		i++;
+		if (env->value != NULL)
+			printf("%s\n", env->varname);
+		env = env->next;
 	}
 	return (0);
 }

@@ -6,13 +6,13 @@
 /*   By: mfleury <mfleury@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/17 09:53:05 by mfleury           #+#    #+#             */
-/*   Updated: 2025/01/07 16:46:04 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/01/08 00:09:16 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-char	**create_env(char **env, int offset)
+/*char	**create_env(char **env, int offset)
 {
 	int		i;
 	char	**new_env;
@@ -24,30 +24,51 @@ char	**create_env(char **env, int offset)
 	if (new_env == NULL)
 		return (NULL);
 	return (new_env);
+}*/
+
+static void	fill_content(t_env **ptr, char *envp[], int i)
+{
+	int	n;
+
+	n = sh_strpos(envp[i], "=");
+	(*ptr)->varname = ft_substr(envp[i], 0, n);
+	if (envp[i][n] == '\0')
+		(*ptr)->value = NULL;
+	else
+		(*ptr)->value = ft_substr(envp[i], n + 1, ft_strlen(envp[i]));
+	(*ptr)->head = *ptr;
+	(*ptr)->next = NULL;
+	return ;
 }
 
-char	**fill_env(char *envp[])
+t_env	*fill_env(char *envp[])
 {
-	char	**env;
+	t_env	*env;
+	t_env	*ptr;
 	int		i;
 
 	if (envp == NULL || envp[0] == NULL)
-		return (NULL);
-	env = create_env(envp, 0);
-	if (env == NULL)
-		return (set_gstatus(202), NULL);
+		return (NULL); // to be revised with min settings
+	env = NULL;
 	i = 0;
 	while (envp[i] != NULL)
 	{
-		env[i] = ft_strdup(envp[i]);
-		if (env[i] == NULL)
+		ptr = (t_env *)ft_calloc(sizeof(t_env), 1);
+		if (ptr == NULL)
 			return (set_gstatus(202), NULL);
+		fill_content(&ptr, envp, i);
+		if (env != NULL)
+		{
+			ptr->head = env->head;
+			env->next = ptr;
+		}
+		env = ptr;
 		i++;
 	}
-	return (env);
+	return (env->head);
 }
 
-char	*create_entry(char *var_name, char *new_value)
+/*char	*create_entry(char *var_name, char *new_value)
 {
 	char	*res;
 	char	*tmp;
@@ -63,25 +84,46 @@ char	*create_entry(char *var_name, char *new_value)
 	if (res == NULL)
 		return (NULL);
 	return (free_s(tmp), res);
-}
+}*/
 
-static char	**search_path(char **env)
+/*static char	**search_path(t_env *env)
 {
-	int		i;
+	char	*path;
 	char	**res;
 
 	i = 0;
-	res = NULL;
-	while (env[i] != NULL)
-	{
-		if (ft_strncmp(env[i], "PATH=", 5) == 0 && ft_strlen(env[i]) > 5)
-			res = ft_split(env[i] + 5, ':');
-		i++;
-	}
+	path = sh_getenv(env, "PATH");
+	res = ft_split(path, ':');
 	return (res);
+}*/
+
+char	**get_env_array(t_env *env)
+{
+	int		n;
+	int		i;
+	char	**env_arr;
+	char	*tmp;
+
+	if (env == NULL)
+		return (NULL);
+	env = env->head;
+	n = env_size(env);
+	env_arr = (char **)ft_calloc(sizeof(char), n + 1);
+	if (env_arr == NULL)
+		return (set_gstatus(202), NULL);
+	i = 0;
+	while (env != NULL)
+	{
+		tmp = ft_strjoin(env->varname, "=");
+		env_arr[i] = ft_strjoin(tmp, env->value);
+		free(tmp);
+		env = env->next;
+	}
+	env_arr[n] = NULL;
+	return (env_arr);
 }
 
-char	*get_full_path(char *arg0, char **env)
+char	*get_full_path(char *arg0, t_env *env)
 {
 	char	*cmd_in;
 	char	*cmd_out;
@@ -90,7 +132,7 @@ char	*get_full_path(char *arg0, char **env)
 
 	if (access(arg0, X_OK) == 0)
 		return (ft_strdup(arg0));
-	paths = search_path(env);
+	paths = ft_split(sh_getenv(env, "PATH"), ':');
 	if (paths == NULL)
 		return (set_gstatus(2), NULL);
 	cmd_in = ft_strjoin("/", arg0);
@@ -99,12 +141,11 @@ char	*get_full_path(char *arg0, char **env)
 	i = 0;
 	while (paths[i] != NULL)
 	{
-		cmd_out = ft_strjoin(paths[i], cmd_in);
+		cmd_out = ft_strjoin(paths[i++], cmd_in);
 		if (cmd_out == NULL)
 			return (free_d(paths), free_s(cmd_in), set_gstatus(202), NULL);
 		if (access(cmd_out, X_OK) == 0)
 			return (free_d(paths), free_s(cmd_in), cmd_out);
-		i++;
 		free_s(cmd_out);
 	}
 	return (free_d(paths), free_s(cmd_in), set_gstatus(127), NULL);

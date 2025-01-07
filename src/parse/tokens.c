@@ -6,15 +6,15 @@
 /*   By: mfleury <mfleury@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/07 14:31:45 by mfleury           #+#    #+#             */
-/*   Updated: 2025/01/06 16:06:47 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/01/07 23:01:38 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
 int		count_brackets(t_shell *sh, char *line);
-int		execute_tokens(t_shell *sh, int i, int level, char ***env);
-int		subshell(t_shell *sh, char ***env);
+int		execute_tokens(t_shell *sh, int i, int level);
+int		subshell(t_shell *sh);
 int		get_tk2(char *line);
 
 int	get_next_token(t_shell *sh, char *line)
@@ -41,7 +41,7 @@ int	get_next_token(t_shell *sh, char *line)
 	return (0);
 }
 
-static int	exec_token_fork(t_shell *sh, int i, int level, char ***env)
+static int	exec_token_fork(t_shell *sh, int i, int level)
 {
 	pid_t	pid;
 	int		cnt;
@@ -52,7 +52,7 @@ static int	exec_token_fork(t_shell *sh, int i, int level, char ***env)
 	if (pid == -1)
 		perror("minishell: ");
 	if (pid == 0)
-		exit(execute_tokens(sh, i, ++level, env));
+		exit(execute_tokens(sh, i, ++level));
 	wait(&wstatus);
 	g_status = 0;
 	cnt = WEXITSTATUS(wstatus);
@@ -75,13 +75,13 @@ static t_shell	*move_sh(t_shell *sh, int n, int *i)
 	return (tmp);
 }
 
-int	execute_tokens(t_shell *sh, int i, int level, char ***env)
+int	execute_tokens(t_shell *sh, int i, int level)
 {
 	while (sh != NULL)
 	{
 		if (sh->bracket[0] > level)
 		{
-			sh = move_sh(sh, exec_token_fork(sh, i, level, env), &i);
+			sh = move_sh(sh, exec_token_fork(sh, i, level), &i);
 			if (sh == NULL)
 				return (i);
 		}
@@ -89,7 +89,7 @@ int	execute_tokens(t_shell *sh, int i, int level, char ***env)
 		{
 			if (sh->token == 0 || (sh->token == 1 && g_status != 0))
 			{
-				if (subshell(sh, env) != 0)
+				if (subshell(sh) != 0)
 					flush_errors(NULL, g_status);
 				sh->pipes = NULL;
 			}

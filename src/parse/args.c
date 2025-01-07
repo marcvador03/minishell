@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/02 18:52:16 by mfleury           #+#    #+#             */
-/*   Updated: 2024/12/17 23:58:26 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/01/07 23:07:02 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,7 @@ static char	*get_args(char *line)
 	return (ft_strdup(line));
 }
 
-char	**create_args(t_pipe *p, char **env)
+char	**create_args(t_pipe *p, t_env *env)
 {
 	char	**args;
 	int		i;

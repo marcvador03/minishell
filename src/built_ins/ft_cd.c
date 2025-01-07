@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/14 09:20:49 by pmorello          #+#    #+#             */
-/*   Updated: 2024/12/17 20:04:09 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/01/08 00:33:31 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ char	*h_rel_path(const char *path)
 	return (rel_path);
 }
 
-char	*old_path(char **env)
+char	*old_path(t_env *env)
 {
 	char	*old_path;
 
@@ -52,7 +52,7 @@ char	*old_path(char **env)
 	return (ft_strdup(old_path));
 }
 
-char	*get_target_path(char **args, char **env)
+char	*get_target_path(char **args, t_env *env)
 {
 	char	*path;
 	char	*home;
@@ -73,7 +73,7 @@ char	*get_target_path(char **args, char **env)
 		return (h_rel_path(path));
 }
 
-int	ft_cd(char **args, char ***env)
+int	ft_cd(char **args, t_env *env)
 {
 	char	*new_path;
 	char	*cur_path;
@@ -82,18 +82,18 @@ int	ft_cd(char **args, char ***env)
 		return (7);
 	cur_path = getcwd(NULL, 0);
 	if (cur_path == NULL)
-		cur_path = ft_strdup(sh_getenv(*env, "PWD"));
-	new_path = get_target_path(args, *env);
+		cur_path = ft_strdup(sh_getenv(env, "PWD"));
+	new_path = get_target_path(args, env);
 	if (!new_path)
 		return (free_s(cur_path), 208);
 	if (chdir(new_path) != 0)
 		return (free_s(new_path), free_s(cur_path), -1);
 	else
 	{
-		*env = sh_update_env(env, "OLDPWD", cur_path);
+		sh_updateenv(env, "OLDPWD", cur_path);
 		free_s(new_path);
 		new_path = getcwd(NULL, 0);
-		*env = sh_update_env(env, "PWD", new_path);
+		sh_updateenv(env, "PWD", new_path);
 	}
 	return (free_s(cur_path), free_s(new_path), 0);
 }

@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/13 15:34:22 by mfleury           #+#    #+#             */
-/*   Updated: 2025/01/06 18:18:54 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/01/07 23:41:15 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ static int	check_overflow(char *str)
 	return (free_s(tmp), 0);
 }
 
-void	ft_exit(t_pipe *p, char **args, char **env)
+void	ft_exit(t_pipe *p, char **args, t_env *env)
 {
 	int	i;
 

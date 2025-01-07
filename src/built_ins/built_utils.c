@@ -6,7 +6,7 @@
 /*   By: pmorello <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/14 10:05:20 by pmorello          #+#    #+#             */
-/*   Updated: 2024/12/17 17:33:00 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/01/07 23:46:39 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ void	swap(char **str1, char **str2)
 	*str2 = tmp;
 }
 
-int	export_count(char **env)
+/*int	export_count(char **env)
 {
 	int	n;
 
@@ -29,7 +29,7 @@ int	export_count(char **env)
 	while (env[n] != NULL)
 		n++;
 	return (n);
-}
+}*/
 
 int	check_export_var(char *str)
 {

@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/25 14:10:00 by mfleury           #+#    #+#             */
-/*   Updated: 2024/12/15 12:42:17 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/01/07 19:52:09 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,18 +32,6 @@ void	free_d(char **ptr)
 	ptr = NULL;
 }
 
-static void	free_pipe_elts(t_pipe *p)
-{
-	if (p->p_line != NULL)
-		free_s((void *)p->p_line);
-	if (p->redirs != NULL)
-		free_d(p->redirs);
-	if (p->rd != NULL)
-		free_s((void *)p->rd);
-	if (p->args != NULL)
-		free_d(p->args);
-}
-
 void	free_pipe(t_pipe *p)
 {
 	t_pipe	*tmp;
@@ -54,10 +42,35 @@ void	free_pipe(t_pipe *p)
 	tmp = p;
 	while (tmp != NULL)
 	{
-		free_pipe_elts(p);
+		if (p->p_line != NULL)
+			free_s((void *)p->p_line);
+		if (p->redirs != NULL)
+			free_d(p->redirs);
+		if (p->rd != NULL)
+			free_s((void *)p->rd);
+		if (p->args != NULL)
+		free_d(p->args);
 		tmp = tmp->next;
 		free_s(p);
 		p = tmp;
+	}
+}
+
+void	free_env(t_env *env)
+{
+	t_env	*tmp;
+
+	if (env == NULL)
+		return ;
+	env = env->head;
+	tmp = env;
+	while (tmp != NULL)
+	{
+		free_s(env->varname);
+		free_s(env->value);
+		tmp = tmp->next;
+		free_s((void *)env);
+		env = tmp;
 	}
 }
 

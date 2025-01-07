@@ -6,13 +6,13 @@
 /*   By: mfleury <mfleury@student.42barcelona.      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 10:01:23 by mfleury           #+#    #+#             */
-/*   Updated: 2025/01/06 18:39:02 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/01/08 00:49:41 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	start_shell(char ***env, t_terms *tcap);
+int	start_shell(t_env *env, t_terms *tcap);
 int	close_redir_fd(t_pipe *p);
 
 unsigned int	g_status = 0;
@@ -25,7 +25,7 @@ int	main_cmd_return(t_pipe *p, int wstatus)
 	return (0);
 }
 
-void	exit_minishell_error(t_shell *sh, int status, char **env)
+void	exit_minishell_error(t_shell *sh, int status, t_env *env)
 {
 	if (sh != NULL)
 		unset_term_settings(sh->tcap, env);
@@ -36,7 +36,7 @@ void	exit_minishell_error(t_shell *sh, int status, char **env)
 		ft_putstr_fd("\n", 2);
 		free_sh(sh);
 		if (env != NULL)
-			free_d(env);
+			free_env(env);
 		exit(status);
 	}
 	else
@@ -44,12 +44,12 @@ void	exit_minishell_error(t_shell *sh, int status, char **env)
 		printf("exit\n");
 		free_sh(sh);
 		if (env != NULL)
-			free_d(env);
+			free_env(env);
 		exit(status);
 	}
 }
 
-void	exit_minishell(t_pipe *p, char **env)
+void	exit_minishell(t_pipe *p, t_env *env)
 {
 	if (p->head == p)
 	{
@@ -59,7 +59,7 @@ void	exit_minishell(t_pipe *p, char **env)
 		close_redir_fd(p);
 		free_sh(p->sh);
 		if (env != NULL)
-			free_d(env);
+			free_env(env);
 		exit(g_status);
 	}
 	else
@@ -70,19 +70,20 @@ void	exit_minishell(t_pipe *p, char **env)
 int	main(int argc, char *argv[], char *envp[])
 {
 	t_terms	tcap;
-	char	**env;
+//	char	**env;
+	t_env	*env;
 
 	if (isatty(STDIN_FILENO) == 0)
 		exit_minishell_error(NULL, errno, NULL);
 	env = fill_env(envp);
-	if (env == NULL)
+	if (env == NULL) // to revise default env variables
 		ft_putendl_fd("No environment variables available for that session", 2);
 	init_termcaps(&tcap, env);
 	set_term_settings(&tcap, env);
 	if (argc > 1 || argv == NULL)
 		exit_minishell_error(NULL, 1, env);
 	while (1)
-		if (start_shell(&env, &tcap) != 0)
+		if (start_shell(env, &tcap) != 0)
 			flush_errors(NULL, g_status);
 	return (0);
 }

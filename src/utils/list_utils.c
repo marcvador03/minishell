@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/30 17:25:00 by mfleury           #+#    #+#             */
-/*   Updated: 2025/01/06 18:06:10 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/01/07 23:27:33 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 int	get_next_token(t_shell *sh, char *line);
 
-t_shell	*sh_lstnew(char *line)
+t_shell	*sh_lstnew(char *line, t_env *env)
 {
 	t_shell	*ptr;
 
@@ -23,6 +23,7 @@ t_shell	*sh_lstnew(char *line)
 		return (set_gstatus(202), NULL);
 	ptr->next = NULL;
 	ptr->head = ptr;
+	ptr->env = env;
 	if (get_next_token(ptr, line) != 0)
 		return (NULL);
 	return (ptr);
@@ -40,12 +41,12 @@ static t_shell	*sh_lstlast(t_shell *sh)
 	return (tmp);
 }
 
-t_shell	*sh_lstadd_back(t_shell **sh, char *line)
+t_shell	*sh_lstadd_back(t_shell **sh, char *line, t_env *env)
 {
 	t_shell	*tmp;
 	t_shell	*new_node;
 
-	new_node = sh_lstnew(line);
+	new_node = sh_lstnew(line, env);
 	if (new_node == NULL)
 		return (NULL);
 	else
@@ -57,3 +58,19 @@ t_shell	*sh_lstadd_back(t_shell **sh, char *line)
 	}
 	return (tmp->next);
 }
+
+int	env_size(t_env *lst)
+{
+	int		cnt;
+	t_env	*tmp;
+
+	cnt = 0;
+	tmp = lst;
+	while (tmp != NULL)
+	{
+		tmp = tmp->next;
+		cnt++;
+	}
+	return (cnt);
+}
+

@@ -6,13 +6,13 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/14 09:44:34 by pmorello          #+#    #+#             */
-/*   Updated: 2024/12/17 20:00:22 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/01/07 23:47:16 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	ft_pwd(char **args, char ***env)
+int	ft_pwd(char **args, t_env *env)
 {
 	char	*pwd;
 
@@ -25,7 +25,7 @@ int	ft_pwd(char **args, char ***env)
 	}
 	pwd = getcwd(NULL, 0);
 	if (pwd == NULL)
-		pwd = ft_strdup(sh_getenv(*env, "PWD"));
+		pwd = ft_strdup(sh_getenv(env, "PWD"));
 	printf("%s\n", pwd);
 	return (free(pwd), 0);
 }
