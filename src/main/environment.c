@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/14 09:05:40 by mfleury           #+#    #+#             */
-/*   Updated: 2025/01/08 15:45:05 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/01/08 20:33:57 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,35 +29,35 @@ char	*sh_getenv(t_env *env, char *str)
 	return (NULL);
 }
 
-void	sh_addenv(t_env *env, char *var_name, char *value)
+t_env	*sh_addenv(t_env *env, char *var_name, char *value)
 {
 	t_env	*ptr;
 
 	if (var_name == NULL)
-		return ;
+		return (env);
 	ptr = (t_env *)ft_calloc(sizeof(t_env), 1);
 	if (ptr == NULL)
-		return (set_gstatus(-1));
+		return (set_gstatus(-1), env);
 	ptr->head = ptr;
 	ptr->next = NULL;
 	ptr->varname = var_name;
 	ptr->value = value;
 	if (env == NULL)
-		return ;
+		return (ptr);
 	while (env->next != NULL)
 		env = env->next;
 	ptr->head = env->head;
 	env->next = ptr;
-	return ;
+	return (env->head);
 }
 
-void	sh_updateenv(t_env *env, char *var_name, char *new_value)
+t_env	*sh_updateenv(t_env *env, char *var_name, char *new_value)
 {
 	int		len[2];
 	t_env	*head;
 
 	if (var_name == NULL)
-		return ;
+		return (env);
 	head = NULL;
 	if (env != NULL)
 		head = env->head;
@@ -72,7 +72,7 @@ void	sh_updateenv(t_env *env, char *var_name, char *new_value)
 				free_s(env->value);
 				env->value = new_value;
 			}
-			return (free_s(var_name));
+			return (free_s(var_name), env->head);
 		}
 		env = env->next;
 	}

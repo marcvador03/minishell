@@ -6,7 +6,7 @@
 /*   By: pmorello <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 12:17:09 by pmorello          #+#    #+#             */
-/*   Updated: 2025/01/08 16:12:32 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/01/08 22:47:17 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,6 +67,17 @@ typedef struct s_env
 	struct s_env		*head;
 	struct s_env		*next;
 }	t_env;
+
+typedef struct s_prompt
+{
+	char				*user;
+	char				*hostname;
+	char				*ex_cur_path;
+	char				*cur_path;
+	char				*home;
+	char				*status;
+	char				*prompt;
+}	t_prompt;
 
 typedef struct s_pipe
 {
@@ -161,8 +172,8 @@ void	flush_errors(char *cmd, int err_sig);
 /* environment functions */
 char	*sh_getenv(t_env *env, char *str);
 t_env	*fill_env(char *envp[]);
-void	sh_updateenv(t_env *env, char *var_name, char *new_value);
-void	sh_addenv(t_env *env, char *var_name, char *value);
+t_env	*sh_updateenv(t_env *env, char *var_name, char *new_value);
+t_env	*sh_addenv(t_env *env, char *var_name, char *value);
 t_env	*sh_delenv(t_env *env, char *var_name);
 char	*expand_env(char *line, t_env *env, int x);
 char	**get_env_array(t_env *env);

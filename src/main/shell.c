@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/07 15:12:52 by mfleury           #+#    #+#             */
-/*   Updated: 2025/01/07 23:00:21 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/01/08 21:13:47 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@ int		check_open_quotes(char *str);
 int		execute_tokens(t_shell *sh, int i, int level);
 int		check_input(char *line);
 int		init_data_brackets(t_shell *tmp, int *a, int *b);
+char	*create_prompt(t_env *env);
 
 static int	fill_sh_init(t_shell *tmp, t_terms *tcap, t_env *env, int (*x)[2])
 {
@@ -57,21 +58,6 @@ static t_shell	*fill_sh(t_shell *sh, char *line, t_terms *tcap, t_env *env)
 	if (sh->bracket[1] != sh->bracket[0])
 		return (set_gstatus(206), NULL);
 	return (sh->head);
-}
-
-static char	*create_prompt(t_env *env)
-{
-	char	*user;
-	char	*res;
-
-	user = sh_getenv(env, "USER");
-	if (user == NULL)
-		res = ft_strjoin("UNDEFINED", ":$ ");
-	else
-		res = ft_strjoin(user, ":$ ");
-	if (res == NULL)
-		return (free_s(res), NULL);
-	return (res);
 }
 
 static char	*get_input(t_env *env)

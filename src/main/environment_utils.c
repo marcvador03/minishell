@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/17 09:53:05 by mfleury           #+#    #+#             */
-/*   Updated: 2025/01/08 16:21:23 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/01/08 20:34:20 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,27 +15,12 @@
 t_env *fill_default_session()
 {	
 	t_env	*env;
-	int	x;
-	int	fd;
-	struct utmp ut;
-	int 	len;
 
 	env = NULL;
-	sh_addenv(env, ft_strdup("SHLVL"), ft_strdup("1"));
+	env = sh_addenv(env, ft_strdup("SHLVL"), ft_strdup("1"));
 	flush_errors("", g_status);
-	sh_addenv(env, ft_strdup("TERM"), ft_strdup("xterm-256color"));
+	env = sh_addenv(env, ft_strdup("TERM"), ft_strdup("xterm-256color"));
 	flush_errors("", g_status);
-	x = ttyslot();
-	len = sizeof(struct utmp);
-	fd = open(UTMP_FILE, O_RDONLY);
-	if (fd == -1)
-		ft_putstr_fd("error opening utmp", 2);
-	while (read(fd, &ut, len) == len)
-	{
-		printf("%s ", ut.ut_user);
-		printf("%s\n", ut.ut_id + 1);
-	}
-
 	return (env);
 }
 

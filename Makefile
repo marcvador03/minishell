@@ -43,6 +43,7 @@ UTILS = core_utils.c \
 MAIN = environment.c \
 	   environment_utils.c \
 	   minishell.c \
+	   prompt.c \
 	   shell.c \
 	   shell_utils.c \
 	   signals.c \
