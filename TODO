@@ -21,7 +21,7 @@
 	5.2 full testing
 
 6. export
-	6.1 space behind = sign
+	OK 6.1 space behind = sign
 	full testing
 
 10. misc
@@ -30,4 +30,6 @@
 	OK 10.2.	ctrl-D on empty line exits but with error (exit normally with 0 in bash)
 	10.3. 	cat | exit 4564, ctrl C then history with echo $? displays mixed lines
 	10.4	cat | exit 4564 then enter displays weird characters instead of returning prompt
+	10.5	revise status error codes (esp. manual ones) and align with bash
+	10.6	update prompt with fallback management
 
