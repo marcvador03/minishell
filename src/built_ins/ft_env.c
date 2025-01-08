@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/14 09:52:16 by pmorello          #+#    #+#             */
-/*   Updated: 2025/01/07 23:40:56 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/01/08 13:51:56 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ int	ft_env(char **args, t_env *env)
 	while (env != NULL)
 	{
 		if (env->value != NULL)
-			printf("%s\n", env->varname);
+			printf("%s%c%s\n", env->varname, '=', env->value);
 		env = env->next;
 	}
 	return (0);
