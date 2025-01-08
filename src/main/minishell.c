@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 10:01:23 by mfleury           #+#    #+#             */
-/*   Updated: 2025/01/08 00:49:41 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/01/08 16:07:52 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,8 +76,8 @@ int	main(int argc, char *argv[], char *envp[])
 	if (isatty(STDIN_FILENO) == 0)
 		exit_minishell_error(NULL, errno, NULL);
 	env = fill_env(envp);
-	if (env == NULL) // to revise default env variables
-		ft_putendl_fd("No environment variables available for that session", 2);
+	//if (env == NULL) // to revise default env variables
+		env = fill_default_session();
 	init_termcaps(&tcap, env);
 	set_term_settings(&tcap, env);
 	if (argc > 1 || argv == NULL)

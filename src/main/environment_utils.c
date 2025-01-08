@@ -6,25 +6,38 @@
 /*   By: mfleury <mfleury@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/17 09:53:05 by mfleury           #+#    #+#             */
-/*   Updated: 2025/01/08 13:59:43 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/01/08 16:21:23 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-/*char	**create_env(char **env, int offset)
-{
-	int		i;
-	char	**new_env;
+t_env *fill_default_session()
+{	
+	t_env	*env;
+	int	x;
+	int	fd;
+	struct utmp ut;
+	int 	len;
 
-	i = 0;
-	while (env[i] != NULL)
-		i++;
-	new_env = (char **)ft_calloc(sizeof(char *), i + offset + 1);
-	if (new_env == NULL)
-		return (NULL);
-	return (new_env);
-}*/
+	env = NULL;
+	sh_addenv(env, ft_strdup("SHLVL"), ft_strdup("1"));
+	flush_errors("", g_status);
+	sh_addenv(env, ft_strdup("TERM"), ft_strdup("xterm-256color"));
+	flush_errors("", g_status);
+	x = ttyslot();
+	len = sizeof(struct utmp);
+	fd = open(UTMP_FILE, O_RDONLY);
+	if (fd == -1)
+		ft_putstr_fd("error opening utmp", 2);
+	while (read(fd, &ut, len) == len)
+	{
+		printf("%s ", ut.ut_user);
+		printf("%s\n", ut.ut_id + 1);
+	}
+
+	return (env);
+}
 
 static void	fill_content(t_env **ptr, char *envp[], int i)
 {
@@ -67,35 +80,6 @@ t_env	*fill_env(char *envp[])
 	}
 	return (env->head);
 }
-
-/*char	*create_entry(char *var_name, char *new_value)
-{
-	char	*res;
-	char	*tmp;
-
-	if (var_name == NULL)
-		return (NULL);
-	if (new_value == NULL)
-		return (var_name);
-	tmp = ft_strjoin(var_name, "=");
-	if (tmp == NULL)
-		return (NULL);
-	res = ft_strjoin(tmp, new_value);
-	if (res == NULL)
-		return (NULL);
-	return (free_s(tmp), res);
-}*/
-
-/*static char	**search_path(t_env *env)
-{
-	char	*path;
-	char	**res;
-
-	i = 0;
-	path = sh_getenv(env, "PATH");
-	res = ft_split(path, ':');
-	return (res);
-}*/
 
 char	**get_env_array(t_env *env)
 {
