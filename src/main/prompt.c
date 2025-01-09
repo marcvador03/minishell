@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/08 20:31:15 by mfleury           #+#    #+#             */
-/*   Updated: 2025/01/09 00:15:50 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/01/09 16:20:41 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,16 +101,25 @@ static char	*get_hostname()
 	int		fd;
 	char	buf[65];
 	char	*host;
+	char	*tmp;
+	int		n;
 
 	fd = open("/etc/hostname", O_RDONLY);
+	host = NULL;
 	if (fd == -1)
 		return (NULL);
 	if (read(fd, &buf, 64) > 1)
 	{
 		buf[64] = '\0';
-		host = ft_strtrim(buf, "\n");
+		tmp = ft_strtrim(buf, "\n");
+		if (tmp == NULL)
+			return (set_gstatus(202), NULL);
+		n = sh_strpos(tmp, ".");
+		host = ft_substr(tmp, 0, n);
+		free_s(tmp);
 		if (host == NULL)
 			return (set_gstatus(202), NULL);
+
 	}	return ((host));
 	return (NULL);
 }
