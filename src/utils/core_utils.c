@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/16 16:32:42 by mfleury           #+#    #+#             */
-/*   Updated: 2025/01/10 13:42:18 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/01/10 18:54:57 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,6 @@ void	set_gstatus(int err_code)
 
 static void	custom_errors1(char *cmd, int errnum)
 {
-	g_status = errnum;
 	ft_putstr_fd(cmd, STDERR_FILENO);
 	if (errnum == 2)
 		ft_putendl_fd(E_002, STDERR_FILENO);
@@ -38,11 +37,11 @@ static void	custom_errors1(char *cmd, int errnum)
 		ft_putendl_fd(E_126, STDERR_FILENO);
 	if (errnum == 127)
 		ft_putendl_fd(E_127, STDERR_FILENO);
+	g_status = errnum;
 }
 
 static void	custom_errors2(char *cmd, int errnum)
 {
-	g_status = errnum;
 	ft_putstr_fd(cmd, STDERR_FILENO);
 	if (errnum == 201)
 		ft_putendl_fd(E_201, STDERR_FILENO);
@@ -60,13 +59,14 @@ static void	custom_errors2(char *cmd, int errnum)
 		ft_putendl_fd(E_207, STDERR_FILENO);
 	if (errnum == 208)
 		ft_putendl_fd(E_208, STDERR_FILENO);
+	g_status = 2;
 }
 
 void	flush_errors(char *cmd, int err_sig)
 {
 	if (err_sig == -1)
 	{
-		//g_status = errno;
+		g_status = errno;
 		ft_putstr_fd("minishell: ", 2);
 		perror(cmd);
 	}

@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/28 13:53:58 by mfleury           #+#    #+#             */
-/*   Updated: 2025/01/07 23:06:34 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/01/10 18:59:02 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,6 +84,6 @@ int	get_next_pipe(t_pipe *p, char *t_line, t_env *env)
 		i++;
 	}
 	p->p_line = ft_strdup(t_line);
-	set_gstatus(fill_in_pipe(p, env));
+	fill_in_pipe(p, env);
 	return (g_status);
 }
