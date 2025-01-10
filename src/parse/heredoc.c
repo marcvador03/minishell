@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/23 14:57:19 by mfleury           #+#    #+#             */
-/*   Updated: 2025/01/06 18:32:31 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/01/10 22:54:04 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,21 +16,24 @@ static int	get_hd_input(char *eof, int fd)
 {
 	char	*hd_input;
 	int		len;
+	char	*eofn;
 
 	init_signal(0, 1);
+	eofn = ft_strjoin(eof, "\n");
 	while (1)
 	{
-		hd_input = readline("> ");
+		write(1, "> ", 2);
+		hd_input = get_next_line(STDIN_FILENO);
 		if (hd_input == NULL)
-			return (-1);
+			return (free_s(eofn), -1);
 		len = max(ft_strlen(eof), ft_strlen(hd_input));
-		if (ft_strncmp(hd_input, eof, len) != 0)
-			ft_putendl_fd(hd_input, fd);
+		if (ft_strncmp(hd_input, eofn, len) != 0)
+			ft_putstr_fd(hd_input, fd);
 		else
-			return (free(hd_input), 0);
+			return (free(hd_input), free_s(eofn), 0);
 		free(hd_input);
 	}
-	return (0);
+	return (free_s(eofn), 0);
 }
 
 int	init_heredoc(char *line)
@@ -52,5 +55,11 @@ int	init_heredoc(char *line)
 	fd = open(".heredoc_tmp", O_RDONLY);
 	if (fd > 0)
 		unlink(".heredoc_tmp");
+	if (WIFEXITED(wstatus))
+		if (WEXITSTATUS(wstatus) == 130 || WEXITSTATUS(wstatus) == 131)
+		{	
+			rl_on_new_line();
+			return (set_gstatus(WEXITSTATUS(wstatus)), close(fd), -1);
+		}
 	return (fd);
 }

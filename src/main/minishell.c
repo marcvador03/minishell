@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 10:01:23 by mfleury           #+#    #+#             */
-/*   Updated: 2025/01/10 19:30:23 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/01/10 22:49:23 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,7 +93,9 @@ int	main(int argc, char *argv[], char *envp[])
 	if (argc > 1 || argv == NULL)
 		exit_minishell_error(NULL, 1, env);
 	while (1)
-		if (start_shell(env, &tcap) != 0)
-			flush_errors(NULL, g_status);
+	{
+		start_shell(env, &tcap);
+		rl_on_new_line();
+	}
 	return (0);
 }

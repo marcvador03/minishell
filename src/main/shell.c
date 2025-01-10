@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/07 15:12:52 by mfleury           #+#    #+#             */
-/*   Updated: 2025/01/08 21:13:47 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/01/10 22:48:56 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,7 +102,7 @@ int	start_shell(t_env *env, t_terms *tcap)
 	g_status = 0;
 	if (sh_check_empty(sh->s_line) == -1)
 		return (free_sh(head), 0);
-	if (execute_tokens(sh, 0, 0) != 0)
-		return (free_sh(head), 1);
+	execute_tokens(sh, 0, 0);
+	//	return (free_sh(head), 1);
 	return (free_sh(head), 0);
 }
