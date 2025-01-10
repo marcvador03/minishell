@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 10:01:23 by mfleury           #+#    #+#             */
-/*   Updated: 2025/01/10 13:51:29 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/01/10 15:05:56 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,12 @@ int	main_cmd_return(t_pipe *p, int wstatus, pid_t pid)
 	while (p != NULL)
 	{
 		if (p->pid == pid && WIFEXITED(wstatus) != 0)
+		{
 			p->p_status = WEXITSTATUS(wstatus);
+			if (p->next == NULL && p->exit == 1)
+				p->sh->exit = 1;
+			break;
+		}
 		p = p->next;
 	}
 	return (0);
@@ -70,6 +75,11 @@ void	exit_minishell(t_pipe *p, t_env *env)
 		exit(status);
 		//kill(0, SIGTERM);
 	}
+	/*else if (p->next == NULL)
+	{
+		p->sh->exit = 1;
+		exit(p->p_status);
+	}*/
 	exit(p->p_status);
 	/*else if (p->next == NULL)
 	{
