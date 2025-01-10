@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/17 15:39:35 by mfleury           #+#    #+#             */
-/*   Updated: 2025/01/10 18:09:17 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/01/11 00:27:15 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,7 +82,7 @@ static int	exec_syscmd_single(char *cmd, char **args, t_env *env, char **env2)
 	if (WIFEXITED(wstatus))
 		return (free_s(t_cmd), WEXITSTATUS(wstatus));
 	else if (WIFSIGNALED(wstatus))
-		return (free_s(t_cmd), WTERMSIG(wstatus));
+		return (free_s(t_cmd), WTERMSIG(wstatus) + 128);
 	return (free_s(t_cmd), 0);
 }
 
