@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/18 09:19:54 by marvin            #+#    #+#             */
-/*   Updated: 2025/01/10 23:13:07 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/01/11 00:32:44 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,11 +34,9 @@ static void	signal_handler_child(int sig)
 	}
 	else if (sig == SIGQUIT)
 	{
-		write(STDIN_FILENO, "\n", 1);
 		rl_on_new_line();
 		g_status = sig + 128;
-		ft_putstr_fd("Quit: ", STDERR_FILENO);
-		ft_putnbr_fd(g_status, STDERR_FILENO);
+		ft_putstr_fd("Quit (core dumped)", STDERR_FILENO);
 	}
 	return ;
 }
