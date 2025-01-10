@@ -6,27 +6,28 @@
 /*   By: mfleury <mfleury@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/13 15:34:22 by mfleury           #+#    #+#             */
-/*   Updated: 2025/01/10 13:49:20 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/01/10 18:22:45 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 #include "error_minishell.h"
 
-static int	check_numeric(char *args, int i)
+static int	check_numeric(char *args, int i, int *status)
 {
 	if (ft_isdigit(args[i]) == 1)
-		return (set_gstatus(2), 2);
+		return (0);
 	if (i == 0 && (args[i] == '-' || args[i] == '+'))
 		return (0);
 	if (args[i] == ' ')
 		return (0);
 	ft_putstr_fd("minishell: exit: ", 2);
 	ft_putendl_fd(E_012, STDERR_FILENO);
-	return (set_gstatus(2), -1);
+	*status = 2;
+	return (*status);
 }
 
-static int	check_overflow(char *str)
+static int	check_overflow(char *str, int *status)
 {
 	char	*tmp;
 	t_ll	n;
@@ -37,7 +38,8 @@ static int	check_overflow(char *str)
 	{
 		ft_putstr_fd("minishell: exit: ", 2);
 		ft_putendl_fd(E_012, STDERR_FILENO);
-		return (set_gstatus(2), free_s(tmp), -1);
+		*status = 2;
+		return (free_s(tmp), *status);
 	}
 	return (free_s(tmp), 0);
 }
@@ -50,13 +52,13 @@ int	ft_exit(t_pipe *p, char **args, t_env *env)
 	if (args[1] != NULL)
 	{
 		while (args[1][i] != 0)
-			if (check_numeric(args[1], i++) == -1)
-				return (exit_minishell(p, env), 0);
+			if (check_numeric(args[1], i++, &p->p_status) == 2)
+				return (exit_minishell(p, env), p->p_status);
 	}
 	if (args[1] != NULL)
 	{
-		if (check_overflow(args[1]) == -1)
-			return (exit_minishell(p, env), 0);
+		if (check_overflow(args[1], &p->p_status) == 2)
+			return (exit_minishell(p, env), p->p_status);
 		else if (args[1] != NULL && args[2] != NULL)
 		{
 			ft_putstr_fd("minishell: exit: ", 2);
