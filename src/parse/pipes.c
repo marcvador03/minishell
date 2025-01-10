@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/28 13:53:58 by mfleury           #+#    #+#             */
-/*   Updated: 2025/01/10 18:59:02 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/01/10 19:35:49 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,13 +49,9 @@ static int	fill_in_pipe(t_pipe *p, t_env *env)
 		return (-1);
 	p->args = create_args(p, env);
 	if (p->args == NULL)
-		return (-1);
+		return (flush_errors(NULL, -1), -1);
 	p->r_fd[INPUT] = get_fdin_redir(p);
-	if (p->r_fd[INPUT] == -1)
-		return (-1);
 	p->r_fd[OUTPUT] = get_fdout_redir(p);
-	if (p->r_fd[OUTPUT] == -1)
-		return (-1);
 	return (0);
 }
 
@@ -72,13 +68,13 @@ int	get_next_pipe(t_pipe *p, char *t_line, t_env *env)
 		{
 			p->p_line = ft_substr(t_line, 0, i);
 			if (p->p_line == NULL || sh_check_empty(p->p_line) != 0)
-				return (set_gstatus(205), -1);
+				return (flush_errors(NULL, 205), -1);
 			if (t_line[i] == '|')
 				ft_memset(t_line, ' ', i + 1);
 			else
 				ft_memset(t_line, ' ', i);
 			if (fill_in_pipe(p, env) == -1)
-				return (set_gstatus(-1), -1);
+				return (-1);
 			return (0);
 		}
 		i++;

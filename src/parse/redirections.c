@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/10 08:52:08 by mfleury           #+#    #+#             */
-/*   Updated: 2025/01/07 23:06:43 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/01/10 19:20:15 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,11 +110,11 @@ char	**create_redirs(t_pipe *p, t_env *env)
 	t_line[0] = p->p_line + sh_skip(p->p_line, ' ');
 	n = count_redir(t_line[0]);
 	if (n == -1)
-		return (set_gstatus(203), NULL);
+		return (flush_errors(NULL, 203), NULL);
 	redirs = (char **)ft_calloc(sizeof(char *), n + 1);
 	p->rd = (char **)ft_calloc(sizeof(char *), n + 1);
 	if (redirs == NULL || p->rd == NULL)
-		return (free_s(redirs), NULL);
+		return (free_s(redirs), flush_errors(NULL, -1), NULL);
 	if (n == 0)
 		return (redirs);
 	i = 0;
@@ -124,7 +124,7 @@ char	**create_redirs(t_pipe *p, t_env *env)
 		redirs[i] = expand_env(redirs[i], env, 1);
 		redirs[i] = sh_trim_strings(redirs[i]);
 		if (sh_check_empty(redirs[i++]) == -1)
-			return (free_d(redirs), set_gstatus(203), NULL);
+			return (free_d(redirs), flush_errors(NULL, 203), NULL);
 	}
 	return (redirs);
 }

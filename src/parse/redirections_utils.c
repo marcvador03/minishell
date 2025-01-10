@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/18 17:20:19 by mfleury           #+#    #+#             */
-/*   Updated: 2025/01/04 15:54:44 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/01/10 19:13:54 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,8 @@ int	get_fdin_redir(t_pipe *p)
 			fd = open(p->redirs[i], O_RDONLY, 0700);
 		else if (rd == 4)
 			fd = init_heredoc(p->redirs[i]);
+		if (fd == -1)
+			return (flush_errors(p->redirs[i], -1), -1);
 		i++;
 	}
 	if (fd == -2)
@@ -69,7 +71,7 @@ int	get_fdout_redir(t_pipe *p)
 		else if (rd == 1)
 			fd = open(p->redirs[i], O_CREAT | O_RDWR | O_TRUNC, 0644);
 		if (fd == -1)
-			return (-1);
+			return (flush_errors(p->redirs[i], -1), -1);
 		i++;
 	}
 	if (fd == -2)

@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 10:01:23 by mfleury           #+#    #+#             */
-/*   Updated: 2025/01/10 15:05:56 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/01/10 19:30:23 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,21 +73,8 @@ void	exit_minishell(t_pipe *p, t_env *env)
 		if (env != NULL)
 			free_env(env);
 		exit(status);
-		//kill(0, SIGTERM);
 	}
-	/*else if (p->next == NULL)
-	{
-		p->sh->exit = 1;
-		exit(p->p_status);
-	}*/
 	exit(p->p_status);
-	/*else if (p->next == NULL)
-	{
-		if (p->sh != NULL && p->head == p)
-			unset_term_settings(p->sh->tcap, env);
-		printf("exit\n");
-		//exit(g_status);
-	}*/
 	return ;
 }
 
