@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/10 08:52:08 by mfleury           #+#    #+#             */
-/*   Updated: 2025/01/10 19:20:15 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/01/10 23:57:53 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,6 +97,8 @@ static char	*create_redir_init(t_pipe *p, int i, char *line)
 	t_redirs[1] = ft_substr(line, t_redirs[0] - line, len[1]);
 	ft_memset(t_redirs[0], ' ', len[1]);
 	p->p_line = line;
+	if (sh_check_empty(t_redirs[1]) == -1)
+		return (free_s(t_redirs[1]), NULL);
 	return (t_redirs[1]);
 }
 
@@ -117,14 +119,14 @@ char	**create_redirs(t_pipe *p, t_env *env)
 		return (free_s(redirs), flush_errors(NULL, -1), NULL);
 	if (n == 0)
 		return (redirs);
-	i = 0;
-	while (i < n)
+	i = -1;
+	while (++i < n)
 	{
 		redirs[i] = create_redir_init(p, i, t_line[0]);
+		if (redirs[i] == NULL)
+			return (free_d(redirs), flush_errors(NULL, 203), NULL);
 		redirs[i] = expand_env(redirs[i], env, 1);
 		redirs[i] = sh_trim_strings(redirs[i]);
-		if (sh_check_empty(redirs[i++]) == -1)
-			return (free_d(redirs), flush_errors(NULL, 203), NULL);
 	}
 	return (redirs);
 }

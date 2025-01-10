@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/18 17:20:19 by mfleury           #+#    #+#             */
-/*   Updated: 2025/01/10 21:59:36 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/01/11 00:06:49 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,7 +73,7 @@ int	get_fdout_redir(t_pipe *p)
 		else if (rd == 1)
 			fd = open(p->redirs[i], O_CREAT | O_RDWR | O_TRUNC, 0644);
 		if (fd == -1)
-			return (flush_errors(p->redirs[i], -1), 0);
+			return (flush_errors(p->redirs[i], -1), -1);
 		i++;
 	}
 	if (fd == -2)
