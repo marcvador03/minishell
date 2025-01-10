@@ -4,6 +4,9 @@
 	OK 1.3 update max input to long long int (update atoi also)
 	1.4 touch test | exit 2 && touch test2: second command must NOT run and $? = 2
 	1.5 touch test | exit 2 | touch test2 && exit 3: files are ALL created and exit 3
+	1.6	ctrl C on piped commad shoudl reprint the prompt on a new line (not after ^C)
+	1.7 ctrl C status is overriden by exit code (incl 0)!!
+	OK 1.8 correct pipe exit code
 
 2. exit_status
 	OK 2.1 correct status exit code of single command

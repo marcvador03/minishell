@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 10:01:23 by mfleury           #+#    #+#             */
-/*   Updated: 2025/01/09 18:20:48 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/01/10 13:51:29 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,11 +17,15 @@ int	close_redir_fd(t_pipe *p);
 
 unsigned int	g_status = 0;
 
-int	main_cmd_return(t_pipe *p, int wstatus)
+int	main_cmd_return(t_pipe *p, int wstatus, pid_t pid)
 {
 	p = p->head;
-	if (WIFEXITED(wstatus))
-		g_status = WEXITSTATUS(wstatus);
+	while (p != NULL)
+	{
+		if (p->pid == pid && WIFEXITED(wstatus) != 0)
+			p->p_status = WEXITSTATUS(wstatus);
+		p = p->next;
+	}
 	return (0);
 }
 
@@ -51,19 +55,29 @@ void	exit_minishell_error(t_shell *sh, int status, t_env *env)
 
 void	exit_minishell(t_pipe *p, t_env *env)
 {
-	if (p->head == p)
+	int	status;
+
+	if (p->sh->p_count == 1)
 	{
 		if (p->sh != NULL && p->head == p)
 			unset_term_settings(p->sh->tcap, env);
 		printf("exit\n");
-		//close_redir_fd(p);
+		status = p->p_status;
+		close_redir_fd(p);
 		free_sh(p->sh);
 		if (env != NULL)
 			free_env(env);
-		exit(g_status);
+		exit(status);
+		//kill(0, SIGTERM);
 	}
-	else
-		free_sh(p->sh);
+	exit(p->p_status);
+	/*else if (p->next == NULL)
+	{
+		if (p->sh != NULL && p->head == p)
+			unset_term_settings(p->sh->tcap, env);
+		printf("exit\n");
+		//exit(g_status);
+	}*/
 	return ;
 }
 

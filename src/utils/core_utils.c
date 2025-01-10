@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/16 16:32:42 by mfleury           #+#    #+#             */
-/*   Updated: 2024/12/17 20:23:16 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/01/10 13:42:18 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,7 @@ void	flush_errors(char *cmd, int err_sig)
 {
 	if (err_sig == -1)
 	{
-		g_status = errno;
+		//g_status = errno;
 		ft_putstr_fd("minishell: ", 2);
 		perror(cmd);
 	}

@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/02 18:58:50 by mfleury           #+#    #+#             */
-/*   Updated: 2025/01/07 23:08:16 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/01/10 13:41:08 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,6 +49,7 @@ static int	run_parent(t_pipe *p)
 {
 	int		wstatus;
 	t_pipe	*head;
+	pid_t	pid;
 
 	head = p->head;
 	p = head;
@@ -61,8 +62,8 @@ static int	run_parent(t_pipe *p)
 	p = head;
 	while (p != NULL)
 	{
-		waitpid(p->pid, &wstatus, 0);
-		main_cmd_return(p, wstatus);
+		pid = waitpid(0, &wstatus, 0);
+		main_cmd_return(p, wstatus, pid);
 		p = p->next;
 	}
 	rl_replace_line("", 0);
@@ -90,11 +91,11 @@ int	single_cmd(t_pipe *p, t_env *env)
 	if (open_redir_fd(p) == -1)
 		return (close_redir_fd(p), -1);
 	if (sh_check_empty(p->args[0]) == 0)
-		exec_cmd(p->args[0], p->args, p, env);
+		p->p_status = exec_cmd(p->args[0], p->args, p, env);
 	close_redir_fd(p);
 	rl_replace_line("", 0);
 	rl_on_new_line();
-	return (g_status);
+	return (p->p_status);
 }
 
 int	multiple_cmd(t_pipe *p, t_env *env)
@@ -118,5 +119,7 @@ int	multiple_cmd(t_pipe *p, t_env *env)
 	}
 	if (run_parent(head) == -1)
 		return (free_pipe(head), -1);
-	return (0);
+	while (head->next != NULL)
+		head = head->next;
+	return (head->p_status);
 }

@@ -6,7 +6,7 @@
 /*   By: pmorello <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 12:17:09 by pmorello          #+#    #+#             */
-/*   Updated: 2025/01/08 22:47:17 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/01/10 13:47:40 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,12 +82,13 @@ typedef struct s_prompt
 typedef struct s_pipe
 {
 	char				*p_line;
-	pid_t				pid;
 	char				**redirs;
 	char				**rd;
 	int					r_fd[4];
 	char				**args;
 	int					fd[2];
+	pid_t				pid;
+	int					p_status;
 	t_shell				*sh;
 	struct s_pipe		*head;
 	struct s_pipe		*prev;
@@ -114,6 +115,7 @@ struct s_shell
 	int					depth;
 	int					bracket[4];
 	int					p_count;
+	pid_t				ppid;
 	t_pipe				*pipes;
 	t_terms				*tcap;
 	t_env				*env;
@@ -130,7 +132,7 @@ int		ft_env(char **args, t_env *env);
 int		ft_echo(char **args, t_env *env);
 int		ft_cd(char **args, t_env *env);
 int		ft_unset(char **args, t_env *env);
-void	ft_exit(t_pipe *p, char **args, t_env *env);
+int		ft_exit(t_pipe *p, char **args, t_env *env);
 
 /* core utils functions */
 char	*get_full_path(char *arg0, t_env *env);
@@ -165,7 +167,7 @@ void	free_env(t_env *env);
 /* main functions */
 void	exit_minishell(t_pipe *p, t_env *env);
 void	exit_minishell_error(t_shell *sh, int status, t_env *env);
-int		main_cmd_return(t_pipe *p, int wstatus);
+int		main_cmd_return(t_pipe *p, int wstatus, pid_t pid);
 void	init_signal(int pid, int hd);
 void	flush_errors(char *cmd, int err_sig);
 

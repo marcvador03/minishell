@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/17 15:39:35 by mfleury           #+#    #+#             */
-/*   Updated: 2025/01/07 23:38:17 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/01/10 13:42:37 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,7 @@ static int	exec_syscmd_multipl(char *cmd, char **args, t_env *env, char **env2)
 	if (errnum != 0)
 		g_status = errnum;
 	free_s(t_cmd);
-	return (errnum);
+	exit (errnum);
 }
 
 static int	exec_syscmd_single(char *cmd, char **args, t_env *env, char **env2)
@@ -78,7 +78,7 @@ static int	exec_syscmd_single(char *cmd, char **args, t_env *env, char **env2)
 	if (pid == 0)
 		return (execve(t_cmd, args, env2));
 	waitpid(pid, &wstatus, 0);
-	kill(pid, SIGINT);
+	//kill(pid, SIGINT);
 	if (WIFEXITED(wstatus))
 		return (free_s(t_cmd), WEXITSTATUS(wstatus));
 	else if (WIFSIGNALED(wstatus))
@@ -112,5 +112,5 @@ int	exec_cmd(char *cmd, char **args, t_pipe *p, t_env *env)
 	else
 		wstatus = exec_syscmd_multipl(cmd, args, env, env_arr);
 	flush_errors(cmd, wstatus);
-	return (free_d(env_arr), g_status);
+	return (free_d(env_arr), wstatus);
 }
