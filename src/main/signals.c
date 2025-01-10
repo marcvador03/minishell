@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/18 09:19:54 by marvin            #+#    #+#             */
-/*   Updated: 2025/01/06 17:17:13 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/01/10 15:48:07 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ static void	signal_handler_main(int sig)
 	if (sig == SIGINT)
 	{
 		write(STDIN_FILENO, "\n", 1);
-		rl_replace_line("", 0);
+		//rl_replace_line("", 0);
 		rl_on_new_line();
 		rl_redisplay();
 		g_status = sig + 128;
@@ -48,7 +48,7 @@ static void	signal_handler_heredoc(int sig)
 	if (sig == SIGINT)
 	{
 		g_status = sig + 128;
-		ioctl(STDIN_FILENO, TIOCSTI, "\n");
+		//ioctl(STDIN_FILENO, TIOCSTI, "\n");
 		close(STDIN_FILENO);
 		write(STDERR_FILENO, "\n", 1);
 		exit(g_status);
@@ -58,7 +58,8 @@ static void	signal_handler_heredoc(int sig)
 		g_status = sig + 128;
 		ft_putstr_fd("Quitc: ", STDERR_FILENO);
 		ft_putnbr_fd(g_status, STDERR_FILENO);
-		write(STDIN_FILENO, "\n", 1);
+		close(STDIN_FILENO);
+		write(STDERR_FILENO, "\n", 1);
 		exit(g_status);
 	}
 	return ;

@@ -34,5 +34,5 @@
 	10.3. 	cat | exit 4564, ctrl C then history with echo $? displays mixed lines
 	10.4	cat | exit 4564 then enter displays weird characters instead of returning prompt
 	10.5	revise status error codes (esp. manual ones) and align with bash
-	10.6	update prompt with fallback management
+	OK 10.6	update prompt with fallback management
 
