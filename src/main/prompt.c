@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/08 20:31:15 by mfleury           #+#    #+#             */
-/*   Updated: 2025/01/09 16:20:41 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/01/10 15:28:29 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,27 +73,26 @@ static char	*replace_home_path(char *home)
 static char	*get_user(t_env *env)
 {
 	char		*user;
-	int			slot;
+	char		*slot;
 	int			fd;
 	struct utmp ut;
 	int 		len;
 
 	user = sh_getenv(env, "USER");
 	if (user != NULL)
-		return (user);
-	slot = ttyslot();
+		return (ft_strdup(user));
+	slot = ft_itoa(ttyslot());
 	user = NULL;
 	len = sizeof(struct utmp);
 	fd = open(UTMP_FILE, O_RDONLY);
 	if (fd == -1)
-		return ("unk");
+		return (free_s(slot), "unk");
 	while (read(fd, &ut, len) == len)
 	{
-		if (ft_atoi(ut.ut_id + 1) == slot) 
-			user = ut.ut_user;
-		printf("%s\n", ut.ut_id + 1);
+		if (ft_strncmp(ut.ut_id + 1, slot, 1) == 0)
+			user = ft_strdup(ut.ut_user);
 	}
-	return (user);
+	return (free_s(slot), user);
 }
 
 static char	*get_hostname()
@@ -136,6 +135,7 @@ char	*create_prompt(t_env *env)
 	free_s(t.status);
 	free_s(t.cur_path);
 	free_s(t.hostname);
+	free_s(t.user);
 	return (t.prompt);
 }
 /*
