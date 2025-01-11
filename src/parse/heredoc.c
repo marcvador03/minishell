@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/23 14:57:19 by mfleury           #+#    #+#             */
-/*   Updated: 2025/01/11 18:03:04 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/01/11 19:17:19 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,24 @@ static int	get_hd_input(char *eof, int fd)
 	return (close (fd), 0);
 }
 
+static int	close_heredoc(int wstatus, int fd)
+{
+	fd = open(".heredoc_tmp", O_RDONLY);
+	if (fd > 0)
+		unlink(".heredoc_tmp");
+	if (WIFEXITED(wstatus))
+	{
+		if (WEXITSTATUS(wstatus) == 130 || WEXITSTATUS(wstatus) == 131)
+		{
+			rl_on_new_line();
+			set_gstatus(WEXITSTATUS(wstatus));
+			close(fd);
+			return (-1);
+		}
+	}
+	return (fd);
+}
+
 int	init_heredoc(char *line)
 {
 	int	pid;
@@ -50,14 +68,6 @@ int	init_heredoc(char *line)
 		exit(get_hd_input(line, fd));
 	waitpid(pid, &wstatus, 0);
 	close(fd);
-	fd = open(".heredoc_tmp", O_RDONLY);
-	if (fd > 0)
-		unlink(".heredoc_tmp");
-	if (WIFEXITED(wstatus))
-		if (WEXITSTATUS(wstatus) == 130 || WEXITSTATUS(wstatus) == 131)
-		{	
-			rl_on_new_line();
-			return (set_gstatus(WEXITSTATUS(wstatus)), close(fd), -1);
-		}
+	fd = close_heredoc(wstatus, fd);
 	return (fd);
 }

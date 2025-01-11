@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/22 16:08:01 by mfleury           #+#    #+#             */
-/*   Updated: 2025/01/11 19:00:23 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/01/11 19:12:24 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,7 @@ int	subshell(t_shell *sh)
 	sh->p_count = count_pipes(sh->s_line);
 	p = fill_pipes(sh, p, sh->p_count);
 	if (p == NULL)
-		return (/*flush_errors(NULL, g_status),*/ g_status);
+		return (g_status);
 	sh->pipes = p->head;
 	if (sh->p_count == 1)
 		status = single_cmd(p, sh->env);

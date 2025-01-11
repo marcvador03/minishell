@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/13 15:34:22 by mfleury           #+#    #+#             */
-/*   Updated: 2025/01/10 18:22:45 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/01/11 19:19:05 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ static int	check_overflow(char *str, int *status)
 int	ft_exit(t_pipe *p, char **args, t_env *env)
 {
 	int	i;
-	
+
 	i = 0;
 	if (args[1] != NULL)
 	{

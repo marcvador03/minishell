@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 10:01:23 by mfleury           #+#    #+#             */
-/*   Updated: 2025/01/11 19:01:22 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/01/11 19:12:51 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ int	main_cmd_return(t_pipe *p, int wstatus, pid_t pid)
 			p->p_status = WEXITSTATUS(wstatus);
 			if (p->next == NULL && p->exit == 1)
 				p->sh->exit = 1;
-			break;
+			break ;
 		}
 		p = p->next;
 	}
@@ -86,8 +86,6 @@ int	main(int argc, char *argv[], char *envp[])
 	if (isatty(STDIN_FILENO) == 0)
 		exit_minishell_error(NULL, errno, NULL);
 	env = fill_env(envp);
-	if (env == NULL) // to revise default env variables
-		env = fill_default_session();
 	init_termcaps(&tcap, env);
 	set_term_settings(&tcap, env);
 	if (argc > 1 || argv == NULL)

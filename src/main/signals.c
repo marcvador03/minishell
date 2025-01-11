@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/18 09:19:54 by marvin            #+#    #+#             */
-/*   Updated: 2025/01/11 01:33:14 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/01/11 19:13:06 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,7 +72,6 @@ void	init_signal(int pid, int hd)
 	else if (pid == 0 && hd == 1)
 	{
 		signal(SIGQUIT, SIG_IGN);
-		//signal(SIGQUIT, signal_handler_heredoc);
 		signal(SIGINT, signal_handler_heredoc);
 		signal(SIGTERM, signal_handler_heredoc);
 	}

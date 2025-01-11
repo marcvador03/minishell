@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/08 20:31:15 by mfleury           #+#    #+#             */
-/*   Updated: 2025/01/11 18:49:40 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/01/11 19:10:38 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ char	*join_prompt(t_prompt *t)
 	char	*res;
 	char	*tmp;
 	int		len[5];
-	
+
 	len[0] = ft_strlen(t->user);
 	len[1] = ft_strlen(t->hostname);
 	len[2] = ft_strlen(t->cur_path);
@@ -46,7 +46,7 @@ static char	*replace_home_path(char *home)
 	char	*ex_path;
 	char	*res;
 	int		len[2];
-		
+
 	ex_path = getcwd(NULL, 0);
 	if (ex_path == NULL)
 		return (set_gstatus(202), NULL);
@@ -75,8 +75,8 @@ static char	*get_user(t_env *env)
 	char		*user;
 	char		*slot;
 	int			fd;
-	struct utmp ut;
-	int 		len;
+	struct utmp	ut;
+	int			len;
 
 	user = sh_getenv(env, "USER");
 	if (user != NULL)
@@ -95,7 +95,7 @@ static char	*get_user(t_env *env)
 	return (close(fd), free_s(slot), user);
 }
 
-static char	*get_hostname()
+static char	*get_hostname(void)
 {
 	int		fd;
 	char	buf[65];
@@ -119,7 +119,6 @@ static char	*get_hostname()
 		free_s(tmp);
 		if (host == NULL)
 			return (close(fd), set_gstatus(202), NULL);
-
 	}
 	return (close(fd), host);
 }

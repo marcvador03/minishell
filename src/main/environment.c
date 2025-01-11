@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/14 09:05:40 by mfleury           #+#    #+#             */
-/*   Updated: 2025/01/08 20:33:57 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/01/11 19:12:06 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,7 +93,7 @@ t_env	*sh_delenv(t_env *env, char *var_name)
 {
 	int		len[2];
 	t_env	*tmp;
-	
+
 	if (env == NULL || var_name == NULL)
 		return (NULL);
 	len[0] = ft_strlen(var_name);
@@ -116,4 +116,4 @@ t_env	*sh_delenv(t_env *env, char *var_name)
 		env = env->next;
 	}
 	return (env->head);
-}	
+}

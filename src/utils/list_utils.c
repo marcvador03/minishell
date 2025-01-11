@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/30 17:25:00 by mfleury           #+#    #+#             */
-/*   Updated: 2025/01/07 23:27:33 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/01/11 19:20:52 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,4 +73,3 @@ int	env_size(t_env *lst)
 	}
 	return (cnt);
 }
-

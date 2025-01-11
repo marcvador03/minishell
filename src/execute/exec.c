@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/17 15:39:35 by mfleury           #+#    #+#             */
-/*   Updated: 2025/01/11 00:31:38 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/01/11 19:18:49 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,6 @@ static int	exec_syscmd_single(char *cmd, char **args, t_env *env, char **env2)
 	pid_t		pid;
 
 	init_signal(0, 0);
-	wstatus = 0;
 	t_cmd = get_full_path(cmd, env);
 	if (t_cmd == NULL)
 		return (g_status);
@@ -78,12 +77,11 @@ static int	exec_syscmd_single(char *cmd, char **args, t_env *env, char **env2)
 	if (pid == 0)
 		return (execve(t_cmd, args, env2));
 	waitpid(pid, &wstatus, 0);
-	//kill(pid, SIGINT);
 	if (WIFEXITED(wstatus))
 		return (free_s(t_cmd), WEXITSTATUS(wstatus));
 	else if (WIFSIGNALED(wstatus))
 	{
-		write(STDIN_FILENO, "\n", 1); 
+		write(STDIN_FILENO, "\n", 1);
 		rl_on_new_line();
 		return (free_s(t_cmd), WTERMSIG(wstatus) + 128);
 	}
@@ -108,7 +106,7 @@ int	exec_cmd(char *cmd, char **args, t_pipe *p, t_env *env)
 	x = str_to_enum(cmd);
 	env_arr = get_env_array(env);
 	if (env_arr == NULL)
-		return(g_status);
+		return (g_status);
 	if (x != -1)
 		wstatus = call_cmd[x](args, env);
 	else if (p->sh->p_count == 1)

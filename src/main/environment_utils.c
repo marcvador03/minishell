@@ -6,14 +6,14 @@
 /*   By: mfleury <mfleury@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/17 09:53:05 by mfleury           #+#    #+#             */
-/*   Updated: 2025/01/11 18:52:43 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/01/11 19:11:46 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-t_env *fill_default_session(t_env *env)
-{	
+t_env	*fill_default_session(t_env *env)
+{
 	char	*level;
 	int		x;
 	t_env	*env2;
@@ -58,7 +58,7 @@ t_env	*fill_env(char *envp[])
 	int		i;
 
 	if (envp == NULL || envp[0] == NULL)
-		return (fill_default_session(NULL)); // to be revised with min settings
+		return (fill_default_session(NULL));
 	env = NULL;
 	i = 0;
 	while (envp[i] != NULL)

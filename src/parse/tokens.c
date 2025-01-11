@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/07 14:31:45 by mfleury           #+#    #+#             */
-/*   Updated: 2025/01/10 14:48:41 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/01/11 19:19:21 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,7 +96,7 @@ int	execute_tokens(t_shell *sh, int i, int level)
 		if (sh->bracket[1] > 0 && level > 0)
 			exit (i);
 		if (sh->exit == 1)
-			break;
+			break ;
 		sh = sh->next;
 		i++;
 	}
