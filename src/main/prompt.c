@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/08 20:31:15 by mfleury           #+#    #+#             */
-/*   Updated: 2025/01/11 17:47:20 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/01/11 18:22:22 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -123,6 +123,7 @@ static char	*get_hostname()
 	}
 	return (close(fd), host);
 }
+
 char	*create_prompt(t_env *env)
 {
 	t_prompt	t;
@@ -139,6 +140,3 @@ char	*create_prompt(t_env *env)
 	free_s(t.user);
 	return (t.prompt);
 }
-/*
-*/
-
