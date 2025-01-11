@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/23 14:57:19 by mfleury           #+#    #+#             */
-/*   Updated: 2025/01/11 01:19:35 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/01/11 12:59:59 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,8 +22,9 @@ static int	get_hd_input(char *eof, int fd)
 	eofn = ft_strjoin(eof, "\n");
 	while (1)
 	{
-		write(1, "> ", 2);
-		hd_input = get_next_line(STDIN_FILENO);
+		/*write(1, "> ", 2);
+		hd_input = get_next_line(STDIN_FILENO);*/
+		hd_input = readline("> ");
 		if (hd_input == NULL)
 			return (free_s(eofn), -1);
 		len = max(ft_strlen(eof), ft_strlen(hd_input));

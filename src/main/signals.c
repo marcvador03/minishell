@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/18 09:19:54 by marvin            #+#    #+#             */
-/*   Updated: 2025/01/11 01:11:25 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/01/11 01:33:14 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,11 +45,12 @@ static void	signal_handler_heredoc(int sig)
 	if (sig == SIGINT)
 	{
 		g_status = sig + 128;
-		rl_on_new_line();
 		close(STDIN_FILENO);
 		write(STDERR_FILENO, "\n", 1);
 		exit(g_status);
 	}
+	else if (sig == SIGQUIT)
+		write(STDERR_FILENO, "\0", 1);
 	return ;
 }
 
@@ -70,7 +71,8 @@ void	init_signal(int pid, int hd)
 	}
 	else if (pid == 0 && hd == 1)
 	{
-		signal(SIGQUIT, signal_handler_heredoc);
+		signal(SIGQUIT, SIG_IGN);
+		//signal(SIGQUIT, signal_handler_heredoc);
 		signal(SIGINT, signal_handler_heredoc);
 		signal(SIGTERM, signal_handler_heredoc);
 	}
