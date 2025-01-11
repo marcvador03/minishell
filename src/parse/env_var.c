@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/11 16:34:27 by mfleury           #+#    #+#             */
-/*   Updated: 2025/01/07 22:57:20 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/01/11 19:05:40 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,8 +54,8 @@ static char	*get_dollar_in(char *line)
 	int		i;
 
 	i = 1;
-	if (line[i] == '?')
-		return (ft_strdup("?"));
+	if (line[i] == '?' || line[i] == '_')
+		return (ft_strdup(&line[i]));
 	if (ft_isdigit(line[i]) == 1)
 	{
 		res = ft_substr(line, 0, 1);
@@ -82,6 +82,8 @@ static char	*expand_env_loop(t_env *env, char *line, int *i, int flag)
 		return (NULL);
 	if (line[*i + 1] == '?')
 		dollar_out = ft_itoa(g_status);
+	else if (line[*i + 1] == '_')
+		dollar_out = ft_strdup(sh_getenv(env, "_"));
 	else if (ft_isalnum(line[*i + 1]) == 1)
 		dollar_out = expand_getenv(dollar_in, env);
 	else if (flag == -1 && ft_isalnum(line[*i + 1]) == 0)
