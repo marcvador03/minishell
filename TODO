@@ -2,10 +2,10 @@
 	OK 1.1 must update exit code when run in multiple commands
 	OK 1.2 check order of wrong arguments (bash comparison)
 	OK 1.3 update max input to long long int (update atoi also)
-	OK 1.4 touch test | exit 2 && touch test2: second command must NOT run and $? = 2
-	OK 1.5 touch test | exit 2 | touch test2 && exit 3: files are ALL created and exit 3
+	no repro  1.4 touch test | exit 2 && touch test2: second command must NOT run and $? = 2
+	no repro 1.5 touch test | exit 2 | touch test2 && exit 3: files are ALL created and exit 3
 	OK 1.6	ctrl C on piped commad shoudl reprint the prompt on a new line (not after ^C)
-	1.7 ctrl C status needs to be overriden by exit code (incl 0)!!
+	no repro 1.7 ctrl C status needs to be overriden by exit code (incl 0)!!
 	OK 1.8 correct pipe exit code
 	OK 1.9 ctrl C / ctrl \ on pipe command does not record 130 131 status code
 

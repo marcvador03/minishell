@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/08 20:31:15 by mfleury           #+#    #+#             */
-/*   Updated: 2025/01/10 15:28:29 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/01/11 17:47:20 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,7 +92,7 @@ static char	*get_user(t_env *env)
 		if (ft_strncmp(ut.ut_id + 1, slot, 1) == 0)
 			user = ft_strdup(ut.ut_user);
 	}
-	return (free_s(slot), user);
+	return (close(fd), free_s(slot), user);
 }
 
 static char	*get_hostname()
@@ -104,23 +104,24 @@ static char	*get_hostname()
 	int		n;
 
 	fd = open("/etc/hostname", O_RDONLY);
-	host = NULL;
 	if (fd == -1)
 		return (NULL);
+	host = NULL;
+	ft_bzero(buf, 64);
 	if (read(fd, &buf, 64) > 1)
 	{
 		buf[64] = '\0';
 		tmp = ft_strtrim(buf, "\n");
 		if (tmp == NULL)
-			return (set_gstatus(202), NULL);
+			return (close(fd), set_gstatus(202), NULL);
 		n = sh_strpos(tmp, ".");
 		host = ft_substr(tmp, 0, n);
 		free_s(tmp);
 		if (host == NULL)
-			return (set_gstatus(202), NULL);
+			return (close(fd), set_gstatus(202), NULL);
 
-	}	return ((host));
-	return (NULL);
+	}
+	return (close(fd), host);
 }
 char	*create_prompt(t_env *env)
 {

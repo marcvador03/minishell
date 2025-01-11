@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 10:01:23 by mfleury           #+#    #+#             */
-/*   Updated: 2025/01/11 01:20:08 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/01/11 17:58:23 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,11 @@ int	main_cmd_return(t_pipe *p, int wstatus, pid_t pid)
 	p = p->head;
 	while (p != NULL)
 	{
+		/*if (p->pid == pid)
+		{
+			close(p->r_fd[INPUT]);
+			close(p->r_fd[OUTPUT]);
+		}*/
 		if (p->pid == pid && WIFEXITED(wstatus) != 0)
 		{
 			p->p_status = WEXITSTATUS(wstatus);
