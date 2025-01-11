@@ -6,7 +6,7 @@
 /*   By: pmorello <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 12:17:09 by pmorello          #+#    #+#             */
-/*   Updated: 2025/01/11 19:21:31 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/01/11 19:22:36 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -173,7 +173,7 @@ t_env	*sh_addenv(t_env *env, char *var_name, char *value);
 t_env	*sh_delenv(t_env *env, char *var_name);
 char	*expand_env(char *line, t_env *env, int x);
 char	**get_env_array(t_env *env);
-t_env	*fill_default_session(void);
+t_env	*fill_default_session(t_env *env);
 
 /*term caps*/
 void	set_term_settings(t_terms *tcap, t_env *env);
