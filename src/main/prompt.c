@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/08 20:31:15 by mfleury           #+#    #+#             */
-/*   Updated: 2025/01/11 18:22:22 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/01/11 18:49:40 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,7 +86,7 @@ static char	*get_user(t_env *env)
 	len = sizeof(struct utmp);
 	fd = open(UTMP_FILE, O_RDONLY);
 	if (fd == -1)
-		return (free_s(slot), "unk");
+		return (free_s(slot), ft_strdup("unk"));
 	while (read(fd, &ut, len) == len)
 	{
 		if (ft_strncmp(ut.ut_id + 1, slot, 1) == 0)
