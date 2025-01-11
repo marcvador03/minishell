@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 10:01:23 by mfleury           #+#    #+#             */
-/*   Updated: 2025/01/10 22:49:23 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/01/11 01:20:08 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ void	exit_minishell_error(t_shell *sh, int status, t_env *env)
 		unset_term_settings(sh->tcap, env);
 	if (status != 0)
 	{
-		ft_putstr_fd("minishell exited with error: ", 2);
+		ft_putstr_fd("minishell exited with error: ", 1);
 		ft_putnbr_fd(status, 2);
 		ft_putstr_fd("\n", 2);
 		free_sh(sh);

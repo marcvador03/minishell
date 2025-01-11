@@ -17,9 +17,10 @@
 
 4. heredoc
 	OK 4.1 correct EOF check (currently fails as validates any partial string)
-	4.2 signal handling?
+	OK 4.2 signal handling
 	OK 4.3 cat << "" gives strange message (expected nothing and reprompt as not supported)
 	OK 4.4 ctl c or ctl d on cat << EOF prints the input already entered (should be erased)
+	4.5 ctrl \ should not print in heredoc
 
 5. quotes
 	OK 5.1 correct case echo ''"'"" at the end of the input

@@ -6,7 +6,7 @@
 /*   By: pmorello <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 12:17:09 by pmorello          #+#    #+#             */
-/*   Updated: 2025/01/10 15:05:12 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/01/11 01:18:35 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,13 +100,6 @@ typedef struct s_termcaps
 {
 	struct termios		old_term;
 	struct termios		new_term;
-	char				*keys_on;
-	char				*keys_off;
-	char				*up_arrow;
-	char				*down_arrow;
-	char				*backspace;
-	char				*del_line;
-	char				*set_cursor_begin;
 }	t_terms;
 
 struct s_shell

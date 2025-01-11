@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/18 09:19:54 by marvin            #+#    #+#             */
-/*   Updated: 2025/01/11 00:32:44 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/01/11 01:11:25 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,6 @@ static void	signal_handler_main(int sig)
 	if (sig == SIGINT)
 	{
 		write(STDIN_FILENO, "\n", 1);
-		//rl_replace_line("", 0);
 		rl_on_new_line();
 		rl_redisplay();
 		g_status = sig + 128;
@@ -46,23 +45,9 @@ static void	signal_handler_heredoc(int sig)
 	if (sig == SIGINT)
 	{
 		g_status = sig + 128;
-		rl_replace_line("", 0);
-		//rl_redisplay();
-		//close(STDIN_FILENO);
-		write(STDIN_FILENO, "\n", 1);
 		rl_on_new_line();
-		exit(g_status);
-	}
-	else if (sig == SIGQUIT)
-	{
-		g_status = sig + 128;
-		ft_putstr_fd("Quit: ", STDERR_FILENO);
-		ft_putnbr_fd(g_status, STDERR_FILENO);
 		close(STDIN_FILENO);
 		write(STDERR_FILENO, "\n", 1);
-		rl_on_new_line();
-		//rl_replace_line("", 1);
-		//rl_redisplay();
 		exit(g_status);
 	}
 	return ;
@@ -89,4 +74,6 @@ void	init_signal(int pid, int hd)
 		signal(SIGINT, signal_handler_heredoc);
 		signal(SIGTERM, signal_handler_heredoc);
 	}
+	else if (pid == 1 && hd == 1)
+		signal(SIGINT, SIG_IGN);
 }
