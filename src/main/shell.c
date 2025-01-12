@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/07 15:12:52 by mfleury           #+#    #+#             */
-/*   Updated: 2025/01/11 19:09:16 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/01/12 19:22:08 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,7 @@ static t_shell	*fill_sh(t_shell *sh, char *line, t_terms *tcap, t_env *env)
 	return (sh->head);
 }
 
-static char	*get_input(t_env *env)
+static char	*get_input(t_env *env, t_terms *tcap)
 {
 	char	*line;
 	char	*line2;
@@ -71,14 +71,21 @@ static char	*get_input(t_env *env)
 		return (NULL);
 	line = readline(prompt);
 	if (line == NULL)
-		return (free_s(prompt), NULL);
+	{
+		free_s(prompt);
+		unset_term_settings(tcap, env);
+		exit_minishell(NULL, env);
+	}
 	else if (ft_strlen(line) == 0 && line[0] == '\0')
-		return (free_s(prompt), free_s(line), set_gstatus(0), get_input(env));
-	else if (check_input(line) != 0)
-		return (free_s(prompt), free_s(line), set_gstatus(0), get_input(env));
+	{
+		set_gstatus(0);
+		return (free_s(prompt), free_s(line), get_input(env, tcap));
+	}
 	add_history(line);
 	line2 = ft_strjoin("&&", line);
-	return (free_s(prompt), free_s(line), line2);
+	if (line2 == NULL)
+		return (set_gstatus(202), free_s(line), free_s(prompt), NULL);
+	return (set_gstatus(0), free_s(prompt), free_s(line), line2);
 }
 
 int	start_shell(t_env *env, t_terms *tcap)
@@ -89,15 +96,15 @@ int	start_shell(t_env *env, t_terms *tcap)
 
 	sh = NULL;
 	init_signal(1, 0);
-	line = get_input(env);
+	line = get_input(env, tcap);
 	if (line == NULL)
-		exit_minishell_error(sh, g_status, env);
+		exit_minishell_error(sh, 200, env);
 	if (check_open_quotes(line) == -1)
-		return (free_s((void *)line), set_gstatus(201), -1);
+		return (free_s(line), flush_errors("", 201), -1);
 	sh = fill_sh(sh, line, tcap, env);
 	if (sh == NULL)
-		return (free_s((void *)line), -1);
-	free_s((void *)line);
+		return (free_s(line), flush_errors("", g_status), -1);
+	free_s(line);
 	head = sh->head;
 	g_status = 0;
 	if (sh_check_empty(sh->s_line) == -1)

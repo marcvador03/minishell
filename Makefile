@@ -31,24 +31,23 @@ PARSE =	args.c \
 		tokens_utils.c
 
 EXECUTE = exec.c \
-		  pre_exec.c
+		  pre_exec.c \
+		  pre_exec_utils.c
 
 UTILS = core_utils.c \
-		core_utils2.c \
 		free_utils.c \
 		list_utils.c \
-		list_utils2.c \
 		str_utils.c
 
 MAIN = environment.c \
 	   environment_utils.c \
+	   errors.c \
 	   minishell.c \
 	   prompt.c \
 	   shell.c \
 	   shell_utils.c \
 	   signals.c \
 	   subshell.c \
-	   subshell_utils.c \
 	   termcaps.c
 
 

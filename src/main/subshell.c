@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/22 16:08:01 by mfleury           #+#    #+#             */
-/*   Updated: 2025/01/11 19:12:24 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/01/12 19:27:15 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,53 @@
 int	count_pipes(char *line);
 int	single_cmd(t_pipe *p, t_env *env);
 int	multiple_cmd(t_pipe *p, t_env *env);
+int	get_next_pipe(t_pipe *p, char *line, t_env *env);
+
+static t_pipe	*p_lstnew(char *line, t_env *env)
+{
+	t_pipe	*ptr;
+
+	ptr = (t_pipe *)ft_calloc(sizeof (t_pipe), 1);
+	if (ptr == NULL)
+		return (NULL);
+	ptr->prev = NULL;
+	ptr->next = NULL;
+	ptr->head = ptr;
+	if (get_next_pipe(ptr, line, env) == 2)
+		return (free_pipe(ptr), NULL);
+	return (ptr);
+}
+
+static t_pipe	*p_lstlast(t_pipe *pipe)
+{
+	t_pipe	*tmp;
+
+	if (pipe == NULL)
+		return (NULL);
+	tmp = pipe;
+	while (tmp->next != NULL)
+		tmp = tmp->next;
+	return (tmp);
+}
+
+static t_pipe	*p_lstadd_back(t_pipe **pipe, char *line, t_env *env)
+{
+	t_pipe	*tmp;
+	t_pipe	*new_node;
+
+	new_node = p_lstnew(line, env);
+	if (new_node == NULL)
+		return (free_pipe(*pipe), NULL);
+	else
+	{
+		tmp = p_lstlast(*pipe);
+		tmp->next = new_node;
+		*pipe = tmp->next;
+		(*pipe)->head = tmp->head;
+		(*pipe)->prev = tmp;
+	}
+	return (tmp->next);
+}
 
 static t_pipe	*fill_pipes(t_shell *sh, t_pipe *p, int n)
 {

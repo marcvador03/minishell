@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 10:01:23 by mfleury           #+#    #+#             */
-/*   Updated: 2025/01/11 19:12:51 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/01/12 12:37:34 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,35 +34,36 @@ int	main_cmd_return(t_pipe *p, int wstatus, pid_t pid)
 	return (0);
 }
 
-void	exit_minishell_error(t_shell *sh, int status, t_env *env)
+void	exit_minishell_error(t_shell *sh, int errnum, t_env *env)
 {
+	int	cpyerr;
+		
+	cpyerr = errnum;
 	if (sh != NULL)
 		unset_term_settings(sh->tcap, env);
-	if (status != 0)
-	{
-		ft_putstr_fd("minishell exited with error: ", 1);
-		ft_putnbr_fd(status, 2);
-		ft_putstr_fd("\n", 2);
-		free_sh(sh);
-		if (env != NULL)
-			free_env(env);
-		exit(status);
-	}
+	ft_putstr_fd("minishell exited with error: ", 2);
+	if (cpyerr < 200)
+		strerror(cpyerr);
 	else
-	{
-		printf("exit\n");
-		free_sh(sh);
-		if (env != NULL)
-			free_env(env);
-		exit(status);
-	}
+		flush_errors("", 200);
+	free_sh(sh);
+	if (env != NULL)
+		free_env(env);
+	exit(2);
 }
 
 void	exit_minishell(t_pipe *p, t_env *env)
 {
 	int	status;
 
-	if (p->sh->p_count == 1)
+	if (p == NULL)
+	{
+		printf("exit\n");
+		if (env != NULL)
+			free_env(env);
+		exit(0);
+	}
+	else if (p->sh->p_count == 1)
 	{
 		if (p->sh != NULL && p->head == p)
 			unset_term_settings(p->sh->tcap, env);
@@ -89,7 +90,7 @@ int	main(int argc, char *argv[], char *envp[])
 	init_termcaps(&tcap, env);
 	set_term_settings(&tcap, env);
 	if (argc > 1 || argv == NULL)
-		exit_minishell_error(NULL, 1, env);
+		exit_minishell_error(NULL, 209, env);
 	while (1)
 	{
 		start_shell(env, &tcap);

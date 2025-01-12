@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/08 20:31:15 by mfleury           #+#    #+#             */
-/*   Updated: 2025/01/11 19:10:38 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/01/12 18:40:22 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,6 +82,8 @@ static char	*get_user(t_env *env)
 	if (user != NULL)
 		return (ft_strdup(user));
 	slot = ft_itoa(ttyslot());
+	if (slot == NULL)
+		return (set_gstatus(202), NULL);
 	user = NULL;
 	len = sizeof(struct utmp);
 	fd = open(UTMP_FILE, O_RDONLY);
@@ -127,12 +129,17 @@ char	*create_prompt(t_env *env)
 {
 	t_prompt	t;
 
+	t.status = ft_itoa(g_status);
+	if (t.status == NULL)
+		g_status = 202;
+	else
+		g_status = 0;
 	t.user = get_user(env);
 	t.hostname = get_hostname();
 	t.home = sh_getenv(env, "HOME");
 	t.cur_path = replace_home_path(t.home);
-	t.status = ft_itoa(g_status);
 	t.prompt = join_prompt(&t);
+	flush_errors("", g_status);
 	free_s(t.status);
 	free_s(t.cur_path);
 	free_s(t.hostname);

@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/11 22:55:30 by mfleury           #+#    #+#             */
-/*   Updated: 2025/01/11 01:08:58 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/01/12 12:22:22 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ void	init_termcaps(t_terms *tcap, t_env *env)
 	char	*term_type;
 
 	if (tcgetattr(STDIN_FILENO, &tcap->old_term) == -1)
-		exit_minishell_error(NULL, 200, env);
+		exit_minishell_error(NULL, errno, env);
 	term_type = sh_getenv(env, "TERM");
 	if (term_type == 0 || term_type == NULL)
 		exit_minishell_error(NULL, 200, env);

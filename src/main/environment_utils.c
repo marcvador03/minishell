@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/17 09:53:05 by mfleury           #+#    #+#             */
-/*   Updated: 2025/01/11 19:11:46 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/01/12 12:10:58 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@ t_env	*fill_default_session(t_env *env)
 	int		x;
 	t_env	*env2;
 
+	flush_errors("", g_status);
 	env2 = env;
 	if (sh_getenv(env2, "SHLVL") == NULL)
 		env2 = sh_addenv(env2, ft_strdup("SHLVL"), ft_strdup("1"));
@@ -65,7 +66,7 @@ t_env	*fill_env(char *envp[])
 	{
 		ptr = (t_env *)ft_calloc(sizeof(t_env), 1);
 		if (ptr == NULL)
-			return (set_gstatus(202), fill_default_session(NULL));
+			return (set_gstatus(-1), fill_default_session(NULL));
 		fill_content(&ptr, envp, i);
 		if (env != NULL)
 		{
