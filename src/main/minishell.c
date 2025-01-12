@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 10:01:23 by mfleury           #+#    #+#             */
-/*   Updated: 2025/01/12 12:37:34 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/01/12 19:35:45 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ int	main_cmd_return(t_pipe *p, int wstatus, pid_t pid)
 void	exit_minishell_error(t_shell *sh, int errnum, t_env *env)
 {
 	int	cpyerr;
-		
+
 	cpyerr = errnum;
 	if (sh != NULL)
 		unset_term_settings(sh->tcap, env);

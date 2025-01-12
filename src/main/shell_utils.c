@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/12 01:02:14 by mfleury           #+#    #+#             */
-/*   Updated: 2025/01/12 19:22:42 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/01/12 19:36:05 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,27 +16,11 @@ int	get_next_token(t_shell *sh, char *line);
 
 int	check_input(char *line)
 {
-	//int	i;
 	char	*t_line;
 	
 	t_line = ft_strtrim(line, " ");
 	if (t_line == NULL)
 		return (flush_errors("", 202), -1);
-	//i = 0;
-	/*while (line[i] != '\0')
-	{
-		if (line[i] == ' ' || line[i] == '~' || line[i] == ':')
-			i++;
-		else if (line[i] == ';' || line[i] == '\\' || line[i] == '.')
-			i++;
-		else if (line[i] == '!')
-		{
-			g_status = 1;
-			i++;
-		}
-		else
-			return (0);
-	}*/
 	return (0);
 }
 
