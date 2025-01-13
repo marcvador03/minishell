@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/14 09:20:49 by pmorello          #+#    #+#             */
-/*   Updated: 2025/01/08 23:14:22 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/01/13 11:35:26 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,7 @@ char	*get_target_path(char **args, t_env *env)
 	{
 		home = sh_getenv(env, "HOME");
 		if (home == NULL || *home == '\0')
-			return (set_gstatus(8), NULL);
+			return (NULL);
 		return (h_abs_path(home));
 	}
 	if (path[0] == '-' && path[1] == '\0')
@@ -82,15 +82,20 @@ int	ft_cd(char **args, t_env *env)
 		return (7);
 	cur_path = getcwd(NULL, 0);
 	if (cur_path == NULL)
+	{
+		flush_errors("cd", -1);
 		cur_path = ft_strdup(sh_getenv(env, "PWD"));
+	}
 	new_path = get_target_path(args, env);
-	if (!new_path)
-		return (free_s(cur_path), 208);
+	if (new_path == NULL)
+		return (free_s(cur_path), 8);
 	if (chdir(new_path) != 0)
 		return (free_s(new_path), free_s(cur_path), -1);
 	sh_updateenv(env, ft_strdup("OLDPWD"), cur_path);
 	free_s(new_path);
 	new_path = getcwd(NULL, 0);
+	if (new_path == NULL)
+		flush_errors("cd", -1);
 	sh_updateenv(env, ft_strdup("PWD"), new_path);
 	return (0);
 }

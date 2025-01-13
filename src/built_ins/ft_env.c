@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/14 09:52:16 by pmorello          #+#    #+#             */
-/*   Updated: 2025/01/08 13:51:56 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/01/13 11:17:42 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 int	ft_env(char **args, t_env *env)
 {
 	if (args[0] == NULL)
-		return (-1);
+		return (207);
 	while (env != NULL)
 	{
 		if (env->value != NULL)

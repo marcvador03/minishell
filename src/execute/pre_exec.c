@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/02 18:58:50 by mfleury           #+#    #+#             */
-/*   Updated: 2025/01/11 17:46:21 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/01/13 11:54:51 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,19 +26,19 @@ static int	run_child(t_pipe *p, t_env *env)
 	o = p->prev;
 	if (p == p->head)
 		if (dup2(p->fd[WRITE_END], STDOUT_FILENO) == -1)
-			return (close_pipes(p), -1);
+			return (flush_errors("", 1), close_pipes(p), g_status);
 	if (p != p->head && p->next != NULL)
 	{
 		if (dup2(o->fd[READ_END], STDIN_FILENO) == -1)
-			return (close_pipes(p), -1);
+			return (flush_errors("", -1), close_pipes(p), g_status);
 		if (dup2(p->fd[WRITE_END], STDOUT_FILENO) == -1)
-			return (close_pipes(p), -1);
+			return (flush_errors("", -1), close_pipes(p), g_status);
 	}
 	else if (p != p->head && p->next == NULL)
 		dup2(o->fd[READ_END], STDIN_FILENO);
 	close_pipes(p);
 	if (open_redir_fd(p) == -1)
-		return (close_redir_fd(p), -1);
+		return (close_redir_fd(p), g_status);
 	if (sh_check_empty(p->args[0]) == 0)
 		wstatus = exec_cmd(p->args[0], p->args, p, env);
 	close_redir_fd(p);
@@ -80,7 +80,7 @@ static int	create_pipes(t_pipe *p)
 	while (p != NULL)
 	{
 		if (pipe(p->fd) == -1)
-			return (-1);
+			return (flush_errors("", 1), -1);
 		p = p->next;
 	}
 	return (0);
@@ -89,7 +89,7 @@ static int	create_pipes(t_pipe *p)
 int	single_cmd(t_pipe *p, t_env *env)
 {
 	if (open_redir_fd(p) == -1)
-		return (close_redir_fd(p), -1);
+		return (close_redir_fd(p), g_status);
 	if (sh_check_empty(p->args[0]) == 0)
 		p->p_status = exec_cmd(p->args[0], p->args, p, env);
 	close_redir_fd(p);
@@ -106,7 +106,7 @@ int	multiple_cmd(t_pipe *p, t_env *env)
 	head = p->head;
 	p = head;
 	if (create_pipes(p) == -1)
-		return (-1);
+		return (g_status);
 	p = head;
 	while (p != NULL)
 	{

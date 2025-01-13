@@ -6,23 +6,13 @@
 /*   By: mfleury <mfleury@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/12 01:02:14 by mfleury           #+#    #+#             */
-/*   Updated: 2025/01/12 19:36:05 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/01/13 12:01:53 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
 int	get_next_token(t_shell *sh, char *line);
-
-int	check_input(char *line)
-{
-	char	*t_line;
-	
-	t_line = ft_strtrim(line, " ");
-	if (t_line == NULL)
-		return (flush_errors("", 202), -1);
-	return (0);
-}
 
 t_shell	*sh_lstnew(char *line, t_env *env)
 {

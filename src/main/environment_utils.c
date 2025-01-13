@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/17 09:53:05 by mfleury           #+#    #+#             */
-/*   Updated: 2025/01/12 12:10:58 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/01/13 11:43:41 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,12 +93,14 @@ char	**get_env_array(t_env *env)
 	n = env_size(env);
 	env_arr = (char **)ft_calloc(sizeof(char *), n + 1);
 	if (env_arr == NULL)
-		return (set_gstatus(202), NULL);
+		return (flush_errors("", -1), NULL);
 	i = 0;
 	while (env != NULL)
 	{
 		tmp = ft_strjoin(env->varname, "=");
 		env_arr[i++] = ft_strjoin(tmp, env->value);
+		if (tmp == NULL || env_arr[i - 1] == NULL)
+			return (flush_errors("", 202), NULL);
 		free(tmp);
 		env = env->next;
 	}
@@ -117,7 +119,7 @@ char	*get_full_path(char *arg0, t_env *env)
 		return (ft_strdup(arg0));
 	paths = ft_split(sh_getenv(env, "PATH"), ':');
 	if (paths == NULL)
-		return (free_s(paths), set_gstatus(2), NULL);
+		return (free_s(paths), set_gstatus(125), NULL);
 	cmd_in = ft_strjoin("/", arg0);
 	if (cmd_in == NULL)
 		return (free_d(paths), set_gstatus(202), NULL);

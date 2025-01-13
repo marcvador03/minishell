@@ -6,7 +6,7 @@
 /*   By: pmorello <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 12:17:09 by pmorello          #+#    #+#             */
-/*   Updated: 2025/01/12 19:26:57 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/01/13 11:59:14 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -129,7 +129,6 @@ int		ft_unset(char **args, t_env *env);
 int		ft_exit(t_pipe *p, char **args, t_env *env);
 
 /* core utils functions */
-char	*get_full_path(char *arg0, t_env *env);
 void	set_gstatus(int err_code);
 int		max(int n1, int n2);
 t_ll	ll_atoi(const char *nptr);
@@ -172,6 +171,7 @@ t_env	*sh_delenv(t_env *env, char *var_name);
 char	*expand_env(char *line, t_env *env, int x);
 char	**get_env_array(t_env *env);
 t_env	*fill_default_session(t_env *env);
+char	*get_full_path(char *arg0, t_env *env);
 
 /*term caps*/
 void	set_term_settings(t_terms *tcap, t_env *env);

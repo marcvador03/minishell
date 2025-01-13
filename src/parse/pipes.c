@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/28 13:53:58 by mfleury           #+#    #+#             */
-/*   Updated: 2025/01/11 19:19:56 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/01/13 12:11:37 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ static int	fill_in_pipe(t_pipe *p, t_env *env)
 		return (2);
 	p->args = create_args(p, env);
 	if (p->args == NULL)
-		return (flush_errors(NULL, -1), -1);
+		return (flush_errors("", -1), -1);
 	p->r_fd[INPUT] = get_fdin_redir(p);
 	if (p->r_fd[INPUT] == -1)
 		return (2);
@@ -71,8 +71,10 @@ int	get_next_pipe(t_pipe *p, char *t_line, t_env *env)
 		if (t_line[i] == '|' || t_line[i] == '\0')
 		{
 			p->p_line = ft_substr(t_line, 0, i);
-			if (p->p_line == NULL || sh_check_empty(p->p_line) != 0)
-				return (flush_errors(NULL, 205), -1);
+			if (p->p_line == NULL)
+				return (flush_errors("", -1), 2);
+			else if (sh_check_empty(p->p_line) != 0)
+				return (flush_errors("", 205), 2);
 			if (t_line[i] == '|')
 				ft_memset(t_line, ' ', i + 1);
 			else

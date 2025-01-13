@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/14 09:54:49 by pmorello          #+#    #+#             */
-/*   Updated: 2025/01/08 00:33:43 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/01/13 11:56:03 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,29 +83,37 @@ static int	print_sorted(t_env *env, int n)
 	return (free_d(s_env), 0);
 }
 
-int	ft_export(char **args, t_env *env)
+static void	ft_export_loop(char *arg, t_env *env)
 {
 	char	*var_name;
 	char	*env_value;
-	int		i;
 	int		n;
 
+	n = sh_strpos(arg, "=");
+	var_name = ft_substr(arg, 0, n);
+	if (arg[n] != '\0')
+		env_value = ft_strdup(export_env_value(arg, n));
+	else
+		env_value = NULL;
+	sh_updateenv(env, var_name, env_value);
+}
+
+int	ft_export(char **args, t_env *env)
+{
+	int		i;
+	int		err;
+
 	i = 1;
+	err = 0;
 	if (args[1] == NULL)
 		return (print_sorted(env, env_size(env)));
 	while (args[i])
 	{
-		if (check_export_var(args[i]) != -1)
-		{
-			n = sh_strpos(args[i], "=");
-			var_name = ft_substr(args[i], 0, n);
-			if (args[i][n] != '\0')
-				env_value = ft_strdup(export_env_value(args[i], n));
-			else
-				env_value = NULL;
-			sh_updateenv(env, var_name, env_value);
-		}
+		if (check_export_var(args[i]) == 0)
+			ft_export_loop(args[i], env);
+		else
+			err = 1;
 		i++;
 	}
-	return (0);
+	return (err);
 }

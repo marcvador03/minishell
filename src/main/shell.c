@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/07 15:12:52 by mfleury           #+#    #+#             */
-/*   Updated: 2025/01/12 19:22:08 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/01/13 12:05:02 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,8 +16,6 @@ char	*get_tk(char *line);
 int		count_tokens(char *line);
 int		check_open_quotes(char *str);
 int		execute_tokens(t_shell *sh, int i, int level);
-int		check_input(char *line);
-int		init_data_brackets(t_shell *tmp, int *a, int *b);
 char	*create_prompt(t_env *env);
 
 static int	fill_sh_init(t_shell *tmp, t_terms *tcap, t_env *env, int (*x)[2])

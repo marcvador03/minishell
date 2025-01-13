@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/12 00:48:00 by mfleury           #+#    #+#             */
-/*   Updated: 2024/12/18 10:54:10 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/01/13 10:39:50 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,7 +90,7 @@ char	*sh_trim_strings(char *s)
 
 	res = split_quotes(s);
 	if (res == NULL)
-		return (NULL);
+		return (flush_errors("", 202), NULL);
 	i = 0;
 	len = 0;
 	while (res[i] != NULL)
@@ -99,7 +99,7 @@ char	*sh_trim_strings(char *s)
 	}
 	cat_str = (char *)ft_calloc(sizeof(char), len + 1);
 	if (cat_str == NULL)
-		return (free_d(res), free_s(s), NULL);
+		return (flush_errors("", -1), free_d(res), free_s(s), NULL);
 	i = 0;
 	while (res[i] != NULL)
 		ft_strlcat(cat_str, res[i++], len + 1);

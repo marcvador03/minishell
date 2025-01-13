@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/02 18:52:16 by mfleury           #+#    #+#             */
-/*   Updated: 2025/01/11 19:20:16 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/01/13 10:41:10 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,6 +65,15 @@ static char	*get_args(char *line)
 	return (ft_strdup(line));
 }
 
+static int	finish_args_creation(t_pipe *p, t_env *env, char ***args, int n)
+{
+	*(args[n]) = NULL;
+	sh_updateenv(env, ft_strdup("_"), ft_strdup(*(args[n - 1])));
+	if (ft_strncmp(*(args[0]), "exit", max(ft_strlen(*(args[0])), 4)) == 0)
+		p->exit = 1;
+	return (0);
+}
+
 char	**create_args(t_pipe *p, t_env *env)
 {
 	char	**args;
@@ -76,20 +85,19 @@ char	**create_args(t_pipe *p, t_env *env)
 	n = count_args(t_line[0]);
 	args = (char **)ft_calloc(sizeof(char *), n + 1);
 	if (args == NULL)
-		return (NULL);
+		return (flush_errors("", -1), NULL);
 	i = 0;
 	while (i < n)
 	{
 		args[i] = get_args(t_line[0]);
+		if (args[i] == NULL)
+			return (free_d(args), flush_errors("", 202), NULL);
 		t_line[0] = t_line[0] + ft_strlen(args[i]);
 		args[i] = expand_env(args[i], env, 1);
 		args[i] = sh_trim_strings(args[i]);
-		if (i < n)
-			sh_updateenv(env, ft_strdup("_"), ft_strdup(args[i]));
-		i++;
+		if (args[i] == NULL)
+			return (free_d(args), NULL);
 	}
-	args[n] = NULL;
-	if (ft_strncmp(args[0], "exit", max(ft_strlen(args[0]), 4)) == 0)
-		p->exit = 1;
+	finish_args_creation(p, env, &args, n);
 	return (args);
 }

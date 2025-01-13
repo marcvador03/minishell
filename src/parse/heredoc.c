@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/23 14:57:19 by mfleury           #+#    #+#             */
-/*   Updated: 2025/01/11 19:17:19 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/01/13 10:47:01 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,13 +30,15 @@ static int	get_hd_input(char *eof, int fd)
 			return (close(fd), free(hd_input), 0);
 		free(hd_input);
 	}
-	return (close (fd), 0);
+	return (close(fd), 0);
 }
 
 static int	close_heredoc(int wstatus, int fd)
 {
 	fd = open(".heredoc_tmp", O_RDONLY);
-	if (fd > 0)
+	if (fd == -1)
+		return (flush_errors("heredoc", -1), -1);
+	else if (fd > 0)
 		unlink(".heredoc_tmp");
 	if (WIFEXITED(wstatus))
 	{
@@ -60,10 +62,10 @@ int	init_heredoc(char *line)
 	init_signal(1, 1);
 	fd = open(".heredoc_tmp", O_WRONLY | O_CREAT | O_TRUNC, 0600);
 	if (fd == -1)
-		return (-1);
+		return (flush_errors("heredoc", -1), -1);
 	pid = fork();
 	if (pid == -1)
-		return (-1);
+		return (flush_errors("heredoc", -1), -1);
 	if (pid == 0)
 		exit(get_hd_input(line, fd));
 	waitpid(pid, &wstatus, 0);

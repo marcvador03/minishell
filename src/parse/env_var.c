@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/11 16:34:27 by mfleury           #+#    #+#             */
-/*   Updated: 2025/01/11 19:05:40 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/01/13 12:10:48 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -119,7 +119,7 @@ char	*expand_env(char *line, t_env *env, int x)
 		{
 			line = expand_env_loop(env, line, &i, flag);
 			if (line == NULL)
-				return (set_gstatus(202), NULL);
+				return (flush_errors("", 202), NULL);
 			if (line[i] == '\0')
 				return (line);
 		}
