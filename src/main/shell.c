@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/07 15:12:52 by mfleury           #+#    #+#             */
-/*   Updated: 2025/01/13 16:57:00 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/01/13 18:30:37 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,6 +61,7 @@ static t_shell	*fill_sh(char *line, t_terms *tcap, t_env *env, int l_status)
 		sh = fill_sh_loop(sh, env, line);
 		if (sh == NULL || fill_sh_init(sh, tcap, &s_bracket, l_status) != 0)
 			return (NULL);
+		i++;
 	}
 	if (sh->bracket[1] != sh->bracket[0])
 		return (set_gstatus(206), NULL);
@@ -104,10 +105,10 @@ int	start_shell(t_env *env, t_terms *tcap, int l_status)
 	if (line == NULL)
 		exit_minishell_error(sh, 200, env);
 	if (check_open_quotes(line) == -1)
-		return (free_s(line), flush_errors("", 201), -1);
+		return (free_s(line), flush_errors("", 201), g_status);
 	sh = fill_sh(line, tcap, env, l_status);
 	if (sh == NULL)
-		return (free_s(line), flush_errors("", g_status), -1);
+		return (free_s(line), flush_errors("", g_status), g_status);
 	free_s(line);
 	head = sh->head;
 	head->l_status = l_status;

@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/18 12:17:52 by mfleury           #+#    #+#             */
-/*   Updated: 2025/01/13 11:43:36 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/01/13 18:22:18 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@
 # define E_201 ": missing quotes \" or \'"
 # define E_202 ": error encountered during memory allocation"
 # define E_203 ": error near redirection token \'<\' or \'>\'"
-# define E_204 ": error near token \'&&\' or \'||\'"
+# define E_204 ": error near token \'&\' or \'|\'"
 # define E_205 ": error near pipe token \'|\'"
 # define E_206 ": error near parenthesis \'(\' or \')\'"
 # define E_207 ": error while fetching env value"
