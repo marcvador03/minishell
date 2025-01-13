@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/17 15:39:35 by mfleury           #+#    #+#             */
-/*   Updated: 2025/01/11 19:18:49 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/01/13 21:31:49 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,15 +31,22 @@ static t_cmd_enum	str_to_enum(const char *str)
 	return (-1);
 }
 
-static int	check_directory(char *cmd)
+static int	check_directory(char *t_cmd)
 {
 	struct stat	statbuf;
 	int			n;
 
-	if (stat(cmd, &statbuf) != 0)
-		return (0);
+	if (stat(t_cmd, &statbuf) != 0)
+	{
+		if (access(t_cmd, X_OK) == -1)
+			return (127);
+		else
+			return (0);
+	}
 	n = S_ISDIR(statbuf.st_mode);
-	return (n);
+	if (n != 0)
+		return (126);
+	return (0);
 }
 
 static int	exec_syscmd_multipl(char *cmd, char **args, t_env *env, char **env2)
@@ -52,6 +59,8 @@ static int	exec_syscmd_multipl(char *cmd, char **args, t_env *env, char **env2)
 		return (g_status);
 	if (check_directory(cmd) != 0)
 		return (free_s(t_cmd), 126);
+	if (access(t_cmd, X_OK) == -1)
+		return (free_s(t_cmd), 127);
 	errnum = execve(t_cmd, args, env2);
 	if (errnum != 0)
 		g_status = errnum;
@@ -69,8 +78,9 @@ static int	exec_syscmd_single(char *cmd, char **args, t_env *env, char **env2)
 	t_cmd = get_full_path(cmd, env);
 	if (t_cmd == NULL)
 		return (g_status);
-	if (check_directory(cmd) != 0)
-		return (free_s(t_cmd), 126);
+	wstatus = check_directory(t_cmd);
+	if (wstatus != 0)
+		return (free_s(t_cmd), wstatus);
 	pid = fork();
 	if (pid == -1)
 		return (free_s(t_cmd), -1);
@@ -82,8 +92,7 @@ static int	exec_syscmd_single(char *cmd, char **args, t_env *env, char **env2)
 	else if (WIFSIGNALED(wstatus))
 	{
 		write(STDIN_FILENO, "\n", 1);
-		rl_on_new_line();
-		return (free_s(t_cmd), WTERMSIG(wstatus) + 128);
+		return (rl_on_new_line(), free_s(t_cmd), WTERMSIG(wstatus) + 128);
 	}
 	return (free_s(t_cmd), 0);
 }
