@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/11 16:34:27 by mfleury           #+#    #+#             */
-/*   Updated: 2025/01/13 16:24:09 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/01/13 18:56:59 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ static char	*get_dollar_in(char *line)
 			return (NULL);
 		return (res);
 	}
-	while (ft_isalnum_plus(line[i]) == 1 && line[i] != '\0')
+	while ((ft_isalnum(line[i]) == 1 || line[i] =='_') && line[i] != '\0')
 		i++;
 	res = ft_substr(line + 1, 0, i - 1);
 	if (res == NULL)
