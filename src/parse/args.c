@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/02 18:52:16 by mfleury           #+#    #+#             */
-/*   Updated: 2025/01/13 13:06:35 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/01/13 13:12:35 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,9 +67,9 @@ static char	*get_args(char *line)
 
 static int	finish_args_creation(t_pipe *p, t_env *env, char ***args, int n)
 {
-	*(args[n]) = NULL;
-	sh_updateenv(env, ft_strdup("_"), ft_strdup(*(args[n - 1])));
-	if (ft_strncmp(*(args[0]), "exit", max(ft_strlen(*(args[0])), 4)) == 0)
+	(*args)[n] = NULL;
+	sh_updateenv(env, ft_strdup("_"), ft_strdup((*args)[n - 1]));
+	if (ft_strncmp((*args)[0], "exit", max(ft_strlen((*args)[0]), 4)) == 0)
 		p->exit = 1;
 	return (0);
 }
