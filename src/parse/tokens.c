@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/07 14:31:45 by mfleury           #+#    #+#             */
-/*   Updated: 2025/01/13 16:16:20 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/01/13 23:38:37 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,11 +93,11 @@ int	execute_tokens(t_shell *sh, int level)
 		if (sh == NULL)
 			return (status);
 		else if (sh->bracket[0] == level)
+		{
 			if ((sh->tk == 0 && status == 0) || (sh->tk == 1 && status != 0))
-			{
 				status = subshell(sh);
-				sh->pipes = NULL;
-			}
+			sh->pipes = NULL;
+		}
 		if (sh->bracket[1] > 0 && level > 0)
 			exit (status);
 		if (sh->exit == 1)

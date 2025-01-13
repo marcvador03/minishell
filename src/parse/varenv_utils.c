@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/02 16:48:32 by mfleury           #+#    #+#             */
-/*   Updated: 2025/01/13 21:09:20 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/01/13 23:35:31 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,4 +60,46 @@ int	ft_isalnum_plus(int c)
 		return (1);
 	else
 		return (0);
+}
+static int	get_full_path_check(char *arg0, char **cmd_out)
+{
+	if (access(arg0, X_OK) == 0)
+	{
+		*cmd_out = ft_strdup(arg0);
+		return (-1);
+	}
+	else if(ft_strncmp(arg0, "", max(ft_strlen(arg0), 1)) == 0)
+	{
+		*cmd_out = ft_strdup("");
+		return (-1);
+	}
+	return (0);
+}
+
+char	*get_full_path(char *arg0, t_env *env)
+{
+	char	*cmd_in;
+	char	*cmd_out;
+	char	**paths;
+	int		i;
+
+	if (get_full_path_check(arg0, &cmd_out) == -1)
+		return (cmd_out);
+	paths = ft_split(sh_getenv(env, "PATH"), ':');
+	if (paths == NULL)
+		return (free_s(paths), set_gstatus(125), NULL);
+	cmd_in = ft_strjoin("/", arg0);
+	if (cmd_in == NULL)
+		return (free_d(paths), set_gstatus(202), NULL);
+	i = 0;
+	while (paths[i] != NULL)
+	{
+		cmd_out = ft_strjoin(paths[i++], cmd_in);
+		if (cmd_out == NULL)
+			return (free_d(paths), free_s(cmd_in), set_gstatus(202), NULL);
+		if (access(cmd_out, X_OK) == 0)
+			return (free_d(paths), free_s(cmd_in), cmd_out);
+		free_s(cmd_out);
+	}
+	return (free_d(paths), free_s(cmd_in), set_gstatus(127), NULL);
 }
