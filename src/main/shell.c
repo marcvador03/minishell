@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/07 15:12:52 by mfleury           #+#    #+#             */
-/*   Updated: 2025/01/13 18:30:37 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/01/13 23:22:33 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ char	*get_tk(char *line);
 int		count_tokens(char *line);
 int		check_open_quotes(char *str);
 int		execute_tokens(t_shell *sh, int level);
-char	*create_prompt(t_env *env, int l_status);
+char	*create_prompt(t_env *env);
 
 static int	fill_sh_init(t_shell *tmp, t_terms *tcap, int (*x)[2], int l_status)
 {
@@ -68,13 +68,13 @@ static t_shell	*fill_sh(char *line, t_terms *tcap, t_env *env, int l_status)
 	return (sh->head);
 }
 
-static char	*get_input(t_env *env, t_terms *tcap, int l_status)
+static char	*get_input(t_env *env, t_terms *tcap)
 {
 	char	*line;
 	char	*line2;
 	char	*prompt;
 
-	prompt = create_prompt(env, l_status);
+	prompt = create_prompt(env);
 	if (prompt == NULL)
 		return (NULL);
 	line = readline(prompt);
@@ -85,7 +85,7 @@ static char	*get_input(t_env *env, t_terms *tcap, int l_status)
 		exit_minishell(NULL, env);
 	}
 	else if (ft_strlen(line) == 0 && line[0] == '\0')
-		return (free_s(prompt), free_s(line), get_input(env, tcap, 0));
+		return (free_s(prompt), free_s(line), get_input(env, tcap));
 	add_history(line);
 	line2 = ft_strjoin("&&", line);
 	if (line2 == NULL)
@@ -93,7 +93,7 @@ static char	*get_input(t_env *env, t_terms *tcap, int l_status)
 	return (free_s(prompt), free_s(line), line2);
 }
 
-int	start_shell(t_env *env, t_terms *tcap, int l_status)
+int	start_shell(t_env *env, t_terms *tcap)
 {
 	char	*line;
 	t_shell	*sh;
@@ -101,19 +101,19 @@ int	start_shell(t_env *env, t_terms *tcap, int l_status)
 
 	sh = NULL;
 	init_signal(1, 0);
-	line = get_input(env, tcap, l_status);
+	line = get_input(env, tcap);
 	if (line == NULL)
 		exit_minishell_error(sh, 200, env);
 	if (check_open_quotes(line) == -1)
 		return (free_s(line), flush_errors("", 201), g_status);
-	sh = fill_sh(line, tcap, env, l_status);
+	sh = fill_sh(line, tcap, env, g_status);
 	if (sh == NULL)
 		return (free_s(line), flush_errors("", g_status), g_status);
 	free_s(line);
 	head = sh->head;
-	head->l_status = l_status;
+	head->l_status = g_status;
 	if (sh_check_empty(sh->s_line) == -1)
 		return (free_sh(head), 0);
-	l_status = execute_tokens(sh, 0);
-	return (free_sh(head), l_status);
+	g_status = execute_tokens(sh, 0);
+	return (free_sh(head), g_status);
 }

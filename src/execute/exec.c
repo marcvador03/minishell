@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/17 15:39:35 by mfleury           #+#    #+#             */
-/*   Updated: 2025/01/13 21:31:49 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/01/13 21:41:37 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,10 +57,9 @@ static int	exec_syscmd_multipl(char *cmd, char **args, t_env *env, char **env2)
 	t_cmd = get_full_path(cmd, env);
 	if (t_cmd == NULL)
 		return (g_status);
-	if (check_directory(cmd) != 0)
-		return (free_s(t_cmd), 126);
-	if (access(t_cmd, X_OK) == -1)
-		return (free_s(t_cmd), 127);
+	errnum = check_directory(t_cmd);
+	if (errnum != 0)
+		return (free_s(t_cmd), errnum);
 	errnum = execve(t_cmd, args, env2);
 	if (errnum != 0)
 		g_status = errnum;
