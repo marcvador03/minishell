@@ -20,7 +20,6 @@ BUILTINS = ft_cd.c \
 
 PARSE =	args.c \
 		brackets.c \
-		env_var.c \
 		heredoc.c \
 		pipes.c \
 		quotes.c \
@@ -28,7 +27,9 @@ PARSE =	args.c \
 		redirections.c \
 		redirections_utils.c \
 		tokens.c \
-		tokens_utils.c
+		tokens_utils.c \
+		varenv.c \
+		varenv_utils.c
 
 EXECUTE = exec.c \
 		  pre_exec.c \
@@ -36,7 +37,6 @@ EXECUTE = exec.c \
 
 UTILS = core_utils.c \
 		free_utils.c \
-		list_utils.c \
 		str_utils.c
 
 MAIN = environment.c \
