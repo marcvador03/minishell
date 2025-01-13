@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/22 16:08:01 by mfleury           #+#    #+#             */
-/*   Updated: 2025/01/13 10:48:12 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/01/13 16:37:09 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ int	single_cmd(t_pipe *p, t_env *env);
 int	multiple_cmd(t_pipe *p, t_env *env);
 int	get_next_pipe(t_pipe *p, char *line, t_env *env);
 
-static t_pipe	*p_lstnew(char *line, t_env *env)
+static t_pipe	*p_lstnew(t_shell *sh, char *line, t_env *env)
 {
 	t_pipe	*ptr;
 
@@ -27,6 +27,7 @@ static t_pipe	*p_lstnew(char *line, t_env *env)
 	ptr->prev = NULL;
 	ptr->next = NULL;
 	ptr->head = ptr;
+	ptr->sh = sh;
 	if (get_next_pipe(ptr, line, env) == 2)
 		return (free_pipe(ptr), NULL);
 	return (ptr);
@@ -44,12 +45,12 @@ static t_pipe	*p_lstlast(t_pipe *pipe)
 	return (tmp);
 }
 
-static t_pipe	*p_lstadd_back(t_pipe **pipe, char *line, t_env *env)
+static t_pipe	*p_lstadd(t_pipe **pipe, char *line, t_env *env, t_shell *sh)
 {
 	t_pipe	*tmp;
 	t_pipe	*new_node;
 
-	new_node = p_lstnew(line, env);
+	new_node = p_lstnew(sh, line, env);
 	if (new_node == NULL)
 		return (free_pipe(*pipe), NULL);
 	else
@@ -76,9 +77,9 @@ static t_pipe	*fill_pipes(t_shell *sh, t_pipe *p, int n)
 	{
 		t_line = sh->s_line + sh_skip(sh->s_line, ' ');
 		if (p == NULL)
-			tmp = p_lstnew(t_line, sh->env);
+			tmp = p_lstnew(sh, t_line, sh->env);
 		else
-			tmp = p_lstadd_back(&p, t_line, sh->env);
+			tmp = p_lstadd(&p, t_line, sh->env, sh);
 		if (tmp == NULL)
 			return (NULL);
 		tmp->sh = sh;

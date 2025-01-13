@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/08 20:31:15 by mfleury           #+#    #+#             */
-/*   Updated: 2025/01/12 18:40:22 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/01/13 15:45:14 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -125,15 +125,13 @@ static char	*get_hostname(void)
 	return (close(fd), host);
 }
 
-char	*create_prompt(t_env *env)
+char	*create_prompt(t_env *env, int l_status)
 {
 	t_prompt	t;
 
-	t.status = ft_itoa(g_status);
+	t.status = ft_itoa(l_status);
 	if (t.status == NULL)
-		g_status = 202;
-	else
-		g_status = 0;
+		flush_errors("", 202);
 	t.user = get_user(env);
 	t.hostname = get_hostname();
 	t.home = sh_getenv(env, "HOME");

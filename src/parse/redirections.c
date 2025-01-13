@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/10 08:52:08 by mfleury           #+#    #+#             */
-/*   Updated: 2025/01/13 12:12:25 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/01/13 16:25:14 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -125,7 +125,7 @@ char	**create_redirs(t_pipe *p, t_env *env)
 		redirs[i] = create_redir_init(p, i, t_line[0]);
 		if (redirs[i] == NULL)
 			return (free_d(redirs), NULL);
-		redirs[i] = expand_env(redirs[i], env, 1);
+		redirs[i] = expand_env(env, redirs[i], 1, p->sh->l_status);
 		redirs[i] = sh_trim_strings(redirs[i]);
 		if (redirs[i] == NULL)
 			return (free_d(redirs), NULL);

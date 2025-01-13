@@ -6,7 +6,7 @@
 /*   By: pmorello <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 12:17:09 by pmorello          #+#    #+#             */
-/*   Updated: 2025/01/13 11:59:14 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/01/13 16:24:06 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,11 +105,12 @@ typedef struct s_termcaps
 struct s_shell
 {
 	char				*s_line;
-	int					token;
+	int					tk;
 	int					depth;
 	int					bracket[4];
 	int					p_count;
 	int					exit;
+	int					l_status;
 	t_pipe				*pipes;
 	t_terms				*tcap;
 	t_env				*env;
@@ -168,7 +169,7 @@ t_env	*fill_env(char *envp[]);
 t_env	*sh_updateenv(t_env *env, char *var_name, char *new_value);
 t_env	*sh_addenv(t_env *env, char *var_name, char *value);
 t_env	*sh_delenv(t_env *env, char *var_name);
-char	*expand_env(char *line, t_env *env, int x);
+char	*expand_env(t_env *env, char *line, int x, int l_status);
 char	**get_env_array(t_env *env);
 t_env	*fill_default_session(t_env *env);
 char	*get_full_path(char *arg0, t_env *env);

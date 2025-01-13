@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/11 16:34:27 by mfleury           #+#    #+#             */
-/*   Updated: 2025/01/13 15:28:07 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/01/13 16:24:09 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,13 +54,8 @@ static char	*expand_getenv(char *s, t_env *env)
 }
 
 
-static int	remove_dollar(char **line, int i, int flag, char *dollar_in)
+static int	remove_dollar(char **line, int i, char *dollar_in)
 {
-	if (flag == 100 && ft_isalnum((*line)[i + 1]) == 0)
-	{
-		free_s(dollar_in);
-		return (-1);
-	}
 	if (ft_isalnum_plus((*line)[i + 1]) == 1)
 	{
 		ft_memset(*line + i, ' ', 1);
@@ -74,7 +69,7 @@ static int	remove_dollar(char **line, int i, int flag, char *dollar_in)
 	return (0);
 }
 
-static char	*expand_env_loop(t_env *env, char *line, int *i, int flag)
+static char	*expand_env_loop(t_env *env, char *line, int *i, int l_status)
 {
 	char	*res;
 	char	*dollar_out;
@@ -85,10 +80,10 @@ static char	*expand_env_loop(t_env *env, char *line, int *i, int flag)
 	if (dollar_in == NULL)
 		return (NULL);
 	if (dollar_in[0] == '?')
-		dollar_out = ft_itoa(g_status);
+		dollar_out = ft_itoa(l_status);
 	else if (dollar_in[0] == '_' && dollar_in[1] == '\0')
 		dollar_out = ft_strdup(sh_getenv(env, "_"));
-	else if (remove_dollar(&line, *i, flag, dollar_in) == -1)
+	else if (remove_dollar(&line, *i, dollar_in) == -1)
 		return (line);
 	else if (ft_isalnum(line[*i + 1]) == 1)
 		dollar_out = expand_getenv(dollar_in, env);
@@ -98,7 +93,7 @@ static char	*expand_env_loop(t_env *env, char *line, int *i, int flag)
 	return (free_s(dollar_in), res);
 }
 
-char	*expand_env(char *line, t_env *env, int x)
+char	*expand_env(t_env *env, char *line, int x, int l_status)
 {
 	int	i;
 	int	flag;
@@ -116,7 +111,7 @@ char	*expand_env(char *line, t_env *env, int x)
 		if ((line[i] == '$' && flag != -1) || \
 			(line[i] == '$' && i > 0 && line[i - 1] != '\\'))
 		{
-			line = expand_env_loop(env, line, &i, flag);
+			line = expand_env_loop(env, line, &i, l_status);
 			if (line == NULL)
 				return (flush_errors("", 202), NULL);
 			if (line[i] == '\0')
