@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/16 16:32:42 by mfleury           #+#    #+#             */
-/*   Updated: 2025/01/13 12:04:45 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/01/13 12:17:32 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,8 +77,6 @@ static void	custom_errors3(char *cmd, int errnum)
 
 void	flush_errors(char *cmd, int err_sig)
 {
-	ft_putstr_fd("minishell: ", STDERR_FILENO);
-	ft_putstr_fd(cmd, STDERR_FILENO);
 	if (err_sig == -1)
 	{
 		g_status = 1;
