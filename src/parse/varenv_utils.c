@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/02 16:48:32 by mfleury           #+#    #+#             */
-/*   Updated: 2025/01/13 14:10:15 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/01/13 15:16:06 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,4 +48,16 @@ char	*resize_line(char *line, char *out, char *in, int *i)
 	free_s(out);
 	free_s(line);
 	return (free_s(tmp[0]), free_s(tmp[1]), free_s(tmp[2]), res);
+}
+
+int	ft_isalnum_plus(int c)
+{
+	if ((c >= 65 && c <= 90) || (c >= 97 && c <= 122))
+		return (1);
+	else if (c >= 48 && c <= 57)
+		return (1);
+	else if (c == '@' || c == '_')
+		return (1);
+	else
+		return (0);
 }

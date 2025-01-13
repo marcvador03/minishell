@@ -6,13 +6,14 @@
 /*   By: mfleury <mfleury@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/11 16:34:27 by mfleury           #+#    #+#             */
-/*   Updated: 2025/01/13 14:28:04 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/01/13 15:28:07 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
 char	*resize_line(char *line, char *out, char *in, int *i);
+int		ft_isalnum_plus(int c);
 
 static char	*get_dollar_in(char *line)
 {
@@ -20,8 +21,10 @@ static char	*get_dollar_in(char *line)
 	int		i;
 
 	i = 1;
-	if (line[i] == '?' || line[i] == '_')
-		return (ft_strdup(&line[i]));
+	if (line[i] == '?')
+		return (ft_strdup("?"));
+	else if (line[i] == '_' && ft_isalnum_plus(line[i + 1]) == 0)
+		return (ft_strdup("_"));
 	if (ft_isdigit(line[i]) == 1)
 	{
 		res = ft_substr(line, 0, 1);
@@ -29,7 +32,7 @@ static char	*get_dollar_in(char *line)
 			return (NULL);
 		return (res);
 	}
-	while (ft_isalnum(line[i]) == 1 && line[i] != '\0')
+	while (ft_isalnum_plus(line[i]) == 1 && line[i] != '\0')
 		i++;
 	res = ft_substr(line + 1, 0, i - 1);
 	if (res == NULL)
@@ -58,7 +61,7 @@ static int	remove_dollar(char **line, int i, int flag, char *dollar_in)
 		free_s(dollar_in);
 		return (-1);
 	}
-	if (ft_isalnum((*line)[i + 1]) == 1 || (*line)[i + 1] == '@')
+	if (ft_isalnum_plus((*line)[i + 1]) == 1)
 	{
 		ft_memset(*line + i, ' ', 1);
 		return (0);
@@ -81,9 +84,9 @@ static char	*expand_env_loop(t_env *env, char *line, int *i, int flag)
 	dollar_out = NULL;
 	if (dollar_in == NULL)
 		return (NULL);
-	if (line[*i + 1] == '?')
+	if (dollar_in[0] == '?')
 		dollar_out = ft_itoa(g_status);
-	else if (line[*i + 1] == '_')
+	else if (dollar_in[0] == '_' && dollar_in[1] == '\0')
 		dollar_out = ft_strdup(sh_getenv(env, "_"));
 	else if (remove_dollar(&line, *i, flag, dollar_in) == -1)
 		return (line);
