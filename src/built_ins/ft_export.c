@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/14 09:54:49 by pmorello          #+#    #+#             */
-/*   Updated: 2025/01/13 11:56:03 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/01/14 00:15:50 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,10 +74,13 @@ static int	print_sorted(t_env *env, int n)
 	i = 0;
 	while (s_env[i] != NULL)
 	{
-		if (ft_strchr(s_env[i], '=') != 0)
-			print_sorted_loop(s_env, i);
-		else
-			printf ("declarxe -x %s\n", s_env[i]);
+		if (!(s_env[i][0] == '_' && s_env[i][1] == '='))
+		{
+			if (ft_strchr(s_env[i], '=') != 0)
+				print_sorted_loop(s_env, i);
+			else
+				printf ("declarxe -x %s\n", s_env[i]);
+		}
 		i++;
 	}
 	return (free_d(s_env), 0);

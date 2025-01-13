@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 10:01:23 by mfleury           #+#    #+#             */
-/*   Updated: 2025/01/13 23:07:05 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/01/13 23:51:27 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,11 @@ int	main_cmd_return(t_pipe *p, int wstatus, pid_t pid)
 			p->p_status = WEXITSTATUS(wstatus);
 			if (p->next == NULL && p->exit == 1)
 				p->sh->exit = 1;
+			break ;
+		}
+		else if (p->pid == pid && WIFSIGNALED(wstatus) != 0)
+		{
+			p->p_status = WTERMSIG(wstatus) + 128;
 			break ;
 		}
 		p = p->next;
