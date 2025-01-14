@@ -6,14 +6,15 @@
 /*   By: mfleury <mfleury@student.42barcelona.      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 10:01:23 by mfleury           #+#    #+#             */
-/*   Updated: 2025/01/14 15:15:11 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/01/14 16:25:50 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
 int	start_shell(t_env *env, t_terms *tcap, int l_status);
-int	close_redir_fd(t_pipe *p);
+int	close_redir_fd_mult(t_pipe *p);
+int	close_redir_fd_single(t_pipe *p);
 
 unsigned int	g_status = 0;
 
@@ -25,7 +26,7 @@ int	main_cmd_return(t_pipe *p, int wstatus, pid_t pid)
 		if (p->pid == pid && WIFEXITED(wstatus) != 0)
 		{
 			p->p_status = WEXITSTATUS(wstatus);
-			close_redir_fd(p);
+			close_redir_fd_mult(p);
 			if (p->next == NULL && p->exit == 1)
 				p->sh->exit = 1;
 			break ;
@@ -33,7 +34,7 @@ int	main_cmd_return(t_pipe *p, int wstatus, pid_t pid)
 		else if (p->pid == pid && WIFSIGNALED(wstatus) != 0)
 		{
 			p->p_status = WTERMSIG(wstatus) + 128;
-			close_redir_fd(p);
+			close_redir_fd_mult(p);
 			break ;
 		}
 		p = p->next;
@@ -76,7 +77,7 @@ void	exit_minishell(t_pipe *p, t_env *env)
 			unset_term_settings(p->sh->tcap, env);
 		printf("exit\n");
 		status = p->p_status;
-		close_redir_fd(p);
+		close_redir_fd_single(p);
 		free_sh(p->sh);
 		if (env != NULL)
 			free_env(env);

@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/25 13:59:57 by mfleury           #+#    #+#             */
-/*   Updated: 2025/01/14 15:21:02 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/01/14 16:56:39 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,22 @@ int	open_redir_fd(t_pipe *p)
 	return (0);
 }
 
-int	close_redir_fd(t_pipe *p)
+int	close_redir_fd_mult(t_pipe *p)
+{
+	
+	p = p->head;
+	while (p != NULL)
+	{
+		if (p->r_fd[INPUT] > 2)
+			close(p->r_fd[INPUT]);
+		if (p->r_fd[OUTPUT] > 2)
+			close(p->r_fd[OUTPUT]);
+		p = p->next;
+	}
+	return (0);
+}
+
+int	close_redir_fd_single(t_pipe *p)
 {
 	int	err;
 
@@ -47,7 +62,7 @@ int	close_redir_fd(t_pipe *p)
 		err = dup2(p->r_fd[T_INPUT], STDIN_FILENO);
 		if (err == -1)
 			flush_errors(p->args[0], -1);
-		//close(p->r_fd[T_INPUT]);
+		close(p->r_fd[T_INPUT]);
 	}
 	if (p->r_fd[OUTPUT] > 2)
 	{
@@ -55,8 +70,9 @@ int	close_redir_fd(t_pipe *p)
 		err = dup2(p->r_fd[T_OUTPUT], STDOUT_FILENO);
 		if (err == -1)
 			flush_errors(p->args[0], -1);
-		//close(p->r_fd[T_OUTPUT]);
+		close(p->r_fd[T_OUTPUT]);
 	}
+	close_redir_fd_mult(p);
 	return (0);
 }
 

@@ -6,14 +6,15 @@
 /*   By: mfleury <mfleury@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/02 18:58:50 by mfleury           #+#    #+#             */
-/*   Updated: 2025/01/14 14:22:28 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/01/14 16:45:34 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
 int		open_redir_fd(t_pipe *p);
-int		close_redir_fd(t_pipe *p);
+int		close_redir_fd_single(t_pipe *p);
+int		close_redir_fd_mult(t_pipe *p);
 int		close_pipes(t_pipe *p);
 int		exec_cmd(char *cmd, char **args, t_pipe *p, t_env *env);
 
@@ -38,10 +39,10 @@ static int	run_child(t_pipe *p, t_env *env)
 		dup2(o->fd[READ_END], STDIN_FILENO);
 	close_pipes(p);
 	if (open_redir_fd(p) == -1)
-		return (close_redir_fd(p), g_status);
+		return (close_redir_fd_single(p), g_status);
 	if (p->args[0] != NULL)
 		wstatus = exec_cmd(p->args[0], p->args, p, env);
-	close_redir_fd(p);
+	close_redir_fd_single(p);
 	exit (wstatus);
 }
 
@@ -89,10 +90,10 @@ static int	create_pipes(t_pipe *p)
 int	single_cmd(t_pipe *p, t_env *env)
 {
 	if (open_redir_fd(p) == -1)
-		return (close_redir_fd(p), g_status);
+		return (close_redir_fd_single(p), g_status);
 	if (p->args[0] != NULL)
 		p->p_status = exec_cmd(p->args[0], p->args, p, env);
-	close_redir_fd(p);
+	close_redir_fd_single(p);
 	rl_replace_line("", 0);
 	rl_on_new_line();
 	return (p->p_status);
