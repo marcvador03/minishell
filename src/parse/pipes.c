@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/28 13:53:58 by mfleury           #+#    #+#             */
-/*   Updated: 2025/01/14 14:13:28 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/01/14 22:38:58 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,8 @@
 
 char	**create_redirs(t_pipe *p, t_env *env);
 char	**create_args(t_pipe *p, t_env *env, char *t_line);
-int		get_fdin_redir(t_pipe *p);
-int		get_fdout_redir(t_pipe *p);
+int		get_fds_redir(t_pipe *p);
+int		close_redir_fd_mult(t_pipe *p);
 
 int	count_pipes(char *line)
 {
@@ -53,12 +53,14 @@ static int	fill_in_pipe(t_pipe *p, t_env *env)
 	p->args = create_args(p, env, t_line);
 	if (p->args == NULL)
 		return (flush_errors("", -1), -1);
-	p->r_fd[INPUT] = get_fdin_redir(p);
+	if (get_fds_redir(p) == -1)
+		return (close_redir_fd_mult(p->head), 2);
+	/*p->r_fd[INPUT] = get_fdin_redir(p);
 	if (p->r_fd[INPUT] == -1)
 		return (2);
 	p->r_fd[OUTPUT] = get_fdout_redir(p);
 	if (p->r_fd[OUTPUT] == -1)
-		return (2);
+		return (2);*/
 	return (0);
 }
 

@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/18 17:20:19 by mfleury           #+#    #+#             */
-/*   Updated: 2025/01/14 18:05:47 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/01/14 22:51:56 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,67 @@ static int	get_rd_flag(char *rd)
 	return (0);
 }
 
-int	get_fdin_redir(t_pipe *p)
+static int	get_fdout(char *r_path, int rd, int pfd)
+{
+	int	fd;
+
+	fd = -2;
+	if (pfd > 2)
+		close(pfd);
+	if (rd == 3)
+		fd = open(r_path, O_CREAT | O_RDWR | O_APPEND, 0644);
+	else if (rd == 1)
+		fd = open(r_path, O_CREAT | O_RDWR | O_TRUNC, 0644);
+	if (fd == -1)
+		return (flush_errors(r_path, -1), -1);
+	if (fd == -2)
+		fd = STDOUT_FILENO;
+	return (fd);
+}
+
+static int	get_fdin(char *r_path, int rd, int pfd)
+{
+	int	fd;
+
+	fd = -2;
+	if (pfd > 2)
+		close(pfd);
+	if (rd == 2)
+		fd = open(r_path, O_RDONLY, 0700);
+	if (fd == -1)
+		return (flush_errors(r_path, -1), -1);
+	else if (rd == 4)
+		fd = init_heredoc(r_path);
+	if (fd == -1)
+		return (-1);
+	if (fd == -2)
+		fd = STDIN_FILENO;
+	return (fd);
+}
+
+int	get_fds_redir(t_pipe *p)
+{
+	int	i;
+	int	fd;
+	int	rd;
+	
+	i = 0;
+	fd = -2;
+	while (p->redirs[i] != NULL)
+	{
+		rd = get_rd_flag(p->rd[i]);
+		if (rd == 2 || rd == 4)
+			p->r_fd[INPUT] = get_fdin(p->redirs[i], rd, p->r_fd[INPUT]);
+		else if (rd == 1 || rd == 3)
+			p->r_fd[OUTPUT] = get_fdout(p->redirs[i], rd, p->r_fd[OUTPUT]);
+		if (p->r_fd[INPUT] == -1 || p->r_fd[OUTPUT] == -1)
+			return (-1);
+		i++;
+	}
+	return (fd);
+}
+
+/*int	get_fdin_redir(t_pipe *p)
 {
 	int	i;
 	int	fd;
@@ -53,9 +113,9 @@ int	get_fdin_redir(t_pipe *p)
 	if (fd == -2)
 		fd = STDIN_FILENO;
 	return (fd);
-}
+}*/
 
-int	get_fdout_redir(t_pipe *p)
+/*int	get_fdout_redir(t_pipe *p)
 {
 	int	i;
 	int	fd;
@@ -79,7 +139,7 @@ int	get_fdout_redir(t_pipe *p)
 	if (fd == -2)
 		fd = STDOUT_FILENO;
 	return (fd);
-}
+}*/
 
 char	find_next_token(char *line)
 {
