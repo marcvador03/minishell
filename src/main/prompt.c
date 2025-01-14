@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/08 20:31:15 by mfleury           #+#    #+#             */
-/*   Updated: 2025/01/13 23:27:27 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/01/14 14:25:39 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -130,7 +130,6 @@ char	*create_prompt(t_env *env)
 	t.home = sh_getenv(env, "HOME");
 	t.cur_path = replace_home_path(t.home);
 	t.prompt = join_prompt(&t);
-	free_s(t.status);
 	free_s(t.cur_path);
 	free_s(t.hostname);
 	free_s(t.user);
