@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/07 15:12:52 by mfleury           #+#    #+#             */
-/*   Updated: 2025/01/14 15:47:41 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/01/14 23:37:04 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,9 +18,9 @@ int		check_open_quotes(char *str);
 int		execute_tokens(t_shell *sh, int level);
 char	*create_prompt(t_env *env);
 
-static int	fill_sh_init(t_shell *tmp, t_terms *tcap, int (*x)[2], int l_status)
+static int	fill_sh_init(t_shell *tmp, t_terms *tcap, int (*x)[2]/*, int l_status*/)
 {
-	tmp->s_line = expand_env(tmp->env, tmp->s_line, 1, l_status);
+	//tmp->s_line = expand_env(tmp->env, tmp->s_line, 1, l_status);
 	if (tmp->s_line == NULL)
 		return (set_gstatus(202), 202);
 	tmp->tcap = tcap;
@@ -44,7 +44,7 @@ static t_shell	*fill_sh_loop(t_shell *sh, t_env *env, char *line)
 	return (sh);
 }
 
-static t_shell	*fill_sh(char *line, t_terms *tcap, t_env *env, int l_status)
+static t_shell	*fill_sh(char *line, t_terms *tcap, t_env *env/*, int l_status*/)
 {
 	int		i;
 	int		s_bracket[2];
@@ -61,7 +61,7 @@ static t_shell	*fill_sh(char *line, t_terms *tcap, t_env *env, int l_status)
 	while (i++ < n)
 	{
 		sh = fill_sh_loop(sh, env, line);
-		if (sh == NULL || fill_sh_init(sh, tcap, &s_bracket, l_status) != 0)
+		if (sh == NULL || fill_sh_init(sh, tcap, &s_bracket/*, l_status*/) != 0)
 			return (NULL);
 		i++;
 	}
@@ -108,7 +108,7 @@ int	start_shell(t_env *env, t_terms *tcap)
 		exit_minishell_error(sh, 200, env);
 	if (check_open_quotes(line) == -1)
 		return (free_s(line), flush_errors("", 201), g_status);
-	sh = fill_sh(line, tcap, env, g_status);
+	sh = fill_sh(line, tcap, env/*, g_status*/);
 	if (sh == NULL)
 		return (free_s(line), flush_errors("", g_status), g_status);
 	free_s(line);

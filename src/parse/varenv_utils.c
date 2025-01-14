@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/02 16:48:32 by mfleury           #+#    #+#             */
-/*   Updated: 2025/01/14 13:30:00 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/01/15 00:09:48 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ int	env_size(t_env *lst)
 
 char	*resize_line(char *line, char *out, char *in, int *i)
 {
-	char	*res;
+	char	*res[2];
 	char	*tmp[3];
 	int		len[4];
 
@@ -42,12 +42,17 @@ char	*resize_line(char *line, char *out, char *in, int *i)
 	if (tmp[2] == NULL)
 		return (NULL);
 	*i = max(0, ft_strlen(tmp[2]) - 1);
-	res = ft_strjoin(tmp[2], tmp[1]);
-	if (res == NULL)
-		return (NULL);
+	res[0] = ft_strjoin(tmp[2], tmp[1]);
+	res[1] = (char *)ft_calloc(sizeof(char), ft_strlen(res[0]) + 3);
+	if (res[0] == NULL || res[1] == NULL)
+		return (free_s(res[0]), free_s(res[1]), NULL);
+	res[1][0] = '\'';
+	ft_strlcpy(&res[1][1], res[0], ft_strlen(res[0]) + 3);
+	res[1][ft_strlen(res[0]) + 1] = '\'';
+	free_s(res[0]);
 	free_s(out);
 	free_s(line);
-	return (free_s(tmp[0]), free_s(tmp[1]), free_s(tmp[2]), res);
+	return (free_s(tmp[0]), free_s(tmp[1]), free_s(tmp[2]), res[1]);
 }
 
 int	ft_isalnum_plus(int c)
