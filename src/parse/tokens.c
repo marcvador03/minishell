@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/07 14:31:45 by mfleury           #+#    #+#             */
-/*   Updated: 2025/01/14 10:42:04 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/01/14 16:06:14 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,7 @@ static int	exec_token_fork(t_shell *sh, int level)
 	int		wstatus;
 	int		status;
 
-	status = 0;
+	status = -1;
 	pid = fork();
 	if (pid == -1)
 		flush_errors("", -1);
