@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/14 09:20:49 by pmorello          #+#    #+#             */
-/*   Updated: 2025/01/14 10:14:29 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/01/14 14:32:53 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,7 +79,7 @@ int	ft_cd(char **args, t_env *env)
 	char	*cur_path;
 
 	if (args[1] != NULL && args[2] != NULL)
-		return (7);
+		return (set_gstatus(7), g_status);
 	cur_path = getcwd(NULL, 0);
 	if (cur_path == NULL)
 	{

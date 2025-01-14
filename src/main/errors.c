@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/16 16:32:42 by mfleury           #+#    #+#             */
-/*   Updated: 2025/01/14 13:22:52 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/01/14 14:36:33 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,7 +75,7 @@ static void	custom_errors3(char *cmd, int errnum)
 	g_status = errnum;
 }
 
-void	flush_errors(char *cmd, int err_sig)
+int	flush_errors(char *cmd, int err_sig)
 {
 	if (err_sig == -1)
 	{
@@ -91,5 +91,5 @@ void	flush_errors(char *cmd, int err_sig)
 		custom_errors3(cmd, err_sig);
 	else if (err_sig == 1)
 		g_status = 1;
-	return ;
+	return (g_status) ;
 }
