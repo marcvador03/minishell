@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/07 14:53:29 by mfleury           #+#    #+#             */
-/*   Updated: 2025/01/13 16:16:20 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/01/14 15:50:18 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,6 +60,9 @@ int	count_tokens(char *line)
 	while (i < len)
 	{
 		i += sh_strpos(t_line + i, get_tk(t_line + i)) + 2;
+		if (i < len)
+			if (t_line[i] == '&' || t_line[i] == '|' || t_line[i] == '\0')
+				return (-1);
 		n++;
 	}
 	return (n);
