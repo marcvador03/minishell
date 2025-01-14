@@ -6,7 +6,7 @@
 /*   By: pmorello <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 12:17:09 by pmorello          #+#    #+#             */
-/*   Updated: 2025/01/13 16:24:06 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/01/14 14:14:40 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,6 +89,7 @@ typedef struct s_pipe
 	int					fd[2];
 	pid_t				pid;
 	int					p_status;
+	int					empty_arg;
 	int					exit;
 	t_shell				*sh;
 	struct s_pipe		*head;

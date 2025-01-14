@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/02 18:58:50 by mfleury           #+#    #+#             */
-/*   Updated: 2025/01/13 23:49:04 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/01/14 14:22:28 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,8 @@ static int	run_child(t_pipe *p, t_env *env)
 	close_pipes(p);
 	if (open_redir_fd(p) == -1)
 		return (close_redir_fd(p), g_status);
-	wstatus = exec_cmd(p->args[0], p->args, p, env);
+	if (p->args[0] != NULL)
+		wstatus = exec_cmd(p->args[0], p->args, p, env);
 	close_redir_fd(p);
 	exit (wstatus);
 }
@@ -89,7 +90,8 @@ int	single_cmd(t_pipe *p, t_env *env)
 {
 	if (open_redir_fd(p) == -1)
 		return (close_redir_fd(p), g_status);
-	p->p_status = exec_cmd(p->args[0], p->args, p, env);
+	if (p->args[0] != NULL)
+		p->p_status = exec_cmd(p->args[0], p->args, p, env);
 	close_redir_fd(p);
 	rl_replace_line("", 0);
 	rl_on_new_line();
