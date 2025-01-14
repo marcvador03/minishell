@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/16 16:32:42 by mfleury           #+#    #+#             */
-/*   Updated: 2025/01/13 12:17:32 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/01/14 10:00:06 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,7 +83,7 @@ void	flush_errors(char *cmd, int err_sig)
 		ft_putstr_fd("minishell: ", STDERR_FILENO);
 		perror(cmd);
 	}
-	else if (err_sig > 1 && err_sig < 126)
+	else if (err_sig > 2 && err_sig < 126)
 		custom_errors1(cmd, err_sig);
 	else if (err_sig > 200 && err_sig < 256)
 		custom_errors2(cmd, err_sig);

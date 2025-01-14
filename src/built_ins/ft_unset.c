@@ -6,11 +6,12 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/14 11:23:34 by pmorello          #+#    #+#             */
-/*   Updated: 2025/01/13 11:36:42 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/01/14 09:54:38 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+int		check_option(char *str, char *cmd);
 
 int	check_unset_var(char *str)
 {
@@ -46,6 +47,9 @@ int	ft_unset(char **args, t_env *env)
 
 	i = 1;
 	err = 0;
+	err = check_option(args[1], "unset");
+	if (err == 2)
+		return (err);
 	while (args[i] != NULL)
 	{
 		if (check_unset_var(args[i]) == -1)

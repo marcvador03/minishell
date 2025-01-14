@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/14 09:54:49 by pmorello          #+#    #+#             */
-/*   Updated: 2025/01/14 00:15:50 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/01/14 09:52:36 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@ void	swap(char **str1, char **str2);
 int		export_count(char **env);
 int		check_export_var(char *str);
 char	*export_env_value(char *args, int n);
+int		check_option(char *str, char *cmd);
 
 static char	**sort_array(char **s_env, int o, int n)
 {
@@ -110,6 +111,9 @@ int	ft_export(char **args, t_env *env)
 	err = 0;
 	if (args[1] == NULL)
 		return (print_sorted(env, env_size(env)));
+	err = check_option(args[1], "export");
+	if (err == 2)
+		return (err);
 	while (args[i])
 	{
 		if (check_export_var(args[i]) == 0)
