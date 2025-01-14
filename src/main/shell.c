@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/07 15:12:52 by mfleury           #+#    #+#             */
-/*   Updated: 2025/01/13 23:22:33 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/01/14 10:40:45 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,7 @@ static t_shell	*fill_sh(char *line, t_terms *tcap, t_env *env, int l_status)
 		i++;
 	}
 	if (sh->bracket[1] != sh->bracket[0])
-		return (set_gstatus(206), NULL);
+		return (free_sh(sh->head), set_gstatus(206), NULL);
 	return (sh->head);
 }
 
