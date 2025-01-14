@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/18 17:20:19 by mfleury           #+#    #+#             */
-/*   Updated: 2025/01/11 01:20:08 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/01/14 18:05:47 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,4 +79,18 @@ int	get_fdout_redir(t_pipe *p)
 	if (fd == -2)
 		fd = STDOUT_FILENO;
 	return (fd);
+}
+
+char	find_next_token(char *line)
+{
+	int	i;
+
+	i = 0;
+	while (line[i] != '\0')
+	{
+		if (line[i] == ' ' || line[i] == '<' || line[i] == '>')
+			return (line[i]);
+		i++;
+	}
+	return (line[i]);
 }

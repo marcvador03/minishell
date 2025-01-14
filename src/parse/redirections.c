@@ -6,11 +6,12 @@
 /*   By: mfleury <mfleury@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/10 08:52:08 by mfleury           #+#    #+#             */
-/*   Updated: 2025/01/13 16:25:14 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/01/14 18:49:02 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+char		find_next_token(char *line);
 
 static char	*get_rd_check(char *line, char *res)
 {
@@ -87,13 +88,15 @@ static char	*create_redir_init(t_pipe *p, int i, char *line)
 {
 	char	*t_redirs[2];
 	int		len[2];
+	char	c;
 
 	p->rd[i] = get_rd(line);
 	len[0] = ft_strlen(p->rd[i]);
 	t_redirs[0] = ft_strnstr(line, p->rd[i], ft_strlen(line));
 	ft_memset(t_redirs[0], ' ', len[0]);
 	t_redirs[0] = t_redirs[0] + sh_skip(t_redirs[0], ' ');
-	len[1] = ft_strchr(t_redirs[0], ' ') - t_redirs[0];
+	c = find_next_token(t_redirs[0] + len[0]);
+	len[1] = ft_strchr(t_redirs[0], c) - t_redirs[0];
 	t_redirs[1] = ft_substr(line, t_redirs[0] - line, len[1]);
 	if (t_redirs[1] == NULL)
 		return (flush_errors("", -1), NULL);
