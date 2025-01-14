@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/17 15:39:35 by mfleury           #+#    #+#             */
-/*   Updated: 2025/01/13 21:41:37 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/01/14 13:24:40 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,7 @@ static int	exec_syscmd_multipl(char *cmd, char **args, t_env *env, char **env2)
 
 	t_cmd = get_full_path(cmd, env);
 	if (t_cmd == NULL)
-		return (g_status);
+		return (free_s(t_cmd), g_status);
 	errnum = check_directory(t_cmd);
 	if (errnum != 0)
 		return (free_s(t_cmd), errnum);
@@ -76,7 +76,7 @@ static int	exec_syscmd_single(char *cmd, char **args, t_env *env, char **env2)
 	init_signal(0, 0);
 	t_cmd = get_full_path(cmd, env);
 	if (t_cmd == NULL)
-		return (g_status);
+		return (free_s(t_cmd), g_status);
 	wstatus = check_directory(t_cmd);
 	if (wstatus != 0)
 		return (free_s(t_cmd), wstatus);
