@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/10 08:52:08 by mfleury           #+#    #+#             */
-/*   Updated: 2025/01/15 16:52:57 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/01/15 22:59:01 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,7 +95,7 @@ static char	*create_redir_init(t_pipe *p, int i, char *line)
 	t_redirs[0] = ft_strnstr(line, p->rd[i], ft_strlen(line));
 	ft_memset(t_redirs[0], ' ', len[0]);
 	t_redirs[0] = t_redirs[0] + sh_skip(t_redirs[0], ' ');
-	if (ft_strlen(t_redirs[0]) < (size_t)len[0])
+	if (ft_strlen(t_redirs[0]) == 0)
 		return (flush_errors("", 203), NULL);
 	c = find_next_token(t_redirs[0] + len[0]);
 	len[1] = ft_strchr(t_redirs[0], c) - t_redirs[0];
