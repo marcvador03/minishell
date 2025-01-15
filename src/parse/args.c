@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/02 18:52:16 by mfleury           #+#    #+#             */
-/*   Updated: 2025/01/14 16:06:34 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/01/15 10:35:00 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,12 +77,30 @@ static int	finish_args_creation(t_pipe *p, t_env *env, char ***args, int n)
 	return (0);
 }
 
-char	**create_args(t_pipe *p, t_env *env, char *t_line)
+char	*create_args_loop(char **t_line)
+{
+	char *arg;
+	
+	arg = get_args(*t_line);
+	if (arg == NULL)
+		return (flush_errors("", 202), NULL);
+	*t_line = *t_line + ft_strlen(arg);
+	//args[i] = expand_env(env, args[i], 1, p->sh->l_status);
+	arg = sh_trim_strings(arg);
+	if (arg == NULL)
+		return (NULL);
+	return (arg);
+}
+
+char	**create_args(t_pipe *p, t_env *env)
 {
 	char	**args;
 	int		i;
 	int		n;
+	char	*t_line;
 
+	p->p_line = expand_env(env, p->p_line, 1, p->sh->l_status);
+	t_line = p->p_line + sh_skip(p->p_line, ' ');
 	n = count_args(t_line);
 	if (n == 0)
 		p->empty_arg = 1;
@@ -92,12 +110,7 @@ char	**create_args(t_pipe *p, t_env *env, char *t_line)
 	i = 0;
 	while (i < n)
 	{
-		args[i] = get_args(t_line);
-		if (args[i] == NULL)
-			return (free_d(args), flush_errors("", 202), NULL);
-		t_line = t_line + ft_strlen(args[i]);
-		args[i] = expand_env(env, args[i], 1, p->sh->l_status);
-		args[i] = sh_trim_strings(args[i]);
+		args[i] = create_args_loop(&t_line);
 		if (args[i++] == NULL)
 			return (free_d(args), NULL);
 	}

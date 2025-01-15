@@ -6,14 +6,14 @@
 /*   By: mfleury <mfleury@student.42barcelona.      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/28 13:53:58 by mfleury           #+#    #+#             */
-/*   Updated: 2025/01/14 22:38:58 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/01/15 10:26:12 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
 char	**create_redirs(t_pipe *p, t_env *env);
-char	**create_args(t_pipe *p, t_env *env, char *t_line);
+char	**create_args(t_pipe *p, t_env *env);
 int		get_fds_redir(t_pipe *p);
 int		close_redir_fd_mult(t_pipe *p);
 
@@ -44,13 +44,10 @@ int	count_pipes(char *line)
 
 static int	fill_in_pipe(t_pipe *p, t_env *env)
 {
-	char	*t_line;
-	
 	p->redirs = create_redirs(p, env);
 	if (p->redirs == NULL)
 		return (2);
-	t_line = p->p_line + sh_skip(p->p_line, ' ');
-	p->args = create_args(p, env, t_line);
+	p->args = create_args(p, env);
 	if (p->args == NULL)
 		return (flush_errors("", -1), -1);
 	if (get_fds_redir(p) == -1)
