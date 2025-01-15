@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/02 18:58:50 by mfleury           #+#    #+#             */
-/*   Updated: 2025/01/15 21:22:35 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/01/15 23:58:35 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,8 +65,8 @@ static int	run_parent(t_pipe *p)
 	{
 		pid = waitpid(0, &wstatus, 0);
 		main_cmd_return(p, wstatus, pid);
-		if (p->p_status == 125)
-			p->p_status = 127;
+		if (p->p_status == 125 || p->p_status == 124)
+			p->p_status = p->p_status + 2;
 		p = p->next;
 	}
 	rl_replace_line("", 0);
@@ -95,8 +95,8 @@ int	single_cmd(t_pipe *p, t_env *env)
 		return (close_redir_fd_single(p), g_status);
 	if (p->args[0] != NULL)
 		exec_cmd(p->args[0], p->args, p, env);
-	if (p->p_status == 125)
-		p->p_status = 127;
+	if (p->p_status == 125 || p->p_status == 124)
+		p->p_status = p->p_status + 2;
 	close_redir_fd_single(p);
 	rl_replace_line("", 0);
 	rl_on_new_line();

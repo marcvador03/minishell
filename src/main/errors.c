@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/16 16:32:42 by mfleury           #+#    #+#             */
-/*   Updated: 2025/01/15 14:51:47 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/01/16 00:00:30 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,8 @@ static void	custom_errors1(char *cmd, int errnum)
 		ft_putendl_fd(E_011, STDERR_FILENO);
 	if (errnum == 12)
 		ft_putendl_fd(E_012, STDERR_FILENO);
+	if (errnum == 13)
+		ft_putendl_fd(E_013, STDERR_FILENO);
 	g_status = 1;
 }
 
@@ -79,17 +81,21 @@ int	flush_errors(char *cmd, int err_sig)
 {
 	if (err_sig == -1)
 	{
-		g_status = 1;
 		ft_putstr_fd("minishell: ", STDERR_FILENO);
 		perror(cmd);
+		g_status = 1;
+		if (errno == 13)
+			g_status = 124;
 	}
-	else if (err_sig > 2 && err_sig < 125)
+	else if (err_sig > 2 && err_sig < 124)
 		custom_errors1(cmd, err_sig);
-	else if (err_sig > 200 && err_sig < 256)
+	else if (err_sig > 200 && err_sig < 255)
 		custom_errors2(cmd, err_sig);
 	else if (err_sig >= 125 && err_sig < 128)
 		custom_errors3(cmd, err_sig);
 	else if (err_sig == 1)
 		g_status = 1;
+	/*else if (err_sig != 0)
+		ft_putstr_fd("minishell: unknown error", STDERR_FILENO);*/
 	return (g_status) ;
 }

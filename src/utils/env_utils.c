@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/15 12:00:56 by mfleury           #+#    #+#             */
-/*   Updated: 2025/01/15 16:04:38 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/01/16 00:14:46 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,7 @@ char	**get_env_array(t_env *env)
 
 static int	get_full_path_check(char *arg0, char **cmd_out)
 {
-	if (access(arg0, X_OK) == 0)
+	if (access(arg0, R_OK) == 0)
 	{
 		*cmd_out = ft_strdup(arg0);
 		return (-1);
@@ -91,9 +91,29 @@ char	*get_full_path(char *arg0, t_env *env)
 		cmd_out = ft_strjoin(paths[i++], cmd_in);
 		if (cmd_out == NULL)
 			return (free_d(paths), free_s(cmd_in), set_gstatus(202), NULL);
-		if (access(cmd_out, X_OK) == 0)
+		if (access(cmd_out, R_OK) == 0)
 			return (free_d(paths), free_s(cmd_in), cmd_out);
+		g_status = errno;
 		free_s(cmd_out);
 	}
 	return (free_d(paths), free_s(cmd_in), set_gstatus(127), NULL);
 }
+
+int	check_directory(char *t_cmd)
+{
+	struct stat	statbuf;
+	int			n;
+
+	if (stat(t_cmd, &statbuf) != 0)
+	{
+		if (access(t_cmd, X_OK) == -1)
+			return (127);
+		else
+			return (0);
+	}
+	n = S_ISDIR(statbuf.st_mode);
+	if (n != 0)
+		return (126);
+	return (0);
+}
+

@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/18 12:17:52 by mfleury           #+#    #+#             */
-/*   Updated: 2025/01/13 18:22:18 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/01/15 23:49:43 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@
 # define E_010 ": export variable name is not valid"
 # define E_011 ": unset variable name is not valid"
 # define E_012 ": numeric argument expected"
+# define E_013 ": permission denied"
 # define E_125 ": no such file or directory"
 # define E_126 ": Is a directory"
 # define E_127 ": command not found"
