@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/12 01:02:14 by mfleury           #+#    #+#             */
-/*   Updated: 2025/01/14 10:41:56 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/01/15 20:28:04 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,7 @@ t_shell	*sh_lstnew(char *line, t_env *env)
 	ptr->next = NULL;
 	ptr->head = ptr;
 	ptr->env = env;
+	ptr->l_status = g_status;
 	if (get_next_token(ptr, line) != 0)
 		return (NULL);
 	return (ptr);

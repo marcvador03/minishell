@@ -6,13 +6,13 @@
 /*   By: mfleury <mfleury@student.42barcelona.      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 10:01:23 by mfleury           #+#    #+#             */
-/*   Updated: 2025/01/15 14:30:43 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/01/15 20:27:22 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	start_shell(t_env *env, t_terms *tcap, int l_status);
+int	start_shell(t_env *env, t_terms *tcap);
 int	close_redir_fd_mult(t_pipe *p);
 int	close_redir_fd_single(t_pipe *p);
 
@@ -102,7 +102,7 @@ int	main(int argc, char *argv[], char *envp[])
 		exit_minishell_error(NULL, 209, env);
 	while (1)
 	{
-		start_shell(env, &tcap, g_status);
+		start_shell(env, &tcap);
 		rl_on_new_line();
 	}
 	return (0);

@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/07 14:31:45 by mfleury           #+#    #+#             */
-/*   Updated: 2025/01/14 16:06:14 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/01/15 20:18:12 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,7 +67,7 @@ static int	exec_token_fork(t_shell *sh, int level)
 		flush_errors("", -1);
 	if (pid == 0)
 		exit(execute_tokens(sh, ++level));
-	wait(&wstatus);
+	waitpid(pid, &wstatus, 0);
 	if (WIFEXITED(wstatus))
 		status = WEXITSTATUS(wstatus);
 	return (status);
@@ -106,7 +106,7 @@ int	execute_tokens(t_shell *sh, int level)
 		if (sh != NULL)
 			sh->l_status = status;
 	}
-	return (status);
+	return (set_gstatus(0), status);
 }
 
 /*int	execute_tokens(t_shell *sh, int i, int level)

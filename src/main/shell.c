@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/07 15:12:52 by mfleury           #+#    #+#             */
-/*   Updated: 2025/01/15 17:01:00 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/01/15 20:27:25 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,15 +107,16 @@ int	start_shell(t_env *env, t_terms *tcap)
 	if (line == NULL)
 		exit_minishell_error(sh, 200, env);
 	if (check_open_quotes(line) == -1)
-		return (free_s(line), flush_errors("", 201), g_status);
+		return (free_s(line), flush_errors("", 201), 0);
 	sh = fill_sh(line, tcap, env/*, g_status*/);
 	if (sh == NULL)
-		return (free_s(line), flush_errors("", g_status), g_status);
+		return (free_s(line), flush_errors("", g_status), 0);
 	free_s(line);
 	head = sh->head;
 	head->l_status = g_status;
+	g_status = 0;
 	if (sh_check_empty(sh->s_line) == -1)
 		return (free_sh(head), 0);
 	g_status = execute_tokens(sh, 0);
-	return (free_sh(head), g_status);
+	return (free_sh(head), 0);
 }
