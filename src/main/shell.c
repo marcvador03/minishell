@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/07 15:12:52 by mfleury           #+#    #+#             */
-/*   Updated: 2025/01/14 23:37:04 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/01/15 17:01:00 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,7 @@ static t_shell	*fill_sh(char *line, t_terms *tcap, t_env *env/*, int l_status*/)
 		return (set_gstatus(204), NULL);
 	s_bracket[0] = 0;
 	s_bracket[1] = 0;
-	while (i++ < n)
+	while (i < n)
 	{
 		sh = fill_sh_loop(sh, env, line);
 		if (sh == NULL || fill_sh_init(sh, tcap, &s_bracket/*, l_status*/) != 0)

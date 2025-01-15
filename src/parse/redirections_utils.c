@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/18 17:20:19 by mfleury           #+#    #+#             */
-/*   Updated: 2025/01/14 22:51:56 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/01/15 16:48:43 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -145,6 +145,8 @@ char	find_next_token(char *line)
 {
 	int	i;
 
+	if (line == NULL)
+		return ('\0');
 	i = 0;
 	while (line[i] != '\0')
 	{
