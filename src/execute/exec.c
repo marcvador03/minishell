@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/17 15:39:35 by mfleury           #+#    #+#             */
-/*   Updated: 2025/01/15 15:53:01 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/01/15 21:33:26 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,7 +95,7 @@ static int	exec_syscmd_single(t_pipe *p, t_env *env, char **env2)
 		exit(execve(t_cmd, p->args, env2));
 	pid = waitpid(p->pid, &wstatus, 0);
 	main_cmd_return(p, wstatus, pid);
-	return (free_s(t_cmd), 0);
+	return (free_s(t_cmd), p->p_status);
 }
 
 int	exec_cmd(char *cmd, char **args, t_pipe *p, t_env *env)
@@ -112,12 +112,12 @@ int	exec_cmd(char *cmd, char **args, t_pipe *p, t_env *env)
 	if (env_arr == NULL)
 		return (g_status);
 	if (x != -1)
-	{
 		wstatus = call_cmd[x](args, env);
-		p->p_status = wstatus;
-	}
 	else if (p->sh->p_count == 1)
-		wstatus = exec_syscmd_single(p, env, env_arr);
+	{
+		exec_syscmd_single(p, env, env_arr);
+		return (free_d(env_arr), flush_errors(cmd, p->p_status), p->p_status);
+	}	
 	else
 		wstatus = exec_syscmd_multipl(cmd, args, env, env_arr);
 	p->p_status = flush_errors(cmd, wstatus);
