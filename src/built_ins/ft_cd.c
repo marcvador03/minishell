@@ -6,11 +6,12 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/14 09:20:49 by pmorello          #+#    #+#             */
-/*   Updated: 2025/01/14 14:32:53 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/01/15 16:23:39 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+int	check_cd_option(char *str);
 
 char	*h_abs_path(const char *path)
 {
@@ -48,7 +49,7 @@ char	*old_path(t_env *env)
 
 	old_path = sh_getenv(env, "OLDPWD");
 	if (old_path == NULL || *old_path == '\0')
-		return (set_gstatus(9), NULL);
+		return (flush_errors("cd", 9), NULL);
 	return (ft_strdup(old_path));
 }
 
@@ -62,7 +63,7 @@ char	*get_target_path(char **args, t_env *env)
 	{
 		home = sh_getenv(env, "HOME");
 		if (home == NULL || *home == '\0')
-			return (set_gstatus(8), NULL);
+			return (flush_errors("cd", 8), NULL);
 		return (h_abs_path(home));
 	}
 	if (path[0] == '-' && path[1] == '\0')
@@ -79,11 +80,13 @@ int	ft_cd(char **args, t_env *env)
 	char	*cur_path;
 
 	if (args[1] != NULL && args[2] != NULL)
-		return (set_gstatus(7), g_status);
+		return (flush_errors("cd", 7), g_status);
+	if (check_cd_option(args[1]) == 2)
+		return (set_gstatus(2), 2);
 	cur_path = getcwd(NULL, 0);
 	if (cur_path == NULL)
 	{
-		flush_errors("cd", -1);
+		flush_errors("cd/getcwd", -1);
 		cur_path = ft_strdup(sh_getenv(env, "PWD"));
 	}
 	new_path = get_target_path(args, env);
@@ -95,7 +98,7 @@ int	ft_cd(char **args, t_env *env)
 	free_s(new_path);
 	new_path = getcwd(NULL, 0);
 	if (new_path == NULL)
-		flush_errors("cd", -1);
+		flush_errors("cd/getcwd", -1);
 	sh_updateenv(env, ft_strdup("PWD"), new_path);
-	return (0);
+	return (g_status);
 }

@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/02 18:58:50 by mfleury           #+#    #+#             */
-/*   Updated: 2025/01/14 16:45:34 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/01/15 14:22:22 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,7 +92,7 @@ int	single_cmd(t_pipe *p, t_env *env)
 	if (open_redir_fd(p) == -1)
 		return (close_redir_fd_single(p), g_status);
 	if (p->args[0] != NULL)
-		p->p_status = exec_cmd(p->args[0], p->args, p, env);
+		exec_cmd(p->args[0], p->args, p, env);
 	close_redir_fd_single(p);
 	rl_replace_line("", 0);
 	rl_on_new_line();

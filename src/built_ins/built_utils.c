@@ -6,7 +6,7 @@
 /*   By: pmorello <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/14 10:05:20 by pmorello          #+#    #+#             */
-/*   Updated: 2025/01/14 09:52:20 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/01/15 16:23:39 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,3 +65,17 @@ char	*export_env_value(char *args, int n)
 		res = &args[n + 1];
 	return (res);
 }
+
+int	check_cd_option(char *str)
+{
+	if (str == NULL)
+		return (0);
+	if (str[0] == '-' && str[1] != '\0')
+	{
+		printf("minishell: %s: '%s': invalid option\n", "cd", str);
+		return (2);
+	}
+	return (0);
+}
+
+

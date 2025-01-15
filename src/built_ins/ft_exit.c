@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/13 15:34:22 by mfleury           #+#    #+#             */
-/*   Updated: 2025/01/11 19:19:05 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/01/15 16:38:35 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,8 @@ static int	check_overflow(char *str, int *status)
 	char	*tmp;
 	t_ll	n;
 
+	if (str[0] == '+')
+		str = str + 1;
 	n = ll_atoi(str);
 	tmp = ll_itoa(n);
 	if (ft_strncmp(str, tmp, ft_strlen(tmp)) != 0)
@@ -61,9 +63,8 @@ int	ft_exit(t_pipe *p, char **args, t_env *env)
 			return (exit_minishell(p, env), p->p_status);
 		else if (args[1] != NULL && args[2] != NULL)
 		{
-			ft_putstr_fd("minishell: exit: ", 2);
-			ft_putendl_fd(E_007, STDERR_FILENO);
-			return (1);
+			p->p_status = flush_errors("exit", 7);
+			return (p->p_status);
 		}
 		else
 			p->p_status = ft_atoi(args[1]);

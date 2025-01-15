@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/08 20:31:15 by mfleury           #+#    #+#             */
-/*   Updated: 2025/01/14 14:25:39 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/01/15 15:28:49 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ static char	*replace_home_path(char *home)
 
 	ex_path = getcwd(NULL, 0);
 	if (ex_path == NULL)
-		return (flush_errors("prompt", 202), NULL);
+		return (flush_errors("prompt", -1), NULL);
 	if (home == NULL || *home == '\0')
 		return (ex_path);
 	len[0] = ft_strlen(ex_path);
