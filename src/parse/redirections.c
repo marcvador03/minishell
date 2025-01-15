@@ -6,12 +6,13 @@
 /*   By: mfleury <mfleury@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/10 08:52:08 by mfleury           #+#    #+#             */
-/*   Updated: 2025/01/15 22:59:01 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/01/15 23:11:42 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 char		find_next_token(char *line);
+int			get_rd_flag(char *rd);
 
 static char	*get_rd_check(char *line, char *res)
 {
@@ -84,7 +85,7 @@ static int	count_redir(char *line)
 	return (++n);
 }
 
-static char	*create_redir_init(t_pipe *p, int i, char *line)
+static char	*create_redir_init(t_pipe *p, int i, char *line, t_env *env)
 {
 	char	*t_redirs[2];
 	int		len[2];
@@ -106,6 +107,8 @@ static char	*create_redir_init(t_pipe *p, int i, char *line)
 	p->p_line = line;
 	if (sh_check_empty(t_redirs[1]) == -1)
 		return (flush_errors("", 203), free_s(t_redirs[1]), NULL);
+	if (get_rd_flag(p->rd[i]) != 4)
+		t_redirs[1] = expand_env(env, t_redirs[1], 1, p->sh->l_status);
 	return (t_redirs[1]);
 }
 
@@ -127,10 +130,9 @@ char	**create_redirs(t_pipe *p, t_env *env)
 	i = -1;
 	while (++i < n)
 	{
-		redirs[i] = create_redir_init(p, i, t_line[0]);
+		redirs[i] = create_redir_init(p, i, t_line[0], env);
 		if (redirs[i] == NULL)
 			return (free_d(redirs), NULL);
-		redirs[i] = expand_env(env, redirs[i], 1, p->sh->l_status);
 		redirs[i] = sh_trim_strings(redirs[i]);
 		if (redirs[i] == NULL)
 			return (free_d(redirs), NULL);

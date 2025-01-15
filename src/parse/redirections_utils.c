@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/18 17:20:19 by mfleury           #+#    #+#             */
-/*   Updated: 2025/01/15 16:48:43 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/01/15 23:04:35 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 int	init_heredoc(char *line);
 
-static int	get_rd_flag(char *rd)
+int	get_rd_flag(char *rd)
 {
 	if (ft_strncmp(rd, ">", ft_strlen(rd)) == 0)
 		return (1);
