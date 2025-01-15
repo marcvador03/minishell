@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/07 15:12:52 by mfleury           #+#    #+#             */
-/*   Updated: 2025/01/15 20:27:25 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/01/15 20:34:32 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,7 +113,6 @@ int	start_shell(t_env *env, t_terms *tcap)
 		return (free_s(line), flush_errors("", g_status), 0);
 	free_s(line);
 	head = sh->head;
-	head->l_status = g_status;
 	g_status = 0;
 	if (sh_check_empty(sh->s_line) == -1)
 		return (free_sh(head), 0);
