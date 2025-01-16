@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/17 15:39:35 by mfleury           #+#    #+#             */
-/*   Updated: 2025/01/16 00:20:19 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/01/16 10:26:03 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,7 +100,6 @@ int	exec_cmd(char *cmd, char **args, t_pipe *p, t_env *env)
 {
 	int			x;
 	t_func_arr	call_cmd[6];
-	//int			wstatus;
 	char		**env_arr;
 
 	if (ft_strncmp(cmd, "exit", max(ft_strlen(cmd), 4)) == 0)
@@ -112,14 +111,9 @@ int	exec_cmd(char *cmd, char **args, t_pipe *p, t_env *env)
 	if (x != -1)
 		p->p_status = call_cmd[x](args, env);
 	else if (p->sh->p_count == 1)
-	{
 		exec_syscmd_single(p, env, env_arr);
-		//return (free_d(env_arr), flush_errors(cmd, p->p_status), p->p_status);
-	}	
 	else
 		exec_syscmd_multiple(p, env, env_arr);
-		//wstatus = exec_syscmd_multipl(cmd, args, env, env_arr);
 	flush_errors(cmd, p->p_status);
-	//p->p_status = flush_errors(cmd, wstatus);
 	return (free_d(env_arr), p->p_status);
 }

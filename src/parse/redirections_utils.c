@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/18 17:20:19 by mfleury           #+#    #+#             */
-/*   Updated: 2025/01/15 23:04:35 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/01/16 10:28:47 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,7 @@ int	get_fds_redir(t_pipe *p)
 	int	i;
 	int	fd;
 	int	rd;
-	
+
 	i = 0;
 	fd = -2;
 	while (p->redirs[i] != NULL)
@@ -86,60 +86,6 @@ int	get_fds_redir(t_pipe *p)
 	}
 	return (fd);
 }
-
-/*int	get_fdin_redir(t_pipe *p)
-{
-	int	i;
-	int	fd;
-	int	rd;
-
-	i = 0;
-	fd = -2;
-	while (p->redirs[i] != NULL)
-	{
-		rd = get_rd_flag(p->rd[i]);
-		if (fd != -2 && (rd == 2 || rd == 4))
-			close(fd);
-		if (rd == 2)
-			fd = open(p->redirs[i], O_RDONLY, 0700);
-		if (fd == -1)
-			return (flush_errors(p->redirs[i], -1), 0);
-		else if (rd == 4)
-			fd = init_heredoc(p->redirs[i]);
-		if (fd == -1)
-			return (-1);
-		i++;
-	}
-	if (fd == -2)
-		fd = STDIN_FILENO;
-	return (fd);
-}*/
-
-/*int	get_fdout_redir(t_pipe *p)
-{
-	int	i;
-	int	fd;
-	int	rd;
-
-	i = 0;
-	fd = -2;
-	while (p->redirs[i] != NULL)
-	{
-		rd = get_rd_flag(p->rd[i]);
-		if (fd != -2 && (rd == 1 || rd == 3))
-			close(fd);
-		if (rd == 3)
-			fd = open(p->redirs[i], O_CREAT | O_RDWR | O_APPEND, 0644);
-		else if (rd == 1)
-			fd = open(p->redirs[i], O_CREAT | O_RDWR | O_TRUNC, 0644);
-		if (fd == -1)
-			return (flush_errors(p->redirs[i], -1), -1);
-		i++;
-	}
-	if (fd == -2)
-		fd = STDOUT_FILENO;
-	return (fd);
-}*/
 
 char	find_next_token(char *line)
 {

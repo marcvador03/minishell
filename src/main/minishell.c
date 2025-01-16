@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 10:01:23 by mfleury           #+#    #+#             */
-/*   Updated: 2025/01/15 20:27:22 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/01/16 10:25:02 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,6 @@ int	main_cmd_return(t_pipe *p, int wstatus, pid_t pid)
 		{
 			p->p_status = WTERMSIG(wstatus) + 128;
 			close_redir_fd_mult(p);
-			//write(STDIN_FILENO, "\n", 1);
 			break ;
 		}
 		p = p->next;

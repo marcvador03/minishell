@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/28 13:53:58 by mfleury           #+#    #+#             */
-/*   Updated: 2025/01/15 10:26:12 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/01/16 10:28:09 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,12 +52,6 @@ static int	fill_in_pipe(t_pipe *p, t_env *env)
 		return (flush_errors("", -1), -1);
 	if (get_fds_redir(p) == -1)
 		return (close_redir_fd_mult(p->head), 2);
-	/*p->r_fd[INPUT] = get_fdin_redir(p);
-	if (p->r_fd[INPUT] == -1)
-		return (2);
-	p->r_fd[OUTPUT] = get_fdout_redir(p);
-	if (p->r_fd[OUTPUT] == -1)
-		return (2);*/
 	return (0);
 }
 

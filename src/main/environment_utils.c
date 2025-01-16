@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/17 09:53:05 by mfleury           #+#    #+#             */
-/*   Updated: 2025/01/15 12:01:33 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/01/16 10:24:38 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,5 +79,3 @@ t_env	*fill_env(char *envp[])
 	env = fill_default_session(env->head);
 	return (env->head);
 }
-
-

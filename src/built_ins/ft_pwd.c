@@ -6,11 +6,12 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/14 09:44:34 by pmorello          #+#    #+#             */
-/*   Updated: 2025/01/14 09:54:06 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/01/16 10:26:53 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
 int		check_option(char *str, char *cmd);
 
 int	ft_pwd(char **args, t_env *env)

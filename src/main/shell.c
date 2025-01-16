@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/07 15:12:52 by mfleury           #+#    #+#             */
-/*   Updated: 2025/01/15 20:34:32 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/01/16 10:23:51 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,9 +18,8 @@ int		check_open_quotes(char *str);
 int		execute_tokens(t_shell *sh, int level);
 char	*create_prompt(t_env *env);
 
-static int	fill_sh_init(t_shell *tmp, t_terms *tcap, int (*x)[2]/*, int l_status*/)
+static int	fill_sh_init(t_shell *tmp, t_terms *tcap, int (*x)[2])
 {
-	//tmp->s_line = expand_env(tmp->env, tmp->s_line, 1, l_status);
 	if (tmp->s_line == NULL)
 		return (set_gstatus(202), 202);
 	tmp->tcap = tcap;
@@ -33,7 +32,7 @@ static int	fill_sh_init(t_shell *tmp, t_terms *tcap, int (*x)[2]/*, int l_status
 static t_shell	*fill_sh_loop(t_shell *sh, t_env *env, char *line)
 {
 	char	*t_line;
-	
+
 	t_line = line + sh_skip(line, ' ');
 	if (sh == NULL)
 		sh = sh_lstnew(t_line, env);
@@ -44,7 +43,7 @@ static t_shell	*fill_sh_loop(t_shell *sh, t_env *env, char *line)
 	return (sh);
 }
 
-static t_shell	*fill_sh(char *line, t_terms *tcap, t_env *env/*, int l_status*/)
+static t_shell	*fill_sh(char *line, t_terms *tcap, t_env *env)
 {
 	int		i;
 	int		s_bracket[2];
@@ -61,7 +60,7 @@ static t_shell	*fill_sh(char *line, t_terms *tcap, t_env *env/*, int l_status*/)
 	while (i < n)
 	{
 		sh = fill_sh_loop(sh, env, line);
-		if (sh == NULL || fill_sh_init(sh, tcap, &s_bracket/*, l_status*/) != 0)
+		if (sh == NULL || fill_sh_init(sh, tcap, &s_bracket) != 0)
 			return (NULL);
 		i++;
 	}
@@ -108,7 +107,7 @@ int	start_shell(t_env *env, t_terms *tcap)
 		exit_minishell_error(sh, 200, env);
 	if (check_open_quotes(line) == -1)
 		return (free_s(line), flush_errors("", 201), 0);
-	sh = fill_sh(line, tcap, env/*, g_status*/);
+	sh = fill_sh(line, tcap, env);
 	if (sh == NULL)
 		return (free_s(line), flush_errors("", g_status), 0);
 	free_s(line);

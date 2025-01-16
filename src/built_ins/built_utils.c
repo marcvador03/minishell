@@ -6,7 +6,7 @@
 /*   By: pmorello <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/14 10:05:20 by pmorello          #+#    #+#             */
-/*   Updated: 2025/01/15 16:23:39 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/01/16 10:26:26 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ int	check_option(char *str, char *cmd)
 int	check_export_var(char *str)
 {
 	int	i;
-	
+
 	if (ft_isdigit(str[0]) == 1 || str[0] == '=' || str[0] == '\0')
 	{
 		printf("minishell: export: '%s': not a valid identifier\n", str);
@@ -77,5 +77,3 @@ int	check_cd_option(char *str)
 	}
 	return (0);
 }
-
-

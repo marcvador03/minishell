@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/25 13:59:57 by mfleury           #+#    #+#             */
-/*   Updated: 2025/01/14 16:56:39 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/01/16 10:25:31 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,6 @@ int	open_redir_fd(t_pipe *p)
 
 int	close_redir_fd_mult(t_pipe *p)
 {
-	
 	p = p->head;
 	while (p != NULL)
 	{

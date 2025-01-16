@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/11 16:34:27 by mfleury           #+#    #+#             */
-/*   Updated: 2025/01/15 12:10:44 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/01/16 10:29:46 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ static char	*get_dollar_in(char *line)
 			return (NULL);
 		return (res);
 	}
-	while ((ft_isalnum(line[i]) == 1 || line[i] =='_') && line[i] != '\0')
+	while ((ft_isalnum(line[i]) == 1 || line[i] == '_') && line[i] != '\0')
 		i++;
 	res = ft_substr(line + 1, 0, i - 1);
 	if (res == NULL)
@@ -61,7 +61,7 @@ static int	remove_dollar(char **line, int i, char *dollar_in, int *flag)
 		ft_memset(*line + i, ' ', 1);
 		return (0);
 	}
-	else if (/*flag != -1 && */((*line)[i + 1] == 34 || (*line)[i + 1] == 39))
+	else if (((*line)[i + 1] == 34 || (*line)[i + 1] == 39))
 	{
 		if ((*line)[i + 1] == 39)
 			*flag = *flag * (-1);

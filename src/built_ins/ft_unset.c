@@ -6,11 +6,12 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/14 11:23:34 by pmorello          #+#    #+#             */
-/*   Updated: 2025/01/14 09:54:38 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/01/16 10:26:58 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
 int		check_option(char *str, char *cmd);
 
 int	check_unset_var(char *str)

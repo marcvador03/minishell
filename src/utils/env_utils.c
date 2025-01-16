@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/15 12:00:56 by mfleury           #+#    #+#             */
-/*   Updated: 2025/01/16 00:14:46 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/01/16 10:31:03 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,7 @@ static int	get_full_path_check(char *arg0, char **cmd_out)
 		*cmd_out = ft_strdup(arg0);
 		return (-1);
 	}
-	else if(ft_strncmp(arg0, "", max(ft_strlen(arg0), 1)) == 0)
+	else if (ft_strncmp(arg0, "", max(ft_strlen(arg0), 1)) == 0)
 	{
 		*cmd_out = ft_strdup("");
 		return (-1);
@@ -116,4 +116,3 @@ int	check_directory(char *t_cmd)
 		return (126);
 	return (0);
 }
-

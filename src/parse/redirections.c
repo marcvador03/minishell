@@ -6,11 +6,12 @@
 /*   By: mfleury <mfleury@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/10 08:52:08 by mfleury           #+#    #+#             */
-/*   Updated: 2025/01/15 23:11:42 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/01/16 10:27:15 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
 char		find_next_token(char *line);
 int			get_rd_flag(char *rd);
 

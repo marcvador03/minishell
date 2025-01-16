@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/16 16:32:42 by mfleury           #+#    #+#             */
-/*   Updated: 2025/01/16 00:00:30 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/01/16 10:24:15 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,7 +95,5 @@ int	flush_errors(char *cmd, int err_sig)
 		custom_errors3(cmd, err_sig);
 	else if (err_sig == 1)
 		g_status = 1;
-	/*else if (err_sig != 0)
-		ft_putstr_fd("minishell: unknown error", STDERR_FILENO);*/
-	return (g_status) ;
+	return (g_status);
 }
