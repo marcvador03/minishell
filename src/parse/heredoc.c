@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/23 14:57:19 by mfleury           #+#    #+#             */
-/*   Updated: 2025/01/16 10:17:54 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/01/16 15:58:50 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,7 @@ int	init_heredoc(char *line)
 	int	fd;
 
 	init_signal(1, 1);
-	fd = open(".", O_WRONLY | O_CREAT | O_TRUNC | O_SYNC, 0600);
+	fd = open(".heredoc_tmp", O_WRONLY | O_CREAT | O_TRUNC | O_SYNC, 0600);
 	if (fd == -1)
 		return (flush_errors("heredoc", -1), -1);
 	pid = fork();
