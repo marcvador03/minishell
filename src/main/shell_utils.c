@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/12 01:02:14 by mfleury           #+#    #+#             */
-/*   Updated: 2025/01/15 20:28:04 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/01/16 17:36:43 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,4 +58,21 @@ t_shell	*sh_lstadd_back(t_shell **sh, char *line, t_env *env)
 		(*sh)->head = tmp->head;
 	}
 	return (tmp->next);
+}
+
+int	check_forbidden_c(char *line)
+{
+	int	i;
+
+	i = 0;
+	while (line[i] != 0)
+	{
+		if (line[i] == ';' || line[i] == 92 || line [i] == 10)
+		{
+			flush_errors("", 210);
+			return (-1);
+		}
+		i++;
+	}
+	return (0);
 }

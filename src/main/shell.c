@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/07 15:12:52 by mfleury           #+#    #+#             */
-/*   Updated: 2025/01/16 10:23:51 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/01/16 17:36:28 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 char	*get_tk(char *line);
 int		count_tokens(char *line);
 int		check_open_quotes(char *str);
-int		execute_tokens(t_shell *sh, int level);
+int		execute_tokens(t_shell *sh, int level, int status);
 char	*create_prompt(t_env *env);
 
 static int	fill_sh_init(t_shell *tmp, t_terms *tcap, int (*x)[2])
@@ -88,6 +88,8 @@ static char	*get_input(t_env *env, t_terms *tcap)
 	else if (ft_strlen(line) == 0 && line[0] == '\0')
 		return (free_s(prompt), free_s(line), get_input(env, tcap));
 	add_history(line);
+	if (check_forbidden_c(line) == -1)
+		return (free_s(prompt), free_s(line), get_input(env, tcap));
 	line2 = ft_strjoin("&&", line);
 	if (line2 == NULL)
 		return (set_gstatus(202), free_s(line), free_s(prompt), NULL);
@@ -115,6 +117,6 @@ int	start_shell(t_env *env, t_terms *tcap)
 	g_status = 0;
 	if (sh_check_empty(sh->s_line) == -1)
 		return (free_sh(head), 0);
-	g_status = execute_tokens(sh, 0);
+	g_status = execute_tokens(sh, 0, 0);
 	return (free_sh(head), 0);
 }

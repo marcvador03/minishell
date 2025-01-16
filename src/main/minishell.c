@@ -6,17 +6,17 @@
 /*   By: mfleury <mfleury@student.42barcelona.      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 10:01:23 by mfleury           #+#    #+#             */
-/*   Updated: 2025/01/16 10:25:02 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/01/16 17:24:34 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
+unsigned int	g_status = 0;
+
 int	start_shell(t_env *env, t_terms *tcap);
 int	close_redir_fd_mult(t_pipe *p);
 int	close_redir_fd_single(t_pipe *p);
-
-unsigned int	g_status = 0;
 
 int	main_cmd_return(t_pipe *p, int wstatus, pid_t pid)
 {
@@ -47,14 +47,15 @@ void	exit_minishell_error(t_shell *sh, int errnum, t_env *env)
 	int	cpyerr;
 
 	cpyerr = errnum;
-	if (sh != NULL)
+	if (sh != NULL && env != NULL)
 		unset_term_settings(sh->tcap, env);
-	ft_putstr_fd("minishell exited with error: ", 2);
+	ft_putstr_fd("minishell exited with error: ", STDERR_FILENO);
 	if (cpyerr < 200)
 		strerror(cpyerr);
 	else
-		flush_errors("", 200);
-	free_sh(sh);
+		flush_errors("", cpyerr);
+	if (sh != NULL)
+		free_sh(sh);
 	if (env != NULL)
 		free_env(env);
 	exit(2);
@@ -94,11 +95,11 @@ int	main(int argc, char *argv[], char *envp[])
 
 	if (isatty(STDIN_FILENO) == 0)
 		exit_minishell_error(NULL, errno, NULL);
+	if (argc > 1 || argv == NULL)
+		exit_minishell_error(NULL, 209, NULL);
 	env = fill_env(envp);
 	init_termcaps(&tcap, env);
 	set_term_settings(&tcap, env);
-	if (argc > 1 || argv == NULL)
-		exit_minishell_error(NULL, 209, env);
 	while (1)
 	{
 		start_shell(env, &tcap);

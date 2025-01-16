@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/12 00:48:00 by mfleury           #+#    #+#             */
-/*   Updated: 2025/01/13 10:39:50 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/01/16 18:17:08 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,12 @@ static char	*split_move(char *s, int cnt[4])
 
 	res = NULL;
 	if (cnt[0] != cnt[2])
-		res = ft_substr(s, cnt[0], cnt[2] - cnt[0] - 1);
+	{
+		//if (s[cnt[2]] != '\0')
+			res = ft_substr(s, cnt[0], cnt[2] - cnt[0] - 1);
+		//else
+		//	res = ft_substr(s, cnt[0], cnt[2] - cnt[0]);
+	}
 	return (res);
 }
 

@@ -6,7 +6,7 @@
 /*   By: pmorello <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 12:17:09 by pmorello          #+#    #+#             */
-/*   Updated: 2025/01/14 14:36:33 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/01/16 17:29:56 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,7 @@
 # endif
 
 extern unsigned int	g_status;
+
 /*Enum to match command names input with a number*/
 typedef enum cmd_enum
 {
@@ -163,6 +164,7 @@ void	exit_minishell_error(t_shell *sh, int status, t_env *env);
 int		main_cmd_return(t_pipe *p, int wstatus, pid_t pid);
 void	init_signal(int pid, int hd);
 int		flush_errors(char *cmd, int err_sig);
+int		check_forbidden_c(char *line);
 
 /* environment functions */
 char	*sh_getenv(t_env *env, char *str);

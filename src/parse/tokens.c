@@ -6,14 +6,14 @@
 /*   By: mfleury <mfleury@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/07 14:31:45 by mfleury           #+#    #+#             */
-/*   Updated: 2025/01/16 10:50:44 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/01/16 14:49:32 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
 int		count_brackets(t_shell *sh, char *line);
-int		execute_tokens(t_shell *sh, int level);
+int		execute_tokens(t_shell *sh, int level, int status);
 int		subshell(t_shell *sh);
 int		get_tk2(char *line);
 
@@ -39,22 +39,20 @@ int	get_next_token(t_shell *sh, char *line)
 	return (0);
 }
 
-static int	exec_token_fork(t_shell *sh, int level)
+static int	exec_token_fork(t_shell *sh, int level, int status)
 {
 	pid_t	pid;
 	int		wstatus;
-	int		status;
 
-	status = -1;
 	pid = fork();
 	if (pid == -1)
 		flush_errors("", -1);
 	if (pid == 0)
-		exit(execute_tokens(sh, ++level));
+		exit(execute_tokens(sh, ++level, status));
 	waitpid(pid, &wstatus, 0);
 	if (WIFEXITED(wstatus))
-		status = WEXITSTATUS(wstatus);
-	return (status);
+		return (WEXITSTATUS(wstatus));
+	return (-1);
 }
 
 static t_shell	*move_sh(t_shell *sh, int *status, int level)
@@ -62,21 +60,22 @@ static t_shell	*move_sh(t_shell *sh, int *status, int level)
 	int	i;
 
 	i = 0;
-	*status = exec_token_fork(sh, level);
+	*status = exec_token_fork(sh, level, *status);
 	sh = sh->next;
 	while (sh != NULL && sh->bracket[1] > i++)
 	{
 		sh->l_status = *status;
 		sh = sh->next;
 	}
+	if (sh != NULL)
+		sh->l_status = *status;
 	return (sh);
 }
 
-int	execute_tokens(t_shell *sh, int level)
+int	execute_tokens(t_shell *sh, int level, int status)
 {
-	int	status;
-
-	status = 0;
+	if (sh != sh->head)
+		status = sh->l_status;
 	while (sh != NULL)
 	{
 		while (sh != NULL && sh->bracket[0] > level)
@@ -87,6 +86,8 @@ int	execute_tokens(t_shell *sh, int level)
 		{
 			if ((sh->tk == 0 && status == 0) || (sh->tk == 1 && status != 0))
 				status = subshell(sh);
+			else if (level > 0)
+				exit (status);
 			sh->pipes = NULL;
 		}
 		if (sh->bracket[1] > 0 && level > 0)
