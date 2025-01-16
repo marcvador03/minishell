@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/18 09:19:54 by marvin            #+#    #+#             */
-/*   Updated: 2025/01/15 14:31:51 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/01/16 10:15:22 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,12 +47,11 @@ static void	signal_handler_heredoc(int sig)
 	if (sig == SIGINT)
 	{
 		g_status = sig + 128;
-		close(STDIN_FILENO);
 		write(STDERR_FILENO, "\n", 1);
 		exit(g_status);
 	}
-	else if (sig == SIGQUIT)
-		write(STDERR_FILENO, "\0", 1);
+	/*else if (sig == SIGQUIT)
+		write(STDERR_FILENO, "\0", 1);*/
 	return ;
 }
 
