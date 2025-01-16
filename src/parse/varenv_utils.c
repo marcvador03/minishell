@@ -6,11 +6,28 @@
 /*   By: mfleury <mfleury@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/02 16:48:32 by mfleury           #+#    #+#             */
-/*   Updated: 2025/01/15 12:15:12 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/01/16 19:08:39 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+/*static char	*concat(char *line, int len)
+{
+	char	*res;
+	int		i;
+
+	res = (char *)ft_calloc(sizeof(char), len + 2);
+	if (res == NULL)
+		return (NULL);
+	res[0] = 34;
+	i = 1;
+	ft_strlcat(res + 1, line, len);
+	res[len] = 34;
+	res[len + 1] = '\0';
+	free_s(line);
+	return (res);
+}*/
 
 char	*resize_line(char *line, char *out, char *in, int *i)
 {
@@ -18,6 +35,7 @@ char	*resize_line(char *line, char *out, char *in, int *i)
 	char	*tmp[3];
 	int		len[4];
 
+	//out = concat(out, ft_strlen(out));
 	len[0] = ft_strlen(in);
 	len[1] = ft_strlen(line);
 	len[2] = ft_strlen(out);
