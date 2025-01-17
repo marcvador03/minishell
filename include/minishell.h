@@ -6,7 +6,7 @@
 /*   By: pmorello <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 12:17:09 by pmorello          #+#    #+#             */
-/*   Updated: 2025/01/16 17:29:56 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/01/17 12:55:17 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,6 +61,14 @@ typedef enum cmd_enum
 typedef long long	t_ll;
 typedef struct s_shell \
 					t_shell;
+typedef struct s_quotes
+{
+	int					i;
+	int					j;
+	int					len;
+	int					flag;
+}	t_quotes;
+
 typedef struct s_env
 {
 	char				*varname;

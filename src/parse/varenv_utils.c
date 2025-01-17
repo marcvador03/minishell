@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/02 16:48:32 by mfleury           #+#    #+#             */
-/*   Updated: 2025/01/16 19:08:39 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/01/17 13:21:06 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,6 @@ char	*resize_line(char *line, char *out, char *in, int *i)
 	char	*tmp[3];
 	int		len[4];
 
-	//out = concat(out, ft_strlen(out));
 	len[0] = ft_strlen(in);
 	len[1] = ft_strlen(line);
 	len[2] = ft_strlen(out);
@@ -53,7 +52,7 @@ char	*resize_line(char *line, char *out, char *in, int *i)
 	return (free_s(tmp[0]), free_s(tmp[1]), free_s(tmp[2]), res);
 }
 
-int	ft_isalnum_plus(int c)
+/*int	ft_isalnum_plus(int c)
 {
 	if ((c >= 65 && c <= 90) || (c >= 97 && c <= 122))
 		return (1);
@@ -63,7 +62,7 @@ int	ft_isalnum_plus(int c)
 		return (1);
 	else
 		return (0);
-}
+}*/
 
 int	expand_env_strings(char *line, int i, int *flag)
 {

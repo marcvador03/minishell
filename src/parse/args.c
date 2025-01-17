@@ -6,13 +6,15 @@
 /*   By: mfleury <mfleury@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/02 18:52:16 by mfleury           #+#    #+#             */
-/*   Updated: 2025/01/16 18:36:23 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/01/17 18:36:46 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-static int	count_args(char *line)
+char	**parse_line(t_pipe *p, char *line);
+
+/*static int	count_args(char *line)
 {
 	int	n;
 	int	i;
@@ -98,6 +100,7 @@ char	**create_args(t_pipe *p, t_env *env)
 	int		n;
 	char	*t_line;
 
+	trim_input_line(p, p->p_line);
 	p->p_line = expand_env(env, p->p_line, 1, p->sh->l_status);
 	t_line = p->p_line + sh_skip(p->p_line, ' ');
 	n = count_args(t_line);
@@ -114,5 +117,28 @@ char	**create_args(t_pipe *p, t_env *env)
 			return (free_d(args), NULL);
 	}
 	finish_args_creation(p, env, &args, n);
+	return (args);
+}*/
+char	**create_args(t_pipe *p)
+{
+	char	**args;
+
+	args = parse_line(p, p->p_line);
+	if (args == NULL)
+		return (NULL);
+	/*n = count_args(p->p_line);
+	if (n == 0)
+		p->empty_arg = 1;
+	args = (char **)ft_calloc(sizeof(char *), n + 1);
+	if (args == NULL)
+		return (flush_errors("", -1), NULL);
+	i = 0;
+	while (i < n)
+	{
+		args[i] = create_args_loop(&p->p_line);
+		if (args[i++] == NULL)
+			return (free_d(args), NULL);
+	}
+	finish_args_creation(p, env, &args, n);*/
 	return (args);
 }
