@@ -6,13 +6,15 @@
 /*   By: mfleury <mfleury@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/02 18:52:16 by mfleury           #+#    #+#             */
-/*   Updated: 2025/01/18 00:36:52 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/01/18 16:55:30 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
 char	**parse_line(t_pipe *p, char *line);
+char	**get_sep_quotes(char *line);
+char	*trim_line_expand(t_pipe *p, char *line);
 
 /*static int	count_args(char *line)
 {
@@ -65,9 +67,9 @@ static char	*get_args(char *line)
 		i++;
 	}
 	return (ft_strdup(line));
-}
+}*/
 
-static int	finish_args_creation(t_pipe *p, t_env *env, char ***args, int n)
+/*static int	finish_args_creation(t_pipe *p, t_env *env, char ***args, int n)
 {
 	(*args)[n] = NULL;
 	if (n > 1)
@@ -77,9 +79,9 @@ static int	finish_args_creation(t_pipe *p, t_env *env, char ***args, int n)
 			p->exit = 1;
 	}
 	return (0);
-}
+}*/
 
-char	*create_args_loop(char **t_line)
+/*char	*create_args_loop(char **t_line)
 {
 	char	*arg;
 
@@ -123,26 +125,25 @@ char	**create_args(t_pipe *p)
 {
 	char	**args;
 	char	*tmp;
-	
+	int		i;
+
 	tmp = p->p_line;
 	p->p_line = ft_strtrim(p->p_line, " ");
 	free_s(tmp);
-	args = parse_line(p, p->p_line);
+	args = get_sep_quotes(p->p_line);
 	if (args == NULL)
-		return (NULL);
-	/*n = count_args(p->p_line);
-	if (n == 0)
-		p->empty_arg = 1;
-	args = (char **)ft_calloc(sizeof(char *), n + 1);
-	if (args == NULL)
-		return (flush_errors("", -1), NULL);
+		return (flush_errors("", 202), NULL);
 	i = 0;
-	while (i < n)
+	while (args[i] != NULL)
 	{
-		args[i] = create_args_loop(&p->p_line);
-		if (args[i++] == NULL)
-			return (free_d(args), NULL);
+		args[i] = trim_line_expand(p, args[i]);
+		i++;
 	}
-	finish_args_creation(p, env, &args, n);*/
+	if (args[0] != NULL)
+	{
+		sh_updateenv(p->sh->env, ft_strdup("_"), ft_strdup((args)[0]));
+		if (ft_strncmp(args[0], "exit", max(ft_strlen(args[0]), 4)) == 0)
+			p->exit = 1;
+	}
 	return (args);
 }

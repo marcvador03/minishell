@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/17 12:19:07 by mfleury           #+#    #+#             */
-/*   Updated: 2025/01/18 10:57:12 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/01/18 16:55:05 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,6 @@ static char	*resize_line(char *line, char *out, char *in, int *i)
 	tmp[2] = ft_strjoin(tmp[0], out);
 	if (tmp[2] == NULL)
 		return (NULL);
-	//*i = max(0, ft_strlen(tmp[2]) - 1);
 	*i += len[2];
 	res = ft_strjoin(tmp[2], tmp[1]);
 	if (res == NULL)
@@ -100,7 +99,7 @@ char	*expand_variable(t_pipe *p, char *line, int *i)
 		dollar_out = ft_itoa(p->sh->l_status);
 	else if (dollar_in[0] == '_' && dollar_in[1] == '\0')
 		dollar_out = ft_strdup(sh_getenv(p->sh->env, "_"));
-	else	
+	else
 		dollar_out = expand_getenv(dollar_in, p->sh->env);
 	res = resize_line(line, dollar_out, dollar_in, i);
 	if (res == NULL)

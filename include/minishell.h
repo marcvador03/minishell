@@ -6,7 +6,7 @@
 /*   By: pmorello <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 12:17:09 by pmorello          #+#    #+#             */
-/*   Updated: 2025/01/17 12:55:17 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/01/18 15:43:38 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,13 +61,15 @@ typedef enum cmd_enum
 typedef long long	t_ll;
 typedef struct s_shell \
 					t_shell;
-typedef struct s_quotes
+typedef struct s_parsing
 {
 	int					i;
 	int					j;
+	int					prev_pos;
+	int					beg_sep;
 	int					len;
-	int					flag;
-}	t_quotes;
+	int					flag_jump;
+}	t_parse;
 
 typedef struct s_env
 {

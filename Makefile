@@ -19,19 +19,17 @@ BUILTINS = ft_cd.c \
 		   built_utils.c
 
 PARSE =	args.c \
-		brackets.c \
+		brackets.c  \
+		cmd_parsing.c \
+		cmd_parsing_utils.c \
 		heredoc.c \
 		pipes.c \
-		quotes.c \
-		quotes_utils.c \
 		redirections.c \
 		redirections_utils.c \
 		strings.c \
 		tokens.c \
 		tokens_utils.c \
 		variable_env.c \
-		varenv.c \
-		varenv_utils.c
 
 EXECUTE = exec.c \
 		  pre_exec.c \
