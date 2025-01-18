@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/17 09:57:43 by mfleury           #+#    #+#             */
-/*   Updated: 2025/01/18 12:42:42 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/01/18 15:12:09 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -129,20 +129,36 @@ static int 	count_quotes(char *line)
 		if (i - prev_pos >= 1)
 			n++;
 		prev_pos = i;
-		if (line[i] == '$' && line[i + 1] != '\0')
+		if (line[i] == '$')
 		{
-			if (line[i + 1] == 39 || line[i + 1] == 34)
-				i += sh_jump_to(line + i + 1, line[i + 1]);
-			i += sh_jump_to(line + i, ' ');
+			i++;
+			while (line[i] != ' ' && line[i] != 34 && line[i] != 39 && line[i] != '\0')
+			{
+				if (line[i + 1] == 39 || line[i + 1] == 34)
+					i += sh_jump_to(line + i + 1, line[i + 1]);
+				i++;
+			}
+			if (line[i] == '\0')
+				return (n);
+			i += sh_skip(line + i, ' ');
 			flag_jump = 1;
 		}
-		if (i - prev_pos >= 1)
-			n++;
 		while (line[i] == 34 || line[i] == 39)
 		{
 			i += sh_jump_to(line + i, line[i]);
-			flag_jump = 1;
+			if (line[i] == '\0')
+				return (n);
+			i++;
+			while (line[i] != ' ' && line[i] != 34 && line[i] != 39 && line[i] != '\0')
+				i++;
+			if (line[i] == ' ')
+			{
+				i += sh_skip(line + i, ' ');
+				flag_jump = 1;
+			}
 		}
+		if (i - prev_pos >= 1)
+			n++;
 		if (line[i] == '\0')
 			return (n);
 		if (flag_jump == 0)
@@ -187,12 +203,32 @@ static char	**get_sep_quotes(char *line)
 			beg_sep = i;
 		}
 		prev_pos = i;
-		if (line[i] == '$' && line[i + 1] != '\0')
+		if (line[i] == '$')
 		{
-			if (line[i + 1] == 39 || line[i + 1] == 34)
-				i += sh_jump_to(line + i + 1, line[i + 1]);
-			i += sh_jump_to(line + i, ' ');
+			i++;
+			while (line[i] != ' ' && line[i] != 34 && line[i] != 39 && line[i] != '\0')
+			{
+				if (line[i + 1] == 39 || line[i + 1] == 34)
+					i += sh_jump_to(line + i + 1, line[i + 1]);
+				i++;
+			}
+			if (line[i] == '\0')
+				break;
+			i += sh_skip(line + i, ' ');
 			flag_jump = 1;
+		}
+		while (line[i] == 34 || line[i] == 39)
+		{
+			i += sh_jump_to(line + i, line[i]);
+			if (line[i] == '\0')
+				break;
+			while (line[i] != ' ' && line[i] != 34 && line[i] != 39 && line[i] != '\0')
+				i++;
+			if (line[i] == ' ')
+			{
+				i += sh_skip(line + i, ' ');
+				flag_jump = 1;
+			}
 		}
 		if (i - prev_pos >= 1)
 		{
@@ -200,11 +236,6 @@ static char	**get_sep_quotes(char *line)
 			if (seps[j++] == NULL)
 				return (flush_errors("", 202), free_d(seps), NULL);
 			beg_sep = i;
-		}
-		while (line[i] == 34 || line[i] == 39)
-		{
-			i += sh_jump_to(line + i, line[i]);
-			flag_jump = 1;
 		}
 		if (line[i] == '\0')
 			break;
