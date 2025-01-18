@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/17 09:57:43 by mfleury           #+#    #+#             */
-/*   Updated: 2025/01/17 19:02:48 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/01/18 12:42:42 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,15 +73,13 @@ static void	quit_spaces(t_quotes *q, char *line, char *f_line)
 	i = 0;
 	q->j = q->i;
 	i = sh_skip(line, line[0]);
-	/*if (i == 1)
-		return ;*/
-	ft_memmove(line + 1, line + i, q->len);
+	ft_strlcpy(line + 1, line + i, q->len);
 	if (line[i] != '\0')
 		f_line[q->len - i + q->j + 1] = '\0';
 	else
 		f_line[q->len - i] = '\0';
 	q->len = ft_strlen(f_line);	
-	q->i = q->j - 1;
+	q->i = max(0, q->j);
 	return ;
 }
 
@@ -130,6 +128,16 @@ static int 	count_quotes(char *line)
 			i += sh_skip(line + i, ' ');
 		if (i - prev_pos >= 1)
 			n++;
+		prev_pos = i;
+		if (line[i] == '$' && line[i + 1] != '\0')
+		{
+			if (line[i + 1] == 39 || line[i + 1] == 34)
+				i += sh_jump_to(line + i + 1, line[i + 1]);
+			i += sh_jump_to(line + i, ' ');
+			flag_jump = 1;
+		}
+		if (i - prev_pos >= 1)
+			n++;
 		while (line[i] == 34 || line[i] == 39)
 		{
 			i += sh_jump_to(line + i, line[i]);
@@ -158,7 +166,7 @@ static char	**get_sep_quotes(char *line)
 	n = count_quotes(line);
 	seps = (char **)ft_calloc(sizeof(char *), n + 1);
 	if (seps == NULL)
-		return (flush_errors("", 202), NULL);
+		return (NULL);
 	i = 0;
 	j = 0;
 	beg_sep = 0; 
@@ -166,9 +174,24 @@ static char	**get_sep_quotes(char *line)
 	{
 		flag_jump = 0;
 		prev_pos = i;
-		if (line[i] == ' ')
+		if (line[i] == ' ' || line[i] == '$')
 		{
 			i += sh_skip(line + i, ' ');
+			flag_jump = 1;
+		}
+		if (i - prev_pos >= 1)
+		{
+			seps[j] = ft_substr(line, beg_sep, i - beg_sep) ;
+			if (seps[j++] == NULL)
+				return (flush_errors("", 202), free_d(seps), NULL);
+			beg_sep = i;
+		}
+		prev_pos = i;
+		if (line[i] == '$' && line[i + 1] != '\0')
+		{
+			if (line[i + 1] == 39 || line[i + 1] == 34)
+				i += sh_jump_to(line + i + 1, line[i + 1]);
+			i += sh_jump_to(line + i, ' ');
 			flag_jump = 1;
 		}
 		if (i - prev_pos >= 1)
@@ -203,28 +226,45 @@ char	*trim_line_expand(t_pipe *p, char *line)
 	q.len = ft_strlen(line);	
 	q.i = 0;
 	q.j = 0;
+	int	flag_jump;
 	
 	while (line[q.i] != '\0')
 	{
+		flag_jump = 0;
 		if (line[q.i] == ' ')
 			quit_spaces(&q, line + q.i, line);
 		if (line[q.i] == '$' && line[q.i + 1] != '\0')
 			if (ft_isalnum_plus(line[q.i + 1]) == 1) //$_
 			{
 				line = expand_variable(p, line, &q.i);
-				q.len = ft_strlen(line);	
+				q.len = ft_strlen(line);
+				flag_jump = 1;
 			}
+		if (line[q.i] == '\0')
+			return (line);
 		while (line[q.i] == 34 || line[q.i] == 39)
 		{
+			if (q.i > 0 && line[q.i - 1] == '$')
+			{
+				ft_strlcpy(line + q.i - 1, line + q.i, q.len);
+				q.i--;
+				q.len = ft_strlen(line);	
+			}
 			line = trim_within_quotes(p, line, &q);
-			ft_memmove(line + q.i - 1, line + q.i, q.len);
-			ft_memmove(line + q.j, line + q.j + 1, q.len);
-			q.i = max(0, q.i - 3);
+			ft_strlcpy(line + q.i - 1, line + q.i, q.len);
+			max(0, --q.i);
 			q.len = ft_strlen(line);	
+			ft_strlcpy(line + q.j, line + q.j + 1, q.len);
+			max(0, --q.i);
+			q.len = ft_strlen(line);
+			flag_jump = 1;
+			if (line[q.i] == ' ')
+				flag_jump = 0;
 		}
 		if (line[q.i] == '\0')
 			return (line);
-		q.i++;
+		if (flag_jump == 0)
+			q.i++;
 	}
 	return (line);
 
@@ -238,9 +278,12 @@ char	**parse_line(t_pipe *p, char *line)
 	args = get_sep_quotes(line);
 	if (args == NULL)
 		return (flush_errors("", 202), NULL);
-	i = -1;
-	while (args[++i] != NULL)
+	i = 0;
+	while (args[i] != NULL)
+	{
 		args[i] = trim_line_expand(p, args[i]);
+		i++;
+	}
 	return (args);
 }
 

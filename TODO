@@ -1,0 +1,6 @@
+1. expand variable after heredoc
+2. tests parsing
+3. exit function parameters
+4. utf8 protection
+5. history don't repeat same command
+6. add * to restrictions

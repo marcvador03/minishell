@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/17 12:19:07 by mfleury           #+#    #+#             */
-/*   Updated: 2025/01/17 14:13:34 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/01/18 10:57:12 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,8 @@ static char	*resize_line(char *line, char *out, char *in, int *i)
 	tmp[2] = ft_strjoin(tmp[0], out);
 	if (tmp[2] == NULL)
 		return (NULL);
-	*i = max(0, ft_strlen(tmp[2]) - 1);
+	//*i = max(0, ft_strlen(tmp[2]) - 1);
+	*i += len[2];
 	res = ft_strjoin(tmp[2], tmp[1]);
 	if (res == NULL)
 		return (free_s(res), NULL);

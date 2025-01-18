@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/02 18:52:16 by mfleury           #+#    #+#             */
-/*   Updated: 2025/01/17 18:36:46 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/01/18 00:36:52 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -122,7 +122,11 @@ char	**create_args(t_pipe *p, t_env *env)
 char	**create_args(t_pipe *p)
 {
 	char	**args;
-
+	char	*tmp;
+	
+	tmp = p->p_line;
+	p->p_line = ft_strtrim(p->p_line, " ");
+	free_s(tmp);
 	args = parse_line(p, p->p_line);
 	if (args == NULL)
 		return (NULL);
