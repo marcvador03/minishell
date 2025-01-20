@@ -6,7 +6,7 @@
 /*   By: pmorello <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 12:17:09 by pmorello          #+#    #+#             */
-/*   Updated: 2025/01/20 12:26:45 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/01/20 14:43:25 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -165,8 +165,8 @@ int		sh_check_empty(char *str);
 char	*sh_trim_spaces(char *str);
 
 /* list utils functions */
-t_shell	*sh_lstnew(char *line, t_env *env);
-t_shell	*sh_lstadd_back(t_shell **sh, char *line, t_env *env);
+t_shell	*sh_lstnew(char *line, t_env *env, int *pos);
+t_shell	*sh_lstadd_back(t_shell **sh, char *line, t_env *env, int *pos);
 int		env_size(t_env *lst);
 
 /* free utils functions */

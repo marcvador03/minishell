@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   redirections.c                                     :+:      :+:    :+:   */
+/*   pipes_parsing.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mfleury <mfleury@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/10 08:52:08 by mfleury           #+#    #+#             */
-/*   Updated: 2025/01/20 12:43:04 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/01/20 15:55:15 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,7 +102,6 @@ int	create_parsing(t_pipe *p)
 	int		cnt_args;
 
 	init_parse(&q);
-	p->p_line = sh_trim_spaces(p->p_line);
 	q.parse = get_sep_quotes(p->p_line);
 	if (q.parse == NULL)
 		return (flush_errors("", 202), 2);

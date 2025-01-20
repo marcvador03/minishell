@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/28 13:53:58 by mfleury           #+#    #+#             */
-/*   Updated: 2025/01/20 12:23:05 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/01/20 16:03:12 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,10 +68,13 @@ int	get_next_pipe(t_pipe *p, char *t_line)
 		if (t_line[i] == '|' || t_line[i] == '\0')
 		{
 			p->p_line = ft_substr(t_line, 0, i);
+			p->p_line = sh_trim_spaces(p->p_line);
 			if (p->p_line == NULL)
-				return (flush_errors("", -1), 2);
-			else if (sh_check_empty(p->p_line) != 0)
+				return (flush_errors("", 202), 2);
+			else if (p->p_line[0] == '\0')
 				return (flush_errors("", 205), 2);
+			/*else if (sh_check_empty(p->p_line) != 0)
+				return (flush_errors("", 205), 2);*/
 			if (t_line[i] == '|')
 				ft_memset(t_line, ' ', i + 1);
 			else
@@ -81,5 +84,10 @@ int	get_next_pipe(t_pipe *p, char *t_line)
 		i++;
 	}
 	p->p_line = ft_strdup(t_line);
+	p->p_line = sh_trim_spaces(p->p_line);
+	if (p->p_line == NULL)
+		return (flush_errors("", 202), 2);
+	else if (p->p_line[0] == '\0')
+		return (flush_errors("", 205), 2);
 	return (create_parsing(p));
 }

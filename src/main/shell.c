@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/07 15:12:52 by mfleury           #+#    #+#             */
-/*   Updated: 2025/01/16 17:36:28 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/01/20 15:07:58 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,15 +29,15 @@ static int	fill_sh_init(t_shell *tmp, t_terms *tcap, int (*x)[2])
 	return (0);
 }
 
-static t_shell	*fill_sh_loop(t_shell *sh, t_env *env, char *line)
+static t_shell	*fill_sh_loop(t_shell *sh, t_env *env, char *line, int *pos)
 {
 	char	*t_line;
 
 	t_line = line + sh_skip(line, ' ');
 	if (sh == NULL)
-		sh = sh_lstnew(t_line, env);
+		sh = sh_lstnew(t_line, env, pos);
 	else
-		sh = sh_lstadd_back(&sh, t_line, env);
+		sh = sh_lstadd_back(&sh, t_line, env, pos);
 	if (sh == NULL)
 		return (NULL);
 	return (sh);
@@ -48,6 +48,7 @@ static t_shell	*fill_sh(char *line, t_terms *tcap, t_env *env)
 	int		i;
 	int		s_bracket[2];
 	int		n;
+	int		pos;
 	t_shell	*sh;
 
 	i = 0;
@@ -57,9 +58,10 @@ static t_shell	*fill_sh(char *line, t_terms *tcap, t_env *env)
 		return (set_gstatus(204), NULL);
 	s_bracket[0] = 0;
 	s_bracket[1] = 0;
+	pos = 0;
 	while (i < n)
 	{
-		sh = fill_sh_loop(sh, env, line);
+		sh = fill_sh_loop(sh, env, line, &pos);
 		if (sh == NULL || fill_sh_init(sh, tcap, &s_bracket) != 0)
 			return (NULL);
 		i++;
@@ -72,7 +74,7 @@ static t_shell	*fill_sh(char *line, t_terms *tcap, t_env *env)
 static char	*get_input(t_env *env, t_terms *tcap)
 {
 	char	*line;
-	char	*line2;
+	//char	*line2;
 	char	*prompt;
 
 	prompt = create_prompt(env);
@@ -90,10 +92,10 @@ static char	*get_input(t_env *env, t_terms *tcap)
 	add_history(line);
 	if (check_forbidden_c(line) == -1)
 		return (free_s(prompt), free_s(line), get_input(env, tcap));
-	line2 = ft_strjoin("&&", line);
+	/*line2 = ft_strjoin("&&", line);
 	if (line2 == NULL)
-		return (set_gstatus(202), free_s(line), free_s(prompt), NULL);
-	return (free_s(prompt), free_s(line), line2);
+		return (set_gstatus(202), free_s(line), free_s(prompt), NULL);*/
+	return (free_s(prompt), line);
 }
 
 int	start_shell(t_env *env, t_terms *tcap)
