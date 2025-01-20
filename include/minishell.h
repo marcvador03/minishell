@@ -6,7 +6,7 @@
 /*   By: pmorello <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 12:17:09 by pmorello          #+#    #+#             */
-/*   Updated: 2025/01/20 14:43:25 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/01/20 17:07:45 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -122,7 +122,7 @@ struct s_shell
 	char				*s_line;
 	int					tk;
 	int					depth;
-	int					bracket[4];
+	int					bracket[2];
 	int					p_count;
 	int					exit;
 	int					l_status;

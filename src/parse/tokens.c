@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/07 14:31:45 by mfleury           #+#    #+#             */
-/*   Updated: 2025/01/20 15:43:10 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/01/20 17:35:40 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,21 +38,47 @@ int		get_tk2(char *line);
 
 }*/
 
-static int 	search_next_token(char *line, int i)
+static int	search_next_bracket(t_shell *sh, char *line, int i)
 {
-	while (line[i] != '\0' && line[i] != '&' && line[i] != '|')
+	while (line[i] == '(' || line[i] == ')' || line[i] == ' ')
+	{
+		if (line[i] == '(')
+		{
+			if (one_of_char(line[i + 1], "),<,>,&,|") == TRUE)
+				return (flush_errors("", 206), -1);
+			sh->bracket[0]++;
+			ft_memset(line + i, ' ', 1);
+		}
+		else if (line[i] == ')')
+		{
+			if (one_of_char(line[i + 1], "(,<,>,&,|") == TRUE)
+				return (flush_errors("", 206), -1);
+			sh->bracket[1]++;
+			ft_memset(line + i, ' ', 1);
+		}
+		i++;
+	}
+	return (i);
+}
+
+static int 	search_next_token(t_shell *sh, char *line, int i)
+{
+	while (one_of_char(line[i], "&,|,(,)") != TRUE && line[i] != '\0')
 		i++;
 	if (line[i] == '\0')
 		return (i);
-	if (line[i] == '|' && one_of_char(line[i + 1], "\0,&,(,)") == TRUE)
+	i = search_next_bracket(sh, line, i);
+	if (line[i] == '\0')
+		return (i);
+	if (line[i] == '|' && one_of_char(line[i + 1], "&,(,)") == TRUE)
 		return (flush_errors("", 204), -1);
 	else if (line[i] == '|' && line[i + 1] == '|') 
 		return (i);
-	if (line[i] == '&' && one_of_char(line[i + 1], "\0,|,(,)") == TRUE)
+	if (line[i] == '&' && one_of_char(line[i + 1], "|,(,)") == TRUE)
 		return (flush_errors("", 204), -1);
 	else if (line[i] == '&' && line[i + 1] == '&') 
 		return (i);
-	return (search_next_token(line, ++i));
+	return (search_next_token(sh, line, ++i));
 
 }
 
@@ -62,18 +88,20 @@ char	*get_next_subshell(t_shell *sh, char *line, int *pos)
 	char	*res;
 
 	i = *pos;
-	if (i == 0 && one_of_char(line[i], "|,&,\0") == TRUE)
+	if (*pos == 0 && one_of_char(line[*pos], "|,&") == TRUE)
 		return (flush_errors("", 204), NULL);
-	else if (i != 0)
+	else if (*pos == 0)
+		i = search_next_bracket(sh, line, i);
+	else if (*pos != 0)
 	{
-		if (line[i] == '|' && line[i + 1] == '|')
+		if (line[i] == '|' && line[i] == '|')
 			sh->tk = 1;
 		while (one_of_char(line[i], "&,|") == TRUE)
 			ft_memset(line + i++, ' ', 1);
-		if (one_of_char(line[i], "|,&,\0") == TRUE)
+		if (one_of_char(line[i], "|,&") == TRUE || line[i] == '\0')
 			return (flush_errors("", 204), NULL);
 	}
-	i = search_next_token(line, i);
+	i = search_next_token(sh, line, i);
 	if (i == -1)
 		return (NULL);
 	res = ft_substr(line, *pos, i - *pos);
