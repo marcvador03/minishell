@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/14 09:16:56 by pmorello          #+#    #+#             */
-/*   Updated: 2025/01/18 13:19:53 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/01/20 09:58:50 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ int	check_spaces(char **args, int i)
 {
 	int	j;
 
-	if (args[i][0] == '\0' || args[i + 1] == NULL)
+	if (args[i + 1] == NULL)
 		return (1);
 	j = 0;
 	while (args[i][j] != '\0')
@@ -49,7 +49,7 @@ int	check_spaces(char **args, int i)
 		if (args[i][j++] != ' ')
 			return (0);
 	}
-	return (1);
+	return (0);
 }
 
 int	ft_echo(char **args, t_env *env)

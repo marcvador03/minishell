@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/18 15:22:36 by mfleury           #+#    #+#             */
-/*   Updated: 2025/01/20 01:08:23 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/01/20 11:00:56 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,7 @@ static int	create_separation(char *line, t_parse *q)
 		if (q->seps[q->j] == NULL)
 			return (-1);
 		q->beg_sep = q->i;
+		//q->prev_pos = q->i;
 		q->j++;
 		return (0);
 	}
@@ -36,11 +37,12 @@ int	separate_dollar(char *line, t_parse *q)
 	q->i++;
 	if (line[q->i] == '\0')
 		return (1);
-	while (none_of_char(line[q->i], " ,\",',>,<") == 1)
+	while (none_of_char(line[q->i], " ,>,<") == 1)
 	{
-		if (line[q->i + 1] == 39 || line[q->i + 1] == 34)
-			q->i += sh_jump_to(line + q->i + 1, line[q->i + 1]);
-		q->i++;
+		if (line[q->i] == 39 || line[q->i] == 34)
+			q->i += sh_jump_to(line + q->i, line[q->i]);
+		else
+			q->i++;
 		if (line[q->i] == '\0')
 			return (1);
 	}
@@ -98,7 +100,7 @@ static int	get_sep_quotes_loop(char *line, t_parse *q)
 {
 	q->flag_jump = 0;
 	q->prev_pos = q->i;
-	if (line[q->i] == ' ' || line[q->i] == '$')
+	if (line[q->i] == ' ')
 	{
 		q->i += sh_skip(line + q->i, ' ');
 		if (create_separation(line, q) == -1)
@@ -121,14 +123,15 @@ static int	get_sep_quotes_loop(char *line, t_parse *q)
 			return (1);
 		if (create_separation(line, q) == 1)
 			return (1);
+		q->prev_pos = q->i;
 	}
 	while (line[q->i] == 34 || line[q->i] == 39)
 	{
 		if (separate_quotes(line, q) == 1)
 			return (1);
-		if (create_separation(line, q) == -1)
-			return (-1);
 	}
+	if (create_separation(line, q) == -1)
+		return (-1);
 	if (line[q->i] == '\0')
 		return (1);
 	if (q->flag_jump == 0)

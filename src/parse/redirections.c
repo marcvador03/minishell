@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/10 08:52:08 by mfleury           #+#    #+#             */
-/*   Updated: 2025/01/20 00:11:29 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/01/20 11:27:04 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -186,7 +186,7 @@ int	create_parsing(t_pipe *p)
 	{
 		if (parse[i][0] == '>' ||  parse[i][0] == '<')
 		{
-			p->rd[j] = ft_strdup(parse[i++]);
+			p->rd[j] = parse[i++];
 			if (p->rd[j] == NULL)
 				return (free_d(parse), flush_errors("", 202), 2);
 			p->redirs[j] = trim_line_expand(p, parse[i]);

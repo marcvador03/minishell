@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/18 16:34:46 by mfleury           #+#    #+#             */
-/*   Updated: 2025/01/20 01:03:31 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/01/20 10:33:05 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,12 +61,13 @@ static int	count_quotes_loop(char *line, t_parse *q, int *n)
 		if (separate_dollar(line, q) == 1)
 			return (1);
 		if (q->i - q->prev_pos >= 1)
+		{
+			q->prev_pos = q->i;
 			*n = *n + 1;
+		}
 	}
 	while (line[q->i] == 34 || line[q->i] == 39)
 	{
-		if (q->i - q->prev_pos >= 1)
-			*n = *n + 1;
 		if (separate_quotes(line, q) == 1)
 			return (1);
 	}
