@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/07 15:12:52 by mfleury           #+#    #+#             */
-/*   Updated: 2025/01/20 15:07:58 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/01/20 22:26:07 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,42 +29,42 @@ static int	fill_sh_init(t_shell *tmp, t_terms *tcap, int (*x)[2])
 	return (0);
 }
 
-static t_shell	*fill_sh_loop(t_shell *sh, t_env *env, char *line, int *pos)
+/*static t_shell	*fill_sh_loop(t_shell *sh, t_env *env, char *line, int *pos)
 {
-	char	*t_line;
+//	char	*t_line;
 
-	t_line = line + sh_skip(line, ' ');
-	if (sh == NULL)
-		sh = sh_lstnew(t_line, env, pos);
-	else
-		sh = sh_lstadd_back(&sh, t_line, env, pos);
-	if (sh == NULL)
-		return (NULL);
+//	t_line = line + sh_skip(line, ' ');
 	return (sh);
-}
+}*/
 
 static t_shell	*fill_sh(char *line, t_terms *tcap, t_env *env)
 {
-	int		i;
 	int		s_bracket[2];
-	int		n;
+//	int		n;
 	int		pos;
 	t_shell	*sh;
+	t_shell	*head;
 
-	i = 0;
 	sh = NULL;
-	n = count_tokens(line);
+	/*n = count_tokens(line);
 	if (n == -1)
-		return (set_gstatus(204), NULL);
+		return (set_gstatus(204), NULL);*/
 	s_bracket[0] = 0;
 	s_bracket[1] = 0;
 	pos = 0;
-	while (i < n)
+	while (line[pos] != '\0')
 	{
-		sh = fill_sh_loop(sh, env, line, &pos);
+		if (sh != NULL)
+			head = sh->head;
+		if (sh == NULL)
+			sh = sh_lstnew(line, env, &pos);
+		else
+			sh = sh_lstadd_back(&sh, line, env, &pos);
+		if (sh == NULL)
+			return (free_sh(head), NULL);
+		//sh = fill_sh_loop(sh, env, line, &pos);
 		if (sh == NULL || fill_sh_init(sh, tcap, &s_bracket) != 0)
 			return (NULL);
-		i++;
 	}
 	if (sh->bracket[1] != sh->bracket[0])
 		return (free_sh(sh->head), set_gstatus(206), NULL);
