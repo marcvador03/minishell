@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/07 14:31:45 by mfleury           #+#    #+#             */
-/*   Updated: 2025/01/20 22:20:19 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/01/20 22:43:53 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -148,12 +148,9 @@ static int	exec_token_fork(t_shell *sh, int level, int status)
 
 static t_shell	*move_sh(t_shell *sh, int *status, int level)
 {
-	int	i;
-
-	i = 0;
 	*status = exec_token_fork(sh, level, *status);
-	sh = sh->next;
-	while (sh != NULL && sh->bracket[1] > i++)
+	//sh = sh->next;
+	while (sh != NULL && sh->bracket[1] <= sh->bracket[0])
 	{
 		sh->l_status = *status;
 		sh = sh->next;

@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/07 15:12:52 by mfleury           #+#    #+#             */
-/*   Updated: 2025/01/20 22:26:07 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/01/20 22:46:43 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,7 @@ static t_shell	*fill_sh(char *line, t_terms *tcap, t_env *env)
 	t_shell	*head;
 
 	sh = NULL;
+	head = NULL;
 	/*n = count_tokens(line);
 	if (n == -1)
 		return (set_gstatus(204), NULL);*/
