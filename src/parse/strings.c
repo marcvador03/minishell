@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/17 09:57:43 by mfleury           #+#    #+#             */
-/*   Updated: 2025/01/20 00:22:55 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/01/20 12:35:55 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ static void	quit_spaces(t_parse *q, char *line, char *f_line)
 	return ;
 }
 
-static char	*trim_within_quotes(t_pipe *p, char *line, t_parse *q)
+static char	*trim_within_quotes(t_pipe *p, char *line, t_parse *q, int f_exp)
 {
 	int		x;
 	int		y;
@@ -41,7 +41,7 @@ static char	*trim_within_quotes(t_pipe *p, char *line, t_parse *q)
 	q->prev_pos = q->i;
 	q->i += sh_jump_to(line + q->i, line[q->i]);
 	x = q->prev_pos;
-	if (line[q->prev_pos] == 39)
+	if (line[q->prev_pos] == 39 || f_exp == 4)
 		return (line);
 	while (x != q->i)
 	{
@@ -62,7 +62,7 @@ static char	*trim_within_quotes(t_pipe *p, char *line, t_parse *q)
 	return (line);
 }
 
-static char	*trim_quotes(t_pipe *p, char *line, t_parse *q)
+static char	*trim_quotes(t_pipe *p, char *line, t_parse *q, int f_exp)
 {
 	while (line[q->i] == 34 || line[q->i] == 39)
 	{
@@ -72,7 +72,7 @@ static char	*trim_quotes(t_pipe *p, char *line, t_parse *q)
 			q->i--;
 			q->len = ft_strlen(line);
 		}
-		line = trim_within_quotes(p, line, q);
+		line = trim_within_quotes(p, line, q, f_exp);
 		ft_strlcpy(line + q->i - 1, line + q->i, q->len);
 		max(0, --q->i);
 		q->len = ft_strlen(line);
@@ -86,11 +86,11 @@ static char	*trim_quotes(t_pipe *p, char *line, t_parse *q)
 	return (line);
 }
 
-static char	*trim_dollar(t_pipe *p, char *line, t_parse *q)
+static char	*trim_dollar(t_pipe *p, char *line, t_parse *q, int f_exp)
 {
 	char	*res;
 
-	if (ft_isalnum_plus(line[q->i + 1]) == 1)
+	if (ft_isalnum_plus(line[q->i + 1]) == 1 && f_exp != 4)
 	{
 		res = expand_variable(p, line, &q->i);
 		q->len = ft_strlen(line);
@@ -100,7 +100,7 @@ static char	*trim_dollar(t_pipe *p, char *line, t_parse *q)
 	return (line);
 }
 
-char	*trim_line_expand(t_pipe *p, char *line)
+char	*trim_line_expand(t_pipe *p, char *line, int f_exp)
 {
 	t_parse	q;
 
@@ -112,10 +112,10 @@ char	*trim_line_expand(t_pipe *p, char *line)
 		if (line[q.i] == ' ')
 			quit_spaces(&q, line + q.i, line);
 		if (line[q.i] == '$' && line[q.i + 1] != '\0')
-			line = trim_dollar(p, line, &q);
+			line = trim_dollar(p, line, &q, f_exp);
 		if (line[q.i] == '\0')
 			return (line);
-		line = trim_quotes(p, line, &q);
+		line = trim_quotes(p, line, &q, f_exp);
 		if (line[q.i] == '\0')
 			return (line);
 		if (q.flag_jump == 0)

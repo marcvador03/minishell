@@ -6,7 +6,7 @@
 /*   By: pmorello <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 12:17:09 by pmorello          #+#    #+#             */
-/*   Updated: 2025/01/20 00:47:25 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/01/20 12:26:45 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,12 +65,13 @@ typedef struct s_parsing
 {
 	int					i;
 	int					j;
+	int					k;
 	int					prev_pos;
 	int					beg_sep;
 	int					len;
 	int					flag_jump;
 	int					flag_sep;
-	char				**seps;
+	char				**parse;
 }	t_parse;
 
 typedef struct s_env
@@ -151,6 +152,7 @@ char	*ll_itoa(t_ll n);
 int		one_of_char(char c, char *letters);
 int		all_of_char(char c, char *letters);
 int		none_of_char(char c, char *letters);
+void	init_parse(t_parse *q);
 
 /* str utils functions */
 void	sh_trim_list_strings(char **str);

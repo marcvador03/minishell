@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/18 17:20:19 by mfleury           #+#    #+#             */
-/*   Updated: 2025/01/16 10:28:47 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/01/20 12:21:11 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,7 +87,7 @@ int	get_fds_redir(t_pipe *p)
 	return (fd);
 }
 
-char	find_next_token(char *line)
+/*char	find_next_token(char *line)
 {
 	int	i;
 
@@ -101,4 +101,4 @@ char	find_next_token(char *line)
 		i++;
 	}
 	return (line[i]);
-}
+}*/
