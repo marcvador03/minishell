@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/17 09:57:43 by mfleury           #+#    #+#             */
-/*   Updated: 2025/01/18 16:52:24 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/01/20 00:22:55 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,8 +35,8 @@ static void	quit_spaces(t_parse *q, char *line, char *f_line)
 
 static char	*trim_within_quotes(t_pipe *p, char *line, t_parse *q)
 {
-	int	x;
-	int	y;
+	int		x;
+	int		y;
 
 	q->prev_pos = q->i;
 	q->i += sh_jump_to(line + q->i, line[q->i]);
@@ -53,7 +53,7 @@ static char	*trim_within_quotes(t_pipe *p, char *line, t_parse *q)
 				line = expand_variable(p, line, &x);
 				q->len = ft_strlen(line);
 				q->i = sh_jump_to(line + q->prev_pos, line[q->prev_pos]);
-				q->i = q->prev_pos;
+				q->i += q->prev_pos;
 				x = max(y, x);
 			}
 		}
@@ -62,7 +62,7 @@ static char	*trim_within_quotes(t_pipe *p, char *line, t_parse *q)
 	return (line);
 }
 
-static void	trim_quotes(t_pipe *p, char *line, t_parse *q)
+static char	*trim_quotes(t_pipe *p, char *line, t_parse *q)
 {
 	while (line[q->i] == 34 || line[q->i] == 39)
 	{
@@ -83,16 +83,21 @@ static void	trim_quotes(t_pipe *p, char *line, t_parse *q)
 		if (line[q->i] == ' ')
 			q->flag_jump = 0;
 	}
+	return (line);
 }
 
-static void	trim_dollar(t_pipe *p, char *line, t_parse *q)
+static char	*trim_dollar(t_pipe *p, char *line, t_parse *q)
 {
+	char	*res;
+
 	if (ft_isalnum_plus(line[q->i + 1]) == 1)
 	{
-		line = expand_variable(p, line, &q->i);
+		res = expand_variable(p, line, &q->i);
 		q->len = ft_strlen(line);
 		q->flag_jump = 1;
+		return (res);
 	}
+	return (line);
 }
 
 char	*trim_line_expand(t_pipe *p, char *line)
@@ -107,10 +112,10 @@ char	*trim_line_expand(t_pipe *p, char *line)
 		if (line[q.i] == ' ')
 			quit_spaces(&q, line + q.i, line);
 		if (line[q.i] == '$' && line[q.i + 1] != '\0')
-			trim_dollar(p, line, &q);
+			line = trim_dollar(p, line, &q);
 		if (line[q.i] == '\0')
 			return (line);
-		trim_quotes(p, line, &q);
+		line = trim_quotes(p, line, &q);
 		if (line[q.i] == '\0')
 			return (line);
 		if (q.flag_jump == 0)

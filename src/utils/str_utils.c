@@ -6,11 +6,24 @@
 /*   By: mfleury <mfleury@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/02 16:56:07 by mfleury           #+#    #+#             */
-/*   Updated: 2025/01/13 10:06:10 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/01/19 15:40:00 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+char	*sh_trim_spaces(char *str)
+{
+	char	*new_str;
+
+	if (str == NULL)
+		return (NULL);
+	new_str = ft_strtrim(str, " ");
+	if (new_str == NULL)
+		return (flush_errors("", 202), str);
+	free_s(str);
+	return (new_str);
+}
 
 int	sh_jump_to(char *str, char c)
 {

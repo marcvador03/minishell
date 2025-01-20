@@ -6,7 +6,7 @@
 /*   By: pmorello <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 12:17:09 by pmorello          #+#    #+#             */
-/*   Updated: 2025/01/18 15:43:38 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/01/20 00:47:25 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,6 +69,8 @@ typedef struct s_parsing
 	int					beg_sep;
 	int					len;
 	int					flag_jump;
+	int					flag_sep;
+	char				**seps;
 }	t_parse;
 
 typedef struct s_env
@@ -146,6 +148,9 @@ void	set_gstatus(int err_code);
 int		max(int n1, int n2);
 t_ll	ll_atoi(const char *nptr);
 char	*ll_itoa(t_ll n);
+int		one_of_char(char c, char *letters);
+int		all_of_char(char c, char *letters);
+int		none_of_char(char c, char *letters);
 
 /* str utils functions */
 void	sh_trim_list_strings(char **str);
@@ -155,6 +160,7 @@ int		sh_jump_to(char *str, char c);
 int		sh_jump_to2(char **str, char c);
 int		sh_skip(char *str, char c);
 int		sh_check_empty(char *str);
+char	*sh_trim_spaces(char *str);
 
 /* list utils functions */
 t_shell	*sh_lstnew(char *line, t_env *env);

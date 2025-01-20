@@ -27,6 +27,7 @@ PARSE =	args.c \
 		redirections.c \
 		redirections_utils.c \
 		strings.c \
+		strings_utils.c \
 		tokens.c \
 		tokens_utils.c \
 		variable_env.c \
@@ -36,6 +37,7 @@ EXECUTE = exec.c \
 		  pre_exec_utils.c
 
 UTILS = core_utils.c \
+		core_utils2.c \
 		free_utils.c \
 		str_utils.c \
 		env_utils.c

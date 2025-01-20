@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/25 14:10:00 by mfleury           #+#    #+#             */
-/*   Updated: 2025/01/11 19:20:44 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/01/19 15:45:18 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ void	free_pipe(t_pipe *p)
 		if (p->redirs != NULL)
 			free_d(p->redirs);
 		if (p->rd != NULL)
-			free_s((void *)p->rd);
+			free_d(p->rd);
 		if (p->args != NULL)
 			free_d(p->args);
 		tmp = tmp->next;
