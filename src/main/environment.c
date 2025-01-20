@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/14 09:05:40 by mfleury           #+#    #+#             */
-/*   Updated: 2025/01/13 12:06:27 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/01/20 23:26:01 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ t_env	*sh_addenv(t_env *env, char *var_name, char *value)
 		return (env);
 	ptr = (t_env *)ft_calloc(sizeof(t_env), 1);
 	if (ptr == NULL)
-		return (flush_errors("", -1), env);
+		return (flush_errors("", -1, ""), env);
 	ptr->head = ptr;
 	ptr->next = NULL;
 	ptr->varname = var_name;

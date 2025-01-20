@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/18 12:17:52 by mfleury           #+#    #+#             */
-/*   Updated: 2025/01/16 17:33:48 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/01/20 22:58:15 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,6 @@
 # define E_207 ": error while fetching env value"
 # define E_208 ": target directory does not exist"
 # define E_209 ": too many arguments"
-# define E_210 ": syntax error around ; or \\ or \\n"
+# define E_210 ": syntax error around:'"
 
 #endif

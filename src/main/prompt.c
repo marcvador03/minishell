@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/08 20:31:15 by mfleury           #+#    #+#             */
-/*   Updated: 2025/01/15 15:28:49 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/01/20 23:31:34 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ char	*join_prompt(t_prompt *t)
 	len[3] += ft_strlen("@:$() ");
 	res = (char *)ft_calloc(sizeof(char), len[3] + 1);
 	if (res == NULL)
-		return (flush_errors("prompt", 202), NULL);
+		return (flush_errors("prompt", 202, ""), NULL);
 	ft_memcpy(res, t->user, len[0]);
 	ft_memcpy(res + len[0], "@", 1);
 	ft_memcpy(res + len[0] + 1, t->hostname, len[1]);
@@ -45,7 +45,7 @@ static char	*replace_home_path(char *home)
 
 	ex_path = getcwd(NULL, 0);
 	if (ex_path == NULL)
-		return (flush_errors("prompt", -1), NULL);
+		return (flush_errors("prompt", -1, ""), NULL);
 	if (home == NULL || *home == '\0')
 		return (ex_path);
 	len[0] = ft_strlen(ex_path);
@@ -56,7 +56,7 @@ static char	*replace_home_path(char *home)
 		{
 			res = (char *)ft_calloc(sizeof(char), len[0] - len[1] + 2);
 			if (res == NULL)
-				return (flush_errors("prompt", 202), ex_path);
+				return (flush_errors("prompt", 202, ""), ex_path);
 			res[0] = '~';
 			ft_memcpy(res + 1, ex_path + len[1], len[0] - len[1]);
 			res[len[0] - len[1] + 1] = '\0';
@@ -79,7 +79,7 @@ static char	*get_user(t_env *env)
 		return (ft_strdup(user));
 	slot = ft_itoa(ttyslot());
 	if (slot == NULL)
-		return (flush_errors("prompt", 202), NULL);
+		return (flush_errors("prompt", 202, ""), NULL);
 	user = NULL;
 	len = sizeof(struct utmp);
 	fd = open(UTMP_FILE, O_RDONLY);
@@ -103,7 +103,7 @@ static char	*get_hostname(void)
 
 	fd = open("/etc/hostname", O_RDONLY);
 	if (fd == -1)
-		return (flush_errors("prompt", -1), NULL);
+		return (flush_errors("prompt", -1, ""), NULL);
 	host = NULL;
 	ft_bzero(buf, 64);
 	if (read(fd, &buf, 64) > 1)
@@ -111,12 +111,12 @@ static char	*get_hostname(void)
 		buf[64] = '\0';
 		tmp = ft_strtrim(buf, "\n");
 		if (tmp == NULL)
-			return (close(fd), flush_errors("prompt", 202), NULL);
+			return (close(fd), flush_errors("prompt", 202, ""), NULL);
 		n = sh_strpos(tmp, ".");
 		host = ft_substr(tmp, 0, n);
 		free_s(tmp);
 		if (host == NULL)
-			return (close(fd), flush_errors("prompt", 202), NULL);
+			return (close(fd), flush_errors("prompt", 202, ""), NULL);
 	}
 	return (close(fd), host);
 }

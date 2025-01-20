@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 10:01:23 by mfleury           #+#    #+#             */
-/*   Updated: 2025/01/16 17:24:34 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/01/20 23:30:33 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,7 @@ void	exit_minishell_error(t_shell *sh, int errnum, t_env *env)
 	if (cpyerr < 200)
 		strerror(cpyerr);
 	else
-		flush_errors("", cpyerr);
+		flush_errors("", cpyerr, "");
 	if (sh != NULL)
 		free_sh(sh);
 	if (env != NULL)

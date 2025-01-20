@@ -6,7 +6,7 @@
 /*   By: pmorello <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 12:17:09 by pmorello          #+#    #+#             */
-/*   Updated: 2025/01/20 17:07:45 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/01/20 23:12:53 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -145,7 +145,8 @@ int		ft_unset(char **args, t_env *env);
 int		ft_exit(t_pipe *p, char **args, t_env *env);
 
 /* core utils functions */
-void	set_gstatus(int err_code);
+void	set_status(int err_code, int *err);
+//void	set_gstatus(int err_code);
 int		max(int n1, int n2);
 t_ll	ll_atoi(const char *nptr);
 char	*ll_itoa(t_ll n);
@@ -181,7 +182,7 @@ void	exit_minishell(t_pipe *p, t_env *env);
 void	exit_minishell_error(t_shell *sh, int status, t_env *env);
 int		main_cmd_return(t_pipe *p, int wstatus, pid_t pid);
 void	init_signal(int pid, int hd);
-int		flush_errors(char *cmd, int err_sig);
+int		flush_errors(char *cmd, int err_sig, char *tk);
 int		check_forbidden_c(char *line);
 
 /* environment functions */
@@ -191,9 +192,9 @@ t_env	*sh_updateenv(t_env *env, char *var_name, char *new_value);
 t_env	*sh_addenv(t_env *env, char *var_name, char *value);
 t_env	*sh_delenv(t_env *env, char *var_name);
 char	*expand_env(t_env *env, char *line, int x, int l_status);
-char	**get_env_array(t_env *env);
+char	**get_env_array(t_env *env, int *err);
 t_env	*fill_default_session(t_env *env);
-char	*get_full_path(char *arg0, t_env *env);
+char	*get_full_path(char *arg0, t_env *env, int *err);
 
 /*term caps*/
 void	set_term_settings(t_terms *tcap, t_env *env);

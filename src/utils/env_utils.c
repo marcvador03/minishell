@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/15 12:00:56 by mfleury           #+#    #+#             */
-/*   Updated: 2025/01/16 10:31:03 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/01/20 23:13:51 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ int	env_size(t_env *lst)
 	return (cnt);
 }
 
-char	**get_env_array(t_env *env)
+char	**get_env_array(t_env *env, int *err)
 {
 	int		n;
 	int		i;
@@ -40,14 +40,14 @@ char	**get_env_array(t_env *env)
 	n = env_size(env);
 	env_arr = (char **)ft_calloc(sizeof(char *), n + 1);
 	if (env_arr == NULL)
-		return (flush_errors("", -1), NULL);
+		return (set_status(flush_errors("", -1, ""), err), NULL);
 	i = 0;
 	while (env != NULL)
 	{
 		tmp = ft_strjoin(env->varname, "=");
 		env_arr[i++] = ft_strjoin(tmp, env->value);
 		if (tmp == NULL || env_arr[i - 1] == NULL)
-			return (flush_errors("", 202), NULL);
+			return (set_status(flush_errors("", 202, ""), err), NULL);
 		free(tmp);
 		env = env->next;
 	}
@@ -70,7 +70,7 @@ static int	get_full_path_check(char *arg0, char **cmd_out)
 	return (0);
 }
 
-char	*get_full_path(char *arg0, t_env *env)
+char	*get_full_path(char *arg0, t_env *env, int *err)
 {
 	char	*cmd_in;
 	char	*cmd_out;
@@ -81,22 +81,22 @@ char	*get_full_path(char *arg0, t_env *env)
 		return (cmd_out);
 	paths = ft_split(sh_getenv(env, "PATH"), ':');
 	if (paths == NULL)
-		return (free_s(paths), set_gstatus(125), NULL);
+		return (free_s(paths), set_status(125, err), NULL);
 	cmd_in = ft_strjoin("/", arg0);
 	if (cmd_in == NULL)
-		return (free_d(paths), set_gstatus(202), NULL);
+		return (free_d(paths), set_status(202, err), NULL);
 	i = 0;
 	while (paths[i] != NULL)
 	{
 		cmd_out = ft_strjoin(paths[i++], cmd_in);
 		if (cmd_out == NULL)
-			return (free_d(paths), free_s(cmd_in), set_gstatus(202), NULL);
+			return (free_d(paths), free_s(cmd_in), set_status(202, err), NULL);
 		if (access(cmd_out, R_OK) == 0)
 			return (free_d(paths), free_s(cmd_in), cmd_out);
-		g_status = errno;
+		*err = errno;
 		free_s(cmd_out);
 	}
-	return (free_d(paths), free_s(cmd_in), set_gstatus(127), NULL);
+	return (free_d(paths), free_s(cmd_in), set_status(127, err), NULL);
 }
 
 int	check_directory(char *t_cmd)

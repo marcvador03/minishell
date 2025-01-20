@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/14 09:44:34 by pmorello          #+#    #+#             */
-/*   Updated: 2025/01/16 10:26:53 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/01/20 23:00:08 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ int	ft_pwd(char **args, t_env *env)
 	pwd = getcwd(NULL, 0);
 	if (pwd == NULL)
 	{
-		flush_errors("pwd", -1);
+		flush_errors("pwd", -1, "");
 		pwd = ft_strdup(sh_getenv(env, "PWD"));
 	}
 	printf("%s\n", pwd);

@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/13 15:34:22 by mfleury           #+#    #+#             */
-/*   Updated: 2025/01/15 16:38:35 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/01/20 22:59:44 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,7 @@ int	ft_exit(t_pipe *p, char **args, t_env *env)
 			return (exit_minishell(p, env), p->p_status);
 		else if (args[1] != NULL && args[2] != NULL)
 		{
-			p->p_status = flush_errors("exit", 7);
+			p->p_status = flush_errors("exit", 7, "");
 			return (p->p_status);
 		}
 		else
