@@ -6,7 +6,7 @@
 /*   By: pmorello <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 12:17:09 by pmorello          #+#    #+#             */
-/*   Updated: 2025/01/21 10:43:44 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/01/21 14:27:18 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -126,6 +126,8 @@ struct s_shell
 	int					p_count;
 	int					exit;
 	int					l_status;
+	char				*s_redirs[20];
+	char				*s_rd[20];
 	t_pipe				*pipes;
 	t_terms				*tcap;
 	t_env				*env;

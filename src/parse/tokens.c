@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/07 14:31:45 by mfleury           #+#    #+#             */
-/*   Updated: 2025/01/21 10:04:27 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/01/21 20:55:39 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,8 +16,9 @@ int		count_brackets(t_shell *sh, char *line);
 int		execute_tokens(t_shell *sh, int level, int status);
 int		subshell(t_shell *sh);
 int		get_tk2(char *line);
+void	init_parse(t_parse *q);
 
-static int	search_next_bracket(t_shell *sh, char *line, int i)
+/*static int	search_next_bracket(t_shell *sh, char *line, int i)
 {
 	int	flag[2];
 
@@ -46,32 +47,156 @@ static int	search_next_bracket(t_shell *sh, char *line, int i)
 	if (flag[0] > 0 && flag[1] > 0)
 		return (flush_errors("", 206, ""), -1);
 	return (i);
-}
+}*/
 
 static int 	search_next_token(t_shell *sh, char *line, int i)
 {
-	while (one_of_char(line[i], "&,|,(,)") != TRUE && line[i] != '\0')
+	while (one_of_char(line[i], "&,|") != TRUE && line[i] != '\0')
 		i++;
 	if (line[i] == '\0')
 		return (i);
-	i = search_next_bracket(sh, line, i);	
-	if (i == -1)
-		return (-1);
-	if (line[i] == '\0')
+	if (line[i] == '&' && one_of_char(line[i + 1], "|,(,)") == TRUE)
+		return (flush_errors("", 210, ""), -1);
+	else if (line[i] == '&' && line[i + 1] == '&') 
 		return (i);
 	if (line[i] == '|' && one_of_char(line[i + 1], "&,(,)") == TRUE)
-		return (flush_errors("", 204, ""), -1);
+		return (flush_errors("", 210, ""), -1);
 	else if (line[i] == '|' && line[i + 1] == '|') 
-		return (i);
-	if (line[i] == '&' && one_of_char(line[i + 1], "|,(,)") == TRUE)
-		return (flush_errors("", 204, ""), -1);
-	else if (line[i] == '&' && line[i + 1] == '&') 
 		return (i);
 	return (search_next_token(sh, line, ++i));
 
 }
 
+static int	set_priority(t_shell *sh, char *s_line, t_parse *q)
+{
+	while (s_line[q->i] == ' ' && s_line[q->i] != '\0')
+		q->i++;
+	while (s_line[q->i] == '(')
+	{
+		ft_memset(s_line + q->i, ' ', 1);
+		q->i++;
+		q->flag_sep = 0;
+		sh->bracket[0]++;
+	}
+	q->i += sh_skip(s_line + q->i, ' ');
+	if (s_line[q->i] == '\0')
+		return (flush_errors("", 210, ""), -1);
+	if (q->flag_sep == 0 && one_of_char(s_line[q->i], "&,|,)") == TRUE)
+		return (flush_errors("", 210, ""), -1);
+	else if(q->flag_sep == 1 && one_of_char(s_line[q->i], "&,|") != TRUE)
+		return (flush_errors("", 210, ""), -1);
+	if (q->flag_sep == 1)
+	{
+		if (s_line[q->i] == '|' && s_line[q->i + 1] == '|')
+			sh->tk = 1;
+		while (one_of_char(s_line[q->i], "&,|") == TRUE)
+		{
+			if (q->k == 0 && s_line[q->i] != s_line[q->i + 1])
+				return (flush_errors("", 210, ""), -1);
+			else if (q->k == 2)
+				return (flush_errors("", 210, ""), -1);
+			ft_memset(s_line + q->i, ' ', 1);
+			q->k++;
+			q->i++;	
+		}
+	}
+	while (s_line[q->i] != ')' && s_line[q->i] != '\0')
+	{
+		if (s_line[q->i] == '(')
+			return (flush_errors("", 210, ""), -1);
+		else if (s_line[q->i] == '(')
+		{
+			set_priority(sh, s_line, q);
+			if (s_line[q->i] == '\0')
+				return (0);
+		}
+		q->i++;
+	}
+	while (s_line[q->i] == ')')
+	{
+		if (s_line[q->i] == '(')
+			return (flush_errors("", 210, ""), -1);
+		ft_memset(s_line + q->i, ' ', 1);
+		q->i++;
+		q->flag_jump = 1;
+		sh->bracket[1]++;
+	}
+	// function get_shell_redirections
+	if (q->flag_jump == 1)
+	{
+		if (q->j > 19)
+			return (flush_errors("", 210, ""), -1);
+		q->i += sh_skip(s_line + q->i, ' ');
+		if (s_line[q->i] == '\0')
+			return (0);
+		else
+			return (flush_errors("", 210, ""), -1);
+	}
+
+		/*
+		if (none_of_char(s_line[q->i], "<,>") == TRUE)
+			return (flush_errors("", 250, ""), -1);
+		q->k = 0;
+		q->prev_pos = q->i;
+		while (one_of_char(s_line[q->i], "<,>") == TRUE)
+		{
+			if (q->k >= 2)
+				return (flush_errors("", 250, ""), -1);
+			if (s_line[q->i] == '>' && s_line[q->i] == '<')
+				return (flush_errors("", 250, ""), -1);
+			else if (s_line[q->i] == '<' && s_line[q->i] == '>')
+				return (flush_errors("", 250, ""), -1);
+			q->k++;
+		}
+		q->i += sh_skip(s_line, ' ');
+		if (s_line[q->i] == '\0')
+			return (flush_errors("", 250, ""), -1);
+		sh->s_rd[q->j] = ft_substr(s_line, q->prev_pos, q->i - q->prev_pos);
+		if (sh->s_rd[q->j] == NULL)
+			return (flush_errors("", 202, ""), -1);
+		q->prev_pos = q->i;
+		while (s_line[q->i] != '\0' && one_of_char(s_line[q->j], "<,>") == TRUE)
+			q->i++;
+		sh->s_redirs[q->j] = ft_substr(s_line, q->prev_pos, q->i - q->prev_pos);
+		if (sh->s_rd[q->j++] == NULL)
+			return (flush_errors("", 202, ""), -1);
+		if (s_line[q->i] == '\0')
+			return (0);
+		else if (one_of_char(s_line[q->j], "<,>") == TRUE)
+			return (call same function, 0);
+	}*/
+
+	return (0);
+}
+
+
 char	*get_next_subshell(t_shell *sh, char *line, int *pos)
+{
+	t_parse	q;
+	char	*res;
+
+	
+	init_parse(&q);
+	q.i = *pos;
+	if (*pos != 0)
+		q.flag_sep = 1;
+	q.beg_sep = *pos;
+	q.i = search_next_token(sh, line, q.i + 2);
+	if (q.i == -1)
+		return (NULL);
+	res = ft_substr(line, *pos, q.i - q.beg_sep);
+	res = sh_trim_spaces(res);
+	if (res == NULL)
+		return (flush_errors("", 202, ""), NULL);
+	*pos = q.i;
+	q.i = 0;
+	if (set_priority(sh, res, &q) == -1)
+		return (free_s(res), NULL);
+	return (res);
+}
+
+
+/*char	*get_next_subshell(t_shell *sh, char *line, int *pos)
 {
 	int		i;
 	char	*res;
@@ -104,7 +229,7 @@ char	*get_next_subshell(t_shell *sh, char *line, int *pos)
 		return (flush_errors("", 202, ""), NULL);
 	*pos = i;
 	return (res);
-}
+}*/
 
 
 
@@ -148,15 +273,19 @@ static int	exec_token_fork(t_shell *sh, int level, int status)
 
 static t_shell	*move_sh(t_shell *sh, int *status, int level)
 {
-	*status = exec_token_fork(sh, level, *status);
-	//sh = sh->next;
-	while (sh != NULL && sh->bracket[1] <= sh->bracket[0])
+	if ((*status != 0 && sh->tk == 1) || (*status == 0 && sh->tk == 0))
+		*status = exec_token_fork(sh, level, *status);
+	while (sh != NULL && (sh->bracket[0] - sh->bracket[1] > level))
 	{
+		//x = sh->bracket[0];
 		sh->l_status = *status;
 		sh = sh->next;
 	}
 	if (sh != NULL)
+	{
 		sh->l_status = *status;
+		sh = sh->next;
+	}
 	return (sh);
 }
 
