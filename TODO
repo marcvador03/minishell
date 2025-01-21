@@ -1,8 +1,9 @@
 1. expand variable after heredoc
-2. tests parsing
+OK 2. cmd parsing
 3. exit function parameters
 4. utf8 protection
 5. history don't repeat same command
 6. add * to restrictions
-7. new parsing tokens
-8. toeksn redirections
+OK 7. new parsing tokens
+8. tokens redirections
+9. multiple lines after killing piped commands

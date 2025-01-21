@@ -27,8 +27,7 @@ PARSE =	brackets.c  \
 		redirections.c \
 		strings.c \
 		strings_utils.c \
-		tokens.c \
-		tokens_utils.c \
+		subshell_parsing.c \
 		variable_env.c \
 
 EXECUTE = exec.c \

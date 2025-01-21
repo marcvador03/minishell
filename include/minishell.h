@@ -6,7 +6,7 @@
 /*   By: pmorello <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 12:17:09 by pmorello          #+#    #+#             */
-/*   Updated: 2025/01/21 14:27:18 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/01/21 22:45:12 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,11 @@
 #  define PATH_MAX 4096
 # endif
 
-extern int	g_status;
+typedef long long		t_ll;
+typedef struct s_shell	t_shell;
+typedef struct s_env	t_env;
+typedef int				(*t_func_arr)(char **args, t_env *env);
+extern int				g_status;
 
 /*Enum to match command names input with a number*/
 typedef enum cmd_enum
@@ -58,9 +62,6 @@ typedef enum cmd_enum
 	END
 }	t_cmd_enum;
 
-typedef long long	t_ll;
-typedef struct s_shell \
-					t_shell;
 typedef struct s_parsing
 {
 	int					i;
@@ -134,7 +135,6 @@ struct s_shell
 	struct s_shell		*head;
 	struct s_shell		*next;
 };
-typedef int			(*t_func_arr)(char **args, t_env *env);
 
 /* built-ins functions*/
 int		ft_unset(char **args, t_env *env);
@@ -143,12 +143,10 @@ int		ft_export(char **args, t_env *env);
 int		ft_env(char **args, t_env *env);
 int		ft_echo(char **args, t_env *env);
 int		ft_cd(char **args, t_env *env);
-int		ft_unset(char **args, t_env *env);
 int		ft_exit(t_pipe *p, char **args, t_env *env);
 
 /* core utils functions */
 void	set_status(int err_code, int *err);
-//void	set_gstatus(int err_code);
 int		max(int n1, int n2);
 t_ll	ll_atoi(const char *nptr);
 char	*ll_itoa(t_ll n);
@@ -157,20 +155,16 @@ int		all_of_char(char c, char *letters);
 int		none_of_char(char c, char *letters);
 void	init_parse(t_parse *q);
 
-/* str utils functions */
-void	sh_trim_list_strings(char **str);
-char	*sh_trim_strings(char *s);
-int		sh_strpos(const char *big, const char *little);
-int		sh_jump_to(char *str, char c);
-int		sh_jump_to2(char **str, char c);
-int		sh_skip(char *str, char c);
-int		sh_check_empty(char *str);
-char	*sh_trim_spaces(char *str);
-
 /* list utils functions */
 t_shell	*sh_lstnew(char *line, t_env *env, int *pos, int *l_status);
 t_shell	*sh_lstadd_back(t_shell **sh, char *line, int *pos, int *l_status);
-int		env_size(t_env *lst);
+
+/* str utils functions */
+int		sh_jump_to(char *str, char c);
+int		sh_skip(char *str, char c);
+char	*sh_trim_spaces(char *str);
+int		sh_strpos(const char *big, const char *little);
+int		sh_check_empty(char *str);
 
 /* free utils functions */
 void	free_s(void *ptr);
@@ -188,6 +182,7 @@ int		flush_errors(char *cmd, int err_sig, char *tk);
 int		check_forbidden_c(char *line);
 
 /* environment functions */
+int		env_size(t_env *lst);
 char	*sh_getenv(t_env *env, char *str);
 t_env	*fill_env(char *envp[]);
 t_env	*sh_updateenv(t_env *env, char *var_name, char *new_value);

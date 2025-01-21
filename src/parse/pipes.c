@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/28 13:53:58 by mfleury           #+#    #+#             */
-/*   Updated: 2025/01/21 10:05:42 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/01/21 22:21:58 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,18 +43,26 @@ int	count_pipes(char *line)
 	return (n);
 }
 
-/*static int	fill_in_pipe(t_pipe *p)
+static int	get_next_pipe_loop(t_pipe *p, char *t_line, int *err, int i)
 {
-	p->redirs = create_redirs(p);
-	if (p->redirs == NULL)
-		return (2);
-	p->args = create_args(p);
-	if (p->args == NULL)
-		return (flush_errors("", -1), -1);
-	if (get_fds_redir(p) == -1)
-		return (close_redir_fd_mult(p->head), 2);
+	if (t_line[i] == '|' || t_line[i] == '\0')
+	{
+		p->p_line = ft_substr(t_line, 0, i);
+		p->p_line = sh_trim_spaces(p->p_line);
+		if (p->p_line == NULL)
+			return (set_status(flush_errors("", 202, ""), err), 2);
+		else if (p->p_line[0] == '\0')
+			return (set_status(flush_errors("", 205, ""), err), 2);
+		/*else if (sh_check_empty(p->p_line) != 0)
+			return (flush_errors("", 205), 2);*/
+		if (t_line[i] == '|')
+			ft_memset(t_line, ' ', i + 1);
+		else
+			ft_memset(t_line, ' ', i);
+		return (1);
+	}
 	return (0);
-}*/
+}
 
 int	get_next_pipe(t_pipe *p, char *t_line, int *err)
 {
@@ -65,22 +73,8 @@ int	get_next_pipe(t_pipe *p, char *t_line, int *err)
 	{
 		while (t_line[i] == 34 || t_line[i] == 39)
 			i += sh_jump_to(t_line + i, t_line[i]);
-		if (t_line[i] == '|' || t_line[i] == '\0')
-		{
-			p->p_line = ft_substr(t_line, 0, i);
-			p->p_line = sh_trim_spaces(p->p_line);
-			if (p->p_line == NULL)
-				return (set_status(flush_errors("", 202, ""), err), 2);
-			else if (p->p_line[0] == '\0')
-				return (set_status(flush_errors("", 205, ""), err), 2);
-			/*else if (sh_check_empty(p->p_line) != 0)
-				return (flush_errors("", 205), 2);*/
-			if (t_line[i] == '|')
-				ft_memset(t_line, ' ', i + 1);
-			else
-				ft_memset(t_line, ' ', i);
+		if (get_next_pipe_loop(p, t_line, err, i) == 1)
 			return ((create_parsing(p)));
-		}
 		i++;
 	}
 	p->p_line = ft_strdup(t_line);

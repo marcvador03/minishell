@@ -6,64 +6,114 @@
 /*   By: mfleury <mfleury@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/07 15:12:52 by mfleury           #+#    #+#             */
-/*   Updated: 2025/01/21 10:51:43 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/01/21 22:07:40 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-char	*get_tk(char *line);
-int		count_tokens(char *line);
 int		check_open_quotes(char *str);
 int		execute_tokens(t_shell *sh, int level, int status);
 char	*create_prompt(t_env *env);
+int		subshell(t_shell *sh);
 
-static int	fill_sh_init(t_shell *tmp, t_terms *tcap, int (*x)[2])
+/*static int	exec_token_fork(t_shell *sh, int level, int status)
 {
-	tmp->tcap = tcap;
-	tmp->bracket[0] = *x[0] + tmp->bracket[0] - (*x)[1];
-	(*x)[0] = tmp->bracket[0];
-	(*x)[1] = tmp->bracket[1];
-	return (0);
+	pid_t	pid;
+	int		wstatus;
+
+	pid = fork();
+	if (pid == -1)
+		flush_errors("", -1, "");
+	if (pid == 0)
+		exit(execute_tokens(sh, ++level, status));
+	waitpid(pid, &wstatus, 0);
+	if (WIFEXITED(wstatus))
+		return (WEXITSTATUS(wstatus));
+	return (-1);
+}*/
+
+static t_shell	*move_sh(t_shell *sh, int *status, int level)
+{
+	pid_t	pid;
+	int		wstatus;
+
+	if ((*status != 0 && sh->tk == 1) || (*status == 0 && sh->tk == 0))
+	{
+		pid = fork();
+		if (pid == -1)
+			flush_errors("", -1, "");
+		if (pid == 0)
+			exit(execute_tokens(sh, ++level, *status));
+		waitpid(pid, &wstatus, 0);
+		if (WIFEXITED(wstatus))
+			*status = WEXITSTATUS(wstatus);
+	}
+	while (sh != NULL && (sh->bracket[0] - sh->bracket[1] > level))
+	{
+		sh->l_status = *status;
+		sh = sh->next;
+	}
+	if (sh != NULL)
+	{
+		sh->l_status = *status;
+		sh = sh->next;
+	}
+	return (sh);
 }
 
-/*static t_shell	*fill_sh_loop(t_shell *sh, t_env *env, char *line, int *pos)
+int	execute_tokens(t_shell *sh, int level, int status)
 {
-//	char	*t_line;
-
-//	t_line = line + sh_skip(line, ' ');
-	return (sh);
-}*/
+	if (sh != sh->head)
+		status = sh->l_status;
+	while (sh != NULL)
+	{
+		while (sh != NULL && sh->bracket[0] > level)
+			sh = move_sh(sh, &status, level);
+		if (sh == NULL)
+			return (status);
+		else if (sh->bracket[0] == level)
+		{
+			if ((sh->tk == 0 && status == 0) || (sh->tk == 1 && status != 0))
+				status = subshell(sh);
+			else if (level > 0)
+				exit (status);
+			sh->pipes = NULL;
+		}
+		if (sh->bracket[1] > 0 && level > 0)
+			exit (status);
+		if (sh->exit == 1)
+			break ;
+		sh = sh->next;
+		if (sh != NULL)
+			sh->l_status = status;
+	}
+	return (status);
+}
 
 static t_shell	*fill_sh(char *line, t_terms *tcap, t_env *env, int *l_status)
 {
-	int		s_bracket[2];
-//	int		n;
-	int		pos;
+	t_parse	tmp;
 	t_shell	*sh;
 	t_shell	*head;
 
 	sh = NULL;
 	head = NULL;
-	/*n = count_tokens(line);
-	if (n == -1)
-		return (set_gstatus(204), NULL);*/
-	s_bracket[0] = 0;
-	s_bracket[1] = 0;
-	pos = 0;
-	while (line[pos] != '\0')
+	init_parse(&tmp);
+	while (line[tmp.i] != '\0')
 	{
 		if (sh != NULL)
 			head = sh->head;
 		if (sh == NULL)
-			sh = sh_lstnew(line, env, &pos, l_status);
+			sh = sh_lstnew(line, env, &tmp.i, l_status);
 		else
-			sh = sh_lstadd_back(&sh, line, &pos, l_status);
+			sh = sh_lstadd_back(&sh, line, &tmp.i, l_status);
 		if (sh == NULL)
 			return (free_sh(head), NULL);
-		//sh = fill_sh_loop(sh, env, line, &pos);
-		if (sh == NULL || fill_sh_init(sh, tcap, &s_bracket) != 0)
-			return (NULL);
+		sh->tcap = tcap;
+		sh->bracket[0] = tmp.j + sh->bracket[0] - tmp.k;
+		tmp.j = sh->bracket[0];
+		tmp.k = sh->bracket[1];
 	}
 	if (sh->bracket[1] != sh->bracket[0])
 		return (free_sh(sh->head), flush_errors("", 206, ""), NULL);
@@ -73,7 +123,6 @@ static t_shell	*fill_sh(char *line, t_terms *tcap, t_env *env, int *l_status)
 static char	*get_input(t_env *env, t_terms *tcap, int *l_status)
 {
 	char	*line;
-	//char	*line2;
 	char	*prompt;
 
 	prompt = create_prompt(env);
@@ -94,9 +143,6 @@ static char	*get_input(t_env *env, t_terms *tcap, int *l_status)
 	add_history(line);
 	if (check_forbidden_c(line) == -1)
 		return (free_s(prompt), free_s(line), get_input(env, tcap, l_status));
-	/*line2 = ft_strjoin("&&", line);
-	if (line2 == NULL)
-		return (set_gstatus(202), free_s(line), free_s(prompt), NULL);*/
 	return (free_s(prompt), line);
 }
 
@@ -118,11 +164,9 @@ int	start_shell(t_env *env, t_terms *tcap, int *l_status)
 		return (free_s(line), 0);
 	free_s(line);
 	head = sh->head;
-	//g_status = 0;
 	*l_status = 0;
 	if (sh_check_empty(sh->s_line) == -1)
 		return (free_sh(head), 0);
-	//g_status = execute_tokens(sh, 0, 0);
 	*l_status = execute_tokens(sh, 0, 0);
 	return (free_sh(head), 0);
 }

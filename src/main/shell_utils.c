@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/12 01:02:14 by mfleury           #+#    #+#             */
-/*   Updated: 2025/01/21 09:49:56 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/01/21 21:11:25 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,8 +28,6 @@ t_shell	*sh_lstnew(char *line, t_env *env, int *pos, int *l_status)
 	ptr->s_line = get_next_subshell(ptr, line, pos);
 	if (ptr->s_line == NULL) // check also line has not only spaces
 		return (free_sh(ptr), NULL);
-	//if (get_next_token(ptr, line) != 0)
-	//	return (NULL);
 	return (ptr);
 }
 

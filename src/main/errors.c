@@ -6,17 +6,12 @@
 /*   By: mfleury <mfleury@student.42barcelona.      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/16 16:32:42 by mfleury           #+#    #+#             */
-/*   Updated: 2025/01/20 23:30:13 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/01/21 22:08:54 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 #include "error_minishell.h"
-
-/*void	set_gstatus(int err_code)
-{
-	g_status = err_code;
-}*/
 
 void	set_status(int err_code, int *err)
 {
@@ -91,7 +86,7 @@ static void	custom_errors3(char *cmd, int errnum, int *ret_err)
 int	flush_errors(char *cmd, int err_sig, char *tk)
 {
 	int	ret_err;
-	
+
 	ret_err = 0;
 	if (err_sig == -1)
 	{
