@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/18 09:19:54 by marvin            #+#    #+#             */
-/*   Updated: 2025/01/16 17:23:11 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/01/21 10:42:30 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,3 +77,4 @@ void	init_signal(int pid, int hd)
 	else if (pid == 1 && hd == 1)
 		signal(SIGINT, SIG_IGN);
 }
+

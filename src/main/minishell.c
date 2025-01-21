@@ -6,15 +6,15 @@
 /*   By: mfleury <mfleury@student.42barcelona.      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 10:01:23 by mfleury           #+#    #+#             */
-/*   Updated: 2025/01/20 23:30:33 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/01/21 10:44:01 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-unsigned int	g_status = 0;
+int	g_status = 0;
 
-int	start_shell(t_env *env, t_terms *tcap);
+int	start_shell(t_env *env, t_terms *tcap, int *l_status);
 int	close_redir_fd_mult(t_pipe *p);
 int	close_redir_fd_single(t_pipe *p);
 
@@ -92,6 +92,7 @@ int	main(int argc, char *argv[], char *envp[])
 {
 	t_terms	tcap;
 	t_env	*env;
+	int		l_status;
 
 	if (isatty(STDIN_FILENO) == 0)
 		exit_minishell_error(NULL, errno, NULL);
@@ -100,9 +101,10 @@ int	main(int argc, char *argv[], char *envp[])
 	env = fill_env(envp);
 	init_termcaps(&tcap, env);
 	set_term_settings(&tcap, env);
+	g_status = 0;
 	while (1)
 	{
-		start_shell(env, &tcap);
+		start_shell(env, &tcap, &l_status);
 		rl_on_new_line();
 	}
 	return (0);

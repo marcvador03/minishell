@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/14 09:54:49 by pmorello          #+#    #+#             */
-/*   Updated: 2025/01/14 09:52:36 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/01/21 10:06:57 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,10 +67,11 @@ static int	print_sorted(t_env *env, int n)
 {
 	int		i;
 	char	**s_env;
+	int		err;
 
-	s_env = get_env_array(env);
+	s_env = get_env_array(env, &err);
 	if (s_env == NULL)
-		return (202);
+		return (err);
 	s_env = sort_array(s_env, 0, n - 1);
 	i = 0;
 	while (s_env[i] != NULL)

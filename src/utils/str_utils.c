@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/02 16:56:07 by mfleury           #+#    #+#             */
-/*   Updated: 2025/01/19 15:40:00 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/01/21 10:05:20 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ char	*sh_trim_spaces(char *str)
 		return (NULL);
 	new_str = ft_strtrim(str, " ");
 	if (new_str == NULL)
-		return (flush_errors("", 202), str);
+		return (flush_errors("", 202, ""), str);
 	free_s(str);
 	return (new_str);
 }

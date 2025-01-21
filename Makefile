@@ -46,9 +46,9 @@ MAIN = environment.c \
 	   errors.c \
 	   minishell.c \
 	   prompt.c \
+	   signals.c \
 	   shell.c \
 	   shell_utils.c \
-	   signals.c \
 	   subshell.c \
 	   termcaps.c
 

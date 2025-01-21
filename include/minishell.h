@@ -6,7 +6,7 @@
 /*   By: pmorello <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 12:17:09 by pmorello          #+#    #+#             */
-/*   Updated: 2025/01/20 23:12:53 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/01/21 10:43:44 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@
 #  define PATH_MAX 4096
 # endif
 
-extern unsigned int	g_status;
+extern int	g_status;
 
 /*Enum to match command names input with a number*/
 typedef enum cmd_enum
@@ -166,8 +166,8 @@ int		sh_check_empty(char *str);
 char	*sh_trim_spaces(char *str);
 
 /* list utils functions */
-t_shell	*sh_lstnew(char *line, t_env *env, int *pos);
-t_shell	*sh_lstadd_back(t_shell **sh, char *line, t_env *env, int *pos);
+t_shell	*sh_lstnew(char *line, t_env *env, int *pos, int *l_status);
+t_shell	*sh_lstadd_back(t_shell **sh, char *line, int *pos, int *l_status);
 int		env_size(t_env *lst);
 
 /* free utils functions */

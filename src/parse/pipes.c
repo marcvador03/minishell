@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/28 13:53:58 by mfleury           #+#    #+#             */
-/*   Updated: 2025/01/20 23:36:22 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/01/21 10:05:42 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,7 +72,7 @@ int	get_next_pipe(t_pipe *p, char *t_line, int *err)
 			if (p->p_line == NULL)
 				return (set_status(flush_errors("", 202, ""), err), 2);
 			else if (p->p_line[0] == '\0')
-				return (set_status(flush_errors("", 205), err), 2);
+				return (set_status(flush_errors("", 205, ""), err), 2);
 			/*else if (sh_check_empty(p->p_line) != 0)
 				return (flush_errors("", 205), 2);*/
 			if (t_line[i] == '|')
@@ -88,6 +88,6 @@ int	get_next_pipe(t_pipe *p, char *t_line, int *err)
 	if (p->p_line == NULL)
 		return (set_status(flush_errors("", 202, ""), err), 2);
 	else if (p->p_line[0] == '\0')
-		return (set_status(flush_errors("", 205), err), 2);
+		return (set_status(flush_errors("", 205, ""), err), 2);
 	return (create_parsing(p));
 }

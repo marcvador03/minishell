@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/10 08:52:08 by mfleury           #+#    #+#             */
-/*   Updated: 2025/01/20 15:55:15 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/01/21 10:01:59 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,14 +23,14 @@ static int	count_redirs_loop(char **parse, t_parse *r, char c)
 	while (parse[r->i][++r->j] != '\0')
 	{
 		if (r->j >= 2)
-			return (flush_errors("", 203), -1);
+			return (flush_errors("", 203, ""), -1);
 		if (parse[r->i][r->j] != c)
-			return (flush_errors("", 203), -1);
+			return (flush_errors("", 203, ""), -1);
 	}
 	if (parse[++r->i] == NULL)
-		return (flush_errors("", 203), -1);
+		return (flush_errors("", 203, ""), -1);
 	else if (parse[r->i][0] == '>' || parse[r->i][0] == '<')
-		return (flush_errors("", 203), -1);
+		return (flush_errors("", 203, ""), -1);
 	return (0);
 }
 
@@ -78,17 +78,17 @@ static int	create_parsing_loop(t_pipe *p, t_parse *q)
 		{
 			p->rd[q->j] = q->parse[q->i++];
 			if (p->rd[q->j] == NULL)
-				return (flush_errors("", 202), 2);
+				return (flush_errors("", 202, ""), 2);
 			q->flag_sep = get_rd_flag(p->rd[q->j]);
 			p->redirs[q->j] = trim_line_expand(p, q->parse[q->i], q->flag_sep);
 			if (p->redirs[q->j++] == NULL)
-				return (flush_errors("", 202), 2);
+				return (flush_errors("", 202, ""), 2);
 		}
 		else
 		{
 			p->args[q->k] = trim_line_expand(p, q->parse[q->i], 0);
 			if (p->args[q->k++] == NULL)
-				return (flush_errors("", 202), 2);
+				return (flush_errors("", 202, ""), 2);
 		}
 		q->i++;
 	}
@@ -104,7 +104,7 @@ int	create_parsing(t_pipe *p)
 	init_parse(&q);
 	q.parse = get_sep_quotes(p->p_line);
 	if (q.parse == NULL)
-		return (flush_errors("", 202), 2);
+		return (flush_errors("", 202, ""), 2);
 	cnt_args = 0;
 	cnt_redirs = 0;
 	q.flag_jump = count_redirs(q.parse, &cnt_args, &cnt_redirs);
@@ -114,7 +114,7 @@ int	create_parsing(t_pipe *p)
 	p->rd = (char **)ft_calloc(sizeof(char *), cnt_redirs + 1);
 	p->args = (char **)ft_calloc(sizeof(char *), cnt_args + 1);
 	if (p->redirs == NULL || p->rd == NULL || p->args == NULL)
-		return (free_d(q.parse), flush_errors("", 202), 2);
+		return (free_d(q.parse), flush_errors("", 202, ""), 2);
 	if (create_parsing_loop(p, &q) == 2)
 		return (free(q.parse), 2);
 	if (close_parsing(p) == 2)

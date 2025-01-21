@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/07 14:31:45 by mfleury           #+#    #+#             */
-/*   Updated: 2025/01/20 22:43:53 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/01/21 10:04:27 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ static int	search_next_bracket(t_shell *sh, char *line, int i)
 		if (line[i] == '(')
 		{
 			if (one_of_char(line[i + 1], "),<,>,&,|") == TRUE)
-				return (flush_errors("", 206), -1);
+				return (flush_errors("", 206, ""), -1);
 			sh->bracket[0]++;
 			ft_memset(line + i, ' ', 1);
 			flag[0] = 1;
@@ -36,7 +36,7 @@ static int	search_next_bracket(t_shell *sh, char *line, int i)
 		else if (line[i] == ')')
 		{
 			if (one_of_char(line[i + 1], "(,<,>,&,|") == TRUE)
-				return (flush_errors("", 206), -1);
+				return (flush_errors("", 206, ""), -1);
 			sh->bracket[1]++;
 			ft_memset(line + i, ' ', 1);
 			flag[1] = 1;
@@ -44,7 +44,7 @@ static int	search_next_bracket(t_shell *sh, char *line, int i)
 		i++;
 	}
 	if (flag[0] > 0 && flag[1] > 0)
-		return (flush_errors("", 206), -1);
+		return (flush_errors("", 206, ""), -1);
 	return (i);
 }
 
@@ -60,11 +60,11 @@ static int 	search_next_token(t_shell *sh, char *line, int i)
 	if (line[i] == '\0')
 		return (i);
 	if (line[i] == '|' && one_of_char(line[i + 1], "&,(,)") == TRUE)
-		return (flush_errors("", 204), -1);
+		return (flush_errors("", 204, ""), -1);
 	else if (line[i] == '|' && line[i + 1] == '|') 
 		return (i);
 	if (line[i] == '&' && one_of_char(line[i + 1], "|,(,)") == TRUE)
-		return (flush_errors("", 204), -1);
+		return (flush_errors("", 204, ""), -1);
 	else if (line[i] == '&' && line[i + 1] == '&') 
 		return (i);
 	return (search_next_token(sh, line, ++i));
@@ -79,7 +79,7 @@ char	*get_next_subshell(t_shell *sh, char *line, int *pos)
 	
 	i = *pos;
 	if (*pos == 0 && one_of_char(line[*pos], "|,&") == TRUE)
-		return (flush_errors("", 204), NULL);
+		return (flush_errors("", 204, ""), NULL);
 	else if (*pos == 0)
 	{
 		i = search_next_bracket(sh, line, i);
@@ -93,7 +93,7 @@ char	*get_next_subshell(t_shell *sh, char *line, int *pos)
 		while (one_of_char(line[i], "&,|") == TRUE)
 			ft_memset(line + i++, ' ', 1);
 		if (one_of_char(line[i], "|,&") == TRUE || line[i] == '\0')
-			return (flush_errors("", 204), NULL);
+			return (flush_errors("", 204, ""), NULL);
 	}
 	i = search_next_token(sh, line, i);
 	if (i == -1)
@@ -101,7 +101,7 @@ char	*get_next_subshell(t_shell *sh, char *line, int *pos)
 	res = ft_substr(line, *pos, i - *pos);
 	res = sh_trim_spaces(res);
 	if (res == NULL)
-		return (flush_errors("", 202), NULL);
+		return (flush_errors("", 202, ""), NULL);
 	*pos = i;
 	return (res);
 }
@@ -137,7 +137,7 @@ static int	exec_token_fork(t_shell *sh, int level, int status)
 
 	pid = fork();
 	if (pid == -1)
-		flush_errors("", -1);
+		flush_errors("", -1, "");
 	if (pid == 0)
 		exit(execute_tokens(sh, ++level, status));
 	waitpid(pid, &wstatus, 0);
