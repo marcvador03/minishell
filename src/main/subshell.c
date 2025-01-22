@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/22 16:08:01 by mfleury           #+#    #+#             */
-/*   Updated: 2025/01/20 23:38:49 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/01/22 14:40:08 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,10 +24,14 @@ static t_pipe	*p_lstnew(t_shell *sh, char *line, t_env *env, int *err)
 	ptr = (t_pipe *)ft_calloc(sizeof (t_pipe), 1);
 	if (ptr == NULL)
 		return (flush_errors("", -1, ""), NULL);
+	ptr->r = (t_redirs *)ft_calloc(sizeof (t_redirs), 1);
+	if (ptr->r == NULL)
+		return (flush_errors("", -1, ""), NULL);
 	ptr->prev = NULL;
 	ptr->next = NULL;
 	ptr->head = ptr;
 	ptr->sh = sh;
+	ptr->r->sh = sh;
 	if (get_next_pipe(ptr, line, env, err) == 2)
 		return (free_pipe(ptr), NULL);
 	return (ptr);

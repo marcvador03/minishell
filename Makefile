@@ -28,6 +28,7 @@ PARSE =	brackets.c  \
 		strings.c \
 		strings_utils.c \
 		subshell_parsing.c \
+		subshell_parsing_utils.c \
 		variable_env.c \
 
 EXECUTE = exec.c \

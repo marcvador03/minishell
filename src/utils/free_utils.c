@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/25 14:10:00 by mfleury           #+#    #+#             */
-/*   Updated: 2025/01/19 15:45:18 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/01/22 14:43:30 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,13 +44,14 @@ void	free_pipe(t_pipe *p)
 	{
 		if (p->p_line != NULL)
 			free_s((void *)p->p_line);
-		if (p->redirs != NULL)
-			free_d(p->redirs);
-		if (p->rd != NULL)
-			free_d(p->rd);
+		if (p->r->redirs != NULL)
+			free_d(p->r->redirs);
+		if (p->r->rd != NULL)
+			free_d(p->r->rd);
 		if (p->args != NULL)
 			free_d(p->args);
 		tmp = tmp->next;
+		free_s(p->r);
 		free_s(p);
 		p = tmp;
 	}
@@ -85,8 +86,13 @@ void	free_sh(t_shell *sh)
 	while (tmp != NULL)
 	{
 		free_pipe(sh->pipes);
+		if (sh->r->rd != NULL)
+			free_d(sh->r->rd);
+		if (sh->r->redirs != NULL)
+			free_d(sh->r->redirs);
 		free_s(sh->s_line);
 		tmp = tmp->next;
+		free_s(sh->r);
 		free_s((void *)sh);
 		sh = tmp;
 	}

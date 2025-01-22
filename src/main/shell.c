@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/07 15:12:52 by mfleury           #+#    #+#             */
-/*   Updated: 2025/01/21 22:07:40 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/01/22 15:12:23 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,22 +16,7 @@ int		check_open_quotes(char *str);
 int		execute_tokens(t_shell *sh, int level, int status);
 char	*create_prompt(t_env *env);
 int		subshell(t_shell *sh);
-
-/*static int	exec_token_fork(t_shell *sh, int level, int status)
-{
-	pid_t	pid;
-	int		wstatus;
-
-	pid = fork();
-	if (pid == -1)
-		flush_errors("", -1, "");
-	if (pid == 0)
-		exit(execute_tokens(sh, ++level, status));
-	waitpid(pid, &wstatus, 0);
-	if (WIFEXITED(wstatus))
-		return (WEXITSTATUS(wstatus));
-	return (-1);
-}*/
+t_shell	*fill_sh(char *line, t_terms *tcap, t_env *env, int *l_status);
 
 static t_shell	*move_sh(t_shell *sh, int *status, int level)
 {
@@ -75,7 +60,11 @@ int	execute_tokens(t_shell *sh, int level, int status)
 		else if (sh->bracket[0] == level)
 		{
 			if ((sh->tk == 0 && status == 0) || (sh->tk == 1 && status != 0))
+			{
+				if (get_fds_redir(sh->r, &sh->l_status) == -1)
+					return (close_redir_fd_sh(sh->head), 2);
 				status = subshell(sh);
+			}
 			else if (level > 0)
 				exit (status);
 			sh->pipes = NULL;
@@ -89,35 +78,6 @@ int	execute_tokens(t_shell *sh, int level, int status)
 			sh->l_status = status;
 	}
 	return (status);
-}
-
-static t_shell	*fill_sh(char *line, t_terms *tcap, t_env *env, int *l_status)
-{
-	t_parse	tmp;
-	t_shell	*sh;
-	t_shell	*head;
-
-	sh = NULL;
-	head = NULL;
-	init_parse(&tmp);
-	while (line[tmp.i] != '\0')
-	{
-		if (sh != NULL)
-			head = sh->head;
-		if (sh == NULL)
-			sh = sh_lstnew(line, env, &tmp.i, l_status);
-		else
-			sh = sh_lstadd_back(&sh, line, &tmp.i, l_status);
-		if (sh == NULL)
-			return (free_sh(head), NULL);
-		sh->tcap = tcap;
-		sh->bracket[0] = tmp.j + sh->bracket[0] - tmp.k;
-		tmp.j = sh->bracket[0];
-		tmp.k = sh->bracket[1];
-	}
-	if (sh->bracket[1] != sh->bracket[0])
-		return (free_sh(sh->head), flush_errors("", 206, ""), NULL);
-	return (sh->head);
 }
 
 static char	*get_input(t_env *env, t_terms *tcap, int *l_status)

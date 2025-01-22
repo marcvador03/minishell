@@ -6,13 +6,14 @@
 /*   By: mfleury <mfleury@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/21 21:43:32 by mfleury           #+#    #+#             */
-/*   Updated: 2025/01/21 22:24:29 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/01/22 11:50:53 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
 static int	parse_subshell(t_shell *sh, char *s_line, t_parse *q);
+int		get_subshell_redirs(t_shell *sh, char **s_line, t_parse *q);
 
 static int	search_next_token(t_shell *sh, char *line, int i)
 {
@@ -101,13 +102,13 @@ static int	parse_subshell(t_shell *sh, char *s_line, t_parse *q)
 		return (-1);
 	if (q->flag_jump == 1)
 	{
-		if (q->j > 19)
-			return (flush_errors("", 210, ""), -1);
 		q->i += sh_skip(s_line + q->i, ' ');
 		if (s_line[q->i] == '\0')
 			return (0);
 		else
-			return (flush_errors("", 210, ""), -1);
+			if (get_subshell_redirs(sh, &s_line, q) == -1)
+				return (-1);
+			//return (flush_errors("", 210, ""), -1);
 	}
 	return (0);
 }
@@ -133,5 +134,6 @@ char	*get_next_subshell(t_shell *sh, char *line, int *pos)
 	q.i = 0;
 	if (parse_subshell(sh, res, &q) == -1)
 		return (free_s(res), NULL);
+	res = sh_trim_spaces(res);
 	return (res);
 }

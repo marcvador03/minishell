@@ -6,13 +6,13 @@
 /*   By: mfleury <mfleury@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/18 17:20:19 by mfleury           #+#    #+#             */
-/*   Updated: 2025/01/22 09:58:55 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/01/22 15:21:06 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	init_heredoc(t_pipe *p, char *line);
+int	init_heredoc(t_redirs *r, char *line, int *r_status);
 
 int	get_rd_flag(char *rd)
 {
@@ -27,37 +27,37 @@ int	get_rd_flag(char *rd)
 	return (0);
 }
 
-static int	get_fdout(t_pipe *p, char *r_path, int rd, int pfd)
+static int	get_fdout(t_redirs *r, int rd, int *err, int i)
 {
 	int	fd;
 
 	fd = -2;
-	if (pfd > 2)
-		close(pfd);
+	if (r->fd[OUTPUT] > 2)
+		close(r->fd[OUTPUT]);
 	if (rd == 3)
-		fd = open(r_path, O_CREAT | O_RDWR | O_APPEND, 0644);
+		fd = open(r->redirs[i], O_CREAT | O_RDWR | O_APPEND, 0644);
 	else if (rd == 1)
-		fd = open(r_path, O_CREAT | O_RDWR | O_TRUNC, 0644);
+		fd = open(r->redirs[i], O_CREAT | O_RDWR | O_TRUNC, 0644);
 	if (fd == -1)
-		return (set_status(flush_errors(r_path, -1, ""), &p->p_status), -1);
+		return (set_status(flush_errors(r->redirs[i], -1, ""), err), -1);
 	if (fd == -2)
 		fd = STDOUT_FILENO;
 	return (fd);
 }
 
-static int	get_fdin(t_pipe *p, char *r_path, int rd, int pfd)
+static int	get_fdin(t_redirs *r, int rd, int *err, int i)
 {
 	int	fd;
 
 	fd = -2;
-	if (pfd > 2)
-		close(pfd);
+	if (r->fd[INPUT] > 2)
+		close(r->fd[INPUT]);
 	if (rd == 2)
-		fd = open(r_path, O_RDONLY, 0700);
+		fd = open(r->redirs[i], O_RDONLY, 0700);
 	if (fd == -1)
-		return (set_status(flush_errors(r_path, -1, ""), &p->p_status), -1);
+		return (set_status(flush_errors(r->redirs[i], -1, ""), err), -1);
 	else if (rd == 4)
-		fd = init_heredoc(p, r_path);
+		fd = init_heredoc(r, r->redirs[i], err);
 	if (fd == -1)
 		return (-1);
 	if (fd == -2)
@@ -65,40 +65,26 @@ static int	get_fdin(t_pipe *p, char *r_path, int rd, int pfd)
 	return (fd);
 }
 
-int	get_fds_redir(t_pipe *p)
+int	get_fds_redir(t_redirs *r, int *err)
 {
-	int	i;
 	int	fd;
 	int	rd;
+	int	i;
 
-	i = 0;
 	fd = -2;
-	while (p->redirs[i] != NULL)
+	i = 0;
+	if (r->exist == 0)
+		return (0);
+	while (r->redirs[i] != NULL)
 	{
-		rd = get_rd_flag(p->rd[i]);
+		rd = get_rd_flag(r->rd[i]);
 		if (rd == 2 || rd == 4)
-			p->r_fd[INPUT] = get_fdin(p, p->redirs[i], rd, p->r_fd[INPUT]);
+			r->fd[INPUT] = get_fdin(r, rd, err, i);
 		else if (rd == 1 || rd == 3)
-			p->r_fd[OUTPUT] = get_fdout(p, p->redirs[i], rd, p->r_fd[OUTPUT]);
-		if (p->r_fd[INPUT] == -1 || p->r_fd[OUTPUT] == -1)
+			r->fd[OUTPUT] = get_fdout(r, rd, err, i);
+		if (r->fd[INPUT] == -1 || r->fd[OUTPUT] == -1)
 			return (-1);
 		i++;
 	}
 	return (fd);
 }
-
-/*char	find_next_token(char *line)
-{
-	int	i;
-
-	if (line == NULL)
-		return ('\0');
-	i = 0;
-	while (line[i] != '\0')
-	{
-		if (line[i] == ' ' || line[i] == '<' || line[i] == '>')
-			return (line[i]);
-		i++;
-	}
-	return (line[i]);
-}*/

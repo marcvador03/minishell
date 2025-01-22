@@ -6,14 +6,14 @@
 /*   By: mfleury <mfleury@student.42barcelona.      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/17 09:57:43 by mfleury           #+#    #+#             */
-/*   Updated: 2025/01/22 09:51:43 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/01/22 14:35:51 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
 void	init_parse(t_parse *q);
-char	*expand_variable(t_pipe *p, char *line, int *i);
+char	*expand_variable(t_shell *sh, char *line, int *i);
 int		ft_isalnum_plus(int c);
 
 static void	quit_spaces(t_parse *q, char *line, char *f_line)
@@ -33,7 +33,7 @@ static void	quit_spaces(t_parse *q, char *line, char *f_line)
 	return ;
 }
 
-static char	*trim_within_quotes(t_pipe *p, char *line, t_parse *q, int f_exp)
+static char	*trim_within_quotes(t_redirs *r, char *line, t_parse *q, int f_exp)
 {
 	int		x;
 	int		y;
@@ -50,7 +50,7 @@ static char	*trim_within_quotes(t_pipe *p, char *line, t_parse *q, int f_exp)
 			if (ft_isalnum_plus(line[x + 1]) == 1)
 			{
 				y = x;
-				line = expand_variable(p, line, &x);
+				line = expand_variable(r->sh, line, &x);
 				q->len = ft_strlen(line);
 				q->i = sh_jump_to(line + q->prev_pos, line[q->prev_pos]);
 				q->i += q->prev_pos;
@@ -62,7 +62,7 @@ static char	*trim_within_quotes(t_pipe *p, char *line, t_parse *q, int f_exp)
 	return (line);
 }
 
-static char	*trim_quotes(t_pipe *p, char *line, t_parse *q, int f_exp)
+static char	*trim_quotes(t_redirs *r, char *line, t_parse *q, int f_exp)
 {
 	while (line[q->i] == 34 || line[q->i] == 39)
 	{
@@ -72,8 +72,8 @@ static char	*trim_quotes(t_pipe *p, char *line, t_parse *q, int f_exp)
 			q->i--;
 			q->len = ft_strlen(line);
 		}
-		p->r_hd_flag = 1;
-		line = trim_within_quotes(p, line, q, f_exp);
+		r->hd_flag = 1;
+		line = trim_within_quotes(r, line, q, f_exp);
 		ft_strlcpy(line + q->i - 1, line + q->i, q->len);
 		max(0, --q->i);
 		q->len = ft_strlen(line);
@@ -87,13 +87,13 @@ static char	*trim_quotes(t_pipe *p, char *line, t_parse *q, int f_exp)
 	return (line);
 }
 
-static char	*trim_dollar(t_pipe *p, char *line, t_parse *q, int f_exp)
+static char	*trim_dollar(t_redirs *r, char *line, t_parse *q, int f_exp)
 {
 	char	*res;
 
 	if (ft_isalnum_plus(line[q->i + 1]) == 1 && f_exp != 4)
 	{
-		res = expand_variable(p, line, &q->i);
+		res = expand_variable(r->sh, line, &q->i);
 		q->len = ft_strlen(line);
 		q->flag_jump = 1;
 		return (res);
@@ -101,7 +101,7 @@ static char	*trim_dollar(t_pipe *p, char *line, t_parse *q, int f_exp)
 	return (line);
 }
 
-char	*trim_line_expand(t_pipe *p, char *line, int f_exp)
+char	*trim_line_expand(t_redirs *r, char *line, int f_exp)
 {
 	t_parse	q;
 
@@ -113,10 +113,10 @@ char	*trim_line_expand(t_pipe *p, char *line, int f_exp)
 		if (line[q.i] == ' ')
 			quit_spaces(&q, line + q.i, line);
 		if (line[q.i] == '$' && line[q.i + 1] != '\0')
-			line = trim_dollar(p, line, &q, f_exp);
+			line = trim_dollar(r, line, &q, f_exp);
 		if (line[q.i] == '\0')
 			return (line);
-		line = trim_quotes(p, line, &q, f_exp);
+		line = trim_quotes(r, line, &q, f_exp);
 		if (line[q.i] == '\0')
 			return (line);
 		if (q.flag_jump == 0)

@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/28 13:53:58 by mfleury           #+#    #+#             */
-/*   Updated: 2025/01/21 22:21:58 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/01/22 14:23:44 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,6 @@
 
 char	**create_redirs(t_pipe *p);
 char	**create_args(t_pipe *p);
-int		get_fds_redir(t_pipe *p);
 int		close_redir_fd_mult(t_pipe *p);
 int		create_parsing(t_pipe *p);
 

@@ -6,7 +6,7 @@
 /*   By: pmorello <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 12:17:09 by pmorello          #+#    #+#             */
-/*   Updated: 2025/01/22 09:50:37 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/01/22 15:17:35 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,6 +68,7 @@ typedef struct s_parsing
 	int					j;
 	int					k;
 	int					prev_pos;
+	int					prev_pos2;
 	int					beg_sep;
 	int					len;
 	int					flag_jump;
@@ -94,13 +95,19 @@ typedef struct s_prompt
 	char				*prompt;
 }	t_prompt;
 
+typedef struct s_redirs
+{
+	int					exist;
+	char				**redirs;
+	char				**rd;
+	int					fd[4];
+	int					hd_flag;
+	t_shell				*sh;
+}	t_redirs;
+
 typedef struct s_pipe
 {
 	char				*p_line;
-	char				**redirs;
-	char				**rd;
-	int					r_fd[4];
-	int					r_hd_flag;
 	char				**args;
 	int					fd[2];
 	pid_t				pid;
@@ -108,6 +115,7 @@ typedef struct s_pipe
 	int					empty_arg;
 	int					exit;
 	t_shell				*sh;
+	t_redirs			*r;
 	struct s_pipe		*head;
 	struct s_pipe		*prev;
 	struct s_pipe		*next;
@@ -128,8 +136,7 @@ struct s_shell
 	int					p_count;
 	int					exit;
 	int					l_status;
-	char				*s_redirs[20];
-	char				*s_rd[20];
+	t_redirs			*r;
 	t_pipe				*pipes;
 	t_terms				*tcap;
 	t_env				*env;
@@ -181,6 +188,10 @@ int		main_cmd_return(t_pipe *p, int wstatus, pid_t pid);
 void	init_signal(int pid, int hd);
 int		flush_errors(char *cmd, int err_sig, char *tk);
 int		check_forbidden_c(char *line);
+
+int	get_fds_redir(t_redirs *r, int *err);
+int	close_redir_fd_pipe(t_pipe *p);
+int	close_redir_fd_sh(t_shell *sh);
 
 /* environment functions */
 int		env_size(t_env *lst);
