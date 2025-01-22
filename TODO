@@ -1,4 +1,4 @@
-1. expand variable after heredoc
+OK 1. expand variable after heredoc
 OK 2. cmd parsing
 3. exit function parameters
 4. utf8 protection

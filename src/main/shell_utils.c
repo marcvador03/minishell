@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/12 01:02:14 by mfleury           #+#    #+#             */
-/*   Updated: 2025/01/21 21:11:25 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/01/22 11:05:12 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,7 +68,7 @@ int	check_forbidden_c(char *line)
 	i = 0;
 	while (line[i] != 0)
 	{
-		if (line[i] == ';' || line[i] == 92 || line [i] == 10)
+		if (line[i] == ';' || line[i] == 92 || line[i] == 10 || line[i] == 42)
 		{
 			flush_errors("", 210, "");
 			return (-1);
