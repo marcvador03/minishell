@@ -6,7 +6,7 @@
 /*   By: pmorello <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 12:17:09 by pmorello          #+#    #+#             */
-/*   Updated: 2025/01/22 15:17:35 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/01/22 23:09:37 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -142,6 +142,9 @@ struct s_shell
 	t_env				*env;
 	struct s_shell		*head;
 	struct s_shell		*next;
+	int					level;
+	struct s_shell		*up;
+	struct s_shell		*down;
 };
 
 /* built-ins functions*/
@@ -164,8 +167,11 @@ int		none_of_char(char c, char *letters);
 void	init_parse(t_parse *q);
 
 /* list utils functions */
-t_shell	*sh_lstnew(char *line, t_env *env, int *pos, int *l_status);
-t_shell	*sh_lstadd_back(t_shell **sh, char *line, int *pos, int *l_status);
+t_shell	*sh_lstnew(t_terms *tcap, t_env *env, int *l_status);
+t_shell	*sh_lstadd_back(t_shell *sh);
+t_shell	*sh_lstadd_down(t_shell *sh);
+//t_shell	*sh_lstnew(char *line, t_env *env, int *pos, int *l_status);
+//t_shell	*sh_lstadd_back(t_shell **sh, char *line, int *pos, int *l_status);
 
 /* str utils functions */
 int		sh_jump_to(char *str, char c);

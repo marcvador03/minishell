@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/12 01:02:14 by mfleury           #+#    #+#             */
-/*   Updated: 2025/01/22 15:02:14 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/01/22 23:25:46 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,22 @@
 char	*get_next_subshell(t_shell *sh, char *line, int *pos);
 int		get_fds_redir(t_redirs *r, int *err);
 
-t_shell	*sh_lstnew(char *line, t_env *env, int *pos, int *l_status)
+t_shell	*sh_lstnew(t_terms *tcap, t_env *env, int *l_status)
+{
+	t_shell	*ptr;
+
+	ptr = (t_shell *)ft_calloc(sizeof (t_shell), 1);
+	if (ptr == NULL)
+		return (set_status(flush_errors("", 202, ""), l_status), NULL);
+	ptr->next = NULL;
+	ptr->head = ptr;
+	ptr->env = env;
+	ptr->l_status = *l_status;
+	ptr->tcap = tcap;
+	return (ptr);
+}
+
+/*t_shell	*sh_lstnew(char *line, t_env *env, int *pos, int *l_status)
 {
 	t_shell	*ptr;
 
@@ -33,7 +48,7 @@ t_shell	*sh_lstnew(char *line, t_env *env, int *pos, int *l_status)
 	if (ptr->s_line == NULL) // check also line has not only spaces
 		return (free_sh(ptr), NULL);
 	return (ptr);
-}
+}*/
 
 static t_shell	*sh_lstlast(t_shell *sh)
 {
@@ -47,7 +62,20 @@ static t_shell	*sh_lstlast(t_shell *sh)
 	return (tmp);
 }
 
-t_shell	*sh_lstadd_back(t_shell **sh, char *line, int *pos, int *l_status)
+t_shell	*sh_lstadd_back(t_shell *sh)
+{
+	t_shell	*ptr;
+	
+	ptr = sh_lstnew(sh->tcap, sh->env, &sh->l_status);
+	if (ptr == NULL)
+		return (NULL);
+	sh = sh_lstlast(sh);
+	sh->next = ptr;
+	ptr->head = sh->head;
+	ptr->up = sh->up;
+	return (ptr);
+}
+/*t_shell	*sh_lstadd_back(t_shell **sh, char *line, int *pos, int *l_status)
 {
 	t_shell	*tmp;
 	t_shell	*new_node;
@@ -61,9 +89,40 @@ t_shell	*sh_lstadd_back(t_shell **sh, char *line, int *pos, int *l_status)
 		tmp->next = new_node;
 		*sh = tmp->next;
 		(*sh)->head = tmp->head;
+		(*sh)->up = tmp->up;
+		(*sh)->tcap = tmp->tcap;
+		(*sh)->env = tmp->env;
 	}
 	return (tmp->next);
+}*/
+
+t_shell	*sh_lstadd_down(t_shell *sh)
+{
+	t_shell	*ptr;
+	
+	ptr = sh_lstnew(sh->tcap, sh->env, &sh->l_status);
+	if (ptr == NULL)
+		return (NULL);
+	ptr->up = sh;
+	sh->down = ptr;
+	return (ptr);
 }
+
+/*t_shell	*sh_lstadd_down(t_shell *sh, char *line, int *pos, int *l_status)
+{
+	t_shell	*new_node;
+
+	new_node = sh_lstnew(line, sh->env, pos, l_status);
+	if (new_node == NULL)
+		return (NULL);
+	else
+	{
+		new_node->up = sh;
+		new_node->r->sh = sh;
+		new_node->tcap = sh->tcap;
+	}
+	return (new_node);
+}*/
 
 int	check_forbidden_c(char *line)
 {
@@ -82,7 +141,7 @@ int	check_forbidden_c(char *line)
 	return (0);
 }
 
-t_shell	*fill_sh(char *line, t_terms *tcap, t_env *env, int *l_status)
+/*t_shell	*fill_sh(char *line, t_terms *tcap, t_env *env, int *l_status)
 {
 	t_parse	tmp;
 	t_shell	*sh;
@@ -110,4 +169,4 @@ t_shell	*fill_sh(char *line, t_terms *tcap, t_env *env, int *l_status)
 	if (sh->bracket[1] != sh->bracket[0])
 		return (free_sh(sh->head), flush_errors("", 206, ""), NULL);
 	return (sh->head);
-}
+}*/
