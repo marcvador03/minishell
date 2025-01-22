@@ -6,13 +6,13 @@
 /*   By: mfleury <mfleury@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/18 17:20:19 by mfleury           #+#    #+#             */
-/*   Updated: 2025/01/21 10:03:20 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/01/22 09:58:55 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	init_heredoc(char *line, int *err);
+int	init_heredoc(t_pipe *p, char *line);
 
 int	get_rd_flag(char *rd)
 {
@@ -27,7 +27,7 @@ int	get_rd_flag(char *rd)
 	return (0);
 }
 
-static int	get_fdout(char *r_path, int rd, int pfd, int *err)
+static int	get_fdout(t_pipe *p, char *r_path, int rd, int pfd)
 {
 	int	fd;
 
@@ -39,13 +39,13 @@ static int	get_fdout(char *r_path, int rd, int pfd, int *err)
 	else if (rd == 1)
 		fd = open(r_path, O_CREAT | O_RDWR | O_TRUNC, 0644);
 	if (fd == -1)
-		return (set_status(flush_errors(r_path, -1, ""), err), -1);
+		return (set_status(flush_errors(r_path, -1, ""), &p->p_status), -1);
 	if (fd == -2)
 		fd = STDOUT_FILENO;
 	return (fd);
 }
 
-static int	get_fdin(char *r_path, int rd, int pfd, int *err)
+static int	get_fdin(t_pipe *p, char *r_path, int rd, int pfd)
 {
 	int	fd;
 
@@ -55,9 +55,9 @@ static int	get_fdin(char *r_path, int rd, int pfd, int *err)
 	if (rd == 2)
 		fd = open(r_path, O_RDONLY, 0700);
 	if (fd == -1)
-		return (set_status(flush_errors(r_path, -1, ""), err), -1);
+		return (set_status(flush_errors(r_path, -1, ""), &p->p_status), -1);
 	else if (rd == 4)
-		fd = init_heredoc(r_path, err);
+		fd = init_heredoc(p, r_path);
 	if (fd == -1)
 		return (-1);
 	if (fd == -2)
@@ -65,7 +65,7 @@ static int	get_fdin(char *r_path, int rd, int pfd, int *err)
 	return (fd);
 }
 
-int	get_fds_redir(t_pipe *p, int *err)
+int	get_fds_redir(t_pipe *p)
 {
 	int	i;
 	int	fd;
@@ -77,9 +77,9 @@ int	get_fds_redir(t_pipe *p, int *err)
 	{
 		rd = get_rd_flag(p->rd[i]);
 		if (rd == 2 || rd == 4)
-			p->r_fd[INPUT] = get_fdin(p->redirs[i], rd, p->r_fd[INPUT], err);
+			p->r_fd[INPUT] = get_fdin(p, p->redirs[i], rd, p->r_fd[INPUT]);
 		else if (rd == 1 || rd == 3)
-			p->r_fd[OUTPUT] = get_fdout(p->redirs[i], rd, p->r_fd[OUTPUT], err);
+			p->r_fd[OUTPUT] = get_fdout(p, p->redirs[i], rd, p->r_fd[OUTPUT]);
 		if (p->r_fd[INPUT] == -1 || p->r_fd[OUTPUT] == -1)
 			return (-1);
 		i++;

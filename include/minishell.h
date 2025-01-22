@@ -6,7 +6,7 @@
 /*   By: pmorello <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 12:17:09 by pmorello          #+#    #+#             */
-/*   Updated: 2025/01/21 22:45:12 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/01/22 09:50:37 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,6 +100,7 @@ typedef struct s_pipe
 	char				**redirs;
 	char				**rd;
 	int					r_fd[4];
+	int					r_hd_flag;
 	char				**args;
 	int					fd[2];
 	pid_t				pid;

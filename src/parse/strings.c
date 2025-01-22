@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/17 09:57:43 by mfleury           #+#    #+#             */
-/*   Updated: 2025/01/20 12:35:55 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/01/22 09:51:43 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,6 +72,7 @@ static char	*trim_quotes(t_pipe *p, char *line, t_parse *q, int f_exp)
 			q->i--;
 			q->len = ft_strlen(line);
 		}
+		p->r_hd_flag = 1;
 		line = trim_within_quotes(p, line, q, f_exp);
 		ft_strlcpy(line + q->i - 1, line + q->i, q->len);
 		max(0, --q->i);

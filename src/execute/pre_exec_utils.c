@@ -6,14 +6,17 @@
 /*   By: mfleury <mfleury@student.42barcelona.      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/25 13:59:57 by mfleury           #+#    #+#             */
-/*   Updated: 2025/01/20 23:18:43 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/01/22 10:08:15 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	open_redir_fd(t_pipe *p, int *err)
+int	open_redir_fd(t_pipe *p)
 {
+	int	*err;
+
+	err = &p->p_status;
 	if (p->r_fd[INPUT] > 2)
 	{
 		p->r_fd[T_INPUT] = dup(STDIN_FILENO);
@@ -49,8 +52,11 @@ int	close_redir_fd_mult(t_pipe *p)
 	return (0);
 }
 
-int	close_redir_fd_single(t_pipe *p, int *err)
+int	close_redir_fd_single(t_pipe *p)
 {
+	int	*err;
+
+	err = &p->p_status;
 	if (p->r_fd[INPUT] > 2)
 	{
 		close(p->r_fd[INPUT]);
