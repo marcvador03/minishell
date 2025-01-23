@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/10 08:52:08 by mfleury           #+#    #+#             */
-/*   Updated: 2025/01/22 15:19:40 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/01/23 15:59:26 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,7 +113,6 @@ int	create_parsing(t_pipe *p)
 	p->args = (char **)ft_calloc(sizeof(char *), cnt_args + 1);
 	if (p->r->redirs == NULL || p->r->rd == NULL || p->args == NULL)
 		return (free_d(q.parse), flush_errors("", 202, ""), 2);
-	p->r->exist = 1;
 	if (create_parsing_loop(p, &q) == 2)
 		return (free(q.parse), 2);
 	if (close_parsing(p) == 2)

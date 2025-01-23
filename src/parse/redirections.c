@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/18 17:20:19 by mfleury           #+#    #+#             */
-/*   Updated: 2025/01/22 15:21:06 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/01/23 10:11:50 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,7 +73,7 @@ int	get_fds_redir(t_redirs *r, int *err)
 
 	fd = -2;
 	i = 0;
-	if (r->exist == 0)
+	if (r == NULL)
 		return (0);
 	while (r->redirs[i] != NULL)
 	{

@@ -6,7 +6,7 @@
 /*   By: pmorello <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 12:17:09 by pmorello          #+#    #+#             */
-/*   Updated: 2025/01/22 23:09:37 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/01/23 15:59:32 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,7 +97,6 @@ typedef struct s_prompt
 
 typedef struct s_redirs
 {
-	int					exist;
 	char				**redirs;
 	char				**rd;
 	int					fd[4];

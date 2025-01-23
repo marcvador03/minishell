@@ -27,6 +27,7 @@ PARSE =	brackets.c  \
 		redirections.c \
 		strings.c \
 		strings_utils.c \
+		subshell_parsing_utils.c \
 		variable_env.c \
 
 EXECUTE = exec.c \
@@ -65,7 +66,7 @@ INCLUDES := $(patsubst %.h, $(INC_DIR)/%.h, $(INC_NAMES))
 
 DEPS := $(OBJECTS:.o=.d)
 
-CFLAGS += -Wall -Werror -Wextra -g -fsanitize=address -MMD -MP -I $(INC_DIR)
+CFLAGS += -Wall -Werror -Wextra -g -MMD -MP -I $(INC_DIR)
 
 LIB_NAMES := libft.a 
 LIBS_TAG := $(patsubst lib%.a, -l%, $(LIB_NAMES))

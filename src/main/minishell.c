@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 10:01:23 by mfleury           #+#    #+#             */
-/*   Updated: 2025/01/22 15:13:40 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/01/23 16:29:20 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,7 +71,7 @@ void	exit_minishell(t_pipe *p, t_env *env)
 			free_env(env);
 		exit(0);
 	}
-	else if (p->sh->p_count == 1)
+	else if (p->sh->p_count == 1 && p->sh->up == NULL)
 	{
 		if (p->sh != NULL && p->head == p)
 			unset_term_settings(p->sh->tcap, env);
@@ -83,6 +83,8 @@ void	exit_minishell(t_pipe *p, t_env *env)
 			free_env(env);
 		exit(status);
 	}
+	else if (p->p_status == 0 && p->sh->up != NULL)
+		exit (p->sh->l_status);
 	exit(p->p_status);
 	return ;
 }

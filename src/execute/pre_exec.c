@@ -6,14 +6,14 @@
 /*   By: mfleury <mfleury@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/02 18:58:50 by mfleury           #+#    #+#             */
-/*   Updated: 2025/01/22 09:54:43 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/01/23 16:53:31 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int		open_redir_fd(t_pipe *p);
-int		close_redir_fd_single(t_pipe *p);
+int		open_redir_fd(t_redirs *r, int *err, char *cmd);
+int		close_redir_fd_single(t_redirs *r, int *err, char *cmd);
 int		close_redir_fd_mult(t_pipe *p);
 int		close_pipes(t_pipe *p);
 int		exec_cmd(char *cmd, char **args, t_pipe *p, t_env *env);
@@ -38,11 +38,16 @@ static int	run_child(t_pipe *p, t_env *env)
 	else if (p != p->head && p->next == NULL)
 		dup2(o->fd[READ_END], STDIN_FILENO);
 	close_pipes(p);
-	if (open_redir_fd(p) == -1)
-		return (close_redir_fd_single(p), p->p_status);
+	if (open_redir_fd(p->r, &p->p_status, p->args[0]) == -1)
+	{
+		close_redir_fd_single(p->r, &p->p_status, p->args[0]);
+		close_redir_fd_pipe(p);
+		return (p->p_status);
+	}
 	if (p->args[0] != NULL)
 		wstatus = exec_cmd(p->args[0], p->args, p, env);
-	close_redir_fd_single(p);
+	close_redir_fd_single(p->r, &p->p_status, p->args[0]);
+	close_redir_fd_pipe(p);
 	exit (wstatus);
 }
 
@@ -91,13 +96,18 @@ static int	create_pipes(t_pipe *p)
 
 int	single_cmd(t_pipe *p, t_env *env)
 {
-	if (open_redir_fd(p) == -1)
-		return (close_redir_fd_single(p), p->p_status);
+	if (open_redir_fd(p->r, &p->p_status, p->args[0]) == -1)
+	{
+		close_redir_fd_single(p->r, &p->p_status, p->args[0]);
+		close_redir_fd_pipe(p);
+		return (p->p_status);
+	}
 	if (p->args[0] != NULL)
 		exec_cmd(p->args[0], p->args, p, env);
 	if (p->p_status == 125 || p->p_status == 124)
 		p->p_status = p->p_status + 2;
-	close_redir_fd_single(p);
+	close_redir_fd_single(p->r, &p->p_status, p->args[0]);
+	close_redir_fd_pipe(p);
 	rl_replace_line("", 0);
 	rl_on_new_line();
 	return (p->p_status);
