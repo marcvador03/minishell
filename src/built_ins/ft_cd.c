@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/14 09:20:49 by pmorello          #+#    #+#             */
-/*   Updated: 2025/01/21 10:06:19 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/01/23 22:22:09 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@ char	*old_path(t_env *env)
 
 	old_path = sh_getenv(env, "OLDPWD");
 	if (old_path == NULL || *old_path == '\0')
-		return (flush_errors("cd", 9, ""), NULL);
+		return (flush_errors("cd", 9, 0), NULL);
 	return (ft_strdup(old_path));
 }
 
@@ -81,25 +81,25 @@ int	ft_cd(char **args, t_env *env)
 	char	*cur_path;
 
 	if (args[1] != NULL && args[2] != NULL)
-		return (flush_errors("cd", 7, ""));
+		return (flush_errors("cd", 7, 0));
 	if (check_cd_option(args[1]) == 2)
 		return (2);
 	cur_path = getcwd(NULL, 0);
 	if (cur_path == NULL)
 	{
-		flush_errors("cd/getcwd", -1, "");
+		flush_errors("cd/getcwd", -1, 0);
 		cur_path = ft_strdup(sh_getenv(env, "PWD"));
 	}
 	new_path = get_target_path(args, env);
 	if (new_path == NULL)
-		return (free_s(cur_path), flush_errors("cd", 8, ""));
+		return (free_s(cur_path), flush_errors("cd", 8, 0));
 	if (chdir(new_path) != 0)
 		return (free_s(new_path), free_s(cur_path), -1);
 	sh_updateenv(env, ft_strdup("OLDPWD"), cur_path);
 	free_s(new_path);
 	new_path = getcwd(NULL, 0);
 	if (new_path == NULL)
-		flush_errors("cd/getcwd", -1, "");
+		flush_errors("cd/getcwd", -1, 0);
 	sh_updateenv(env, ft_strdup("PWD"), new_path);
 	return (0);
 }

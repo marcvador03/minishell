@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/18 17:20:19 by mfleury           #+#    #+#             */
-/*   Updated: 2025/01/23 19:52:07 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/01/23 22:56:38 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ static int	get_fdout(t_redirs *r, int rd, int *err, int i)
 	else if (rd == 1)
 		fd = open(r->redirs[i], O_CREAT | O_RDWR | O_TRUNC, 0644);
 	if (fd == -1)
-		return (set_status(flush_errors(r->redirs[i], -1, ""), err), -1);
+		return (set_status(flush_errors(r->redirs[i], -1, 0), err), -1);
 	if (fd == -2)
 		fd = STDOUT_FILENO;
 	return (fd);
@@ -55,7 +55,7 @@ static int	get_fdin(t_redirs *r, int rd, int *err, int i)
 	if (rd == 2)
 		fd = open(r->redirs[i], O_RDONLY, 0700);
 	if (fd == -1)
-		return (set_status(flush_errors(r->redirs[i], -1, ""), err), -1);
+		return (set_status(flush_errors(r->redirs[i], -1, 0), err), -1);
 	else if (rd == 4)
 		fd = init_heredoc(r, r->redirs[i], err);
 	if (fd == -1)

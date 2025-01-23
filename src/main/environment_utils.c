@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/17 09:53:05 by mfleury           #+#    #+#             */
-/*   Updated: 2025/01/21 22:09:19 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/01/23 22:31:08 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,7 @@ t_env	*fill_env(char *envp[])
 	{
 		ptr = (t_env *)ft_calloc(sizeof(t_env), 1);
 		if (ptr == NULL)
-			return (flush_errors("", 202, ""), fill_default_session(NULL));
+			return (flush_errors("", 202, 0), fill_default_session(NULL));
 		fill_content(&ptr, envp, i);
 		if (env != NULL)
 		{

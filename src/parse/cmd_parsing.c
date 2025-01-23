@@ -6,16 +6,15 @@
 /*   By: mfleury <mfleury@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/18 15:22:36 by mfleury           #+#    #+#             */
-/*   Updated: 2025/01/20 23:40:17 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/01/23 23:11:49 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	init_parse(t_parse *q);
-int		count_quotes(char *line);
-int		separate_dollar(char *line, t_parse *q);
-int		separate_quotes(char *line, t_parse *q);
+int	count_quotes(char *line);
+int	separate_quotes(char *line, t_parse *q);
+int	separate_dollar(char *line, t_parse *q);
 
 static int	create_separation(char *line, t_parse *q)
 {
@@ -121,12 +120,12 @@ char	**get_sep_quotes(char *line)
 		q.prev_pos = q.i;
 		x = get_sep_quotes_loop(line, &q);
 		if (x == -1)
-			return (flush_errors("", 202, ""), free_d(q.parse), NULL);
+			return (flush_errors("", 202, 0), free_d(q.parse), NULL);
 		else if (x == 1)
 			break ;
 	}
 	q.prev_pos = q.beg_sep;
 	if (create_separation(line, &q) == -1)
-		return (flush_errors("", 202, ""), free_d(q.parse), NULL);
+		return (flush_errors("", 202, 0), free_d(q.parse), NULL);
 	return (q.parse);
 }

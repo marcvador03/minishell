@@ -6,88 +6,56 @@
 /*   By: mfleury <mfleury@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/07 15:12:52 by mfleury           #+#    #+#             */
-/*   Updated: 2025/01/23 19:49:57 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/01/23 23:08:00 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int		check_open_quotes(char *str);
 int		execute_tokens(t_shell *sh, int status);
 char	*create_prompt(t_env *env);
-int		subshell(t_shell *sh);
+t_shell	*sh_lstnew(t_terms *tcap, t_env *env, int *l_status);
 t_shell	*parse_sh(t_shell *sh, char *line, int *pos);
-t_shell	*fill_sh(char *line, t_terms *tcap, t_env *env, int *l_status);
-int		get_subshell_redirs(t_shell *sh, char *t_line, int *pos);
-int		open_redir_fd(t_redirs *r, int *err, char *cmd);
-int		close_redir_fd_single(t_redirs *r, int *err, char *cmd);
-static int	get_next_token(t_shell *sh, char *line, t_parse *q);
 
-static int	execute_fork(t_shell *sh, int status)
+static int	check_forbidden_c(char *line)
 {
-	pid_t	pid;
-	int		wstatus;
+	int	i;
 
-	pid = fork();
-	if (pid == -1)
-		flush_errors("", -1, "");
-	if (pid == 0)
-		exit(execute_tokens(sh, status));
-	waitpid(pid, &wstatus, 0);
-	if (sh->up != NULL && sh->up->r != NULL)
+	i = 0;
+	while (line[i] != 0)
 	{
-		close_redir_fd_single(sh->up->r, &status, "");
-		close_redir_fd_sh(sh->up);
+		if (line[i] == ';' || line[i] == 92 || line[i] == 10 || line[i] == 42)
+		{
+			flush_errors("", 210, line[i]);
+			return (-1);
+		}
+		i++;
 	}
-	if (WIFEXITED(wstatus))
-		status = WEXITSTATUS(wstatus);
-	return (status);
+	return (0);
 }
 
-static void	launch_subshell(t_shell *sh, int *status)
+static int	check_open_quotes(char *str)
 {
-	if ((sh->tk == 0 && status == 0) || (sh->tk == 1 && status != 0))
-		*status = subshell(sh);
-	if (sh->up != NULL && sh->next == NULL)
-	{
-		if (sh->up != NULL && sh->up->r != NULL)
-		{
-			close_redir_fd_single(sh->up->r, status, "");
-			close_redir_fd_sh(sh->up);
-		}
-		exit(*status);
-	}
-	sh->pipes = NULL;
-	return ;
-}
+	int	i;
+	int	x;
 
-int	execute_tokens(t_shell *sh, int status)
-{
-	if (sh != sh->head)
-		status = sh->l_status;
-	while (sh != NULL && sh->exit != 1)
+	i = 0;
+	while (str[i] != 0)
 	{
-		if (sh->r != NULL)
+		if (str[i] == 34 || str[i] == 39)
 		{
-			if (get_fds_redir(sh->r, &sh->l_status) == -1)
-				return (close_redir_fd_sh(sh->head), 2);
-			if (open_redir_fd(sh->r, &status, "") == -1)
-				return (close_redir_fd_sh(sh->head), 2);
+			if (str[i + 1] == '\0')
+				return (flush_errors("", 210, str[i]), -1);
+			x = sh_jump_to(str + i, str[i]);
+			if (str[x + i - 1] != str[i])
+				return (flush_errors("", 210, str[i]), -1);
+			else
+				i += x;
 		}
-		if (sh->down != NULL)
-		{
-			if ((sh->tk == 0 && status == 0) || (sh->tk == 1 && status != 0))
-				status = execute_fork(sh->down, status);
-		}
-		else if (sh->down == NULL)
-			launch_subshell(sh, &status);
-		if (sh->exit == 1)
-			break ;
-		sh = sh->next;
-		if (sh != NULL)
-			sh->l_status = status;
+		else
+			i++;
 	}
-	return (status);
+	return (0);
 }
 
 static char	*get_input(t_env *env, t_terms *tcap, int *l_status)
@@ -129,10 +97,10 @@ int	start_shell(t_env *env, t_terms *tcap, int *l_status)
 	if (line == NULL)
 		exit_minishell_error(sh, 200, env);
 	if (check_open_quotes(line) == -1)
-		return (free_s(line), flush_errors("", 201, ""), 0);
+		return (free_s(line), 2);
 	sh = sh_lstnew(tcap, env, l_status);
 	if (sh == NULL)
-		return (set_status(flush_errors("", 202, ""), l_status), 0);
+		return (set_status(flush_errors("", 202, 0), l_status), 0);
 	i = 0;
 	sh = parse_sh(sh, line, &i);
 	free_s(line);

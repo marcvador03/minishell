@@ -1,37 +1,42 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   strings_utils.c                                    :+:      :+:    :+:   */
+/*   core2_utils.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mfleury <mfleury@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/01/18 17:06:38 by mfleury           #+#    #+#             */
-/*   Updated: 2025/01/18 17:06:43 by mfleury          ###   ########.fr       */
+/*   Created: 2025/01/23 22:52:04 by mfleury           #+#    #+#             */
+/*   Updated: 2025/01/23 23:28:00 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	check_open_quotes(char *str)
+void	set_status(int err_code, int *err)
 {
-	int	i;
-	int	x;
+	*err = err_code;
+}
 
-	i = 0;
-	while (str[i] != 0)
-	{
-		if (str[i] == 34 || str[i] == 39)
-		{
-			if (str[i + 1] == '\0')
-				return (-1);
-			x = sh_jump_to(str + i, str[i]);
-			if (str[x + i - 1] != str[i])
-				return (-1);
-			else
-				i += x;
-		}
-		else
-			i++;
-	}
-	return (0);
+void	init_parse(t_parse *q)
+{
+	q->i = 0;
+	q->j = 0;
+	q->k = 0;
+	q->prev_pos = 0;
+	q->prev_pos2 = 0;
+	q->beg_sep = 0;
+	q->len = 0;
+	q->flag_jump = 0;
+}
+
+int	ft_isalnum_plus(int c)
+{
+	if ((c >= 65 && c <= 90) || (c >= 97 && c <= 122))
+		return (1);
+	else if (c >= 48 && c <= 57)
+		return (1);
+	else if (c == '@' || c == '_' || c == '?')
+		return (1);
+	else
+		return (0);
 }

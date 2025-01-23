@@ -6,14 +6,11 @@
 /*   By: mfleury <mfleury@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/12 01:02:14 by mfleury           #+#    #+#             */
-/*   Updated: 2025/01/23 19:19:38 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/01/23 23:06:37 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-char	*get_next_subshell(t_shell *sh, char *line, int *pos);
-int		get_fds_redir(t_redirs *r, int *err);
 
 t_shell	*sh_lstnew(t_terms *tcap, t_env *env, int *l_status)
 {
@@ -21,7 +18,7 @@ t_shell	*sh_lstnew(t_terms *tcap, t_env *env, int *l_status)
 
 	ptr = (t_shell *)ft_calloc(sizeof (t_shell), 1);
 	if (ptr == NULL)
-		return (set_status(flush_errors("", 202, ""), l_status), NULL);
+		return (set_status(flush_errors("", 202, 0), l_status), NULL);
 	ptr->next = NULL;
 	ptr->head = ptr;
 	ptr->env = env;
@@ -66,21 +63,4 @@ t_shell	*sh_lstadd_down(t_shell *sh)
 	ptr->up = sh;
 	sh->down = ptr;
 	return (ptr);
-}
-
-int	check_forbidden_c(char *line)
-{
-	int	i;
-
-	i = 0;
-	while (line[i] != 0)
-	{
-		if (line[i] == ';' || line[i] == 92 || line[i] == 10 || line[i] == 42)
-		{
-			flush_errors("", 210, "");
-			return (-1);
-		}
-		i++;
-	}
-	return (0);
 }

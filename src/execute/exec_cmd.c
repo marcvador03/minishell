@@ -1,18 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   exec.c                                             :+:      :+:    :+:   */
+/*   exec_cmd.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mfleury <mfleury@student.42barcelona.      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/17 15:39:35 by mfleury           #+#    #+#             */
-/*   Updated: 2025/01/20 23:13:25 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/01/23 22:23:10 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-int	check_directory(char *t_cmd);
 
 static t_cmd_enum	str_to_enum(const char *str, t_func_arr (*call_cmd)[6])
 {
@@ -45,7 +43,7 @@ static int	exec_process(char *t_cmd, char **args, char **env2)
 
 	if (execve(t_cmd, args, env2) == -1)
 	{
-		err = flush_errors(t_cmd, -1, "");
+		err = flush_errors(t_cmd, -1, 0);
 		free_s(t_cmd);
 		exit(err);
 	}
@@ -122,6 +120,6 @@ int	exec_cmd(char *cmd, char **args, t_pipe *p, t_env *env)
 		exec_syscmd_single(p, env, env_arr);
 	else
 		exec_syscmd_multiple(p, env, env_arr);
-	flush_errors(cmd, p->p_status, "");
+	flush_errors(cmd, p->p_status, 0);
 	return (free_d(env_arr), p->p_status);
 }

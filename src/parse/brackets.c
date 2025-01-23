@@ -6,13 +6,13 @@
 /*   By: mfleury <mfleury@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/17 10:02:58 by mfleury           #+#    #+#             */
-/*   Updated: 2024/12/17 10:04:40 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/01/23 22:17:52 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	check_brackets(char *line, int i)
+/*int	check_brackets(char *line, int i)
 {
 	while (line[i] == 34 || line[i] == 39)
 		i += sh_jump_to(line + i, line[i]);
@@ -52,4 +52,4 @@ int	count_brackets(t_shell *sh, char *line)
 		i++;
 	}
 	return (0);
-}
+}*/

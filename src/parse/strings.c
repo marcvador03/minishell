@@ -6,15 +6,11 @@
 /*   By: mfleury <mfleury@student.42barcelona.      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/17 09:57:43 by mfleury           #+#    #+#             */
-/*   Updated: 2025/01/23 19:21:44 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/01/23 22:12:33 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-void	init_parse(t_parse *q);
-char	*expand_variable(t_shell *sh, char *line, int *i);
-int		ft_isalnum_plus(int c);
 
 static void	quit_spaces(t_parse *q, char *line, char *f_line)
 {

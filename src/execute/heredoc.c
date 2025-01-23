@@ -6,13 +6,13 @@
 /*   By: mfleury <mfleury@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/23 14:57:19 by mfleury           #+#    #+#             */
-/*   Updated: 2025/01/23 19:23:05 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/01/23 22:57:48 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-char		*trim_expand(t_redirs *r, char *line, int f_exp);
+char	*trim_expand(t_redirs *r, char *line, int f_exp);
 
 static int	get_hd_input(t_redirs *r, char *eof, int fd)
 {
@@ -43,7 +43,7 @@ static int	close_heredoc(int wstatus, int fd, int *r_status)
 {
 	fd = open(".heredoc_tmp", O_RDONLY);
 	if (fd == -1)
-		return (set_status(flush_errors("heredoc", -1, ""), r_status), -1);
+		return (set_status(flush_errors("heredoc", -1, 0), r_status), -1);
 	else if (fd > 0)
 		unlink(".heredoc_tmp");
 	if (WIFEXITED(wstatus))
@@ -68,10 +68,10 @@ int	init_heredoc(t_redirs *r, char *line, int *r_status)
 	init_signal(1, 1);
 	fd = open(".heredoc_tmp", O_WRONLY | O_CREAT | O_TRUNC | O_SYNC, 0600);
 	if (fd == -1)
-		return (flush_errors("heredoc", -1, ""), -1);
+		return (flush_errors("heredoc", -1, 0), -1);
 	pid = fork();
 	if (pid == -1)
-		return (flush_errors("heredoc", -1, ""), -1);
+		return (flush_errors("heredoc", -1, 0), -1);
 	if (pid == 0)
 		exit(get_hd_input(r, line, fd));
 	waitpid(pid, &wstatus, 0);

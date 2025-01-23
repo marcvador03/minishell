@@ -6,16 +6,15 @@
 /*   By: mfleury <mfleury@student.42barcelona.      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 10:01:23 by mfleury           #+#    #+#             */
-/*   Updated: 2025/01/23 16:29:20 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/01/23 23:23:04 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	g_status = 0;
-
 int	start_shell(t_env *env, t_terms *tcap, int *l_status);
-int	close_redir_fd_single(t_pipe *p);
+
+int	g_status = 0;
 
 int	main_cmd_return(t_pipe *p, int wstatus, pid_t pid)
 {
@@ -52,7 +51,7 @@ void	exit_minishell_error(t_shell *sh, int errnum, t_env *env)
 	if (cpyerr < 200)
 		strerror(cpyerr);
 	else
-		flush_errors("", cpyerr, "");
+		flush_errors("", cpyerr, 0);
 	if (sh != NULL)
 		free_sh(sh);
 	if (env != NULL)
@@ -77,7 +76,7 @@ void	exit_minishell(t_pipe *p, t_env *env)
 			unset_term_settings(p->sh->tcap, env);
 		printf("exit\n");
 		status = p->p_status;
-		close_redir_fd_single(p);
+		close_redir_fd_single(p->r, &status, p->args[0]);
 		free_sh(p->sh);
 		if (env != NULL)
 			free_env(env);

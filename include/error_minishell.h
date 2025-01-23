@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/18 12:17:52 by mfleury           #+#    #+#             */
-/*   Updated: 2025/01/20 22:58:15 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/01/23 23:21:20 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,15 +25,10 @@
 # define E_127 ": command not found"
 
 # define E_200 ": unrecoverable error due terminal setup"
-# define E_201 ": missing quotes \" or \'"
 # define E_202 ": error encountered during memory allocation"
-# define E_203 ": error near redirection token \'<\' or \'>\'"
-# define E_204 ": error near token \'&\' or \'|\'"
-# define E_205 ": error near pipe token \'|\'"
-# define E_206 ": error near parenthesis \'(\' or \')\'"
-# define E_207 ": error while fetching env value"
 # define E_208 ": target directory does not exist"
 # define E_209 ": too many arguments"
 # define E_210 ": syntax error around:'"
+# define E_211 ": global syntax error preventing parsing"
 
 #endif

@@ -4,7 +4,7 @@ SRC_DIR := src
 OBJ_DIR := obj
 INC_DIR := include
 LIB_DIR := lib
-BUILT_INS := $(SRC_DIR)/built_ins
+#BUILT_INS := $(SRC_DIR)/built_ins
 
 #Filenames definition
 NAME := minishell
@@ -21,23 +21,24 @@ BUILTINS = ft_cd.c \
 PARSE =	brackets.c  \
 		cmd_parsing.c \
 		cmd_parsing_utils.c \
-		heredoc.c \
-		pipes.c \
 		pipes_parsing.c \
-		redirections.c \
+		shell_redirections.c \
 		strings.c \
-		strings_utils.c \
-		subshell_parsing_utils.c \
+		subshell_parsing.c \
 		variable_env.c \
 
-EXECUTE = exec.c \
-		  pre_exec.c \
-		  pre_exec_utils.c
+EXECUTE = close_fd.c \
+		  exec_cmd.c \
+		  exec_shell.c \
+		  heredoc.c \
+		  open_fd.c \
+		  pre_exec_cmd.c
 
 UTILS = core_utils.c \
-		core_utils2.c \
+		core2_utils.c \
 		free_utils.c \
 		str_utils.c \
+		str2_utils.c \
 		env_utils.c
 
 MAIN = environment.c \
@@ -45,18 +46,21 @@ MAIN = environment.c \
 	   errors.c \
 	   minishell.c \
 	   prompt.c \
-	   signals.c \
 	   shell.c \
 	   shell_utils.c \
+	   signals.c \
 	   subshell.c \
+	   subshell_utils.c \
 	   termcaps.c
+
+REDIRECTIONS = environment.c
 
 
 SRC_NAMES =  $(addprefix $(SRC_DIR)/parse/, $(PARSE)) \
 			 $(addprefix $(SRC_DIR)/execute/, $(EXECUTE)) \
 			 $(addprefix $(SRC_DIR)/utils/, $(UTILS)) \
 			 $(addprefix $(SRC_DIR)/main/, $(MAIN)) \
-			$(addprefix $(SRC_DIR)/built_ins/, $(BUILTINS))
+	 		$(addprefix $(SRC_DIR)/built_ins/, $(BUILTINS))
 
 INC_NAMES := minishell.h
 

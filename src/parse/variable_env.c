@@ -6,23 +6,11 @@
 /*   By: mfleury <mfleury@student.42barcelona.      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/17 12:19:07 by mfleury           #+#    #+#             */
-/*   Updated: 2025/01/22 14:35:01 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/01/23 22:53:54 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-int	ft_isalnum_plus(int c)
-{
-	if ((c >= 65 && c <= 90) || (c >= 97 && c <= 122))
-		return (1);
-	else if (c >= 48 && c <= 57)
-		return (1);
-	else if (c == '@' || c == '_' || c == '?')
-		return (1);
-	else
-		return (0);
-}
 
 static char	*resize_line(char *line, char *out, char *in, int *i)
 {

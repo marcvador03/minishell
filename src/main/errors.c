@@ -6,17 +6,12 @@
 /*   By: mfleury <mfleury@student.42barcelona.      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/16 16:32:42 by mfleury           #+#    #+#             */
-/*   Updated: 2025/01/21 22:08:54 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/01/23 23:21:38 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 #include "error_minishell.h"
-
-void	set_status(int err_code, int *err)
-{
-	*err = err_code;
-}
 
 static void	custom_errors1(char *cmd, int errnum, int *ret_err)
 {
@@ -37,24 +32,12 @@ static void	custom_errors1(char *cmd, int errnum, int *ret_err)
 	*ret_err = 1;
 }
 
-static void	custom_errors2(char *cmd, int errnum, char *tk, int *ret_err)
+static void	custom_errors2(char *cmd, int errnum, char tk, int *ret_err)
 {
 	ft_putstr_fd("minishell: ", STDERR_FILENO);
 	ft_putstr_fd(cmd, STDERR_FILENO);
-	if (errnum == 201)
-		ft_putendl_fd(E_201, STDERR_FILENO);
 	if (errnum == 202)
 		ft_putendl_fd(E_202, STDERR_FILENO);
-	if (errnum == 203)
-		ft_putendl_fd(E_203, STDERR_FILENO);
-	if (errnum == 204)
-		ft_putendl_fd(E_204, STDERR_FILENO);
-	if (errnum == 205)
-		ft_putendl_fd(E_205, STDERR_FILENO);
-	if (errnum == 206)
-		ft_putendl_fd(E_206, STDERR_FILENO);
-	if (errnum == 207)
-		ft_putendl_fd(E_207, STDERR_FILENO);
 	if (errnum == 208)
 		ft_putendl_fd(E_208, STDERR_FILENO);
 	if (errnum == 209)
@@ -62,7 +45,7 @@ static void	custom_errors2(char *cmd, int errnum, char *tk, int *ret_err)
 	if (errnum == 210)
 	{
 		ft_putstr_fd(E_210, STDERR_FILENO);
-		ft_putstr_fd(tk, STDERR_FILENO);
+		ft_putchar_fd(tk, STDERR_FILENO);
 		ft_putendl_fd("'", STDERR_FILENO);
 	}
 	*ret_err = 2;
@@ -83,7 +66,7 @@ static void	custom_errors3(char *cmd, int errnum, int *ret_err)
 		*ret_err = 127;
 }
 
-int	flush_errors(char *cmd, int err_sig, char *tk)
+int	flush_errors(char *cmd, int err_sig, char tk)
 {
 	int	ret_err;
 

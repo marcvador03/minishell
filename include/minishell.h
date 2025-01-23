@@ -6,7 +6,7 @@
 /*   By: pmorello <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 12:17:09 by pmorello          #+#    #+#             */
-/*   Updated: 2025/01/23 15:59:32 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/01/23 23:27:29 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -111,7 +111,6 @@ typedef struct s_pipe
 	int					fd[2];
 	pid_t				pid;
 	int					p_status;
-	int					empty_arg;
 	int					exit;
 	t_shell				*sh;
 	t_redirs			*r;
@@ -131,7 +130,6 @@ struct s_shell
 	char				*s_line;
 	int					tk;
 	int					depth;
-	int					bracket[2];
 	int					p_count;
 	int					exit;
 	int					l_status;
@@ -141,7 +139,6 @@ struct s_shell
 	t_env				*env;
 	struct s_shell		*head;
 	struct s_shell		*next;
-	int					level;
 	struct s_shell		*up;
 	struct s_shell		*down;
 };
@@ -156,21 +153,12 @@ int		ft_cd(char **args, t_env *env);
 int		ft_exit(t_pipe *p, char **args, t_env *env);
 
 /* core utils functions */
-void	set_status(int err_code, int *err);
 int		max(int n1, int n2);
-t_ll	ll_atoi(const char *nptr);
 char	*ll_itoa(t_ll n);
-int		one_of_char(char c, char *letters);
-int		all_of_char(char c, char *letters);
-int		none_of_char(char c, char *letters);
+t_ll	ll_atoi(const char *nptr);
 void	init_parse(t_parse *q);
-
-/* list utils functions */
-t_shell	*sh_lstnew(t_terms *tcap, t_env *env, int *l_status);
-t_shell	*sh_lstadd_back(t_shell *sh);
-t_shell	*sh_lstadd_down(t_shell *sh);
-//t_shell	*sh_lstnew(char *line, t_env *env, int *pos, int *l_status);
-//t_shell	*sh_lstadd_back(t_shell **sh, char *line, int *pos, int *l_status);
+int		ft_isalnum_plus(int c);
+void	set_status(int err_code, int *err);
 
 /* str utils functions */
 int		sh_jump_to(char *str, char c);
@@ -178,6 +166,8 @@ int		sh_skip(char *str, char c);
 char	*sh_trim_spaces(char *str);
 int		sh_strpos(const char *big, const char *little);
 int		sh_check_empty(char *str);
+int		one_of_char(char c, char *letters);
+int		none_of_char(char c, char *letters);
 
 /* free utils functions */
 void	free_s(void *ptr);
@@ -187,28 +177,32 @@ void	free_sh(t_shell *sh);
 void	free_env(t_env *env);
 
 /* main functions */
-void	exit_minishell(t_pipe *p, t_env *env);
-void	exit_minishell_error(t_shell *sh, int status, t_env *env);
+int		flush_errors(char *cmd, int err_sig, char tk);
 int		main_cmd_return(t_pipe *p, int wstatus, pid_t pid);
+void	exit_minishell_error(t_shell *sh, int errnum, t_env *env);
+void	exit_minishell(t_pipe *p, t_env *env);
 void	init_signal(int pid, int hd);
-int		flush_errors(char *cmd, int err_sig, char *tk);
-int		check_forbidden_c(char *line);
-
-int	get_fds_redir(t_redirs *r, int *err);
-int	close_redir_fd_pipe(t_pipe *p);
-int	close_redir_fd_sh(t_shell *sh);
 
 /* environment functions */
-int		env_size(t_env *lst);
-char	*sh_getenv(t_env *env, char *str);
-t_env	*fill_env(char *envp[]);
-t_env	*sh_updateenv(t_env *env, char *var_name, char *new_value);
-t_env	*sh_addenv(t_env *env, char *var_name, char *value);
-t_env	*sh_delenv(t_env *env, char *var_name);
-char	*expand_env(t_env *env, char *line, int x, int l_status);
 char	**get_env_array(t_env *env, int *err);
-t_env	*fill_default_session(t_env *env);
 char	*get_full_path(char *arg0, t_env *env, int *err);
+int		check_directory(char *t_cmd);
+char	*sh_getenv(t_env *env, char *str);
+t_env	*sh_addenv(t_env *env, char *var_name, char *value);
+t_env	*sh_updateenv(t_env *env, char *var_name, char *new_value);
+t_env	*sh_delenv(t_env *env, char *var_name);
+int		env_size(t_env *lst);
+char	*expand_variable(t_shell *sh, char *line, int *i);
+t_env	*fill_env(char *envp[]);
+
+/* file descriptor functions */
+int		open_redir_fd(t_redirs *r, int *err, char *cmd);
+int		close_redir_fd_sh(t_shell *sh);
+int		close_redir_fd_pipe(t_pipe *p);
+int		close_redir_fd_single(t_redirs *r, int *err, char *cmd);
+int		close_pipes(t_pipe *p);
+int		get_fds_redir(t_redirs *r, int *err);
+int		get_rd_flag(char *rd);
 
 /*term caps*/
 void	set_term_settings(t_terms *tcap, t_env *env);

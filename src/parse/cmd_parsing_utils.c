@@ -6,13 +6,11 @@
 /*   By: mfleury <mfleury@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/18 16:34:46 by mfleury           #+#    #+#             */
-/*   Updated: 2025/01/20 11:55:05 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/01/23 22:12:21 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-void	init_parse(t_parse *q);
 
 int	separate_quotes(char *line, t_parse *q)
 {

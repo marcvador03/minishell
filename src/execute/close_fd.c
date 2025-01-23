@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   pre_exec_utils.c                                   :+:      :+:    :+:   */
+/*   close_fd.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mfleury <mfleury@student.42barcelona.      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/25 13:59:57 by mfleury           #+#    #+#             */
-/*   Updated: 2025/01/23 16:51:25 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/01/23 22:36:11 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,17 +18,17 @@ int	open_redir_fd(t_redirs *r, int *err, char *cmd)
 	{
 		r->fd[T_INPUT] = dup(STDIN_FILENO);
 		if (r->fd[T_INPUT] == -1)
-			return (set_status(flush_errors(cmd, -1, ""), err), -1);
+			return (set_status(flush_errors(cmd, -1, 0), err), -1);
 		if (dup2(r->fd[INPUT], STDIN_FILENO) == -1)
-			return (set_status(flush_errors(cmd, -1, ""), err), -1);
+			return (set_status(flush_errors(cmd, -1, 0), err), -1);
 	}
 	if (r->fd[OUTPUT] > 2)
 	{
 		r->fd[T_OUTPUT] = dup(STDOUT_FILENO);
 		if (r->fd[T_OUTPUT] == -1)
-			return (set_status(flush_errors(cmd, -1, ""), err), -1);
+			return (set_status(flush_errors(cmd, -1, 0), err), -1);
 		if (dup2(r->fd[OUTPUT], STDOUT_FILENO) == -1)
-			return (set_status(flush_errors(cmd, -1, ""), err), -1);
+			return (set_status(flush_errors(cmd, -1, 0), err), -1);
 	}
 	return (0);
 }
@@ -66,14 +66,14 @@ int	close_redir_fd_single(t_redirs *r, int *err, char *cmd)
 	{
 		close(r->fd[INPUT]);
 		if (dup2(r->fd[T_INPUT], STDIN_FILENO) == -1)
-			*err = flush_errors(cmd, -1, "");
+			*err = flush_errors(cmd, -1, 0);
 		close(r->fd[T_INPUT]);
 	}
 	if (r->fd[OUTPUT] > 2)
 	{
 		close(r->fd[OUTPUT]);
 		if (dup2(r->fd[T_OUTPUT], STDOUT_FILENO) == -1)
-			*err = flush_errors(cmd, -1, "");
+			*err = flush_errors(cmd, -1, 0);
 		close(r->fd[T_OUTPUT]);
 	}
 	return (0);

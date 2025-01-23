@@ -6,13 +6,13 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/14 09:52:16 by pmorello          #+#    #+#             */
-/*   Updated: 2025/01/16 10:27:07 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/01/23 22:47:11 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int		check_option(char *str, char *cmd);
+int	check_option(char *str, char *cmd);
 
 int	ft_env(char **args, t_env *env)
 {

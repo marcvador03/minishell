@@ -6,17 +6,14 @@
 /*   By: mfleury <mfleury@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/02 18:58:50 by mfleury           #+#    #+#             */
-/*   Updated: 2025/01/23 19:51:09 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/01/23 22:58:03 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int		open_redir_fd(t_redirs *r, int *err, char *cmd);
-int		close_redir_fd_single(t_redirs *r, int *err, char *cmd);
-int		close_redir_fd_mult(t_pipe *p);
-int		close_pipes(t_pipe *p);
-int		exec_cmd(char *cmd, char **args, t_pipe *p, t_env *env);
+int	create_pipes_child(t_pipe *p);
+int	exec_cmd(char *cmd, char **args, t_pipe *p, t_env *env);
 
 static int	run_child(t_pipe *p, t_env *env)
 {
@@ -24,7 +21,7 @@ static int	run_child(t_pipe *p, t_env *env)
 
 	wstatus = 0;
 	if (create_pipes_child(p) == -1)
-		return (flush_errors("", 1, ""));
+		return (flush_errors("", 1, 0));
 	close_pipes(p);
 	if (open_redir_fd(p->r, &p->p_status, p->args[0]) == -1)
 	{
@@ -109,7 +106,7 @@ int	multiple_cmd(t_pipe *p, t_env *env)
 	head = p->head;
 	p = head;
 	if (create_pipes(p) == -1)
-		return (flush_errors("", -1, ""));
+		return (flush_errors("", -1, 0));
 	p = head;
 	while (p != NULL)
 	{

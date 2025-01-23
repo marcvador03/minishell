@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/15 12:00:56 by mfleury           #+#    #+#             */
-/*   Updated: 2025/01/20 23:13:51 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/01/23 22:40:41 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,14 +40,14 @@ char	**get_env_array(t_env *env, int *err)
 	n = env_size(env);
 	env_arr = (char **)ft_calloc(sizeof(char *), n + 1);
 	if (env_arr == NULL)
-		return (set_status(flush_errors("", -1, ""), err), NULL);
+		return (set_status(flush_errors("", -1, 0), err), NULL);
 	i = 0;
 	while (env != NULL)
 	{
 		tmp = ft_strjoin(env->varname, "=");
 		env_arr[i++] = ft_strjoin(tmp, env->value);
 		if (tmp == NULL || env_arr[i - 1] == NULL)
-			return (set_status(flush_errors("", 202, ""), err), NULL);
+			return (set_status(flush_errors("", 202, 0), err), NULL);
 		free(tmp);
 		env = env->next;
 	}

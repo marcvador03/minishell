@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   core_utils2.c                                      :+:      :+:    :+:   */
+/*   str2_utils.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mfleury <mfleury@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/20 00:38:02 by mfleury           #+#    #+#             */
-/*   Updated: 2025/01/22 12:43:11 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/01/23 22:53:31 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ int	one_of_char(char c, char *letters)
 		return (FALSE);
 	dict = ft_split(letters, ',');
 	if (dict == NULL)
-		return (flush_errors("", 202, ""), FALSE);
+		return (flush_errors("", 202, 0), FALSE);
 	i = 0;
 	while (dict[i] != NULL)
 	{
@@ -41,7 +41,7 @@ int	all_of_char(char c, char *letters)
 		return (FALSE);
 	dict = ft_split(letters, ',');
 	if (dict == NULL)
-		return (flush_errors("", 202, ""), FALSE);
+		return (flush_errors("", 202, 0), FALSE);
 	i = 0;
 	while (dict[i] != NULL)
 	{
@@ -61,7 +61,7 @@ int	none_of_char(char c, char *letters)
 		return (FALSE);
 	dict = ft_split(letters, ',');
 	if (dict == NULL)
-		return (flush_errors("", 202, ""), FALSE);
+		return (flush_errors("", 202, 0), FALSE);
 	i = 0;
 	while (dict[i] != NULL)
 	{
@@ -72,18 +72,6 @@ int	none_of_char(char c, char *letters)
 	return (free_d(dict), TRUE);
 }
 
-void	init_parse(t_parse *q)
-{
-	q->i = 0;
-	q->j = 0;
-	q->k = 0;
-	q->prev_pos = 0;
-	q->prev_pos2 = 0;
-	q->beg_sep = 0;
-	q->len = 0;
-	q->flag_jump = 0;
-}
-
 char	*sh_trim_spaces(char *str)
 {
 	char	*new_str;
@@ -92,7 +80,7 @@ char	*sh_trim_spaces(char *str)
 		return (NULL);
 	new_str = ft_strtrim(str, " ");
 	if (new_str == NULL)
-		return (flush_errors("", 202, ""), str);
+		return (flush_errors("", 202, 0), str);
 	free_s(str);
 	return (new_str);
 }

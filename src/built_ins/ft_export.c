@@ -6,17 +6,16 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/14 09:54:49 by pmorello          #+#    #+#             */
-/*   Updated: 2025/01/21 10:06:57 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/01/23 23:28:18 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	swap(char **str1, char **str2);
-int		export_count(char **env);
-int		check_export_var(char *str);
-char	*export_env_value(char *args, int n);
 int		check_option(char *str, char *cmd);
+void	swap(char **str1, char **str2);
+char	*export_env_value(char *args, int n);
+int		check_export_var(char *str);
 
 static char	**sort_array(char **s_env, int o, int n)
 {

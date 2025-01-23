@@ -6,11 +6,16 @@
 /*   By: mfleury <mfleury@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/23 19:43:27 by mfleury           #+#    #+#             */
-/*   Updated: 2025/01/23 19:50:10 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/01/23 23:28:26 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+t_shell	*sh_lstadd_back(t_shell *sh);
+t_shell	*sh_lstadd_down(t_shell *sh);
+t_shell	*parse_sh(t_shell *sh, char *line, int *pos);
+int		get_subshell_redirs(t_shell *sh, char *t_line, int *pos);
 
 static void	set_priority(t_shell *sh, char *line, t_parse *q)
 {
@@ -46,7 +51,7 @@ static int	get_inside_bracket(t_shell *sh, char *line, t_parse *q)
 		if (line[q->i] == '\0')
 			q->i = q->prev_pos;
 		else
-			if (get_subshell_redirs(sh, &line, &q->i) == -1)
+			if (get_subshell_redirs(sh, line, &q->i) == -1)
 				return (-1);
 	}
 	while (one_of_char(line[q->i], "&,|,(,)") != TRUE && line[q->i] != '\0')
@@ -57,11 +62,11 @@ static int	get_inside_bracket(t_shell *sh, char *line, t_parse *q)
 static int	check_tokens_errors(char *line, t_parse *q)
 {
 	if (line[q->i] == '&' && line[q->i] != line[q->i + 1])
-		return (flush_errors("", 210, ""), -1);
+		return (flush_errors("", 210, line[q->i]), -1);
 	else if (line[q->i + 1] != '\0')
 	{
 		if (one_of_char(line[q->i + 2], "&,|,)") == TRUE)
-			return (flush_errors("", 210, ""), -1);
+			return (flush_errors("", 210, line[q->i + 1]), -1);
 	}
 	return (0);
 }
@@ -107,9 +112,9 @@ t_shell	*parse_sh(t_shell *sh, char *line, int *pos)
 		sh->s_line = ft_substr(line, q.beg_sep, q.i - q.beg_sep);
 		sh->s_line = sh_trim_spaces(sh->s_line);
 		if (sh->s_line == NULL)
-			return (flush_errors("", 202, ""), NULL);
+			return (flush_errors("", 202, 0), NULL);
 		if (sh->s_line[0] == '\0')
-			return (flush_errors("", 210, ""), NULL);
+			return (flush_errors("", 210, line[q.i]), NULL);
 		if (line[q.i] != '\0' && line[q.i] != ')')
 			sh = sh_lstadd_back(sh);
 	}
