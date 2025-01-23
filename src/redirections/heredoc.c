@@ -6,13 +6,13 @@
 /*   By: mfleury <mfleury@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/23 14:57:19 by mfleury           #+#    #+#             */
-/*   Updated: 2025/01/22 14:36:52 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/01/23 19:23:05 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-char		*trim_line_expand(t_redirs *r, char *line, int f_exp);
+char		*trim_expand(t_redirs *r, char *line, int f_exp);
 
 static int	get_hd_input(t_redirs *r, char *eof, int fd)
 {
@@ -29,7 +29,7 @@ static int	get_hd_input(t_redirs *r, char *eof, int fd)
 		if (ft_strncmp(hd_input, eof, len) != 0)
 		{
 			if (r->hd_flag == 0)
-				hd_input = trim_line_expand(r, hd_input, 0);	
+				hd_input = trim_expand(r, hd_input, 0);
 			ft_putendl_fd(hd_input, fd);
 		}
 		else

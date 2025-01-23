@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/22 16:08:01 by mfleury           #+#    #+#             */
-/*   Updated: 2025/01/22 14:40:08 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/01/23 19:48:27 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,55 +17,45 @@ int	single_cmd(t_pipe *p, t_env *env);
 int	multiple_cmd(t_pipe *p, t_env *env);
 int	get_next_pipe(t_pipe *p, char *line, t_env *env, int *err);
 
-static t_pipe	*p_lstnew(t_shell *sh, char *line, t_env *env, int *err)
+static int	get_next_pipe_loop(t_pipe *p, char *t_line, int *err, int i)
 {
-	t_pipe	*ptr;
-
-	ptr = (t_pipe *)ft_calloc(sizeof (t_pipe), 1);
-	if (ptr == NULL)
-		return (flush_errors("", -1, ""), NULL);
-	ptr->r = (t_redirs *)ft_calloc(sizeof (t_redirs), 1);
-	if (ptr->r == NULL)
-		return (flush_errors("", -1, ""), NULL);
-	ptr->prev = NULL;
-	ptr->next = NULL;
-	ptr->head = ptr;
-	ptr->sh = sh;
-	ptr->r->sh = sh;
-	if (get_next_pipe(ptr, line, env, err) == 2)
-		return (free_pipe(ptr), NULL);
-	return (ptr);
-}
-
-static t_pipe	*p_lstlast(t_pipe *pipe)
-{
-	t_pipe	*tmp;
-
-	if (pipe == NULL)
-		return (NULL);
-	tmp = pipe;
-	while (tmp->next != NULL)
-		tmp = tmp->next;
-	return (tmp);
-}
-
-static t_pipe	*p_lstadd(t_pipe **pipe, char *line, t_env *env, int *err)
-{
-	t_pipe	*tmp;
-	t_pipe	*new_node;
-
-	new_node = p_lstnew((*pipe)->sh, line, env, err);
-	if (new_node == NULL)
-		return (free_pipe(*pipe), NULL);
-	else
+	if (t_line[i] == '|' || t_line[i] == '\0')
 	{
-		tmp = p_lstlast(*pipe);
-		tmp->next = new_node;
-		*pipe = tmp->next;
-		(*pipe)->head = tmp->head;
-		(*pipe)->prev = tmp;
+		p->p_line = ft_substr(t_line, 0, i);
+		p->p_line = sh_trim_spaces(p->p_line);
+		if (p->p_line == NULL)
+			return (set_status(flush_errors("", 202, ""), err), 2);
+		else if (p->p_line[0] == '\0')
+			return (set_status(flush_errors("", 205, ""), err), 2);
+		if (t_line[i] == '|')
+			ft_memset(t_line, ' ', i + 1);
+		else
+			ft_memset(t_line, ' ', i);
+		return (1);
 	}
-	return (tmp->next);
+	return (0);
+}
+
+static int	get_next_pipe(t_pipe *p, char *t_line, int *err)
+{
+	int		i;
+
+	i = 0;
+	while (t_line[i] != '\0')
+	{
+		while (t_line[i] == 34 || t_line[i] == 39)
+			i += sh_jump_to(t_line + i, t_line[i]);
+		if (get_next_pipe_loop(p, t_line, err, i) == 1)
+			return ((create_parsing(p)));
+		i++;
+	}
+	p->p_line = ft_strdup(t_line);
+	p->p_line = sh_trim_spaces(p->p_line);
+	if (p->p_line == NULL)
+		return (set_status(flush_errors("", 202, ""), err), 2);
+	else if (p->p_line[0] == '\0')
+		return (set_status(flush_errors("", 205, ""), err), 2);
+	return (create_parsing(p));
 }
 
 static t_pipe	*fill_pipes(t_shell *sh, t_pipe *p, int n, int *err)

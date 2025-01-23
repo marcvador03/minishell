@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/17 09:57:43 by mfleury           #+#    #+#             */
-/*   Updated: 2025/01/22 14:35:51 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/01/23 19:21:44 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,7 +101,7 @@ static char	*trim_dollar(t_redirs *r, char *line, t_parse *q, int f_exp)
 	return (line);
 }
 
-char	*trim_line_expand(t_redirs *r, char *line, int f_exp)
+char	*trim_expand(t_redirs *r, char *line, int f_exp)
 {
 	t_parse	q;
 

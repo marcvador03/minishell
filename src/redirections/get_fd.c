@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   redirections.c                                     :+:      :+:    :+:   */
+/*   get_fd.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mfleury <mfleury@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/18 17:20:19 by mfleury           #+#    #+#             */
-/*   Updated: 2025/01/23 10:11:50 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/01/23 19:52:07 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,4 +87,27 @@ int	get_fds_redir(t_redirs *r, int *err)
 		i++;
 	}
 	return (fd);
+}
+
+int	create_pipes_child(t_pipe *p)
+{
+	t_pipe	*o;
+
+	o = p->prev;
+	if (p == p->head)
+		if (dup2(p->fd[WRITE_END], STDOUT_FILENO) == -1)
+			return (close_pipes(p), -1);
+	if (p != p->head && p->next != NULL)
+	{
+		if (dup2(o->fd[READ_END], STDIN_FILENO) == -1)
+			return (close_pipes(p), -1);
+		if (dup2(p->fd[WRITE_END], STDOUT_FILENO) == -1)
+			return (close_pipes(p), -1);
+	}
+	else if (p != p->head && p->next == NULL)
+	{
+		if (dup2(o->fd[READ_END], STDIN_FILENO) == -1)
+			return (close_pipes(p), -1);
+	}
+	return (0);
 }

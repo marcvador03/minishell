@@ -6,14 +6,14 @@
 /*   By: mfleury <mfleury@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/10 08:52:08 by mfleury           #+#    #+#             */
-/*   Updated: 2025/01/23 15:59:26 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/01/23 19:22:03 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
 char	**get_sep_quotes(char *line);
-char	*trim_line_expand(t_pipe *p, char *line, int f_exp);
+char	*trim_expand(t_pipe *p, char *line, int f_exp);
 int		get_rd_flag(char *rd);
 
 static int	count_redirs_loop(char **parse, t_parse *r, char c)
@@ -78,13 +78,13 @@ static int	create_parsing_loop(t_pipe *p, t_parse *q)
 			if (p->r->rd[q->j] == NULL)
 				return (flush_errors("", 202, ""), 2);
 			q->flag_sep = get_rd_flag(p->r->rd[q->j]);
-			p->r->redirs[q->j] = trim_line_expand(p, q->parse[q->i], q->flag_sep);
+			p->r->redirs[q->j] = trim_expand(p, q->parse[q->i], q->flag_sep);
 			if (p->r->redirs[q->j++] == NULL)
 				return (flush_errors("", 202, ""), 2);
 		}
 		else
 		{
-			p->args[q->k] = trim_line_expand(p, q->parse[q->i], 0);
+			p->args[q->k] = trim_expand(p, q->parse[q->i], 0);
 			if (p->args[q->k++] == NULL)
 				return (flush_errors("", 202, ""), 2);
 		}

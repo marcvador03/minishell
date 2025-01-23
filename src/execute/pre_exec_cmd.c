@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   pre_exec.c                                         :+:      :+:    :+:   */
+/*   pre_exec_cmd.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mfleury <mfleury@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/02 18:58:50 by mfleury           #+#    #+#             */
-/*   Updated: 2025/01/23 16:53:31 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/01/23 19:51:09 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,23 +20,11 @@ int		exec_cmd(char *cmd, char **args, t_pipe *p, t_env *env);
 
 static int	run_child(t_pipe *p, t_env *env)
 {
-	t_pipe	*o;
 	int		wstatus;
 
 	wstatus = 0;
-	o = p->prev;
-	if (p == p->head)
-		if (dup2(p->fd[WRITE_END], STDOUT_FILENO) == -1)
-			return (close_pipes(p), flush_errors("", 1, ""));
-	if (p != p->head && p->next != NULL)
-	{
-		if (dup2(o->fd[READ_END], STDIN_FILENO) == -1)
-			return (close_pipes(p), flush_errors("", 1, ""));
-		if (dup2(p->fd[WRITE_END], STDOUT_FILENO) == -1)
-			return (close_pipes(p), flush_errors("", 1, ""));
-	}
-	else if (p != p->head && p->next == NULL)
-		dup2(o->fd[READ_END], STDIN_FILENO);
+	if (create_pipes_child(p) == -1)
+		return (flush_errors("", 1, ""));
 	close_pipes(p);
 	if (open_redir_fd(p->r, &p->p_status, p->args[0]) == -1)
 	{
