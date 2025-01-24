@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/22 16:08:01 by mfleury           #+#    #+#             */
-/*   Updated: 2025/01/23 23:27:51 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/01/24 21:42:00 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,14 +40,18 @@ static int	get_next_pipe_loop(t_pipe *p, char *t_line, int *err, int i)
 int	get_next_pipe(t_pipe *p, char *t_line, int *err)
 {
 	int		i;
+	int		x;
 
 	i = 0;
 	while (t_line[i] != '\0')
 	{
 		while (t_line[i] == 34 || t_line[i] == 39)
 			i += sh_jump_to(t_line + i, t_line[i]);
-		if (get_next_pipe_loop(p, t_line, err, i) == 1)
+		x = get_next_pipe_loop(p, t_line, err, i);
+		if (x == 1)
 			return ((create_parsing(p)));
+		else if (x == 2)
+			return (2);
 		i++;
 	}
 	p->p_line = ft_strdup(t_line);
