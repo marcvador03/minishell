@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/23 14:57:19 by mfleury           #+#    #+#             */
-/*   Updated: 2025/01/23 22:57:48 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/01/24 16:17:51 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,11 +29,11 @@ static int	get_hd_input(t_redirs *r, char *eof, int fd)
 		if (ft_strncmp(hd_input, eof, len) != 0)
 		{
 			if (r->hd_flag == 0)
-				hd_input = trim_expand(r, hd_input, 0);
+				hd_input = trim_expand(r, hd_input, -1);
 			ft_putendl_fd(hd_input, fd);
 		}
 		else
-			return (close(fd), free(hd_input), 0);
+			return (close(fd), free(hd_input), -1);
 		free(hd_input);
 	}
 	return (close(fd), 0);

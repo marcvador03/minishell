@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/23 19:43:27 by mfleury           #+#    #+#             */
-/*   Updated: 2025/01/24 09:41:28 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/01/24 16:04:20 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,7 +93,7 @@ static int	get_next_token(t_shell *sh, char *line, t_parse *q, int *l_status)
 			return (0);
 		else if (line[q->i] == '|')
 		{
-			if (none_of_char(line[q->i], "|,&,(,)") == TRUE)
+			if (none_of_char(line[++q->i], "|,&,(,)") == TRUE)
 				return (get_next_token(sh, line, q, l_status));
 			else
 				q->i--;
