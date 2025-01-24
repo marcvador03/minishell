@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/16 16:32:42 by mfleury           #+#    #+#             */
-/*   Updated: 2025/01/23 23:21:38 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/01/24 09:53:33 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,13 +16,19 @@
 static void	custom_errors1(char *cmd, int errnum, int *ret_err)
 {
 	ft_putstr_fd("minishell: ", STDERR_FILENO);
-	ft_putstr_fd(cmd, STDERR_FILENO);
+	if (ft_strncmp(cmd, "", max(2, ft_strlen(cmd))) != 0)
+	{
+		ft_putstr_fd(cmd, STDERR_FILENO);
+		ft_putstr_fd(": ", STDERR_FILENO);
+	}
 	if (errnum == 7)
 		ft_putendl_fd(E_007, STDERR_FILENO);
 	if (errnum == 8)
 		ft_putendl_fd(E_008, STDERR_FILENO);
 	if (errnum == 9)
 		ft_putendl_fd(E_009, STDERR_FILENO);
+	if (errnum == 10)
+		ft_putendl_fd(E_010, STDERR_FILENO);
 	if (errnum == 11)
 		ft_putendl_fd(E_011, STDERR_FILENO);
 	if (errnum == 12)
@@ -35,13 +41,21 @@ static void	custom_errors1(char *cmd, int errnum, int *ret_err)
 static void	custom_errors2(char *cmd, int errnum, char tk, int *ret_err)
 {
 	ft_putstr_fd("minishell: ", STDERR_FILENO);
-	ft_putstr_fd(cmd, STDERR_FILENO);
+	if (ft_strncmp(cmd, "", max(2, ft_strlen(cmd))) != 0)
+	{
+		ft_putstr_fd(cmd, STDERR_FILENO);
+		ft_putstr_fd(": ", STDERR_FILENO);
+	}
+	if (errnum == 200)
+		ft_putendl_fd(E_200, STDERR_FILENO);
 	if (errnum == 202)
 		ft_putendl_fd(E_202, STDERR_FILENO);
 	if (errnum == 208)
 		ft_putendl_fd(E_208, STDERR_FILENO);
 	if (errnum == 209)
 		ft_putendl_fd(E_209, STDERR_FILENO);
+	if (errnum == 211)
+		ft_putendl_fd(E_211, STDERR_FILENO);
 	if (errnum == 210)
 	{
 		ft_putstr_fd(E_210, STDERR_FILENO);
@@ -54,7 +68,11 @@ static void	custom_errors2(char *cmd, int errnum, char tk, int *ret_err)
 static void	custom_errors3(char *cmd, int errnum, int *ret_err)
 {
 	ft_putstr_fd("minishell: ", STDERR_FILENO);
-	ft_putstr_fd(cmd, STDERR_FILENO);
+	if (ft_strncmp(cmd, "", max(2, ft_strlen(cmd))) != 0)
+	{
+		ft_putstr_fd(cmd, STDERR_FILENO);
+		ft_putstr_fd(": ", STDERR_FILENO);
+	}
 	if (errnum == 125)
 		ft_putendl_fd(E_125, STDERR_FILENO);
 	if (errnum == 126)
