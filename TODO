@@ -1,9 +1,15 @@
 OK 1. expand variable after heredoc
 OK 2. cmd parsing
 3. exit function parameters
-4. utf8 protection
-5. history don't repeat same command
+NO 4. utf8 protection
+NO 5. history don't repeat same command
 OK 6. add * to restrictions
 OK 7. new parsing tokens
 OK 8. tokens redirections
 9. multiple lines after killing piped commands
+
+10. Token check errors
+
+11. Redo absolute path and relative path logic + chech files permissions and dir
+12. (cat << EOF > infile && echo a) > test bug ( seems fd conflict issue)
+13. (cat << EOF && cat) << EOF2 not like bash
