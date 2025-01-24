@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/23 19:43:27 by mfleury           #+#    #+#             */
-/*   Updated: 2025/01/23 23:28:26 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/01/24 09:41:28 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 t_shell	*sh_lstadd_back(t_shell *sh);
 t_shell	*sh_lstadd_down(t_shell *sh);
-t_shell	*parse_sh(t_shell *sh, char *line, int *pos);
+t_shell	*parse_sh(t_shell *sh, char *line, int *pos, int *l_status);
 int		get_subshell_redirs(t_shell *sh, char *t_line, int *pos);
 
 static void	set_priority(t_shell *sh, char *line, t_parse *q)
@@ -33,7 +33,7 @@ static void	set_priority(t_shell *sh, char *line, t_parse *q)
 	return ;
 }
 
-static int	get_inside_bracket(t_shell *sh, char *line, t_parse *q)
+static int	inside_bracket(t_shell *sh, char *line, t_parse *q, int *l_status)
 {
 	t_shell	*sub_sh;
 
@@ -41,7 +41,7 @@ static int	get_inside_bracket(t_shell *sh, char *line, t_parse *q)
 	sub_sh = sh_lstadd_down(sh);
 	if (sub_sh == NULL)
 		return (-1);
-	parse_sh(sub_sh, line, &q->i);
+	parse_sh(sub_sh, line, &q->i, l_status);
 	if (line[q->i] == ')')
 	{
 		ft_memset(line + q->i, ' ', 1);
@@ -59,19 +59,25 @@ static int	get_inside_bracket(t_shell *sh, char *line, t_parse *q)
 	return (0);
 }
 
-static int	check_tokens_errors(char *line, t_parse *q)
+static int	check_tokens_errors(char *line, t_parse *q, int *l_status)
 {
 	if (line[q->i] == '&' && line[q->i] != line[q->i + 1])
-		return (flush_errors("", 210, line[q->i]), -1);
+	{
+		*l_status = flush_errors("", 210, line[q->i]);
+		return (-1);
+	}
 	else if (line[q->i + 1] != '\0')
 	{
 		if (one_of_char(line[q->i + 2], "&,|,)") == TRUE)
-			return (flush_errors("", 210, line[q->i + 1]), -1);
+		{
+			*l_status = flush_errors("", 210, line[q->i + 1]);
+			return (-1);
+		}
 	}
 	return (0);
 }
 
-static int	get_next_token(t_shell *sh, char *line, t_parse *q)
+static int	get_next_token(t_shell *sh, char *line, t_parse *q, int *l_status)
 {
 	if (sh != sh->head)
 		set_priority(sh, line, q);
@@ -81,24 +87,24 @@ static int	get_next_token(t_shell *sh, char *line, t_parse *q)
 		return (q->i);
 	else if (line[q->i] == '&' || line[q->i] == '|')
 	{
-		if (check_tokens_errors(line, q) == -1)
+		if (check_tokens_errors(line, q, l_status) == -1)
 			return (-1);
 		if (line[q->i + 1] == '&' || line[q->i + 1] == '|')
 			return (0);
 		else if (line[q->i] == '|')
 		{
 			if (none_of_char(line[q->i], "|,&,(,)") == TRUE)
-				return (get_next_token(sh, line, q));
+				return (get_next_token(sh, line, q, l_status));
 			else
 				q->i--;
 		}
 	}
 	else if (line[q->i] == '(')
-		return (get_inside_bracket(sh, line, q));
+		return (inside_bracket(sh, line, q, l_status));
 	return (q->i);
 }
 
-t_shell	*parse_sh(t_shell *sh, char *line, int *pos)
+t_shell	*parse_sh(t_shell *sh, char *line, int *pos, int *l_status)
 {
 	t_parse	q;
 
@@ -107,7 +113,7 @@ t_shell	*parse_sh(t_shell *sh, char *line, int *pos)
 	while (line[q.i] != '\0' && line[q.i] != ')')
 	{
 		q.beg_sep = q.i;
-		if (get_next_token(sh, line, &q) == -1)
+		if (get_next_token(sh, line, &q, l_status) == -1)
 			return (NULL);
 		sh->s_line = ft_substr(line, q.beg_sep, q.i - q.beg_sep);
 		sh->s_line = sh_trim_spaces(sh->s_line);

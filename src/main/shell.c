@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/07 15:12:52 by mfleury           #+#    #+#             */
-/*   Updated: 2025/01/23 23:08:00 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/01/24 09:40:34 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 int		execute_tokens(t_shell *sh, int status);
 char	*create_prompt(t_env *env);
 t_shell	*sh_lstnew(t_terms *tcap, t_env *env, int *l_status);
-t_shell	*parse_sh(t_shell *sh, char *line, int *pos);
+t_shell	*parse_sh(t_shell *sh, char *line, int *pos, int *l_status);
 
 static int	check_forbidden_c(char *line)
 {
@@ -102,10 +102,11 @@ int	start_shell(t_env *env, t_terms *tcap, int *l_status)
 	if (sh == NULL)
 		return (set_status(flush_errors("", 202, 0), l_status), 0);
 	i = 0;
-	sh = parse_sh(sh, line, &i);
+	sh = parse_sh(sh, line, &i, l_status);
+	if (sh == NULL)
+		return (free_s(line), 0);
 	free_s(line);
 	head = sh->head;
-	*l_status = 0;
 	if (sh_check_empty(sh->s_line) == -1)
 		return (free_sh(head), 0);
 	*l_status = execute_tokens(head, 0);
