@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/10 08:52:08 by mfleury           #+#    #+#             */
-/*   Updated: 2025/01/23 23:11:02 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/01/25 21:12:17 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,8 +84,8 @@ static int	create_parsing_loop(t_pipe *p, t_parse *q)
 		else
 		{
 			p->args[q->k] = trim_expand(p->r, q->parse[q->i], 0);
-			if (p->args[q->k++] == NULL)
-				return (flush_errors("", 202, 0), 2);
+			if (p->args[q->k] != NULL)
+				q->k++;
 		}
 		q->i++;
 	}

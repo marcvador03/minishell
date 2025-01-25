@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/17 09:57:43 by mfleury           #+#    #+#             */
-/*   Updated: 2025/01/24 16:17:27 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/01/25 20:39:34 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,7 +109,11 @@ char	*trim_expand(t_redirs *r, char *line, int f_exp)
 		if (line[q.i] == ' ' && f_exp != -1)
 			quit_spaces(&q, line + q.i, line);
 		if (line[q.i] == '$' && line[q.i + 1] != '\0')
+		{
 			line = trim_dollar(r, line, &q, f_exp);
+			if (line == NULL)
+				return (NULL);
+		}
 		if (line[q.i] == '\0')
 			return (line);
 		line = trim_quotes(r, line, &q, f_exp);

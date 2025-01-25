@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/17 12:19:07 by mfleury           #+#    #+#             */
-/*   Updated: 2025/01/23 22:53:54 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/01/25 20:37:25 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,8 @@ static char	*resize_line(char *line, char *out, char *in, int *i)
 	char	*tmp[3];
 	int		len[4];
 
+	if (out == NULL)
+		return (free_s(line), NULL);
 	len[0] = ft_strlen(in);
 	len[1] = ft_strlen(line);
 	len[2] = ft_strlen(out);
@@ -44,7 +46,7 @@ static char	*expand_getenv(char *s, t_env *env)
 	if (value != NULL)
 		res = ft_strdup(value);
 	else
-		res = ft_strdup("");
+		return (NULL);
 	return (res);
 }
 
