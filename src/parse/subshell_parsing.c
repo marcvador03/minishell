@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/23 19:43:27 by mfleury           #+#    #+#             */
-/*   Updated: 2025/01/24 16:04:20 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/01/25 20:16:19 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,10 +81,21 @@ static int	get_next_token(t_shell *sh, char *line, t_parse *q, int *l_status)
 {
 	if (sh != sh->head)
 		set_priority(sh, line, q);
-	while (one_of_char(line[q->i], "&,|,(,)") == FALSE && line[q->i] != '\0')
+	while (one_of_char(line[q->i], "&,|,(,),<,>") == FALSE && line[q->i] != '\0')
 		q->i++;
 	if (line[q->i] == '\0')
 		return (q->i);
+	else if (line[q->i] == '>' || line[q->i] == '<')
+	{
+		q->prev_pos = q->i;
+		while (one_of_char(line[q->i], "&,|,(,)") == FALSE && line[q->i] != '\0')
+			q->i++;
+		if (line[q->i] == '(')
+		{
+			*l_status = flush_errors("", 210, line[q->prev_pos]);
+			return (-1);
+		}
+	}
 	else if (line[q->i] == '&' || line[q->i] == '|')
 	{
 		if (check_tokens_errors(line, q, l_status) == -1)
@@ -114,13 +125,15 @@ t_shell	*parse_sh(t_shell *sh, char *line, int *pos, int *l_status)
 	{
 		q.beg_sep = q.i;
 		if (get_next_token(sh, line, &q, l_status) == -1)
-			return (NULL);
+			return (free_sh(sh), NULL);
 		sh->s_line = ft_substr(line, q.beg_sep, q.i - q.beg_sep);
 		sh->s_line = sh_trim_spaces(sh->s_line);
 		if (sh->s_line == NULL)
 			return (flush_errors("", 202, 0), NULL);
 		if (sh->s_line[0] == '\0')
-			return (flush_errors("", 210, line[q.i]), NULL);
+			return (flush_errors("", 210, line[q.i]), free_sh(sh), NULL);
+		if (sh->r != NULL && sh->down == NULL)
+			return (flush_errors("", 210, *sh->r->rd[0]), free_sh(sh), NULL);
 		if (line[q.i] != '\0' && line[q.i] != ')')
 			sh = sh_lstadd_back(sh);
 	}
