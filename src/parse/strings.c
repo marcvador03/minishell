@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/17 09:57:43 by mfleury           #+#    #+#             */
-/*   Updated: 2025/01/25 20:39:34 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/01/26 12:51:49 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,6 +62,7 @@ static char	*trim_quotes(t_redirs *r, char *line, t_parse *q, int f_exp)
 {
 	while (line[q->i] == 34 || line[q->i] == 39)
 	{
+		q->len = ft_strlen(line);
 		if (q->i > 0 && line[q->i - 1] == '$')
 		{
 			ft_strlcpy(line + q->i - 1, line + q->i, q->len);
