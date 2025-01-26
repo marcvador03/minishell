@@ -6,7 +6,7 @@
 /*   By: pmorello <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 12:17:09 by pmorello          #+#    #+#             */
-/*   Updated: 2025/01/25 21:13:01 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/01/26 17:03:29 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -185,8 +185,6 @@ void	init_signal(int pid, int hd);
 
 /* environment functions */
 char	**get_env_array(t_env *env, int *err);
-char	*get_full_path(char *arg0, t_env *env, int *err);
-int		check_directory(char *t_cmd);
 char	*sh_getenv(t_env *env, char *str);
 t_env	*sh_addenv(t_env *env, char *var_name, char *value);
 t_env	*sh_updateenv(t_env *env, char *var_name, char *new_value);
@@ -194,6 +192,11 @@ t_env	*sh_delenv(t_env *env, char *var_name);
 int		env_size(t_env *lst);
 char	*expand_variable(t_shell *sh, char *line, int *i);
 t_env	*fill_env(char *envp[]);
+
+/* path functions */
+int		is_absolute_path(char *cmd, int *err);
+int		check_file_directory(char *t_cmd, int *err);
+char	*get_full_path(char *arg0, t_env *env, int *err);
 
 /* file descriptor functions */
 int		open_redir_fd(t_redirs *r, int *err, char *cmd);

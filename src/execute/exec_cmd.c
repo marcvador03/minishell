@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/17 15:39:35 by mfleury           #+#    #+#             */
-/*   Updated: 2025/01/23 22:23:10 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/01/26 17:53:35 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,17 +54,18 @@ static int	exec_process(char *t_cmd, char **args, char **env2)
 static int	exec_syscmd_multiple(t_pipe *p, t_env *env, char **env2)
 {
 	char	*t_cmd;
-	int		err;
+	int		*err;
+	int		x;
 
-	err = 0;
-	t_cmd = get_full_path(p->args[0], env, &err);
+	err = &p->p_status;
+	x = is_absolute_path(p->args[0], err);
+	if (x == 0)
+		t_cmd = ft_strdup(p->args[0]);
+	else if (x == -1)
+		t_cmd = get_full_path(p->args[0], env, err);
+	else
+		return (p->p_status);
 	if (t_cmd == NULL)
-	{
-		p->p_status = err;
-		return (free_s(t_cmd), p->p_status);
-	}
-	p->p_status = check_directory(t_cmd);
-	if (p->p_status != 0)
 		return (free_s(t_cmd), p->p_status);
 	exec_process(t_cmd, p->args, env2);
 	free_s(t_cmd);
@@ -76,20 +77,20 @@ static int	exec_syscmd_single(t_pipe *p, t_env *env, char **env2)
 	char		*t_cmd;
 	int			wstatus;
 	pid_t		pid;
-	int			err;
+	int			*err;
+	int			x;
 
-	err = 0;
+	err = &p->p_status;
 	init_signal(0, 0);
-	t_cmd = get_full_path(p->args[0], env, &err);
+	x = is_absolute_path(p->args[0], err);
+	if (x == 0)
+		t_cmd = ft_strdup(p->args[0]);
+	else if (x == -1)
+		t_cmd = get_full_path(p->args[0], env, err);
+	else
+		return (p->p_status);
 	if (t_cmd == NULL)
-	{
-		p->p_status = err;
 		return (free_s(t_cmd), p->p_status);
-	}
-	p->p_status = check_directory(t_cmd);
-	if (p->p_status != 0)
-		return (free_s(t_cmd), p->p_status);
-	wstatus = 0;
 	p->pid = fork();
 	if (p->pid == -1)
 		return (free_s(t_cmd), -1);
@@ -115,11 +116,13 @@ int	exec_cmd(char *cmd, char **args, t_pipe *p, t_env *env)
 	if (env_arr == NULL)
 		return (err);
 	if (x != -1)
+	{
 		p->p_status = call_cmd[x](args, env);
+		flush_errors(cmd, p->p_status, 0);
+	}
 	else if (p->sh->p_count == 1)
 		exec_syscmd_single(p, env, env_arr);
 	else
 		exec_syscmd_multiple(p, env, env_arr);
-	flush_errors(cmd, p->p_status, 0);
 	return (free_d(env_arr), p->p_status);
 }

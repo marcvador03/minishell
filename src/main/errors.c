@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/16 16:32:42 by mfleury           #+#    #+#             */
-/*   Updated: 2025/01/24 09:53:33 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/01/26 17:43:56 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,6 +96,8 @@ int	flush_errors(char *cmd, int err_sig, char tk)
 		ret_err = 1;
 		if (errno == 13)
 			ret_err = 124;
+		else if (errno == 2)
+			ret_err = 127;
 	}
 	else if (err_sig > 2 && err_sig < 124)
 		custom_errors1(cmd, err_sig, &ret_err);

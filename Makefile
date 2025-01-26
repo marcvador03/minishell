@@ -32,6 +32,7 @@ EXECUTE = close_fd.c \
 		  exec_shell.c \
 		  heredoc.c \
 		  open_fd.c \
+		  path.c \
 		  pre_exec_cmd.c
 
 UTILS = core_utils.c \
