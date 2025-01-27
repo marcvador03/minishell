@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/17 09:57:43 by mfleury           #+#    #+#             */
-/*   Updated: 2025/01/26 12:51:49 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/01/27 15:00:18 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,12 +63,6 @@ static char	*trim_quotes(t_redirs *r, char *line, t_parse *q, int f_exp)
 	while (line[q->i] == 34 || line[q->i] == 39)
 	{
 		q->len = ft_strlen(line);
-		if (q->i > 0 && line[q->i - 1] == '$')
-		{
-			ft_strlcpy(line + q->i - 1, line + q->i, q->len);
-			q->i--;
-			q->len = ft_strlen(line);
-		}
 		r->hd_flag = 1;
 		line = trim_within_quotes(r, line, q, f_exp);
 		ft_strlcpy(line + q->i - 1, line + q->i, q->len);
@@ -95,6 +89,11 @@ static char	*trim_dollar(t_redirs *r, char *line, t_parse *q, int f_exp)
 		q->flag_jump = 1;
 		return (res);
 	}
+	else if ((line[q->i + 1] == 34 || line[q->i + 1] == 39) && f_exp != 4)
+	{
+		ft_strlcpy(line + q->i, line + q->i + 1, q->len);
+		q->len = ft_strlen(line);
+	}
 	return (line);
 }
 
@@ -109,6 +108,7 @@ char	*trim_expand(t_redirs *r, char *line, int f_exp)
 		q.flag_jump = 0;
 		if (line[q.i] == ' ' && f_exp != -1)
 			quit_spaces(&q, line + q.i, line);
+		q.len = ft_strlen(line);
 		if (line[q.i] == '$' && line[q.i + 1] != '\0')
 		{
 			line = trim_dollar(r, line, &q, f_exp);
