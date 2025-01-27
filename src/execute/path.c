@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/26 13:00:25 by mfleury           #+#    #+#             */
-/*   Updated: 2025/01/26 17:53:06 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/01/27 14:30:01 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ char	*get_full_path(char *arg0, t_env *env, int *err)
 	int		i;
 
 	path_env = sh_getenv(env, "PATH");
-	if (path_env == NULL)
+	if (path_env == NULL || arg0[0] == '\0')
 		return (set_status(flush_errors(arg0, 127, '\0'), err), NULL);
 	paths = ft_split(path_env, ':');
 	if (paths == NULL)
@@ -50,7 +50,7 @@ char	*get_full_path(char *arg0, t_env *env, int *err)
 		cmd_out = ft_strjoin(paths[i++], cmd_in);
 		if (cmd_out == NULL)
 			return (free_d(paths), free_s(cmd_in), set_status(202, err), NULL);
-		if (access(cmd_out, X_OK) == 0)
+		if (access(cmd_out, F_OK) == 0)
 			return (free_d(paths), free_s(cmd_in), cmd_out);
 		*err = errno;
 		free_s(cmd_out);
