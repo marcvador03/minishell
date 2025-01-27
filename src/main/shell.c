@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/07 15:12:52 by mfleury           #+#    #+#             */
-/*   Updated: 2025/01/27 13:15:17 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/01/27 14:33:44 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,7 +107,7 @@ int	start_shell(t_env *env, t_terms *tcap, int *l_status)
 	if (line == NULL)
 		exit_minishell_error(sh, 200, env);
 	if (check_open_quotes(line) == -1)
-		return (free_s(line), 2);
+		return (set_status(2, l_status), free_s(line), 2);
 	sh = sh_lstnew(tcap, env, l_status);
 	if (sh == NULL)
 		return (set_status(flush_errors("", 202, 0), l_status), 0);
