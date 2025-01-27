@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/18 15:22:36 by mfleury           #+#    #+#             */
-/*   Updated: 2025/01/27 18:57:16 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/01/27 19:29:50 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,9 +112,11 @@ char	**get_sep_quotes(t_pipe *p)
 		return (NULL);
 	init_parse(&q);
 	n = count_quotes(p);
+	if (p->p_line == NULL)
+		return (NULL);
 	q.parse = (char **)ft_calloc(sizeof(char *), n + 1);
 	if (q.parse == NULL)
-		return (NULL);
+		return (flush_errors("", 202, 0), NULL);
 	while (p->p_line[q.i] != '\0')
 	{
 		q.flag_jump = 0;

@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/10 08:52:08 by mfleury           #+#    #+#             */
-/*   Updated: 2025/01/27 18:47:36 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/01/27 19:31:05 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,7 +101,7 @@ int	create_parsing(t_pipe *p)
 	init_parse(&q);
 	q.parse = get_sep_quotes(p);
 	if (q.parse == NULL)
-		return (flush_errors("", 202, 0), 2);
+		return (2);
 	cnt_args = 0;
 	cnt_redirs = 0;
 	q.flag_jump = count_redirs(q.parse, &cnt_args, &cnt_redirs);
