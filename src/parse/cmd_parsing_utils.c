@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/18 16:34:46 by mfleury           #+#    #+#             */
-/*   Updated: 2025/01/27 18:56:58 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/01/27 19:25:27 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,8 +70,10 @@ static int	count_quotes_rd_dollar(t_pipe *p, t_parse *q, int *n)
 		*n = *n + 1;
 		q->flag_jump = 1;
 	}
-	if (t_line[q->i] == '$')
+	if (t_line[q->i] == '$' && t_line[q->i + 1] != '\0')
 	{
+		if (t_line[q->i + 1] == ' ')
+			return (0);
 		q->prev_pos = q->i;
 		t_line = expand_variable(p->sh, t_line, &q->i);
 		p->p_line = t_line;
