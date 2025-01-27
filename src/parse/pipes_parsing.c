@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/10 08:52:08 by mfleury           #+#    #+#             */
-/*   Updated: 2025/01/25 21:12:17 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/01/27 12:56:37 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,14 +20,14 @@ static int	count_redirs_loop(char **parse, t_parse *r, char c)
 	while (parse[r->i][++r->j] != '\0')
 	{
 		if (r->j >= 2)
-			return (flush_errors("", 203, c), -1);
+			return (flush_errors("", 210, c), -1);
 		if (parse[r->i][r->j] != c)
-			return (flush_errors("", 203, c), -1);
+			return (flush_errors("", 210, c), -1);
 	}
 	if (parse[++r->i] == NULL)
-		return (flush_errors("", 203, c), -1);
+		return (flush_errors("", 210, c), -1);
 	else if (parse[r->i][0] == '>' || parse[r->i][0] == '<')
-		return (flush_errors("", 203, c), -1);
+		return (flush_errors("", 210, c), -1);
 	return (0);
 }
 
