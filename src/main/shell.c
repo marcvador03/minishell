@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/07 15:12:52 by mfleury           #+#    #+#             */
-/*   Updated: 2025/01/27 13:07:19 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/01/27 13:15:17 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ char	*create_prompt(t_env *env);
 t_shell	*sh_lstnew(t_terms *tcap, t_env *env, int *l_status);
 t_shell	*parse_sh(t_shell *sh, char *line, int *pos, int *l_status);
 
-static int	check_forbidden_c(char *line)
+static int	check_forbidden_c(char *line, int *l_status)
 {
 	int	i;
 
@@ -25,7 +25,7 @@ static int	check_forbidden_c(char *line)
 	while (line[i] != 0)
 	{
 		if ((line[i] > 0 && line[i] <= 31) || line[i] == 92)
-			return (flush_errors("", 210, line[i]), -1);
+			return (set_status(flush_errors("", 210, line[i]), l_status), -1);
 		i++;
 	}
 	i = 0;
@@ -38,7 +38,7 @@ static int	check_forbidden_c(char *line)
 				return (0);
 		}
 		if (line[i] == ';' || line[i] == 42)
-			return (flush_errors("", 210, line[i]), -1);
+			return (set_status(flush_errors("", 210, line[i]), l_status), -1);
 		i++;
 	}
 	return (0);
@@ -89,7 +89,7 @@ static char	*get_input(t_env *env, t_terms *tcap, int *l_status)
 		*l_status = 130;
 	g_status = 0;
 	add_history(line);
-	if (check_forbidden_c(line) == -1)
+	if (check_forbidden_c(line, l_status) == -1)
 		return (free_s(prompt), free_s(line), get_input(env, tcap, l_status));
 	return (free_s(prompt), line);
 }
