@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/18 16:34:46 by mfleury           #+#    #+#             */
-/*   Updated: 2025/01/23 22:12:21 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/01/27 16:45:49 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,8 +25,8 @@ int	separate_quotes(char *line, t_parse *q)
 	}
 	if (line[q->i] == ' ')
 	{
-		q->i += sh_skip(line + q->i, ' ');
-		q->flag_jump = 1;
+		q->i += sh_skip(line + q->i, ' ') - 1;
+		//q->flag_jump = 1;
 	}
 	return (0);
 }
