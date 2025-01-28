@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/26 13:00:25 by mfleury           #+#    #+#             */
-/*   Updated: 2025/01/28 12:58:05 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/01/28 15:18:19 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,6 +66,15 @@ int	is_absolute_path(char *cmd, int *err)
 	if (cmd == NULL)
 		return (0);
 	i = 0;
+	if (cmd[0] == '.')
+	{
+		if (cmd[1] == '\0' || (cmd[1] == '.' && cmd[2] == '\0'))
+		{
+			*err = flush_errors(cmd, 127, '\0');
+			return (127);
+		}
+	}
+
 	while (cmd[i] != '\0')
 	{
 		if (cmd[i] == '/')
