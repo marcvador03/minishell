@@ -6,56 +6,13 @@
 /*   By: mfleury <mfleury@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/18 15:22:36 by mfleury           #+#    #+#             */
-/*   Updated: 2025/01/28 12:56:17 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/01/28 15:43:19 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
 int		count_quotes(t_pipe *p);
-int		separate_quotes(char *line, t_parse *q);
-int		separate_dollar(char *line, t_parse *q);
-
-static int	create_separation(char *line, t_parse *q)
-{
-
-	if (q->i - q->prev_pos >= 1)
-	{
-		q->parse[q->j] = ft_substr(line, q->beg_sep, q->i - q->beg_sep);
-		q->parse[q->j] = sh_trim_spaces(q->parse[q->j]);
-		if (q->parse[q->j] == NULL)
-			return (-1);
-		q->beg_sep = q->i;
-		q->j++;
-		return (0);
-	}
-	else
-		return (0);
-}
-
-static int	create_rd_separation(char *line, t_parse *q)
-{
-	if (q->i >= 1 && line[q->i - 1] != ' ')
-	{
-		q->parse[q->j] = ft_substr(line, q->beg_sep, q->i - q->beg_sep);
-		q->parse[q->j] = sh_trim_spaces(q->parse[q->j]);
-		if (q->parse[q->j++] == NULL)
-			return (-1);
-	}
-	q->beg_sep = q->i;
-	while (line[q->i] == '>' || line[q->i] == '<')
-		q->i++;
-	q->i += sh_skip(line + q->i, ' ');
-	q->parse[q->j] = ft_substr(line, q->beg_sep, q->i - q->beg_sep);
-	q->parse[q->j] = sh_trim_spaces(q->parse[q->j]);
-	if (q->parse[q->j++] == NULL)
-		return (-1);
-	q->beg_sep = q->i;
-	q->flag_jump = 1;
-	if (line[q->i] == '\0')
-		return (1);
-	return (0);
-}
 
 static int	get_sep_quotes_rd_dollar(char *line, t_parse *q)
 {
@@ -102,21 +59,31 @@ static int	get_sep_quotes_loop(char *line, t_parse *q)
 	return (0);
 }
 
+static char	**get_sep_quotes_init(t_pipe *p, int *status, t_parse *q, int *n)
+{
+	char	**parse;
+
+	if (p->p_line == NULL)
+		return (NULL);
+	init_parse(q);
+	*n = count_quotes(p);
+	if (p->p_line == NULL)
+		return (NULL);
+	parse = (char **)ft_calloc(sizeof(char *), *n + 1);
+	if (parse == NULL)
+		return (set(flush_errors("", 202, 0), status), NULL);
+	return (parse);
+}
+
 char	**get_sep_quotes(t_pipe *p, int *status)
 {
 	t_parse		q;
 	int			x;
 	int			n;
 
-	if (p->p_line == NULL)
-		return (NULL);
-	init_parse(&q);
-	n = count_quotes(p);
-	if (p->p_line == NULL)
-		return (NULL);
-	q.parse = (char **)ft_calloc(sizeof(char *), n + 1);
+	q.parse = get_sep_quotes_init(p, status, &q, &n);
 	if (q.parse == NULL)
-		return (set(flush_errors("", 202, 0), status), NULL);
+		return (NULL);
 	while (p->p_line[q.i] != '\0')
 	{
 		q.flag_jump = 0;

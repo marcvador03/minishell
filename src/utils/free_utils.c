@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/25 14:10:00 by mfleury           #+#    #+#             */
-/*   Updated: 2025/01/28 15:00:45 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/01/28 16:20:19 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,21 +57,18 @@ void	free_pipe(t_pipe *p)
 	}
 }
 
-void	free_env(t_env *env)
+static void	free_sh_sides(t_shell *sh)
 {
-	t_env	*tmp;
-
-	if (env == NULL)
-		return ;
-	env = env->head;
-	tmp = env;
-	while (tmp != NULL)
+	if (sh->up != NULL)
+		sh->up->down = NULL;
+	if (sh->down != NULL)
+		free_sh(sh->down);
+	if (sh->r != NULL)
 	{
-		free_s(env->varname);
-		free_s(env->value);
-		tmp = tmp->next;
-		free_s((void *)env);
-		env = tmp;
+		if (sh->r->rd != NULL)
+			free_d(sh->r->rd);
+		if (sh->r->redirs != NULL)
+			free_d(sh->r->redirs);
 	}
 }
 
@@ -86,17 +83,7 @@ void	free_sh(t_shell *sh)
 	while (tmp != NULL)
 	{
 		free_pipe(sh->pipes);
-		if (sh->up != NULL)
-			sh->up->down = NULL;
-		if (sh->down != NULL)
-			free_sh(sh->down);
-		if (sh->r != NULL)
-		{
-			if (sh->r->rd != NULL)
-				free_d(sh->r->rd);
-			if (sh->r->redirs != NULL)
-				free_d(sh->r->redirs);
-		}
+		free_sh_sides(sh);
 		free_s(sh->s_line);
 		tmp = tmp->next;
 		free_s(sh->r);

@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/23 22:52:04 by mfleury           #+#    #+#             */
-/*   Updated: 2025/01/28 14:26:38 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/01/28 16:16:01 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,4 +42,12 @@ int	ft_isalnum_plus(int c)
 		return (1);
 	else
 		return (0);
+}
+
+int	max(int n1, int n2)
+{
+	if (n1 > n2)
+		return (n1);
+	else
+		return (n2);
 }

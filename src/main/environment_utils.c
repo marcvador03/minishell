@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/17 09:53:05 by mfleury           #+#    #+#             */
-/*   Updated: 2025/01/23 22:31:08 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/01/28 16:14:04 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,4 +75,47 @@ t_env	*fill_env(char *envp[])
 	}
 	env = fill_default_session(env->head);
 	return (env->head);
+}
+
+int	env_size(t_env *lst)
+{
+	int		cnt;
+	t_env	*tmp;
+
+	cnt = 0;
+	tmp = lst;
+	while (tmp != NULL)
+	{
+		tmp = tmp->next;
+		cnt++;
+	}
+	return (cnt);
+}
+
+char	**get_env_array(t_env *env, int *err)
+{
+	int		n;
+	int		i;
+	char	**env_arr;
+	char	*tmp;
+
+	if (env == NULL)
+		return (NULL);
+	env = env->head;
+	n = env_size(env);
+	env_arr = (char **)ft_calloc(sizeof(char *), n + 1);
+	if (env_arr == NULL)
+		return (set(flush_errors("", -1, 0), err), NULL);
+	i = 0;
+	while (env != NULL)
+	{
+		tmp = ft_strjoin(env->varname, "=");
+		env_arr[i++] = ft_strjoin(tmp, env->value);
+		if (tmp == NULL || env_arr[i - 1] == NULL)
+			return (set(flush_errors("", 202, 0), err), NULL);
+		free(tmp);
+		env = env->next;
+	}
+	env_arr[n] = NULL;
+	return (env_arr);
 }

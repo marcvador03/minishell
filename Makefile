@@ -18,13 +18,14 @@ BUILTINS = ft_cd.c \
 		   ft_unset.c \
 		   built_utils.c
 
-PARSE =	brackets.c  \
-		cmd_parsing.c \
+PARSE =	cmd_parsing.c \
+		cmd_parsing_count.c \
 		cmd_parsing_utils.c \
 		pipes_parsing.c \
 		shell_redirections.c \
-		strings.c \
-		subshell_parsing.c \
+		shell_parsing.c \
+		shell_parsing_utils.c \
+		trim_expand.c \
 		variable_env.c \
 
 EXECUTE = close_fd.c \
@@ -39,8 +40,7 @@ UTILS = core_utils.c \
 		core2_utils.c \
 		free_utils.c \
 		str_utils.c \
-		str2_utils.c \
-		env_utils.c
+		str2_utils.c
 
 MAIN = environment.c \
 	   environment_utils.c \

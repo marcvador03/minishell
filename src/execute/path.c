@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/26 13:00:25 by mfleury           #+#    #+#             */
-/*   Updated: 2025/01/28 15:18:19 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/01/28 15:32:08 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,23 +27,33 @@
 	return (0);
 }*/
 
-char	*get_full_path(char *arg0, t_env *env, int *err)
+static char	*full_path_init(char *arg0, t_env *env, int *err, char ***paths)
 {
-	char	*cmd_in;
 	char	*path_env;
-	char	*cmd_out;
-	char	**paths;
-	int		i;
+	char	*cmd_in;
 
 	path_env = sh_getenv(env, "PATH");
 	if (path_env == NULL || arg0[0] == '\0')
 		return (set(flush_errors(arg0, 127, '\0'), err), NULL);
-	paths = ft_split(path_env, ':');
-	if (paths == NULL)
+	*paths = ft_split(path_env, ':');
+	if (*paths == NULL)
 		return (free_s(paths), set(202, err), NULL);
 	cmd_in = ft_strjoin("/", arg0);
 	if (cmd_in == NULL)
-		return (free_d(paths), set(202, err), NULL);
+		return (free_d(*paths), set(202, err), NULL);
+	return (cmd_in);
+}
+
+char	*get_full_path(char *arg0, t_env *env, int *err)
+{
+	char	*cmd_in;
+	char	*cmd_out;
+	char	**paths;
+	int		i;
+
+	cmd_in = full_path_init(arg0, env, err, &paths);
+	if (cmd_in == NULL)
+		return (NULL);
 	i = 0;
 	while (paths[i] != NULL)
 	{
@@ -74,7 +84,6 @@ int	is_absolute_path(char *cmd, int *err)
 			return (127);
 		}
 	}
-
 	while (cmd[i] != '\0')
 	{
 		if (cmd[i] == '/')

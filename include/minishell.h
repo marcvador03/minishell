@@ -6,7 +6,7 @@
 /*   By: pmorello <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 12:17:09 by pmorello          #+#    #+#             */
-/*   Updated: 2025/01/28 14:26:38 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/01/28 16:20:43 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -169,15 +169,14 @@ int		sh_skip(char *str, char c);
 char	*sh_trim_spaces(char *str);
 int		sh_strpos(const char *big, const char *little);
 int		sh_check_empty(char *str);
-int		one_of_char(char c, char *letters);
-int		none_of_char(char c, char *letters);
+int		oneofchar(char c, char *letters);
+int		noneofchar(char c, char *letters);
 
 /* free utils functions */
 void	free_s(void *ptr);
 void	free_d(char **ptr);
 void	free_pipe(t_pipe *p);
 void	free_sh(t_shell *sh);
-void	free_env(t_env *env);
 
 /* main functions */
 int		flush_errors(char *cmd, int err_sig, char tk);
@@ -200,6 +199,12 @@ t_env	*fill_env(char *envp[]);
 int		is_absolute_path(char *cmd, int *err);
 int		check_file_directory(char *t_cmd, int *err);
 char	*get_full_path(char *arg0, t_env *env, int *err);
+
+/* parsing functions */
+int		create_separation(char *line, t_parse *q);
+int		create_rd_separation(char *line, t_parse *q);
+int		separate_quotes(char *line, t_parse *q);
+int		separate_dollar(char *line, t_parse *q);
 
 /* file descriptor functions */
 int		open_redir_fd(t_redirs *r, int *err, char *cmd);

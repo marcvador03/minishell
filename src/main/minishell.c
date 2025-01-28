@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 10:01:23 by mfleury           #+#    #+#             */
-/*   Updated: 2025/01/23 23:23:04 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/01/28 16:18:20 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,24 @@
 int	start_shell(t_env *env, t_terms *tcap, int *l_status);
 
 int	g_status = 0;
+
+void	free_env(t_env *env)
+{
+	t_env	*tmp;
+
+	if (env == NULL)
+		return ;
+	env = env->head;
+	tmp = env;
+	while (tmp != NULL)
+	{
+		free_s(env->varname);
+		free_s(env->value);
+		tmp = tmp->next;
+		free_s((void *)env);
+		env = tmp;
+	}
+}
 
 int	main_cmd_return(t_pipe *p, int wstatus, pid_t pid)
 {

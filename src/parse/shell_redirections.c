@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/21 21:50:58 by mfleury           #+#    #+#             */
-/*   Updated: 2025/01/23 23:19:57 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/01/28 16:06:38 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,11 +19,11 @@ static int	count_sh_redirs(char *t_line, t_parse *q)
 	q->k = 0;
 	n = 0;
 	q->prev_pos2 = q->i;
-	while (one_of_char(t_line[q->i], "<,>") != TRUE && t_line[q->i] != '\0')
+	while (oneofchar(t_line[q->i], "<,>") != TRUE && t_line[q->i] != '\0')
 		q->i++;
 	if (t_line[q->i] == '\0')
 		return (0);
-	while (one_of_char(t_line[q->i], "<,>") == TRUE)
+	while (oneofchar(t_line[q->i], "<,>") == TRUE)
 	{
 		if (q->k >= 2)
 			return (flush_errors("", 210, t_line[q->i]), -1);
@@ -45,7 +45,7 @@ static int	get_redirs_loop(t_shell *sh, char *t_line, t_parse *q)
 {
 	char	c;
 
-	while (one_of_char(t_line[q->i], "<,>") == TRUE)
+	while (oneofchar(t_line[q->i], "<,>") == TRUE)
 		q->i++;
 	c = t_line[q->i - 1];
 	q->i += sh_skip(t_line + q->i, ' ');
@@ -87,7 +87,7 @@ int	get_subshell_redirs(t_shell *sh, char *t_line, int *pos)
 	if (sh->r->rd == NULL)
 		return (flush_errors("", 202, 0), -1);
 	q.i = q.prev_pos;
-	while (t_line[q.i] != '\0' && one_of_char(t_line[q.i], "&,|,(,)") != TRUE)
+	while (t_line[q.i] != '\0' && oneofchar(t_line[q.i], "&,|,(,)") != TRUE)
 	{
 		if (get_redirs_loop(sh, t_line, &q) == -1)
 			return (-1);

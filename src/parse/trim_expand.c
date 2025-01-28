@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   strings.c                                          :+:      :+:    :+:   */
+/*   trim_expand.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mfleury <mfleury@student.42barcelona.      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/17 09:57:43 by mfleury           #+#    #+#             */
-/*   Updated: 2025/01/28 13:58:51 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/01/28 15:50:57 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,35 +31,27 @@ static void	quit_spaces(t_parse *q, char *line, char *f_line)
 
 static char	*trim_within_quotes(t_redirs *r, char *line, t_parse *q, int f_exp)
 {
-	int		x;
-	//int		y;
-
 	q->prev_pos = q->i;
 	q->i += sh_jump_to(line + q->i, line[q->i]);
-	x = q->prev_pos;
 	if (line[q->prev_pos] == 39 || f_exp == 4)
 		return (line);
-	while (x != q->i)
+	while (q->prev_pos != q->i)
 	{
 		q->flag_jump = 0;
-		if (line[x] == '$' && x + 1 != q->i)
+		if (line[q->prev_pos] == '$' && q->prev_pos + 1 != q->i)
 		{
-			if (ft_isalnum_plus(line[x + 1]) == 1)
+			if (ft_isalnum_plus(line[q->prev_pos + 1]) == 1)
 			{
-				//y = x;
-				line = expand_variable(r->sh, line, &x);
+				line = expand_variable(r->sh, line, &q->prev_pos);
 				if (line == NULL)
 					return (NULL);
 				q->i = max(0, q->i + (ft_strlen(line) - q->len));
 				q->len = ft_strlen(line);
-				//q->i = sh_jump_to(line + q->prev_pos, line[q->prev_pos]);
-				//q->i += q->prev_pos;
 				q->flag_jump = 1;
-				//x = max(y, x);
 			}
 		}
 		if (q->flag_jump == 0)
-			x++;
+			q->prev_pos++;
 	}
 	return (line);
 }
@@ -117,8 +109,6 @@ char	*trim_expand(t_redirs *r, char *line, int f_exp)
 		if (line[q.i] == ' ' && f_exp != -1)
 			quit_spaces(&q, line + q.i, line);
 		q.len = ft_strlen(line);
-		/*if (line[q.i] == '$' && line[q.i + 1] != '\0')
-			line = trim_dollar(r, line, &q, f_exp);*/
 		if (line == NULL)
 			return (NULL);
 		if (line[q.i] == '\0')
