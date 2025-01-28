@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/17 09:57:43 by mfleury           #+#    #+#             */
-/*   Updated: 2025/01/27 17:58:15 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/01/28 13:58:51 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ static void	quit_spaces(t_parse *q, char *line, char *f_line)
 static char	*trim_within_quotes(t_redirs *r, char *line, t_parse *q, int f_exp)
 {
 	int		x;
-	int		y;
+	//int		y;
 
 	q->prev_pos = q->i;
 	q->i += sh_jump_to(line + q->i, line[q->i]);
@@ -41,21 +41,25 @@ static char	*trim_within_quotes(t_redirs *r, char *line, t_parse *q, int f_exp)
 		return (line);
 	while (x != q->i)
 	{
+		q->flag_jump = 0;
 		if (line[x] == '$' && x + 1 != q->i)
 		{
 			if (ft_isalnum_plus(line[x + 1]) == 1)
 			{
-				y = x;
+				//y = x;
 				line = expand_variable(r->sh, line, &x);
 				if (line == NULL)
 					return (NULL);
+				q->i = max(0, q->i + (ft_strlen(line) - q->len));
 				q->len = ft_strlen(line);
-				q->i = sh_jump_to(line + q->prev_pos, line[q->prev_pos]);
-				q->i += q->prev_pos;
-				x = max(y, x);
+				//q->i = sh_jump_to(line + q->prev_pos, line[q->prev_pos]);
+				//q->i += q->prev_pos;
+				q->flag_jump = 1;
+				//x = max(y, x);
 			}
 		}
-		x++;
+		if (q->flag_jump == 0)
+			x++;
 	}
 	return (line);
 }
