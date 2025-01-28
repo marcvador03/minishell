@@ -6,14 +6,14 @@
 /*   By: mfleury <mfleury@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/10 08:52:08 by mfleury           #+#    #+#             */
-/*   Updated: 2025/01/27 19:31:05 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/01/28 12:55:09 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
 char	*trim_expand(t_redirs *r, char *line, int f_exp);
-char	**get_sep_quotes(t_pipe *p);
+char	**get_sep_quotes(t_pipe *p, int *status);
 
 static int	count_redirs_loop(char **parse, t_parse *r, char c)
 {
@@ -99,9 +99,9 @@ int	create_parsing(t_pipe *p)
 	int		cnt_args;
 
 	init_parse(&q);
-	q.parse = get_sep_quotes(p);
+	q.parse = get_sep_quotes(p, &q.status);
 	if (q.parse == NULL)
-		return (2);
+		return (q.status);
 	cnt_args = 0;
 	cnt_redirs = 0;
 	q.flag_jump = count_redirs(q.parse, &cnt_args, &cnt_redirs);

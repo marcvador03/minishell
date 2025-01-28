@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/23 14:57:19 by mfleury           #+#    #+#             */
-/*   Updated: 2025/01/24 16:17:51 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/01/28 12:57:31 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ static int	close_heredoc(int wstatus, int fd, int *r_status)
 {
 	fd = open(".heredoc_tmp", O_RDONLY);
 	if (fd == -1)
-		return (set_status(flush_errors("heredoc", -1, 0), r_status), -1);
+		return (set(flush_errors("heredoc", -1, 0), r_status), -1);
 	else if (fd > 0)
 		unlink(".heredoc_tmp");
 	if (WIFEXITED(wstatus))

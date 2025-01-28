@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/07 15:12:52 by mfleury           #+#    #+#             */
-/*   Updated: 2025/01/27 14:33:44 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/01/28 12:58:35 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ static int	check_forbidden_c(char *line, int *l_status)
 	while (line[i] != 0)
 	{
 		if ((line[i] > 0 && line[i] <= 31) || line[i] == 92)
-			return (set_status(flush_errors("", 210, line[i]), l_status), -1);
+			return (set(flush_errors("", 210, line[i]), l_status), -1);
 		i++;
 	}
 	i = 0;
@@ -38,7 +38,7 @@ static int	check_forbidden_c(char *line, int *l_status)
 				return (0);
 		}
 		if (line[i] == ';' || line[i] == 42)
-			return (set_status(flush_errors("", 210, line[i]), l_status), -1);
+			return (set(flush_errors("", 210, line[i]), l_status), -1);
 		i++;
 	}
 	return (0);
@@ -107,10 +107,10 @@ int	start_shell(t_env *env, t_terms *tcap, int *l_status)
 	if (line == NULL)
 		exit_minishell_error(sh, 200, env);
 	if (check_open_quotes(line) == -1)
-		return (set_status(2, l_status), free_s(line), 2);
+		return (set(2, l_status), free_s(line), 2);
 	sh = sh_lstnew(tcap, env, l_status);
 	if (sh == NULL)
-		return (set_status(flush_errors("", 202, 0), l_status), 0);
+		return (set(flush_errors("", 202, 0), l_status), 0);
 	i = 0;
 	sh = parse_sh(sh, line, &i, l_status);
 	if (sh == NULL)

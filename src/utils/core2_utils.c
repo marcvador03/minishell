@@ -6,13 +6,13 @@
 /*   By: mfleury <mfleury@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/23 22:52:04 by mfleury           #+#    #+#             */
-/*   Updated: 2025/01/27 18:58:38 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/01/28 12:56:36 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	set_status(int err_code, int *err)
+void	set(int err_code, int *err)
 {
 	*err = err_code;
 }
@@ -27,6 +27,7 @@ void	init_parse(t_parse *q)
 	q->beg_sep = 0;
 	q->len = 0;
 	q->flag_jump = 0;
+	q->status = 0;
 }
 
 int	ft_isalnum_plus(int c)

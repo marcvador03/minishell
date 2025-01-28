@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/26 13:00:25 by mfleury           #+#    #+#             */
-/*   Updated: 2025/01/27 14:30:01 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/01/28 12:58:05 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,19 +37,19 @@ char	*get_full_path(char *arg0, t_env *env, int *err)
 
 	path_env = sh_getenv(env, "PATH");
 	if (path_env == NULL || arg0[0] == '\0')
-		return (set_status(flush_errors(arg0, 127, '\0'), err), NULL);
+		return (set(flush_errors(arg0, 127, '\0'), err), NULL);
 	paths = ft_split(path_env, ':');
 	if (paths == NULL)
-		return (free_s(paths), set_status(202, err), NULL);
+		return (free_s(paths), set(202, err), NULL);
 	cmd_in = ft_strjoin("/", arg0);
 	if (cmd_in == NULL)
-		return (free_d(paths), set_status(202, err), NULL);
+		return (free_d(paths), set(202, err), NULL);
 	i = 0;
 	while (paths[i] != NULL)
 	{
 		cmd_out = ft_strjoin(paths[i++], cmd_in);
 		if (cmd_out == NULL)
-			return (free_d(paths), free_s(cmd_in), set_status(202, err), NULL);
+			return (free_d(paths), free_s(cmd_in), set(202, err), NULL);
 		if (access(cmd_out, F_OK) == 0)
 			return (free_d(paths), free_s(cmd_in), cmd_out);
 		*err = errno;

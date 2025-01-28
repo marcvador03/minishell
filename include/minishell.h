@@ -6,7 +6,7 @@
 /*   By: pmorello <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 12:17:09 by pmorello          #+#    #+#             */
-/*   Updated: 2025/01/27 18:58:34 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/01/28 12:56:26 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,6 +73,7 @@ typedef struct s_parsing
 	int					len;
 	int					flag_jump;
 	int					flag_sep;
+	int					status;
 	char				**parse;
 }	t_parse;
 
@@ -158,7 +159,7 @@ char	*ll_itoa(t_ll n);
 t_ll	ll_atoi(const char *nptr);
 void	init_parse(t_parse *q);
 int		ft_isalnum_plus(int c);
-void	set_status(int err_code, int *err);
+void	set(int err_code, int *err);
 
 /* str utils functions */
 int		sh_jump_to(char *str, char c);

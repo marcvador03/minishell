@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/02 18:58:50 by mfleury           #+#    #+#             */
-/*   Updated: 2025/01/23 22:58:03 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/01/28 13:08:10 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,8 @@ static int	run_child(t_pipe *p, t_env *env)
 	if (create_pipes_child(p) == -1)
 		return (flush_errors("", 1, 0));
 	close_pipes(p);
+	if (p->p_line == NULL)
+		exit (wstatus);
 	if (open_redir_fd(p->r, &p->p_status, p->args[0]) == -1)
 	{
 		close_redir_fd_single(p->r, &p->p_status, p->args[0]);
@@ -81,6 +83,12 @@ static int	create_pipes(t_pipe *p)
 
 int	single_cmd(t_pipe *p, t_env *env)
 {
+	if (p->p_line == NULL)
+	{
+		rl_replace_line("", 0);
+		rl_on_new_line();
+		return (p->p_status);
+	}
 	if (open_redir_fd(p->r, &p->p_status, p->args[0]) == -1)
 	{
 		close_redir_fd_single(p->r, &p->p_status, p->args[0]);

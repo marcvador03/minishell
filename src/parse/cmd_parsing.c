@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/18 15:22:36 by mfleury           #+#    #+#             */
-/*   Updated: 2025/01/27 19:29:50 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/01/28 12:56:17 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,7 +102,7 @@ static int	get_sep_quotes_loop(char *line, t_parse *q)
 	return (0);
 }
 
-char	**get_sep_quotes(t_pipe *p)
+char	**get_sep_quotes(t_pipe *p, int *status)
 {
 	t_parse		q;
 	int			x;
@@ -116,19 +116,22 @@ char	**get_sep_quotes(t_pipe *p)
 		return (NULL);
 	q.parse = (char **)ft_calloc(sizeof(char *), n + 1);
 	if (q.parse == NULL)
-		return (flush_errors("", 202, 0), NULL);
+		return (set(flush_errors("", 202, 0), status), NULL);
 	while (p->p_line[q.i] != '\0')
 	{
 		q.flag_jump = 0;
 		q.prev_pos = q.i;
 		x = get_sep_quotes_loop(p->p_line, &q);
 		if (x == -1)
-			return (flush_errors("", 202, 0), free_d(q.parse), NULL);
+		{
+			*status = flush_errors("", 202, 0);
+			return (free_d(q.parse), NULL);
+		}
 		else if (x == 1)
 			break ;
 	}
 	q.prev_pos = q.beg_sep;
 	if (create_separation(p->p_line, &q) == -1)
-		return (flush_errors("", 202, 0), free_d(q.parse), NULL);
+		return (set(flush_errors("", 202, 0), status), free_d(q.parse), NULL);
 	return (q.parse);
 }

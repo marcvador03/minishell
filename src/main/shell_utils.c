@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/12 01:02:14 by mfleury           #+#    #+#             */
-/*   Updated: 2025/01/23 23:06:37 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/01/28 12:58:44 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ t_shell	*sh_lstnew(t_terms *tcap, t_env *env, int *l_status)
 
 	ptr = (t_shell *)ft_calloc(sizeof (t_shell), 1);
 	if (ptr == NULL)
-		return (set_status(flush_errors("", 202, 0), l_status), NULL);
+		return (set(flush_errors("", 202, 0), l_status), NULL);
 	ptr->next = NULL;
 	ptr->head = ptr;
 	ptr->env = env;

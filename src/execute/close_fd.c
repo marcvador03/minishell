@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/25 13:59:57 by mfleury           #+#    #+#             */
-/*   Updated: 2025/01/23 22:36:11 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/01/28 12:57:20 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,17 +18,17 @@ int	open_redir_fd(t_redirs *r, int *err, char *cmd)
 	{
 		r->fd[T_INPUT] = dup(STDIN_FILENO);
 		if (r->fd[T_INPUT] == -1)
-			return (set_status(flush_errors(cmd, -1, 0), err), -1);
+			return (set(flush_errors(cmd, -1, 0), err), -1);
 		if (dup2(r->fd[INPUT], STDIN_FILENO) == -1)
-			return (set_status(flush_errors(cmd, -1, 0), err), -1);
+			return (set(flush_errors(cmd, -1, 0), err), -1);
 	}
 	if (r->fd[OUTPUT] > 2)
 	{
 		r->fd[T_OUTPUT] = dup(STDOUT_FILENO);
 		if (r->fd[T_OUTPUT] == -1)
-			return (set_status(flush_errors(cmd, -1, 0), err), -1);
+			return (set(flush_errors(cmd, -1, 0), err), -1);
 		if (dup2(r->fd[OUTPUT], STDOUT_FILENO) == -1)
-			return (set_status(flush_errors(cmd, -1, 0), err), -1);
+			return (set(flush_errors(cmd, -1, 0), err), -1);
 	}
 	return (0);
 }
