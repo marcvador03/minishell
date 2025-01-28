@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/18 16:34:46 by mfleury           #+#    #+#             */
-/*   Updated: 2025/01/27 19:27:48 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/01/28 13:15:56 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ int	separate_quotes(char *line, t_parse *q)
 	q->i += sh_jump_to(line + q->i, line[q->i]);
 	if (line[q->i] == '\0')
 		return (1);
-	while (none_of_char(line[q->i], " ,\",',>,<") == 1)
+	while (none_of_char(line[q->i], " ,\",',>,<,$") == 1)
 	{
 		q->i++;
 		if (line[q->i] == '\0')
