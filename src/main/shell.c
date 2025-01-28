@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/07 15:12:52 by mfleury           #+#    #+#             */
-/*   Updated: 2025/01/28 12:58:35 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/01/28 14:03:14 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,7 +83,8 @@ static char	*get_input(t_env *env, t_terms *tcap, int *l_status)
 		unset_term_settings(tcap, env);
 		exit_minishell(NULL, env);
 	}
-	else if (ft_strlen(line) == 0 && line[0] == '\0')
+	line = sh_trim_spaces(line);
+	if (ft_strlen(line) == 0 && line[0] == '\0')
 		return (free_s(prompt), free_s(line), get_input(env, tcap, l_status));
 	if (g_status == 130)
 		*l_status = 130;
