@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/18 16:34:46 by mfleury           #+#    #+#             */
-/*   Updated: 2025/01/28 15:54:27 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/01/28 17:25:13 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,14 +41,17 @@ static int	count_quotes_dollar(t_pipe *p, t_parse *q)
 	t_line = p->p_line;
 	if (t_line[q->i] == '$' && t_line[q->i + 1] != '\0')
 	{
-		if (t_line[q->i + 1] == ' ')
-			return (0);
-		q->prev_pos = q->i;
-		t_line = expand_variable(p->sh, t_line, &q->i);
-		p->p_line = t_line;
-		if (p->p_line == NULL)
-			return (1);
-		q->i = q->prev_pos;
+		if (ft_isalnum_plus(t_line[q->i + 1]) == 1)
+		{
+			if (t_line[q->i + 1] == ' ')
+				return (0);
+			q->prev_pos = q->i;
+			t_line = expand_variable(p->sh, t_line, &q->i);
+			p->p_line = t_line;
+			if (p->p_line == NULL)
+				return (1);
+			q->i = q->prev_pos;
+		}
 	}
 	return (0);
 }
