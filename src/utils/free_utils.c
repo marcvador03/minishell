@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/25 14:10:00 by mfleury           #+#    #+#             */
-/*   Updated: 2025/01/23 13:20:51 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/01/28 15:00:45 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,6 +86,8 @@ void	free_sh(t_shell *sh)
 	while (tmp != NULL)
 	{
 		free_pipe(sh->pipes);
+		if (sh->up != NULL)
+			sh->up->down = NULL;
 		if (sh->down != NULL)
 			free_sh(sh->down);
 		if (sh->r != NULL)

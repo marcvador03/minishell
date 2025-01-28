@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/23 22:52:04 by mfleury           #+#    #+#             */
-/*   Updated: 2025/01/28 14:08:11 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/01/28 14:26:38 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,7 @@ void	init_parse(t_parse *q)
 	q->beg_sep = 0;
 	q->len = 0;
 	q->flag_jump = 0;
+	q->flag_bracket = 0;
 	q->status = 0;
 	q->tk = 0;
 }

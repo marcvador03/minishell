@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/23 19:43:27 by mfleury           #+#    #+#             */
-/*   Updated: 2025/01/28 14:10:47 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/01/28 15:11:13 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,13 +37,18 @@ static int	inside_bracket(t_shell *sh, char *line, t_parse *q, int *l_status)
 {
 	t_shell	*sub_sh;
 
+	q->tk = line[q->i];
+	q->flag_bracket++;
 	q->i++;
 	sub_sh = sh_lstadd_down(sh);
 	if (sub_sh == NULL)
 		return (-1);
-	parse_sh(sub_sh, line, &q->i, l_status);
+	sub_sh = parse_sh(sub_sh, line, &q->i, l_status);
+	if (sub_sh == NULL)
+		return (-1);
 	if (line[q->i] == ')')
 	{
+		q->flag_bracket--;
 		ft_memset(line + q->i, ' ', 1);
 		q->prev_pos = q->i;
 		while (one_of_char(line[q->i], "<,>") != TRUE && line[q->i] != '\0')
@@ -56,6 +61,8 @@ static int	inside_bracket(t_shell *sh, char *line, t_parse *q, int *l_status)
 	}
 	while (one_of_char(line[q->i], "&,|,(,)") != TRUE && line[q->i] != '\0')
 		q->i++;
+	if (line[q->i] == '\0' && q->flag_bracket != 0)
+		return (set(flush_errors("", 210, q->tk), l_status), -1);
 	return (0);
 }
 
@@ -85,9 +92,9 @@ static int	get_next_token(t_shell *sh, char *line, t_parse *q, int *l_status)
 		q->i++;
 	if (line[q->i] == '\0')
 		return (q->i);
-	else if (line[q->i] == '>' || line[q->i] == '<')
+	q->tk = line[q->i];
+	if (line[q->i] == '>' || line[q->i] == '<')
 	{
-		q->tk = line[q->i];
 		q->prev_pos = q->i;
 		while (one_of_char(line[q->i], "&,|,(,)") == FALSE && line[q->i] != '\0')
 			q->i++;
@@ -99,7 +106,6 @@ static int	get_next_token(t_shell *sh, char *line, t_parse *q, int *l_status)
 	}
 	else if (line[q->i] == '&' || line[q->i] == '|')
 	{
-		q->tk = line[q->i];
 		if (check_tokens_errors(line, q, l_status) == -1)
 			return (-1);
 		if (line[q->i + 1] == '&' || line[q->i + 1] == '|')
@@ -140,5 +146,7 @@ t_shell	*parse_sh(t_shell *sh, char *line, int *pos, int *l_status)
 			sh = sh_lstadd_back(sh);
 	}
 	*pos = q.i;
+	if (line[q.i] == ')' && (sh->s_line == NULL || sh->s_line[0] == '\0'))
+		return (flush_errors("", 210, line[q.i]), free_sh(sh), NULL);
 	return (sh);
 }
