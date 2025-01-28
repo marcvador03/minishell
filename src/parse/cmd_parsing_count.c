@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/18 16:34:46 by mfleury           #+#    #+#             */
-/*   Updated: 2025/01/28 17:25:13 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/01/28 17:53:57 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,6 +51,7 @@ static int	count_quotes_dollar(t_pipe *p, t_parse *q)
 			if (p->p_line == NULL)
 				return (1);
 			q->i = q->prev_pos;
+			q->flag_jump = 1;
 		}
 	}
 	return (0);
