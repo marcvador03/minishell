@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/23 19:43:27 by mfleury           #+#    #+#             */
-/*   Updated: 2025/01/28 15:21:23 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/01/28 15:22:44 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -147,6 +147,6 @@ t_shell	*parse_sh(t_shell *sh, char *line, int *pos, int *l_status)
 	}
 	*pos = q.i;
 	if (line[q.i] == ')' && (sh->s_line == NULL || sh->s_line[0] == '\0'))
-		return (flush_errors("", 210, line[q.i]), free_sh(sh), NULL);
+		return (set(flush_errors("", 210, line[q.i]), l_status), free_sh(sh), NULL);
 	return (sh);
 }
