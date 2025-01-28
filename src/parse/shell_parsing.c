@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/23 19:43:27 by mfleury           #+#    #+#             */
-/*   Updated: 2025/01/28 16:13:02 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/01/28 16:54:12 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,7 +90,8 @@ t_shell	*parse_sh(t_shell *sh, char *line, int *pos, int *l_status)
 			return (free_sh(sh), NULL);
 		sh->s_line = ft_substr(line, q.beg_sep, q.i - q.beg_sep);
 		sh->s_line = sh_trim_spaces(sh->s_line);
-		parse_sh_errors(sh, &q, l_status);
+		if (parse_sh_errors(sh, &q, l_status) == -1)
+			return (NULL);
 		if (line[q.i] != '\0' && line[q.i] != ')')
 			sh = sh_lstadd_back(sh);
 	}

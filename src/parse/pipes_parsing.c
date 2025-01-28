@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/10 08:52:08 by mfleury           #+#    #+#             */
-/*   Updated: 2025/01/28 12:55:09 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/01/28 17:00:59 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,7 +106,7 @@ int	create_parsing(t_pipe *p)
 	cnt_redirs = 0;
 	q.flag_jump = count_redirs(q.parse, &cnt_args, &cnt_redirs);
 	if (q.flag_jump == -1)
-		return (free_d(q.parse), 2);
+		return (set(2, &q.status), free_d(q.parse), q.status);
 	p->r->redirs = (char **)ft_calloc(sizeof(char *), cnt_redirs + 1);
 	p->r->rd = (char **)ft_calloc(sizeof(char *), cnt_redirs + 1);
 	p->args = (char **)ft_calloc(sizeof(char *), cnt_args + 1);
