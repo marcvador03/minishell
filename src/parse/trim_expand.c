@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/17 09:57:43 by mfleury           #+#    #+#             */
-/*   Updated: 2025/01/28 17:14:42 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/01/28 18:02:05 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ static char	*trim_within_quotes(t_redirs *r, char *line, t_parse *q, int f_exp)
 		q->flag_jump = 0;
 		if (line[q->prev_pos] == '$' && q->prev_pos + 1 != q->i)
 		{
-			if (ft_isalnum_plus(line[q->prev_pos + 1]) == 1)
+			if (ft_isalnum_plus_q(line[q->prev_pos + 1]) == 1)
 			{
 				line = expand_variable(r->sh, line, &q->prev_pos);
 				if (line == NULL)

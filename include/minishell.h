@@ -6,7 +6,7 @@
 /*   By: pmorello <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 12:17:09 by pmorello          #+#    #+#             */
-/*   Updated: 2025/01/28 16:20:43 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/01/28 18:00:34 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -161,6 +161,7 @@ char	*ll_itoa(t_ll n);
 t_ll	ll_atoi(const char *nptr);
 void	init_parse(t_parse *q);
 int		ft_isalnum_plus(int c);
+int		ft_isalnum_plus_q(int c);
 void	set(int err_code, int *err);
 
 /* str utils functions */
