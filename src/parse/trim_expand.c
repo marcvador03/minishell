@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/17 09:57:43 by mfleury           #+#    #+#             */
-/*   Updated: 2025/01/28 17:07:43 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/01/28 17:14:42 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,13 +62,14 @@ static char	*trim_quotes(t_redirs *r, char *line, t_parse *q, int f_exp)
 	{
 		q->len = ft_strlen(line);
 		r->hd_flag = 1;
+		q->prev_pos2 = q->i;
 		line = trim_within_quotes(r, line, q, f_exp);
 		if (line == NULL)
 			return (NULL);
 		ft_strlcpy(line + q->i - 1, line + q->i, q->len);
 		q->i = max(0, q->i - 1);
 		q->len = ft_strlen(line);
-		ft_strlcpy(line + q->prev_pos, line + q->prev_pos + 1, q->len);
+		ft_strlcpy(line + q->prev_pos2, line + q->prev_pos2 + 1, q->len);
 		q->i = max(0, q->i - 1);
 		q->len = ft_strlen(line);
 		q->flag_jump = 1;
