@@ -14,3 +14,4 @@ OK 11. Redo absolute path and relative path logic + chech files permissions and 
 12. (cat << EOF > infile && echo a) > test bug ( seems fd conflict issue)
 13. (cat << EOF && cat) << EOF2 not like bash
 OK 14. export HOLA="   bonjour    hey    " ; echo wesh"$HOLA""" | cat -e does not compute cat
+15. (ls))
