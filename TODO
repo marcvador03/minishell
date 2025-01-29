@@ -13,3 +13,4 @@ OK 8. tokens redirections
 11. Redo absolute path and relative path logic + chech files permissions and dir
 12. (cat << EOF > infile && echo a) > test bug ( seems fd conflict issue)
 13. (cat << EOF && cat) << EOF2 not like bash
+14. export HOLA="   bonjour    hey    " ; echo wesh"$HOLA""" | cat -e does not compute cat

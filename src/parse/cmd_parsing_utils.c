@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 15:41:25 by mfleury           #+#    #+#             */
-/*   Updated: 2025/01/28 16:06:04 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/01/29 10:55:32 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,6 +68,11 @@ int	separate_quotes(char *line, t_parse *q)
 		q->i += sh_skip(line + q->i, ' ') - 1;
 		q->flag_jump = 0;
 	}
+	/*else if (line[q->i] == '$')
+	{
+		if (count_quotes_dollar(p, q, n) == 1)
+			return (1);
+	}*/
 	return (0);
 }
 
