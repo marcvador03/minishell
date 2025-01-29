@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 16:10:10 by mfleury           #+#    #+#             */
-/*   Updated: 2025/01/29 18:02:53 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/01/29 20:34:26 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,14 +59,29 @@ static int	check_tokens_errors(char *line, t_parse *q, int *l_status)
 
 static int	get_next_rd(t_shell *sh, char *line, t_parse *q, int *l_status)
 {
+	char	c;
+
 	q->prev_pos = q->i;
-	while (oneofchar(line[q->i], "&,|,(,)") == FALSE && line[q->i] != '\0')
-		q->i++;
-	if (line[q->i] == '(')
+	c = line[q->prev_pos];
+	q->k = 0;
+	while (line[q->i] == line[q->prev_pos])
 	{
-		*l_status = flush_errors("", 210, line[q->prev_pos]);
-		return (-1);
+		q->k++;
+		q->i++;
 	}
+	if (line[q->i] == '\0')
+		return (set(flush_errors("", 210, c), l_status), -1);
+	q->i += sh_skip(line + q->i, ' ');
+	if (line[q->i] == '\0')
+		return (set(flush_errors("", 210, c), l_status), -1);
+	if (q->k >= 2 || oneofchar(line[q->i], "&,|,(,)") == TRUE)
+		return (set(flush_errors("", 210, c), l_status), -1);
+	/*while (oneofchar(line[q->i], "&,|,(,)") == FALSE && line[q->i] != '\0')
+		q->i++;
+	{
+		*l_status = flush_errors("", 210, l[q->prev_pos]);
+		return (-1);
+	}*/
 	return (get_next_token(sh, line, q, l_status));
 }
 
