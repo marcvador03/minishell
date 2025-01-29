@@ -5,97 +5,46 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: mfleury <mfleury@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/01/06 18:06:03 by mfleury           #+#    #+#             */
-/*   Updated: 2025/01/28 16:16:07 by mfleury          ###   ########.fr       */
+/*   Created: 2025/01/23 22:52:04 by mfleury           #+#    #+#             */
+/*   Updated: 2025/01/29 14:09:17 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-t_ll	ll_atoi(const char *nptr)
+void	set(int err_code, int *err)
 {
-	int		sign;
-	t_ll	res;
-
-	if (*nptr == '\0')
-		return (0);
-	res = 0;
-	sign = 1;
-	while ((*nptr >= 9 && *nptr <= 13) || *nptr == 32)
-		nptr++;
-	if (*nptr == 45 || *nptr == 43)
-		if (*nptr++ == 45)
-			sign *= -1;
-	if (*nptr != '\0' && *nptr >= 48 && *nptr <= 57)
-		res = res + (*nptr++ - 48);
-	while (*nptr != '\0' && *nptr >= 48 && *nptr <= 57)
-	{
-		if (res != 0)
-			res *= 10;
-		res = res + (*nptr++ - 48);
-	}
-	return (res * sign);
+	*err = err_code;
 }
 
-static unsigned int	ft_itoa_len(t_ll n)
+void	init_parse(t_parse *q)
 {
-	unsigned int	cnt;
-
-	cnt = 0;
-	if (n == 0)
-		return (1);
-	while (n != 0)
-	{
-		n = n / 10;
-		cnt++;
-	}
-	return (cnt);
+	q->i = 0;
+	q->j = 0;
+	q->k = 0;
+	q->prev_pos = 0;
+	q->prev_pos2 = 0;
+	q->beg_sep = 0;
+	q->len = 0;
+	q->flag_jump = 0;
+	q->flag_bracket = 0;
+	q->status = 0;
+	q->tk = 0;
 }
 
-static unsigned int	ft_itoa_lim(int *temp, t_ll *n)
+int	max(int n1, int n2)
 {
-	int	sign;
-
-	sign = 0;
-	if (*n < 0)
-	{
-		sign = 1;
-		if (*n == LLONG_MIN)
-		{
-			*temp = *n % (-10);
-			*temp = -(1) * *temp;
-			*n = *n / 10;
-			sign += 1;
-		}
-		*n = -(1) * *n;
-	}
-	return (sign);
+	if (n1 > n2)
+		return (n1);
+	else
+		return (n2);
 }
 
-char	*ll_itoa(t_ll n)
+void	swap(char **str1, char **str2)
 {
-	unsigned int	cnt;
-	unsigned int	sign;
-	char			*str;
-	int				temp;
+	char	*tmp;
 
-	temp = -1;
-	sign = ft_itoa_lim(&temp, &n);
-	cnt = ft_itoa_len(n) + sign;
-	str = (char *)malloc((cnt + 1) * sizeof(char));
-	if (str == NULL)
-		return (NULL);
-	str[cnt--] = '\0';
-	if (n == 0)
-		str[0] = 48;
-	if (temp >= 0)
-		str[cnt--] = temp + 48;
-	while (n != 0)
-	{
-		str[cnt--] = (n % 10) + 48;
-		n = n / 10;
-	}
-	if (sign >= 1)
-		str[0] = '-';
-	return (str);
+	tmp = *str1;
+	*str1 = *str2;
+	*str2 = tmp;
 }

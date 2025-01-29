@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/20 00:38:02 by mfleury           #+#    #+#             */
-/*   Updated: 2025/01/28 16:15:23 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/01/29 14:09:23 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,4 +63,28 @@ char	*sh_trim_spaces(char *str)
 		return (flush_errors("", 202, 0), str);
 	free_s(str);
 	return (new_str);
+}
+
+int	ft_isalnum_plus(int c)
+{
+	if ((c >= 65 && c <= 90) || (c >= 97 && c <= 122))
+		return (1);
+	else if (c >= 48 && c <= 57)
+		return (1);
+	else if (c == '@' || c == '_' || c == '?' || c == 34 || c == 39)
+		return (1);
+	else
+		return (0);
+}
+
+int	ft_isalnum_plus_q(int c)
+{
+	if ((c >= 65 && c <= 90) || (c >= 97 && c <= 122))
+		return (1);
+	else if (c >= 48 && c <= 57)
+		return (1);
+	else if (c == '@' || c == '_' || c == '?')
+		return (1);
+	else
+		return (0);
 }

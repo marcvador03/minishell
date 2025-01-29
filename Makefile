@@ -36,9 +36,9 @@ EXECUTE = close_fd.c \
 		  path.c \
 		  pre_exec_cmd.c
 
-UTILS = core_utils.c \
-		core2_utils.c \
+UTILS =	core_utils.c \
 		free_utils.c \
+		llatoi_utils.c \
 		str_utils.c \
 		str2_utils.c
 

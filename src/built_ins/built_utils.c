@@ -6,7 +6,7 @@
 /*   By: pmorello <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/14 10:05:20 by pmorello          #+#    #+#             */
-/*   Updated: 2025/01/29 13:04:33 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/01/29 14:09:12 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,4 +67,18 @@ int	check_cd_option(char *str)
 		return (2);
 	}
 	return (0);
+}
+
+int	chdir_error(char *new_path, char *cur_path, char *arg)
+{
+	int	err;
+
+	err = errno;
+	ft_putstr_fd("minishell: cd: ", STDERR_FILENO);
+	ft_putstr_fd(arg, STDERR_FILENO);
+	ft_putstr_fd(": ", STDERR_FILENO);
+	ft_putendl_fd(strerror(err), STDERR_FILENO);
+	free_s(new_path);
+	free_s(cur_path);
+	return (1);
 }
