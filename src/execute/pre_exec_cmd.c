@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/02 18:58:50 by mfleury           #+#    #+#             */
-/*   Updated: 2025/01/29 17:28:26 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/01/29 17:30:23 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,6 @@ static int	run_parent(t_pipe *p)
 		main_cmd_return(p, wstatus, pid);
 		if (p->p_status == 125 || p->p_status == 124)
 			p->p_status = p->p_status + 2;
-		//close_redir_fd_single(p->r, &p->p_status, p->args[0]);
 		p = p->next;
 	}
 	rl_replace_line("", 0);
