@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/25 13:59:57 by mfleury           #+#    #+#             */
-/*   Updated: 2025/01/28 12:57:20 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/01/29 16:50:19 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,14 +64,14 @@ int	close_redir_fd_single(t_redirs *r, int *err, char *cmd)
 {
 	if (r->fd[INPUT] > 2)
 	{
-		close(r->fd[INPUT]);
+		//close(r->fd[INPUT]);
 		if (dup2(r->fd[T_INPUT], STDIN_FILENO) == -1)
 			*err = flush_errors(cmd, -1, 0);
 		close(r->fd[T_INPUT]);
 	}
 	if (r->fd[OUTPUT] > 2)
 	{
-		close(r->fd[OUTPUT]);
+		//close(r->fd[OUTPUT]);
 		if (dup2(r->fd[T_OUTPUT], STDOUT_FILENO) == -1)
 			*err = flush_errors(cmd, -1, 0);
 		close(r->fd[T_OUTPUT]);

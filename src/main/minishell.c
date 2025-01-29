@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 10:01:23 by mfleury           #+#    #+#             */
-/*   Updated: 2025/01/28 16:18:20 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/01/29 16:16:36 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,8 @@ int	main_cmd_return(t_pipe *p, int wstatus, pid_t pid)
 		if (p->pid == pid && WIFEXITED(wstatus) != 0)
 		{
 			p->p_status = WEXITSTATUS(wstatus);
-			close_redir_fd_pipe(p);
+			//close_redir_fd_single(p->r, &p->p_status, p->args[0]);
+			//close_redir_fd_pipe(p);
 			if (p->next == NULL && p->exit == 1)
 				p->sh->exit = 1;
 			break ;
@@ -50,7 +51,8 @@ int	main_cmd_return(t_pipe *p, int wstatus, pid_t pid)
 		else if (p->pid == pid && WIFSIGNALED(wstatus) != 0)
 		{
 			p->p_status = WTERMSIG(wstatus) + 128;
-			close_redir_fd_pipe(p);
+			//close_redir_fd_single(p->r, &p->p_status, p->args[0]);
+			//close_redir_fd_pipe(p);
 			break ;
 		}
 		p = p->next;

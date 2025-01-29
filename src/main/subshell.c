@@ -6,15 +6,15 @@
 /*   By: mfleury <mfleury@student.42barcelona.      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/22 16:08:01 by mfleury           #+#    #+#             */
-/*   Updated: 2025/01/29 12:18:29 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/01/29 17:25:01 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
 int		create_parsing(t_pipe *p);
-t_pipe	*p_lstnew(t_shell *sh, char *line, int *err);
-t_pipe	*p_lstadd(t_pipe **pipe, char *line, int *err);
+t_pipe	*p_lstnew(t_shell *sh, int *err);
+t_pipe	*p_lstadd(t_pipe **pipe, int *err);
 int		single_cmd(t_pipe *p, t_env *env);
 int		multiple_cmd(t_pipe *p, t_env *env);
 
@@ -76,11 +76,13 @@ static t_pipe	*fill_pipes(t_shell *sh, t_pipe *p, int n, int *err)
 	{
 		t_line = sh->s_line + sh_skip(sh->s_line, ' ');
 		if (p == NULL)
-			tmp = p_lstnew(sh, t_line, err);
+			tmp = p_lstnew(sh, err);
 		else
-			tmp = p_lstadd(&p, t_line, err);
+			tmp = p_lstadd(&p, err);
 		if (tmp == NULL)
 			return (NULL);
+		if (get_next_pipe(tmp, t_line, err) == 2)
+			return (free_pipe(tmp), set(2, err), NULL);
 		tmp->sh = sh;
 		p = tmp->head;
 		i++;
