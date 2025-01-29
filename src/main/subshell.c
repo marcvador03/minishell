@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/22 16:08:01 by mfleury           #+#    #+#             */
-/*   Updated: 2025/01/28 12:59:08 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/01/29 12:18:29 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,7 +99,7 @@ static int	count_pipes(char *line)
 	i = 0;
 	while (line[i] != '\0')
 	{
-		if (line[i] == 34 || line[i] == 39)
+		while (line[i] == 34 || line[i] == 39)
 			i += sh_jump_to(line + i, line[i]);
 		if (line[i] == '\0')
 			break ;
