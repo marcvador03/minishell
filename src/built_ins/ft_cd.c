@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/14 09:20:49 by pmorello          #+#    #+#             */
-/*   Updated: 2025/01/23 22:22:09 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/01/29 13:18:33 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,6 +75,21 @@ char	*get_target_path(char **args, t_env *env)
 		return (h_rel_path(path));
 }
 
+int	chdir_error(char *new_path, char *cur_path, char *arg)
+{
+	int	err;
+	//struct stat	statbuf;
+
+	err = errno;
+	ft_putstr_fd("minishell: cd: ", STDERR_FILENO);
+	ft_putstr_fd(arg, STDERR_FILENO);
+	ft_putstr_fd(": ", STDERR_FILENO);
+	ft_putendl_fd(strerror(err), STDERR_FILENO);
+	free_s(new_path);
+	free_s(cur_path);
+	return (1);
+}
+
 int	ft_cd(char **args, t_env *env)
 {
 	char	*new_path;
@@ -94,7 +109,7 @@ int	ft_cd(char **args, t_env *env)
 	if (new_path == NULL)
 		return (free_s(cur_path), flush_errors("cd", 8, 0));
 	if (chdir(new_path) != 0)
-		return (free_s(new_path), free_s(cur_path), -1);
+		return (chdir_error(new_path, cur_path, args[1]));
 	sh_updateenv(env, ft_strdup("OLDPWD"), cur_path);
 	free_s(new_path);
 	new_path = getcwd(NULL, 0);

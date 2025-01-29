@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/23 22:52:04 by mfleury           #+#    #+#             */
-/*   Updated: 2025/01/28 18:01:47 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/01/29 13:04:35 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,3 +63,13 @@ int	max(int n1, int n2)
 	else
 		return (n2);
 }
+
+void	swap(char **str1, char **str2)
+{
+	char	*tmp;
+
+	tmp = *str1;
+	*str1 = *str2;
+	*str2 = tmp;
+}
+

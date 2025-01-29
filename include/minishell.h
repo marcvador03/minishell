@@ -6,7 +6,7 @@
 /*   By: pmorello <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 12:17:09 by pmorello          #+#    #+#             */
-/*   Updated: 2025/01/28 18:00:34 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/01/29 13:04:31 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -163,6 +163,7 @@ void	init_parse(t_parse *q);
 int		ft_isalnum_plus(int c);
 int		ft_isalnum_plus_q(int c);
 void	set(int err_code, int *err);
+void	swap(char **str1, char **str2);
 
 /* str utils functions */
 int		sh_jump_to(char *str, char c);

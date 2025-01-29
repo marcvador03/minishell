@@ -8,9 +8,9 @@ OK 7. new parsing tokens
 OK 8. tokens redirections
 9. multiple lines after killing piped commands
 
-10. Token check errors
+OK 10. Token check errors
 
-11. Redo absolute path and relative path logic + chech files permissions and dir
+OK 11. Redo absolute path and relative path logic + chech files permissions and dir
 12. (cat << EOF > infile && echo a) > test bug ( seems fd conflict issue)
 13. (cat << EOF && cat) << EOF2 not like bash
-14. export HOLA="   bonjour    hey    " ; echo wesh"$HOLA""" | cat -e does not compute cat
+OK 14. export HOLA="   bonjour    hey    " ; echo wesh"$HOLA""" | cat -e does not compute cat
