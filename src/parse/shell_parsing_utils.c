@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 16:10:10 by mfleury           #+#    #+#             */
-/*   Updated: 2025/01/29 15:17:39 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/01/29 18:02:53 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,13 +20,21 @@ static void	set_priority(t_shell *sh, char *line, t_parse *q)
 	char	c;
 
 	q->i += sh_skip(line + q->i, ' ');
-	if (line[q->i] == '|' && line[q->i] == '|')
+	if (line[q->i + 1] == '\0')
+		return ;
+	if (line[q->i] == '|' && line[q->i + 1] == '|')
 		sh->tk = 1;
-	c = line[q->i];
-	while (line[q->i] == c)
+	if (line[q->i] == '&' || line[q->i + 1] == '|')
 	{
-		ft_memset(line + q->i, ' ', 1);
-		q->i++;
+		if (line[q->i + 1] == line[q->i])
+		{
+			c = line[q->i];
+			while (line[q->i] == c)
+			{
+				ft_memset(line + q->i, ' ', 1);
+				q->i++;
+			}
+		}
 	}
 	return ;
 }
