@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 16:10:10 by mfleury           #+#    #+#             */
-/*   Updated: 2025/01/29 20:34:26 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/01/29 20:41:45 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,7 +74,7 @@ static int	get_next_rd(t_shell *sh, char *line, t_parse *q, int *l_status)
 	q->i += sh_skip(line + q->i, ' ');
 	if (line[q->i] == '\0')
 		return (set(flush_errors("", 210, c), l_status), -1);
-	if (q->k >= 2 || oneofchar(line[q->i], "&,|,(,)") == TRUE)
+	if (q->k > 2 || oneofchar(line[q->i], "&,|,(,)") == TRUE)
 		return (set(flush_errors("", 210, c), l_status), -1);
 	/*while (oneofchar(line[q->i], "&,|,(,)") == FALSE && line[q->i] != '\0')
 		q->i++;

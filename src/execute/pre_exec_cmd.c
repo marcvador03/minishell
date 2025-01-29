@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/02 18:58:50 by mfleury           #+#    #+#             */
-/*   Updated: 2025/01/29 18:47:55 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/01/29 20:48:27 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,8 +35,11 @@ static int	run_child(t_pipe *p, t_env *env)
 		wstatus = exec_cmd(p->args[0], p->args, p, env);
 	close_redir_fd_single(p->r, &p->p_status, p->args[0]);
 	close_redir_fd_pipe(p);
-	close_redir_fd_single(p->sh->up->r, &p->p_status, p->args[0]);
-	close_redir_fd_sh(p->sh->up);
+	if (p->sh->up != NULL && p->sh->up->r != NULL)
+	{
+		close_redir_fd_single(p->sh->up->r, &p->p_status, p->args[0]);
+		close_redir_fd_sh(p->sh->up);
+	}
 	exit (wstatus);
 }
 
