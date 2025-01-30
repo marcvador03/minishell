@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/23 14:57:19 by mfleury           #+#    #+#             */
-/*   Updated: 2025/01/30 18:57:22 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/01/30 18:59:02 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ static int	get_hd_input(t_redirs *r, char *eof, int fd)
 {
 	char	*hd_input;
 	int		len;
-	int 	err;
+	int		err;
 
 	init_signal(0, 1);
 	close_other_fds(r, &err);

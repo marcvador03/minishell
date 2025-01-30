@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/23 19:47:27 by mfleury           #+#    #+#             */
-/*   Updated: 2025/01/30 18:55:49 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/01/30 18:58:19 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,8 +30,6 @@ t_pipe	*p_lstnew(t_shell *sh, int *err)
 	ptr->sh = sh;
 	sh->pipes = ptr->head;
 	ptr->r->sh = sh;
-	/*if (get_next_pipe(ptr, line, err) == 2)
-		return (free_pipe(ptr), set(2, err), NULL);*/
 	return (ptr);
 }
 

@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/02 18:58:50 by mfleury           #+#    #+#             */
-/*   Updated: 2025/01/29 20:48:27 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/01/30 18:58:45 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,6 @@ static int	run_parent(t_pipe *p)
 	}
 	p = head;
 	close_redir_fd_pipe(p);
-	//close_redir_fd_sh(p->sh->up);
 	while (p != NULL)
 	{
 		pid = waitpid(0, &wstatus, 0);
