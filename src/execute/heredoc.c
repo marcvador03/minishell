@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/23 14:57:19 by mfleury           #+#    #+#             */
-/*   Updated: 2025/01/30 18:59:02 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/01/30 23:31:14 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,14 +14,36 @@
 
 char	*trim_expand(t_redirs *r, char *line, int f_exp);
 
+char	*trim_dollar(t_redirs *r, char *line)
+{
+	int		i;
+	int		flag_jump;
+
+	i = 0;
+	while (line[i] != '\0')
+	{
+		flag_jump = 0;
+		if (line[i] == '$' && ft_isalnum_plus_q(line[i + 1]) == 1)
+		{
+			line = expand_variable(r->sh, line, &i);
+			flag_jump = 1;
+			if (line[i] == '\0')
+				return (line);
+		}
+		if (flag_jump == 0)
+			i++;
+	}
+	return (line);
+}
+
 static int	close_other_fds(t_redirs *r, int *err)
 {
+	close_redir_fd_single(r, err, "");
 	if (r->sh->up != NULL && r->sh->up->r != NULL)
 	{
-		ft_putstr_fd("test", 2);
+		close_redir_fd_single(r->sh->up->r, err, "");
 		close_redir_fd_sh(r->sh->up);
 	}
-	close_redir_fd_single(r, err, "");
 	return (*err);
 }
 
@@ -42,14 +64,14 @@ static int	get_hd_input(t_redirs *r, char *eof, int fd)
 		if (ft_strncmp(hd_input, eof, len) != 0)
 		{
 			if (r->hd_flag == 0)
-				hd_input = trim_expand(r, hd_input, -1);
+				hd_input = trim_dollar(r, hd_input);
 			ft_putendl_fd(hd_input, fd);
 		}
 		else
 			return (close(fd), free(hd_input), -1);
 		free(hd_input);
 	}
-	return (close_other_fds(r, &err), close(fd), 0);
+	return (close(fd), 0);
 }
 
 static int	close_heredoc(int wstatus, int fd, int *r_status)

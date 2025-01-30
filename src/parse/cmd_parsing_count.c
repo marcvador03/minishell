@@ -6,13 +6,13 @@
 /*   By: mfleury <mfleury@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/18 16:34:46 by mfleury           #+#    #+#             */
-/*   Updated: 2025/01/29 10:57:05 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/01/30 22:44:08 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-char	*trim_dollar(t_redirs *r, char *line, t_parse *q, int f_exp);
+//char	*trim_dollar(t_redirs *r, char *line, t_parse *q, int f_exp);
 
 static void	count_spaces(char *line, int *pos, int *n, t_parse *q)
 {
