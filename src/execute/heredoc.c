@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/23 14:57:19 by mfleury           #+#    #+#             */
-/*   Updated: 2025/01/30 23:39:38 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/01/31 00:07:58 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,6 @@ char	*trim_dollar(t_redirs *r, char *line)
 
 static int	close_other_fds(t_redirs *r, int *err)
 {
-	//close_redir_fd_single(r, err, "");
 	if (r->sh->up != NULL && r->sh->up->r != NULL)
 	{
 		close_redir_fd_single(r->sh->up->r, err, "");

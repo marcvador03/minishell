@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/17 09:57:43 by mfleury           #+#    #+#             */
-/*   Updated: 2025/01/30 23:27:06 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/01/31 00:07:53 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,25 +81,6 @@ static char	*trim_quotes(t_redirs *r, char *line, t_parse *q, int f_exp)
 	return (line);
 }
 
-/*char	*trim_dollar(t_redirs *r, char *line, t_parse *q, int f_exp)
-{
-	char	*res;
-
-	if (ft_isalnum_plus(line[q->i + 1]) == 1 && f_exp != 4)
-	{
-		res = expand_variable(r->sh, line, &q->i);
-		q->len = ft_strlen(res);
-		q->flag_jump = 1;
-		return (res);
-	}
-	else if ((line[q->i + 1] == 34 || line[q->i + 1] == 39) && f_exp != 4)
-	{
-		ft_strlcpy(line + q->i, line + q->i + 1, q->len);
-		q->len = ft_strlen(line);
-	}
-	return (line);
-}*/
-
 char	*trim_expand(t_redirs *r, char *line, int f_exp)
 {
 	t_parse	q;
@@ -112,8 +93,6 @@ char	*trim_expand(t_redirs *r, char *line, int f_exp)
 		if (line[q.i] == ' ' && f_exp != -1)
 			quit_spaces(&q, line + q.i, line);
 		q.len = ft_strlen(line);
-		/*if (line[q.i] == '$' && line[q.i + 1] != '\0' && f_exp == -1)
-			line = trim_dollar(r, line, &q, f_exp);*/
 		if (line == NULL)
 			return (NULL);
 		if (line[q.i] == '\0')
