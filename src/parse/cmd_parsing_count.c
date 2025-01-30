@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/18 16:34:46 by mfleury           #+#    #+#             */
-/*   Updated: 2025/01/30 22:44:08 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/01/31 00:02:43 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,8 @@ static int	count_quotes_rd(t_pipe *p, t_parse *q, int *n)
 			q->i++;
 		if (t_line[q->i] == '\0')
 			return (1);
+		if (q->i >= 2 && t_line[q->i - 1] == '<' && t_line[q->i - 2] == '<')
+			q->flag_sep = 1;
 		q->i += sh_skip(t_line + q->i, ' ');
 		*n = *n + 1;
 		q->flag_jump = 1;
@@ -45,7 +47,9 @@ static int	count_quotes_dollar(t_pipe *p, t_parse *q, int *n)
 {
 	if (p->p_line[q->i] == '$' && p->p_line[q->i + 1] != '\0')
 	{
-		if (ft_isalnum_plus(p->p_line[q->i + 1]) == 1)
+		if (q->flag_sep == 1)
+			q->i += sh_jump_to(p->p_line + q->i, ' ');
+		else if (ft_isalnum_plus(p->p_line[q->i + 1]) == 1)
 		{
 			if (p->p_line[q->i + 1] == ' ')
 				return (0);
@@ -63,6 +67,7 @@ static int	count_quotes_dollar(t_pipe *p, t_parse *q, int *n)
 			}
 			q->flag_jump = 1;
 		}
+		q->flag_sep = 0;
 	}
 	return (0);
 }
@@ -85,6 +90,7 @@ static int	count_quotes_loop(t_pipe *p, t_parse *q, int *n)
 			return (1);
 	if (count_quotes_dollar(p, q, n) == 1)
 		return (1);
+	q->flag_sep = 0;
 	if (q->i - q->prev_pos >= 1)
 		*n = *n + 1;
 	if (p->p_line[q->i] == '\0')
