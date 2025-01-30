@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/23 19:43:27 by mfleury           #+#    #+#             */
-/*   Updated: 2025/01/28 16:54:12 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/01/30 16:17:04 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,10 +23,12 @@ static int	close_bracket(t_shell *sh, char *line, t_parse *q)
 	q->flag_bracket--;
 	ft_memset(line + q->i, ' ', 1);
 	q->prev_pos = q->i;
-	while (oneofchar(line[q->i], "<,>") != TRUE && line[q->i] != '\0')
+	while (oneofchar(line[q->i], "<,>,)") != TRUE && line[q->i] != '\0')
 		q->i++;
 	if (line[q->i] == '\0')
 		q->i = q->prev_pos;
+	else if (line[q->i] == ')')
+		close_bracket(sh, line, q);
 	else if (get_subshell_redirs(sh, line, &q->i) == -1)
 		return (-1);
 	return (0);
