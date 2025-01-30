@@ -6,13 +6,25 @@
 /*   By: mfleury <mfleury@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/23 14:57:19 by mfleury           #+#    #+#             */
-/*   Updated: 2025/01/28 12:57:31 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/01/30 16:39:26 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
 char	*trim_expand(t_redirs *r, char *line, int f_exp);
+
+static void	close_other_fds(t_redirs *r)
+{
+	int	err;
+	
+	close_redir_fd_single(r, &err, "");
+	if (r->sh->up != NULL && r->sh->up->r != NULL)
+	{
+		close_redir_fd_single(r->sh->up->r, &err, "");
+		close_redir_fd_sh(r->sh->up);
+	}
+}
 
 static int	get_hd_input(t_redirs *r, char *eof, int fd)
 {
@@ -24,7 +36,7 @@ static int	get_hd_input(t_redirs *r, char *eof, int fd)
 	{
 		hd_input = readline("> ");
 		if (hd_input == NULL)
-			return (close(fd), -1);
+			return (close_other_fds(r), close(fd), -1);
 		len = max(ft_strlen(eof), ft_strlen(hd_input));
 		if (ft_strncmp(hd_input, eof, len) != 0)
 		{
@@ -33,10 +45,10 @@ static int	get_hd_input(t_redirs *r, char *eof, int fd)
 			ft_putendl_fd(hd_input, fd);
 		}
 		else
-			return (close(fd), free(hd_input), -1);
+			return (close_other_fds(r), close(fd), free(hd_input), -1);
 		free(hd_input);
 	}
-	return (close(fd), 0);
+	return (close_other_fds(r), close(fd), 0);
 }
 
 static int	close_heredoc(int wstatus, int fd, int *r_status)

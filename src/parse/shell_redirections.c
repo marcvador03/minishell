@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/21 21:50:58 by mfleury           #+#    #+#             */
-/*   Updated: 2025/01/28 16:06:38 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/01/30 16:29:36 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,6 +87,7 @@ int	get_subshell_redirs(t_shell *sh, char *t_line, int *pos)
 	if (sh->r->rd == NULL)
 		return (flush_errors("", 202, 0), -1);
 	q.i = q.prev_pos;
+	sh->r->sh = sh;
 	while (t_line[q.i] != '\0' && oneofchar(t_line[q.i], "&,|,(,)") != TRUE)
 	{
 		if (get_redirs_loop(sh, t_line, &q) == -1)
