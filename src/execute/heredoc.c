@@ -6,13 +6,11 @@
 /*   By: mfleury <mfleury@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/23 14:57:19 by mfleury           #+#    #+#             */
-/*   Updated: 2025/01/30 23:31:14 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/01/30 23:39:38 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-char	*trim_expand(t_redirs *r, char *line, int f_exp);
 
 char	*trim_dollar(t_redirs *r, char *line)
 {
@@ -38,7 +36,7 @@ char	*trim_dollar(t_redirs *r, char *line)
 
 static int	close_other_fds(t_redirs *r, int *err)
 {
-	close_redir_fd_single(r, err, "");
+	//close_redir_fd_single(r, err, "");
 	if (r->sh->up != NULL && r->sh->up->r != NULL)
 	{
 		close_redir_fd_single(r->sh->up->r, err, "");
