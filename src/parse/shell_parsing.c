@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/23 19:43:27 by mfleury           #+#    #+#             */
-/*   Updated: 2025/01/30 16:17:04 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/01/31 11:05:26 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,19 +18,24 @@ t_shell	*parse_sh(t_shell *sh, char *line, int *pos, int *l_status);
 int		get_subshell_redirs(t_shell *sh, char *t_line, int *pos);
 int		get_next_token(t_shell *sh, char *line, t_parse *q, int *l_status);
 
-static int	close_bracket(t_shell *sh, char *line, t_parse *q)
+static int	close_bracket(t_shell *sh, char *line, t_parse *q, int *l_status)
 {
-	q->flag_bracket--;
 	ft_memset(line + q->i, ' ', 1);
 	q->prev_pos = q->i;
-	while (oneofchar(line[q->i], "<,>,)") != TRUE && line[q->i] != '\0')
-		q->i++;
+	q->i += sh_skip(line + q->i, ' ');
+	if (line[q->i] == '\0')
+		return (0);
+	else if (oneofchar(line[q->i], "<,>,&,|,(,)") != TRUE)
+		return (set(flush_errors("", 210, q->tk), l_status), -1);
 	if (line[q->i] == '\0')
 		q->i = q->prev_pos;
-	else if (line[q->i] == ')')
-		close_bracket(sh, line, q);
-	else if (get_subshell_redirs(sh, line, &q->i) == -1)
-		return (-1);
+	else if (line[q->i] == '>' || line[q->i] == '<')
+	{
+		if (get_subshell_redirs(sh, line, &q->i) == -1)
+			return (-1);
+	}
+	else if (oneofchar(line[q->i], "<,>,&,|,(,)") != TRUE && line[q->i] != '\0')
+		return (set(flush_errors("", 210, q->tk), l_status), -1);
 	return (0);
 }
 
@@ -39,7 +44,6 @@ int	inside_bracket(t_shell *sh, char *line, t_parse *q, int *l_status)
 	t_shell	*sub_sh;
 
 	q->tk = line[q->i];
-	q->flag_bracket++;
 	q->i++;
 	sub_sh = sh_lstadd_down(sh);
 	if (sub_sh == NULL)
@@ -49,13 +53,11 @@ int	inside_bracket(t_shell *sh, char *line, t_parse *q, int *l_status)
 		return (-1);
 	if (line[q->i] == ')')
 	{
-		if (close_bracket(sh, line, q) == -1)
+		if (close_bracket(sh, line, q, l_status) == -1)
 			return (-1);
 	}
 	while (oneofchar(line[q->i], "&,|,(,)") != TRUE && line[q->i] != '\0')
 		q->i++;
-	if (line[q->i] == '\0' && q->flag_bracket != 0)
-		return (set(flush_errors("", 210, q->tk), l_status), -1);
 	return (0);
 }
 

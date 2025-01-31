@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/07 15:12:52 by mfleury           #+#    #+#             */
-/*   Updated: 2025/01/28 14:03:14 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/01/31 12:12:49 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,34 @@ int		execute_tokens(t_shell *sh, int status);
 char	*create_prompt(t_env *env);
 t_shell	*sh_lstnew(t_terms *tcap, t_env *env, int *l_status);
 t_shell	*parse_sh(t_shell *sh, char *line, int *pos, int *l_status);
+
+static int	check_brackets(char *line)
+{
+	int	i;
+	int	bracket;
+
+	i = 0;
+	bracket = 0;
+	while (line[i] != '\0')
+	{
+		while (line[i] == 34 || line[i] == 39)
+		{
+			i += sh_jump_to(line + i, line[i]);
+			if (line[i] == '\0' && bracket != 0)
+				return (flush_errors("", 210, ')'), -1);
+			else if (line[i] == '\0')
+				return (0);
+		}
+		if (line[i] == '(')
+			bracket++;
+		else if (line[i] == ')')
+			bracket--;
+		i++;
+	}
+	if (bracket != 0)
+		return (flush_errors("", 210, ')'), -1);
+	return (0);
+}
 
 static int	check_forbidden_c(char *line, int *l_status)
 {
@@ -29,7 +57,7 @@ static int	check_forbidden_c(char *line, int *l_status)
 		i++;
 	}
 	i = 0;
-	while (line[i] != 0)
+	while (line[i] != '\0')
 	{
 		while (line[i] == 34 || line[i] == 39)
 		{
@@ -65,6 +93,8 @@ static int	check_open_quotes(char *str)
 		else
 			i++;
 	}
+	if (check_brackets(str) == -1)
+		return (-1);
 	return (0);
 }
 

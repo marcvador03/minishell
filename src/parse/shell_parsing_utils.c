@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 16:10:10 by mfleury           #+#    #+#             */
-/*   Updated: 2025/01/30 18:59:31 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/01/31 12:14:51 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,26 +95,31 @@ static int	get_next_dollar(t_shell *sh, char *line, t_parse *q, int *l_status)
 	return (0);
 }
 
-int	get_next_token(t_shell *sh, char *line, t_parse *q, int *l_status)
+int	get_next_token(t_shell *sh, char *l, t_parse *q, int *l_status)
 {
 	if (sh != sh->head)
-		set_priority(sh, line, q);
-	while (oneofchar(line[q->i], "&,|,(,),<,>") == FALSE && line[q->i] != '\0')
+		set_priority(sh, l, q);
+	while (oneofchar(l[q->i], "&,|,(,),<,>,',\"") == FALSE && l[q->i] != '\0')
 		q->i++;
-	if (line[q->i] == '\0')
+	if (l[q->i] == 34 || l[q->i] == 39)
+	{
+		q->i += sh_jump_to(l + q->i, l[q->i]);
 		return (q->i);
-	q->tk = line[q->i];
-	if (line[q->i] == '>' || line[q->i] == '<')
+	}
+	if (l[q->i] == '\0')
+		return (q->i);
+	q->tk = l[q->i];
+	if (l[q->i] == '>' || l[q->i] == '<')
 	{
-		if (get_next_rd(sh, line, q, l_status) == -1)
+		if (get_next_rd(sh, l, q, l_status) == -1)
 			return (-1);
 	}
-	else if (line[q->i] == '&' || line[q->i] == '|')
+	else if (l[q->i] == '&' || l[q->i] == '|')
 	{
-		if (get_next_dollar(sh, line, q, l_status) == -1)
+		if (get_next_dollar(sh, l, q, l_status) == -1)
 			return (-1);
 	}
-	else if (line[q->i] == '(')
-		return (inside_bracket(sh, line, q, l_status));
+	else if (l[q->i] == '(')
+		return (inside_bracket(sh, l, q, l_status));
 	return (q->i);
 }
