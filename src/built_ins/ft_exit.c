@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/13 15:34:22 by mfleury           #+#    #+#             */
-/*   Updated: 2025/01/23 22:22:27 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/01/31 10:00:52 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,12 +30,10 @@ static int	check_numeric(char *args, int i, int *status)
 static int	check_overflow(char *str, int *status)
 {
 	char	*tmp;
-	t_ll	n;
 
 	if (str[0] == '+')
 		str = str + 1;
-	n = ll_atoi(str);
-	tmp = ll_itoa(n);
+	tmp = ft_strdup(str);
 	if (ft_strncmp(str, tmp, ft_strlen(tmp)) != 0)
 	{
 		ft_putstr_fd("minishell: exit: ", 2);
