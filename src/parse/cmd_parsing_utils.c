@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 15:41:25 by mfleury           #+#    #+#             */
-/*   Updated: 2025/01/30 18:59:23 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/02/01 21:38:20 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,3 +91,11 @@ int	separate_dollar(char *line, t_parse *q)
 	q->flag_jump = 1;
 	return (0);
 }
+
+void	count_spaces(char *line, int *pos, int *n, t_parse *q)
+{
+	*pos += sh_skip(line + *pos, ' ');
+	*n = *n + 1;
+	q->flag_jump = 1;
+}
+

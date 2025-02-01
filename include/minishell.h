@@ -6,7 +6,7 @@
 /*   By: pmorello <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 12:17:09 by pmorello          #+#    #+#             */
-/*   Updated: 2025/01/31 11:04:06 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/02/01 22:30:30 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,6 +75,7 @@ typedef struct s_parsing
 	int					flag_sep;
 	int					status;
 	char				**parse;
+	char				*t_line;
 	char				tk;
 }	t_parse;
 
