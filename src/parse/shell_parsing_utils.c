@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 16:10:10 by mfleury           #+#    #+#             */
-/*   Updated: 2025/01/31 12:14:51 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/02/01 20:56:41 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,7 +104,7 @@ int	get_next_token(t_shell *sh, char *l, t_parse *q, int *l_status)
 	if (l[q->i] == 34 || l[q->i] == 39)
 	{
 		q->i += sh_jump_to(l + q->i, l[q->i]);
-		return (q->i);
+		return (get_next_token(sh, l, q, l_status));
 	}
 	if (l[q->i] == '\0')
 		return (q->i);
