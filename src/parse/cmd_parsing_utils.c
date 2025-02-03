@@ -5,15 +5,51 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: mfleury <mfleury@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/01/28 15:41:25 by mfleury           #+#    #+#             */
-/*   Updated: 2025/02/01 21:38:20 by mfleury          ###   ########.fr       */
+/*   Created: 2025/02/03 14:41:24 by mfleury           #+#    #+#             */
+/*   Updated: 2025/02/03 15:10:48 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
+int	get_words_loop(t_pipe *p, t_parse *q);
+
+static int	create_separation_exp(char *line, t_parse *q)
+{
+	int		i;
+	char	*tmp;
+
+	if (q->status == 1)
+		return (set(q->k + 1, &q->k), 0);
+	i = 0;
+	while (line[i] != '\0' && i != q->prev_pos2)
+	{
+		if (line[i] == 39 || line[i] == 34)
+		{
+			q->tk = (line[i] ^ 1);
+			q->tk = (q->tk ^ (1 << 2));
+		}
+		i++;
+	}
+	q->parse[q->j] = ft_substr(line, q->beg_sep, q->i - q->beg_sep);
+	q->parse[q->j] = sh_trim_spaces(q->parse[q->j]);
+	tmp = ft_strjoin(&q->tk, q->parse[q->j]);
+	free_s(q->parse[q->j]);
+	q->parse[q->j] = ft_strjoin(tmp, &q->tk);
+	if (q->parse[q->j] == NULL)
+		return (free_s(tmp), -1);
+	q->beg_sep = q->i;
+	q->j++;
+	return (free_s(tmp), 0);
+}
+
 int	create_separation(char *line, t_parse *q)
 {
+	if (q->status == 1)
+	{
+		q->k = q->k + 1;
+		return (0);
+	}
 	if (q->i - q->prev_pos >= 1)
 	{
 		q->parse[q->j] = ft_substr(line, q->beg_sep, q->i - q->beg_sep);
@@ -28,74 +64,70 @@ int	create_separation(char *line, t_parse *q)
 		return (0);
 }
 
-int	create_rd_separation(char *line, t_parse *q)
+static int	count_within_dollar(t_parse *q)
 {
-	if (q->i >= 1 && line[q->i - 1] != ' ')
+	if (q->t_line[q->i] == ' ')
+		q->i += sh_skip(q->t_line + q->i, ' ');
+	while (q->i < q->prev_pos2 && q->t_line[q->i] != '\0')
 	{
-		q->parse[q->j] = ft_substr(line, q->beg_sep, q->i - q->beg_sep);
-		q->parse[q->j] = sh_trim_spaces(q->parse[q->j]);
-		if (q->parse[q->j++] == NULL)
-			return (-1);
-	}
-	q->beg_sep = q->i;
-	while (line[q->i] == '>' || line[q->i] == '<')
-		q->i++;
-	q->i += sh_skip(line + q->i, ' ');
-	q->parse[q->j] = ft_substr(line, q->beg_sep, q->i - q->beg_sep);
-	q->parse[q->j] = sh_trim_spaces(q->parse[q->j]);
-	if (q->parse[q->j++] == NULL)
-		return (-1);
-	q->beg_sep = q->i;
-	q->flag_jump = 1;
-	if (line[q->i] == '\0')
-		return (1);
-	return (0);
-}
-
-int	separate_quotes(char *line, t_parse *q)
-{
-	q->i += sh_jump_to(line + q->i, line[q->i]);
-	if (line[q->i] == '\0')
-		return (1);
-	while (noneofchar(line[q->i], " ,\",',>,<,$") == 1)
-	{
-		q->i++;
-		if (line[q->i] == '\0')
-			return (1);
-	}
-	if (line[q->i] == ' ')
-	{
-		q->i += sh_skip(line + q->i, ' ') - 1;
-		q->flag_jump = 0;
-	}
-	return (0);
-}
-
-int	separate_dollar(char *line, t_parse *q)
-{
-	q->i++;
-	if (line[q->i] == '\0')
-		return (1);
-	while (noneofchar(line[q->i], " ,>,<") == 1)
-	{
-		if (line[q->i] == 39 || line[q->i] == 34)
-			q->i += sh_jump_to(line + q->i, line[q->i]);
+		if (q->t_line[q->i] == ' ')
+		{
+			q->i += sh_skip(q->t_line + q->i, ' ');
+			if (create_separation_exp(q->t_line, q) == -1)
+				return (-1);
+			if (q->t_line[q->i] == '\0')
+				break ;
+			q->beg_sep = q->i;
+		}
 		else
 			q->i++;
-		if (line[q->i] == '\0')
-			return (1);
 	}
-	if (line[q->i] == '\0')
-		return (1);
-	q->i += sh_skip(line + q->i, ' ');
-	q->flag_jump = 1;
 	return (0);
 }
 
-void	count_spaces(char *line, int *pos, int *n, t_parse *q)
+int	count_words_dollar(t_pipe *p, t_parse *q)
 {
-	*pos += sh_skip(line + *pos, ' ');
-	*n = *n + 1;
-	q->flag_jump = 1;
+	if (q->t_line[q->i] == '$' && q->t_line[q->i + 1] != '\0')
+	{
+		if (q->flag_sep == 1)
+			q->i += sh_jump_to(q->t_line + q->i, ' ');
+		else if (ft_isalnum_plus(q->t_line[q->i + 1]) == 1)
+		{
+			if (q->t_line[q->i + 1] == ' ')
+				return (0);
+			q->prev_pos2 = q->i;
+			q->t_line = expand_variable(p->sh, q->t_line, &q->prev_pos2);
+			if (q->t_line == NULL)
+				return (1);
+			count_within_dollar(q);
+			q->flag_sep = 0;
+			get_words_loop(p, q);
+		}
+		q->flag_sep = 0;
+	}
+	return (0);
 }
 
+int	count_words_rd(t_pipe *p, t_parse *q)
+{
+	if (q->t_line[q->i] == '<' || q->t_line[q->i] == '>')
+	{
+		if (create_separation(q->t_line, q) == -1)
+			return (-1);
+		q->beg_sep = q->i;
+		while (q->t_line[q->i] == '>' || q->t_line[q->i] == '<')
+			q->i++;
+		if (q->t_line[q->i] == '\0')
+			return (1);
+		if (q->i >= 2)
+		{
+			if (q->t_line[q->i - 1] == '<' && q->t_line[q->i - 2] == '<')
+				q->flag_sep = 1;
+		}
+		q->i += sh_skip(q->t_line + q->i, ' ');
+		if (create_separation(q->t_line, q) == -1)
+			return (-1);
+		get_words_loop(p, q);
+	}
+	return (0);
+}

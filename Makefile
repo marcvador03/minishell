@@ -19,7 +19,6 @@ BUILTINS = ft_cd.c \
 		   built_utils.c
 
 PARSE =	cmd_parsing.c \
-		cmd_parsing_count.c \
 		cmd_parsing_utils.c \
 		pipes_parsing.c \
 		shell_redirections.c \

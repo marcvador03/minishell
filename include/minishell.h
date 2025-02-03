@@ -6,7 +6,7 @@
 /*   By: pmorello <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 12:17:09 by pmorello          #+#    #+#             */
-/*   Updated: 2025/02/01 22:30:30 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/02/03 11:44:24 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -202,11 +202,11 @@ int		is_absolute_path(char *cmd, int *err);
 int		check_file_directory(char *t_cmd, int *err);
 char	*get_full_path(char *arg0, t_env *env, int *err);
 
-/* parsing functions */
+/* parsing functions 
 int		create_separation(char *line, t_parse *q);
 int		create_rd_separation(char *line, t_parse *q);
 int		separate_quotes(char *line, t_parse *q);
-int		separate_dollar(char *line, t_parse *q);
+int		separate_dollar(char *line, t_parse *q);*/
 
 /* file descriptor functions */
 int		open_redir_fd(t_redirs *r, int *err, char *cmd);
