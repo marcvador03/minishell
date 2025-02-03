@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 16:10:10 by mfleury           #+#    #+#             */
-/*   Updated: 2025/02/01 20:56:41 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/02/03 16:11:58 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,6 +61,7 @@ static int	get_next_rd(t_shell *sh, char *line, t_parse *q, int *l_status)
 {
 	char	c;
 
+	q->flag_jump = 1;
 	q->prev_pos = q->i;
 	c = line[q->prev_pos];
 	q->k = 0;
@@ -83,6 +84,7 @@ static int	get_next_dollar(t_shell *sh, char *line, t_parse *q, int *l_status)
 {
 	if (check_tokens_errors(line, q, l_status) == -1)
 		return (-1);
+	q->flag_jump = 0;
 	if (line[q->i + 1] == '&' || line[q->i + 1] == '|')
 		return (0);
 	else if (line[q->i] == '|')
