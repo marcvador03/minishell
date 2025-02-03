@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/03 14:41:24 by mfleury           #+#    #+#             */
-/*   Updated: 2025/02/03 15:10:48 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/02/03 21:06:39 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,7 +101,7 @@ int	count_words_dollar(t_pipe *p, t_parse *q)
 				return (1);
 			count_within_dollar(q);
 			q->flag_sep = 0;
-			get_words_loop(p, q);
+			return(get_words_loop(p, q));
 		}
 		q->flag_sep = 0;
 	}
@@ -127,7 +127,7 @@ int	count_words_rd(t_pipe *p, t_parse *q)
 		q->i += sh_skip(q->t_line + q->i, ' ');
 		if (create_separation(q->t_line, q) == -1)
 			return (-1);
-		get_words_loop(p, q);
+		return(get_words_loop(p, q));
 	}
 	return (0);
 }
