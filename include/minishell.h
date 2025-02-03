@@ -6,7 +6,7 @@
 /*   By: pmorello <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 12:17:09 by pmorello          #+#    #+#             */
-/*   Updated: 2025/02/03 11:44:24 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/02/03 21:12:53 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -189,7 +189,7 @@ void	init_signal(int pid, int hd);
 
 /* environment functions */
 char	**get_env_array(t_env *env, int *err);
-char	*sh_getenv(t_env *env, char *str);
+char	*sh_getenv(t_env *env, char *str, int flag);
 t_env	*sh_addenv(t_env *env, char *var_name, char *value);
 t_env	*sh_updateenv(t_env *env, char *var_name, char *new_value);
 t_env	*sh_delenv(t_env *env, char *var_name);

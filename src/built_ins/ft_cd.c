@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/14 09:20:49 by pmorello          #+#    #+#             */
-/*   Updated: 2025/01/29 14:08:54 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/02/03 21:16:49 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ char	*old_path(t_env *env)
 {
 	char	*old_path;
 
-	old_path = sh_getenv(env, "OLDPWD");
+	old_path = sh_getenv(env, "OLDPWD", 0);
 	if (old_path == NULL || *old_path == '\0')
 		return (flush_errors("cd", 9, 0), NULL);
 	return (ft_strdup(old_path));
@@ -63,7 +63,7 @@ char	*get_target_path(char **args, t_env *env)
 	path = args[1];
 	if (args[1] == NULL)
 	{
-		home = sh_getenv(env, "HOME");
+		home = sh_getenv(env, "HOME", 0);
 		if (home == NULL || *home == '\0')
 			return (NULL);
 		return (h_abs_path(home));
@@ -89,7 +89,7 @@ int	ft_cd(char **args, t_env *env)
 	if (cur_path == NULL)
 	{
 		flush_errors("cd/getcwd", -1, 0);
-		cur_path = ft_strdup(sh_getenv(env, "PWD"));
+		cur_path = ft_strdup(sh_getenv(env, "PWD", 0));
 	}
 	new_path = get_target_path(args, env);
 	if (new_path == NULL)

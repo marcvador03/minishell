@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/26 13:00:25 by mfleury           #+#    #+#             */
-/*   Updated: 2025/01/28 15:32:08 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/02/03 21:14:42 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ static char	*full_path_init(char *arg0, t_env *env, int *err, char ***paths)
 	char	*path_env;
 	char	*cmd_in;
 
-	path_env = sh_getenv(env, "PATH");
+	path_env = sh_getenv(env, "PATH", 0);
 	if (path_env == NULL || arg0[0] == '\0')
 		return (set(flush_errors(arg0, 127, '\0'), err), NULL);
 	*paths = ft_split(path_env, ':');

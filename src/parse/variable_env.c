@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/17 12:19:07 by mfleury           #+#    #+#             */
-/*   Updated: 2025/01/28 17:22:59 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/02/03 21:14:25 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ static char	*expand_getenv(char *s, t_env *env)
 	char	*value;
 	char	*res;
 
-	value = sh_getenv(env, s);
+	value = sh_getenv(env, s, 0);
 	if (value != NULL)
 		res = ft_strdup(value);
 	else
@@ -91,7 +91,7 @@ char	*expand_variable(t_shell *sh, char *line, int *i)
 	if (dollar_in[0] == '?')
 		dollar_out = ft_itoa(sh->l_status);
 	else if (dollar_in[0] == '_' && dollar_in[1] == '\0')
-		dollar_out = ft_strdup(sh_getenv(sh->env, "_"));
+		dollar_out = ft_strdup(sh_getenv(sh->env, "_", 0));
 	else if (ft_isalnum_plus(dollar_in[0]) == 1)
 		dollar_out = expand_getenv(dollar_in, sh->env);
 	res = resize_line(line, dollar_out, dollar_in, i);

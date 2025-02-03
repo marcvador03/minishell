@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/17 09:53:05 by mfleury           #+#    #+#             */
-/*   Updated: 2025/01/28 16:14:04 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/02/03 21:15:26 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,17 +19,17 @@ t_env	*fill_default_session(t_env *env)
 	t_env	*env2;
 
 	env2 = env;
-	if (sh_getenv(env2, "SHLVL") == NULL)
+	if (sh_getenv(env2, "SHLVL", 1) == NULL)
 		env2 = sh_addenv(env2, ft_strdup("SHLVL"), ft_strdup("1"));
 	else
 	{
-		x = ft_atoi(sh_getenv(env2, "SHLVL"));
+		x = ft_atoi(sh_getenv(env2, "SHLVL", 0));
 		level = ft_itoa(x + 1);
 		sh_updateenv(env2, ft_strdup("SHLVL"), level);
 	}
-	if (sh_getenv(env2, "TERM") == NULL)
+	if (sh_getenv(env2, "TERM", 1) == NULL)
 		env = sh_addenv(env2, ft_strdup("TERM"), ft_strdup("xterm-256color"));
-	if (sh_getenv(env2, "_") == NULL)
+	if (sh_getenv(env2, "_", 1) == NULL)
 		env = sh_addenv(env2, ft_strdup("_"), ft_strdup("./minishell"));
 	return (env2);
 }

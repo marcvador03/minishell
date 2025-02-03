@@ -6,13 +6,13 @@
 /*   By: mfleury <mfleury@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/14 09:05:40 by mfleury           #+#    #+#             */
-/*   Updated: 2025/01/23 22:30:58 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/02/03 21:12:35 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-char	*sh_getenv(t_env *env, char *str)
+char	*sh_getenv(t_env *env, char *str, int flag)
 {
 	int		len[2];
 
@@ -23,7 +23,12 @@ char	*sh_getenv(t_env *env, char *str)
 	{
 		len[1] = ft_strlen(env->varname);
 		if (ft_strncmp(env->varname, str, max(len[0], len[1])) == 0)
-			return (env->value);
+		{
+			if (flag == 1)
+				return (env->varname);
+			else
+				return (env->value);
+		}
 		env = env->next;
 	}
 	return (NULL);
