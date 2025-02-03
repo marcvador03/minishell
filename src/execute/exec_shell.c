@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/23 23:04:56 by mfleury           #+#    #+#             */
-/*   Updated: 2025/01/23 23:26:00 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/02/03 15:47:08 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,14 +24,14 @@ static int	execute_fork(t_shell *sh, int status)
 	if (pid == -1)
 		flush_errors("", -1, 0);
 	if (pid == 0)
-		exit(execute_tokens(sh, status));
+		return(execute_tokens(sh, 0));
 	waitpid(pid, &wstatus, 0);
 	if (sh->up != NULL && sh->up->r != NULL)
 	{
 		close_redir_fd_single(sh->up->r, &status, "");
 		close_redir_fd_sh(sh->up);
 	}
-	if (WIFEXITED(wstatus))
+	if (WIFEXITED(wstatus) != 0)
 		status = WEXITSTATUS(wstatus);
 	return (status);
 }
