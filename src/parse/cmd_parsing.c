@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/03 11:06:18 by mfleury           #+#    #+#             */
-/*   Updated: 2025/02/04 16:56:24 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/02/04 19:13:44 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,6 @@ int	count_words_rd(t_pipe *p, t_parse *q)
 
 int	get_words_loop(t_pipe *p, t_parse *q)
 {
-	q->prev_pos = q->i;
 	if (q->t_line[q->i] == ' ')
 	{
 		q->i += sh_skip(q->t_line + q->i, ' ');
@@ -113,7 +112,6 @@ char	**get_sep_words(t_pipe *p, int *status)
 		return (NULL);
 	while (q.t_line[q.i] != '\0')
 	{
-		q.prev_pos = q.i;
 		q.flag_jump = 0;
 		q.x = get_words_loop(p, &q);
 		if (q.x == -1)
