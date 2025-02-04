@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/23 19:43:27 by mfleury           #+#    #+#             */
-/*   Updated: 2025/02/03 16:12:47 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/02/04 09:47:46 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,13 +39,30 @@ static int	close_bracket(t_shell *sh, char *line, t_parse *q, int *l_status)
 	return (0);
 }
 
+static int	inside_bracket_errors(char *line, t_parse *q)
+{
+	int	i;
+
+	i = q->i;
+	while (i >= q->beg_sep)
+	{
+		if (oneofchar(line[i], "&,|") == TRUE)
+			break ;
+		if (oneofchar(line[i], " ,(") == FALSE)
+			return (flush_errors("", 210, q->tk), -1);
+		i--;
+	}
+	return (0);
+
+}
+
 int	inside_bracket(t_shell *sh, char *line, t_parse *q, int *l_status)
 {
 	t_shell	*sub_sh;
 
-	if (q->flag_jump == 1)
-		return (flush_errors("", 210, 0), -1);
 	q->tk = line[q->i];
+	if (inside_bracket_errors(line, q) == -1)
+		return (-1) ;
 	q->i++;
 	sub_sh = sh_lstadd_down(sh);
 	if (sub_sh == NULL)
