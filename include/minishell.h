@@ -6,7 +6,7 @@
 /*   By: pmorello <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 12:17:09 by pmorello          #+#    #+#             */
-/*   Updated: 2025/02/03 21:12:53 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/02/04 16:54:49 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,6 +67,7 @@ typedef struct s_parsing
 	int					i;
 	int					j;
 	int					k;
+	int					x;
 	int					prev_pos;
 	int					prev_pos2;
 	int					beg_sep;

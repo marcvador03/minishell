@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/03 14:41:24 by mfleury           #+#    #+#             */
-/*   Updated: 2025/02/04 15:18:27 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/02/04 16:58:18 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,10 +81,31 @@ static int	count_within_dollar(t_parse *q)
 		else
 			q->i++;
 	}
-	if (q->i != q->beg_sep && q->t_line[q->i] == '\0')
+	if (q->i != q->beg_sep)
 	{
-		if (create_separation_exp(q->t_line, q) == -1)
-			return (-1);
+		if (q->t_line[q->i] == '\0' || q->t_line[q->i] == ' ')
+		{
+			if (create_separation_exp(q->t_line, q) == -1)
+				return (-1);
+			if (q->t_line[q->i] == ' ')
+				q->i += sh_skip(q->t_line + q->i, ' ');
+		}
+	}
+	return (0);
+}
+
+static int	count_words_dollar_check(t_parse *q)
+{
+	if (q->t_line[q->i] == ' ')
+	{
+		q->i += sh_skip(q->t_line + q->i, ' ');
+		q->prev_pos = q->i - 1;
+		if (q->prev_pos != q->beg_sep)
+		{
+			if (create_separation(q->t_line, q) == -1)
+				return (1);
+		}
+		q->prev_pos = q->i;
 	}
 	return (0);
 }
@@ -103,41 +124,11 @@ int	count_words_dollar(t_pipe *p, t_parse *q)
 			q->t_line = expand_variable(p->sh, q->t_line, &q->prev_pos2);
 			if (q->t_line == NULL)
 				return (1);
-			if (q->t_line[q->i] == ' ')
-			{
-				q->i += sh_skip(q->t_line + q->i, ' ');
-				if (q->prev_pos != q->beg_sep)
-					if (create_separation(q->t_line, q) == -1)
-						return (-1);
-				q->prev_pos = q->i;
-			}
+			if (count_words_dollar_check(q) == -1)
+				return (1);
 			count_within_dollar(q);
 			return (set(0, &q->flag_sep), get_words_loop(p, q));
 		}
 	}
 	return (set(0, &q->flag_sep), 0);
-}
-
-int	count_words_rd(t_pipe *p, t_parse *q)
-{
-	if (q->t_line[q->i] == '<' || q->t_line[q->i] == '>')
-	{
-		if (create_separation(q->t_line, q) == -1)
-			return (-1);
-		q->beg_sep = q->i;
-		while (q->t_line[q->i] == '>' || q->t_line[q->i] == '<')
-			q->i++;
-		if (q->t_line[q->i] == '\0')
-			return (1);
-		if (q->i >= 2)
-		{
-			if (q->t_line[q->i - 1] == '<' && q->t_line[q->i - 2] == '<')
-				q->flag_sep = 1;
-		}
-		q->i += sh_skip(q->t_line + q->i, ' ');
-		if (create_separation(q->t_line, q) == -1)
-			return (-1);
-		return (get_words_loop(p, q));
-	}
-	return (0);
 }

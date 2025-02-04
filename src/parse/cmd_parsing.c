@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/03 11:06:18 by mfleury           #+#    #+#             */
-/*   Updated: 2025/02/04 15:18:41 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/02/04 16:56:24 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,31 @@
 
 int	create_separation(char *line, t_parse *q);
 int	count_words_dollar(t_pipe *p, t_parse *q);
-int	count_words_rd(t_pipe *p, t_parse *q);
+int	get_words_loop(t_pipe *p, t_parse *q);
+
+int	count_words_rd(t_pipe *p, t_parse *q)
+{
+	if (q->t_line[q->i] == '<' || q->t_line[q->i] == '>')
+	{
+		if (create_separation(q->t_line, q) == -1)
+			return (-1);
+		q->beg_sep = q->i;
+		while (q->t_line[q->i] == '>' || q->t_line[q->i] == '<')
+			q->i++;
+		if (q->t_line[q->i] == '\0')
+			return (1);
+		if (q->i >= 2)
+		{
+			if (q->t_line[q->i - 1] == '<' && q->t_line[q->i - 2] == '<')
+				q->flag_sep = 1;
+		}
+		q->i += sh_skip(q->t_line + q->i, ' ');
+		if (create_separation(q->t_line, q) == -1)
+			return (-1);
+		return (get_words_loop(p, q));
+	}
+	return (0);
+}
 
 int	get_words_loop(t_pipe *p, t_parse *q)
 {
@@ -24,7 +48,6 @@ int	get_words_loop(t_pipe *p, t_parse *q)
 		q->i += sh_skip(q->t_line + q->i, ' ');
 		if (create_separation(q->t_line, q) == -1)
 			return (-1);
-		return (get_words_loop(p, q));
 	}
 	if (count_words_rd(p, q) == 1)
 		return (1);
@@ -37,11 +60,11 @@ int	get_words_loop(t_pipe *p, t_parse *q)
 			return (1);
 		return (get_words_loop(p, q));
 	}
-	q->flag_sep = 0;
 	if (q->t_line[q->i] == '\0')
 		return (1);
-	q->i++;
-	return (0);
+	if (q->flag_jump == 0)
+		q->i++;
+	return (set(1, &q->flag_jump), set(0, &q->flag_sep), 0);
 }
 
 static int	count_words(t_pipe *p)
@@ -56,6 +79,7 @@ static int	count_words(t_pipe *p)
 	q.status = 1;
 	while (q.t_line[q.i] != '\0')
 	{
+		q.flag_jump = 0;
 		if (get_words_loop(p, &q) == 1)
 			return (free_s(q.t_line), q.k);
 	}
@@ -82,7 +106,6 @@ static char	**get_sep_words_init(t_pipe *p, int *status, t_parse *q, int *n)
 char	**get_sep_words(t_pipe *p, int *status)
 {
 	t_parse		q;
-	int			x;
 	int			n;
 
 	q.parse = get_sep_words_init(p, status, &q, &n);
@@ -91,14 +114,15 @@ char	**get_sep_words(t_pipe *p, int *status)
 	while (q.t_line[q.i] != '\0')
 	{
 		q.prev_pos = q.i;
-		x = get_words_loop(p, &q);
-		if (x == -1)
+		q.flag_jump = 0;
+		q.x = get_words_loop(p, &q);
+		if (q.x == -1)
 		{
 			*status = flush_errors("", 202, 0);
 			p->p_line = q.t_line;
 			return (free_d(q.parse), NULL);
 		}
-		else if (x == 1)
+		else if (q.x == 1)
 			break ;
 	}
 	q.prev_pos = q.beg_sep;
