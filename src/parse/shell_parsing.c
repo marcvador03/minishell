@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/23 19:43:27 by mfleury           #+#    #+#             */
-/*   Updated: 2025/02/04 09:47:46 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/02/04 09:53:44 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,6 @@ static int	inside_bracket_errors(char *line, t_parse *q)
 		i--;
 	}
 	return (0);
-
 }
 
 int	inside_bracket(t_shell *sh, char *line, t_parse *q, int *l_status)
@@ -62,7 +61,7 @@ int	inside_bracket(t_shell *sh, char *line, t_parse *q, int *l_status)
 
 	q->tk = line[q->i];
 	if (inside_bracket_errors(line, q) == -1)
-		return (-1) ;
+		return (-1);
 	q->i++;
 	sub_sh = sh_lstadd_down(sh);
 	if (sub_sh == NULL)

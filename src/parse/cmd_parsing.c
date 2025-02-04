@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/03 11:06:18 by mfleury           #+#    #+#             */
-/*   Updated: 2025/02/03 21:06:39 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/02/04 09:52:44 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ int	get_words_loop(t_pipe *p, t_parse *q)
 		q->i += sh_skip(q->t_line + q->i, ' ');
 		if (create_separation(q->t_line, q) == -1)
 			return (-1);
-		return(get_words_loop(p, q));
+		return (get_words_loop(p, q));
 	}
 	if (count_words_rd(p, q) == 1)
 		return (1);
@@ -35,7 +35,7 @@ int	get_words_loop(t_pipe *p, t_parse *q)
 		q->i += sh_jump_to(q->t_line + q->i, q->t_line[q->i]);
 		if (q->t_line[q->i] == '\0')
 			return (1);
-		return(get_words_loop(p, q));
+		return (get_words_loop(p, q));
 	}
 	q->flag_sep = 0;
 	if (q->t_line[q->i] == '\0')

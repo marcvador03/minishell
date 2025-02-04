@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/23 23:04:56 by mfleury           #+#    #+#             */
-/*   Updated: 2025/02/03 15:47:08 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/02/04 09:52:59 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ static int	execute_fork(t_shell *sh, int status)
 	if (pid == -1)
 		flush_errors("", -1, 0);
 	if (pid == 0)
-		return(execute_tokens(sh, 0));
+		return (execute_tokens(sh, 0));
 	waitpid(pid, &wstatus, 0);
 	if (sh->up != NULL && sh->up->r != NULL)
 	{
