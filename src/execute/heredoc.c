@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/23 14:57:19 by mfleury           #+#    #+#             */
-/*   Updated: 2025/01/31 00:07:58 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/02/04 19:36:43 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ char	*trim_dollar(t_redirs *r, char *line)
 		{
 			line = expand_variable(r->sh, line, &i);
 			flag_jump = 1;
-			if (line[i] == '\0')
+			if (line == NULL || line[i] == '\0')
 				return (line);
 		}
 		if (flag_jump == 0)
