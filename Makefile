@@ -70,7 +70,7 @@ INCLUDES := $(patsubst %.h, $(INC_DIR)/%.h, $(INC_NAMES))
 
 DEPS := $(OBJECTS:.o=.d)
 
-CFLAGS += -Wall -Werror -Wextra -MMD -MP -g -fsanitize=address -I $(INC_DIR)
+CFLAGS += -Wall -Werror -Wextra -MMD -MP -I $(INC_DIR)
 
 LIB_NAMES := libft.a 
 LIBS_TAG := $(patsubst lib%.a, -l%, $(LIB_NAMES))
