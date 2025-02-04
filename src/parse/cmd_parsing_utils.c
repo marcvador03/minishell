@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/03 14:41:24 by mfleury           #+#    #+#             */
-/*   Updated: 2025/02/04 14:23:34 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/02/04 14:35:44 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,20 +38,19 @@ int	create_separation(char *line, t_parse *q)
 
 static int	create_separation_exp(char *line, t_parse *q)
 {
-	int		i;
 	char	*tmp;
 
 	if (q->status == 1 && (q->i - q->prev_pos >= 1))
 		return (set(q->k + 1, &q->k), set(q->i, &q->beg_sep), 0);
-	i = q->prev_pos;
-	while (line[i] != '\0' && i != q->prev_pos2)
+	q->k = q->prev_pos;
+	while (line[q->k] != '\0' && q->k != q->prev_pos2)
 	{
-		if (line[i] == 39 || line[i] == 34)
+		if (line[q->k] == 39 || line[q->k] == 34)
 		{
-			q->tk = (line[i] ^ 1);
+			q->tk = (line[q->k] ^ 1);
 			q->tk = (q->tk ^ (1 << 2));
 		}
-		i++;
+		q->k++;
 	}
 	q->parse[q->j] = ft_substr(line, q->beg_sep, q->i - q->beg_sep);
 	q->parse[q->j] = sh_trim_spaces(q->parse[q->j]);
@@ -60,10 +59,10 @@ static int	create_separation_exp(char *line, t_parse *q)
 	q->parse[q->j] = ft_strjoin(tmp, &q->tk);
 	q->parse[q->j] = sh_trim_spaces(q->parse[q->j]);
 	if (q->parse[q->j] == NULL)
-		return (free_s(tmp), -1);
+		return (set(0, &q->k), free_s(tmp), -1);
 	q->beg_sep = q->i;
 	q->j++;
-	return (free_s(tmp), 0);
+	return (free_s(tmp), set(0, &q->k), 0);
 }
 
 static int	count_within_dollar(t_parse *q)
