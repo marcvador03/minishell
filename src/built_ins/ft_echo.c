@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/14 09:16:56 by pmorello          #+#    #+#             */
-/*   Updated: 2025/01/25 20:25:23 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/02/04 14:32:48 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,8 @@ int	check_params(char **args)
 		if (*args[i] == '-')
 		{
 			j = 1;
+			if (args[i][j] == '\0')
+				return (i);
 			while (args[i][j] != '\0')
 			{
 				if (args[i][j] != 'n')
