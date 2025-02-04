@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/03 14:41:24 by mfleury           #+#    #+#             */
-/*   Updated: 2025/02/04 15:03:16 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/02/04 15:11:49 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,9 +89,9 @@ static int	count_within_dollar(t_parse *q)
 			q->beg_sep = q->i;
 		}
 		else
-			q->i++;
+				q->i++;
 	}
-	if (q->i != q->beg_sep)
+	if (q->i != q->beg_sep && q->t_line[q->i] == '\0')
 	{
 		if (create_separation_exp(q->t_line, q) == -1)
 			return (-1);
