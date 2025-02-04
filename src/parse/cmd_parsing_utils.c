@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/03 14:41:24 by mfleury           #+#    #+#             */
-/*   Updated: 2025/02/04 09:53:21 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/02/04 14:23:34 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,40 +14,12 @@
 
 int	get_words_loop(t_pipe *p, t_parse *q);
 
-static int	create_separation_exp(char *line, t_parse *q)
-{
-	int		i;
-	char	*tmp;
-
-	if (q->status == 1)
-		return (set(q->k + 1, &q->k), 0);
-	i = 0;
-	while (line[i] != '\0' && i != q->prev_pos2)
-	{
-		if (line[i] == 39 || line[i] == 34)
-		{
-			q->tk = (line[i] ^ 1);
-			q->tk = (q->tk ^ (1 << 2));
-		}
-		i++;
-	}
-	q->parse[q->j] = ft_substr(line, q->beg_sep, q->i - q->beg_sep);
-	q->parse[q->j] = sh_trim_spaces(q->parse[q->j]);
-	tmp = ft_strjoin(&q->tk, q->parse[q->j]);
-	free_s(q->parse[q->j]);
-	q->parse[q->j] = ft_strjoin(tmp, &q->tk);
-	if (q->parse[q->j] == NULL)
-		return (free_s(tmp), -1);
-	q->beg_sep = q->i;
-	q->j++;
-	return (free_s(tmp), 0);
-}
-
 int	create_separation(char *line, t_parse *q)
 {
-	if (q->status == 1)
+	if (q->status == 1 && (q->i - q->prev_pos >= 1))
 	{
 		q->k = q->k + 1;
+		q->beg_sep = q->i;
 		return (0);
 	}
 	if (q->i - q->prev_pos >= 1)
@@ -64,10 +36,48 @@ int	create_separation(char *line, t_parse *q)
 		return (0);
 }
 
+static int	create_separation_exp(char *line, t_parse *q)
+{
+	int		i;
+	char	*tmp;
+
+	if (q->status == 1 && (q->i - q->prev_pos >= 1))
+		return (set(q->k + 1, &q->k), set(q->i, &q->beg_sep), 0);
+	i = q->prev_pos;
+	while (line[i] != '\0' && i != q->prev_pos2)
+	{
+		if (line[i] == 39 || line[i] == 34)
+		{
+			q->tk = (line[i] ^ 1);
+			q->tk = (q->tk ^ (1 << 2));
+		}
+		i++;
+	}
+	q->parse[q->j] = ft_substr(line, q->beg_sep, q->i - q->beg_sep);
+	q->parse[q->j] = sh_trim_spaces(q->parse[q->j]);
+	tmp = ft_strjoin(&q->tk, q->parse[q->j]);
+	free_s(q->parse[q->j]);
+	q->parse[q->j] = ft_strjoin(tmp, &q->tk);
+	q->parse[q->j] = sh_trim_spaces(q->parse[q->j]);
+	if (q->parse[q->j] == NULL)
+		return (free_s(tmp), -1);
+	q->beg_sep = q->i;
+	q->j++;
+	return (free_s(tmp), 0);
+}
+
 static int	count_within_dollar(t_parse *q)
 {
 	if (q->t_line[q->i] == ' ')
+	{
 		q->i += sh_skip(q->t_line + q->i, ' ');
+		if (q->prev_pos != q->beg_sep)
+		{
+			if (create_separation(q->t_line, q) == -1)
+				return (-1);
+		}
+		q->prev_pos = q->i;
+	}
 	while (q->i < q->prev_pos2 && q->t_line[q->i] != '\0')
 	{
 		if (q->t_line[q->i] == ' ')
