@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/03 14:41:24 by mfleury           #+#    #+#             */
-/*   Updated: 2025/02/04 16:58:18 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/02/04 17:22:45 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,7 @@ int	create_separation(char *line, t_parse *q)
 		if (q->parse[q->j] == NULL)
 			return (-1);
 		q->beg_sep = q->i;
+		q->prev_pos = q->i;
 		q->j++;
 		return (0);
 	}
@@ -99,7 +100,6 @@ static int	count_words_dollar_check(t_parse *q)
 	if (q->t_line[q->i] == ' ')
 	{
 		q->i += sh_skip(q->t_line + q->i, ' ');
-		q->prev_pos = q->i - 1;
 		if (q->prev_pos != q->beg_sep)
 		{
 			if (create_separation(q->t_line, q) == -1)
