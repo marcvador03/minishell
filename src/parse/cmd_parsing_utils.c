@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/03 14:41:24 by mfleury           #+#    #+#             */
-/*   Updated: 2025/02/04 15:11:49 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/02/04 15:18:27 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,16 +67,6 @@ static int	create_separation_exp(char *line, t_parse *q)
 
 static int	count_within_dollar(t_parse *q)
 {
-	if (q->t_line[q->i] == ' ')
-	{
-		q->i += sh_skip(q->t_line + q->i, ' ');
-		if (q->prev_pos != q->beg_sep)
-		{
-			if (create_separation(q->t_line, q) == -1)
-				return (-1);
-		}
-		q->prev_pos = q->i;
-	}
 	while (q->i < q->prev_pos2 && q->t_line[q->i] != '\0')
 	{
 		if (q->t_line[q->i] == ' ')
@@ -89,7 +79,7 @@ static int	count_within_dollar(t_parse *q)
 			q->beg_sep = q->i;
 		}
 		else
-				q->i++;
+			q->i++;
 	}
 	if (q->i != q->beg_sep && q->t_line[q->i] == '\0')
 	{
@@ -113,13 +103,19 @@ int	count_words_dollar(t_pipe *p, t_parse *q)
 			q->t_line = expand_variable(p->sh, q->t_line, &q->prev_pos2);
 			if (q->t_line == NULL)
 				return (1);
+			if (q->t_line[q->i] == ' ')
+			{
+				q->i += sh_skip(q->t_line + q->i, ' ');
+				if (q->prev_pos != q->beg_sep)
+					if (create_separation(q->t_line, q) == -1)
+						return (-1);
+				q->prev_pos = q->i;
+			}
 			count_within_dollar(q);
-			q->flag_sep = 0;
-			return (get_words_loop(p, q));
+			return (set(0, &q->flag_sep), get_words_loop(p, q));
 		}
-		q->flag_sep = 0;
 	}
-	return (0);
+	return (set(0, &q->flag_sep), 0);
 }
 
 int	count_words_rd(t_pipe *p, t_parse *q)
