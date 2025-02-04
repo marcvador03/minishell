@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 16:10:10 by mfleury           #+#    #+#             */
-/*   Updated: 2025/02/04 09:38:04 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/02/04 18:34:58 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,8 @@ static void	set_priority(t_shell *sh, char *line, t_parse *q)
 {
 	char	c;
 
+	if (line[q->i] == '\0')
+		return ;
 	q->i += sh_skip(line + q->i, ' ');
 	if (line[q->i + 1] == '\0')
 		return ;
