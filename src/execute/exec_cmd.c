@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/17 15:39:35 by mfleury           #+#    #+#             */
-/*   Updated: 2025/01/26 17:53:35 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/02/05 21:41:24 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,14 +110,15 @@ int	exec_cmd(char *cmd, char **args, t_pipe *p, t_env *env)
 
 	err = 0;
 	if (ft_strncmp(cmd, "exit", max(ft_strlen(cmd), 4)) == 0)
-		return (ft_exit(p, args, env));
+		return (ft_exit(p, args, &env));
 	x = str_to_enum(cmd, &call_cmd);
 	env_arr = get_env_array(env, &err);
 	if (env_arr == NULL)
 		return (err);
 	if (x != -1)
 	{
-		p->p_status = call_cmd[x](args, env);
+		p->p_status = call_cmd[x](args, &env);
+		p->sh->env = env;
 		flush_errors(cmd, p->p_status, 0);
 	}
 	else if (p->sh->p_count == 1)

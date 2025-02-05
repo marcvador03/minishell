@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/14 09:52:16 by pmorello          #+#    #+#             */
-/*   Updated: 2025/01/23 22:47:11 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/02/05 21:44:49 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 int	check_option(char *str, char *cmd);
 
-int	ft_env(char **args, t_env *env)
+int	ft_env(char **args, t_env **env)
 {
 	int	err;
 
@@ -24,11 +24,11 @@ int	ft_env(char **args, t_env *env)
 	err = check_option(args[1], "env");
 	if (err == 2)
 		return (err);
-	while (env != NULL)
+	while ((*env) != NULL)
 	{
-		if (env->value != NULL)
-			printf("%s%c%s\n", env->varname, '=', env->value);
-		env = env->next;
+		if ((*env)->value != NULL)
+			printf("%s%c%s\n", (*env)->varname, '=', (*env)->value);
+		*env = (*env)->next;
 	}
 	return (err);
 }

@@ -6,7 +6,7 @@
 /*   By: pmorello <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 12:17:09 by pmorello          #+#    #+#             */
-/*   Updated: 2025/02/04 16:54:49 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/02/05 21:41:48 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@
 typedef long long		t_ll;
 typedef struct s_shell	t_shell;
 typedef struct s_env	t_env;
-typedef int				(*t_func_arr)(char **args, t_env *env);
+typedef int				(*t_func_arr)(char **args, t_env **env);
 extern int				g_status;
 
 /*Enum to match command names input with a number*/
@@ -148,13 +148,13 @@ struct s_shell
 };
 
 /* built-ins functions*/
-int		ft_unset(char **args, t_env *env);
-int		ft_pwd(char **args, t_env *env);
-int		ft_export(char **args, t_env *env);
-int		ft_env(char **args, t_env *env);
-int		ft_echo(char **args, t_env *env);
-int		ft_cd(char **args, t_env *env);
-int		ft_exit(t_pipe *p, char **args, t_env *env);
+int		ft_unset(char **args, t_env **env);
+int		ft_pwd(char **args, t_env **env);
+int		ft_export(char **args, t_env **env);
+int		ft_env(char **args, t_env **env);
+int		ft_echo(char **args, t_env **env);
+int		ft_cd(char **args, t_env **env);
+int		ft_exit(t_pipe *p, char **args, t_env **env);
 
 /* core utils functions */
 int		max(int n1, int n2);

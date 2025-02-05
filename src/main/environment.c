@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/14 09:05:40 by mfleury           #+#    #+#             */
-/*   Updated: 2025/02/03 21:12:35 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/02/05 19:11:49 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,13 +109,13 @@ t_env	*sh_delenv(t_env *env, char *var_name)
 		if (ft_strncmp(env->varname, var_name, max(len[0], len[1])) == 0)
 		{
 			if (env == env->head)
-				update_head (env->next, env->next);
+				update_head (env, env->next);
 			else
 				tmp->next = env->next;
 			free_s(env->varname);
 			free_s(env->value);
 			free_s(env);
-			return (tmp->next);
+			return (tmp->head);
 		}
 		tmp = env;
 		env = env->next;

@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/14 09:54:49 by pmorello          #+#    #+#             */
-/*   Updated: 2025/01/23 23:28:18 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/02/05 21:43:30 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,7 +102,7 @@ static void	ft_export_loop(char *arg, t_env *env)
 	sh_updateenv(env, var_name, env_value);
 }
 
-int	ft_export(char **args, t_env *env)
+int	ft_export(char **args, t_env **env)
 {
 	int		i;
 	int		err;
@@ -110,14 +110,14 @@ int	ft_export(char **args, t_env *env)
 	i = 1;
 	err = 0;
 	if (args[1] == NULL)
-		return (print_sorted(env, env_size(env)));
+		return (print_sorted(*env, env_size(*env)));
 	err = check_option(args[1], "export");
 	if (err == 2)
 		return (err);
 	while (args[i])
 	{
 		if (check_export_var(args[i]) == 0)
-			ft_export_loop(args[i], env);
+			ft_export_loop(args[i], *env);
 		else
 			err = 1;
 		i++;

@@ -6,13 +6,13 @@
 /*   By: mfleury <mfleury@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/07 15:12:52 by mfleury           #+#    #+#             */
-/*   Updated: 2025/01/31 12:12:49 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/02/05 19:06:09 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int		execute_tokens(t_shell *sh, int status);
+int		execute_tokens(t_shell *sh, int status, t_env **env);
 char	*create_prompt(t_env *env);
 t_shell	*sh_lstnew(t_terms *tcap, t_env *env, int *l_status);
 t_shell	*parse_sh(t_shell *sh, char *line, int *pos, int *l_status);
@@ -125,7 +125,7 @@ static char	*get_input(t_env *env, t_terms *tcap, int *l_status)
 	return (free_s(prompt), line);
 }
 
-int	start_shell(t_env *env, t_terms *tcap, int *l_status)
+int	start_shell(t_env **env, t_terms *tcap, int *l_status)
 {
 	char	*line;
 	t_shell	*sh;
@@ -134,12 +134,12 @@ int	start_shell(t_env *env, t_terms *tcap, int *l_status)
 
 	sh = NULL;
 	init_signal(1, 0);
-	line = get_input(env, tcap, l_status);
+	line = get_input(*env, tcap, l_status);
 	if (line == NULL)
-		exit_minishell_error(sh, 200, env);
+		exit_minishell_error(sh, 200, *env);
 	if (check_open_quotes(line) == -1)
 		return (set(2, l_status), free_s(line), 2);
-	sh = sh_lstnew(tcap, env, l_status);
+	sh = sh_lstnew(tcap, *env, l_status);
 	if (sh == NULL)
 		return (set(flush_errors("", 202, 0), l_status), 0);
 	i = 0;
@@ -150,6 +150,6 @@ int	start_shell(t_env *env, t_terms *tcap, int *l_status)
 	head = sh->head;
 	if (sh_check_empty(sh->s_line) == -1)
 		return (free_sh(head), 0);
-	*l_status = execute_tokens(head, 0);
+	*l_status = execute_tokens(head, 0, env);
 	return (free_sh(head), 0);
 }

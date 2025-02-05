@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/14 11:23:34 by pmorello          #+#    #+#             */
-/*   Updated: 2025/02/03 21:13:44 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/02/05 21:44:03 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ int	check_unset_var(char *str)
 	return (0);
 }
 
-int	ft_unset(char **args, t_env *env)
+int	ft_unset(char **args, t_env **env)
 {
 	int	i;
 	int	err;
@@ -58,8 +58,8 @@ int	ft_unset(char **args, t_env *env)
 			printf("minishell: unset: '%s': not a valid identifier\n", args[i]);
 			err = 1;
 		}
-		if (sh_getenv(env, args[i], 1) != NULL)
-			sh_delenv(env, args[i]);
+		if (sh_getenv(*env, args[i], 1) != NULL)
+			*env = sh_delenv(*env, args[i]);
 		i++;
 	}
 	return (err);

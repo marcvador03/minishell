@@ -6,13 +6,13 @@
 /*   By: mfleury <mfleury@student.42barcelona.      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 10:01:23 by mfleury           #+#    #+#             */
-/*   Updated: 2025/01/30 18:58:33 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/02/05 21:26:56 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	start_shell(t_env *env, t_terms *tcap, int *l_status);
+int	start_shell(t_env **env, t_terms *tcap, int *l_status);
 
 int	g_status = 0;
 
@@ -120,8 +120,10 @@ int	main(int argc, char *argv[], char *envp[])
 	g_status = 0;
 	while (1)
 	{
-		start_shell(env, &tcap, &l_status);
+		start_shell(&env, &tcap, &l_status);
 		rl_on_new_line();
+		if (env == NULL || env->head == NULL)
+			env = fill_env(envp);
 	}
 	return (0);
 }

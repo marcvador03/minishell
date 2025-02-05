@@ -6,7 +6,7 @@
 /*   By: mfleury <mfleury@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/13 15:34:22 by mfleury           #+#    #+#             */
-/*   Updated: 2025/02/04 19:58:07 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/02/05 21:43:09 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,7 @@ static int	check_overflow(char *str, int *status)
 	return (free_s(tmp), 0);
 }
 
-int	ft_exit(t_pipe *p, char **args, t_env *env)
+int	ft_exit(t_pipe *p, char **args, t_env **env)
 {
 	int	i;
 
@@ -60,12 +60,12 @@ int	ft_exit(t_pipe *p, char **args, t_env *env)
 	{
 		while (args[1][i] != 0)
 			if (check_numeric(args[1], i++, &p->p_status) == 2)
-				return (exit_minishell(p, env), p->p_status);
+				return (exit_minishell(p, *env), p->p_status);
 	}
 	if (args[1] != NULL)
 	{
 		if (check_overflow(args[1], &p->p_status) == 2)
-			return (exit_minishell(p, env), p->p_status);
+			return (exit_minishell(p, *env), p->p_status);
 		else if (args[1] != NULL && args[2] != NULL)
 		{
 			p->p_status = flush_errors("exit", 7, 0);
@@ -74,6 +74,6 @@ int	ft_exit(t_pipe *p, char **args, t_env *env)
 		else
 			p->p_status = ft_atoi(args[1]);
 	}
-	exit_minishell(p, env);
+	exit_minishell(p, *env);
 	return (p->p_status);
 }

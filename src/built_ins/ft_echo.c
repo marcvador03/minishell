@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/14 09:16:56 by pmorello          #+#    #+#             */
-/*   Updated: 2025/02/04 14:32:48 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/02/05 21:42:19 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,7 @@ int	check_spaces(char **args, int i)
 	return (0);
 }
 
-int	ft_echo(char **args, t_env *env)
+int	ft_echo(char **args, t_env **env)
 {
 	int	i;
 	int	new_line;
