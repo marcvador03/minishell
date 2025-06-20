@@ -6,7 +6,7 @@
 /*   By: pmorello <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 12:17:09 by pmorello          #+#    #+#             */
-/*   Updated: 2025/02/05 21:41:48 by mfleury          ###   ########.fr       */
+/*   Updated: 2025/06/20 12:31:06 by mfleury          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,6 +62,7 @@ typedef enum cmd_enum
 	END
 }	t_cmd_enum;
 
+/* basic temporary structure used in several parsing functions */
 typedef struct s_parsing
 {
 	int					i;
@@ -80,6 +81,7 @@ typedef struct s_parsing
 	char				tk;
 }	t_parse;
 
+/*structure to contain environment variables copied from envp at start */
 typedef struct s_env
 {
 	char				*varname;
@@ -88,6 +90,7 @@ typedef struct s_env
 	struct s_env		*next;
 }	t_env;
 
+/*structure containing prompt information*/
 typedef struct s_prompt
 {
 	char				*user;
@@ -99,6 +102,7 @@ typedef struct s_prompt
 	char				*prompt;
 }	t_prompt;
 
+/*structure containing redirections for one pipe command */
 typedef struct s_redirs
 {
 	char				**redirs;
@@ -108,6 +112,7 @@ typedef struct s_redirs
 	t_shell				*sh;
 }	t_redirs;
 
+/*structure containing each pipe command from a command line*/
 typedef struct s_pipe
 {
 	char				*p_line;
@@ -123,11 +128,27 @@ typedef struct s_pipe
 	struct s_pipe		*next;
 }	t_pipe;
 
+/*structure to save terminal settings */
 typedef struct s_termcaps
 {
 	struct termios		old_term;
 	struct termios		new_term;
 }	t_terms;
+
+/*structure holding key informations from the latest command. && and || are
+ * delimitors for each command (and assume that each line start with a hidden
+ * &&
+ *
+ * - s_line contains one command
+ * - tk is the token collected for the command (&& or ||)
+ * - depth is parenthesis level of depth
+ * - p_count records the number of pipe sub-commands
+ * - exit is a flag used to allow minishell exit or not
+ * - l_status contains the last status code from previous command
+ * - r, pipes, tcaps, env are pointers to structures described above
+ * - head, next are linked list used to browse commands at the same level of
+ *   execution (same parenthesis depth)
+ * - up and down used to browse within parenthesis depths. */
 
 struct s_shell
 {
